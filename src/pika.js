@@ -9,71 +9,80 @@
  *  Player half-width: 32 = 0x20
  */
 
+// Initial Values: refer FUN_000403a90 && FUN_00401f40
 // player on left side
 const player1 = {
   isPlayer2: false, // 0xA0
   isComputer: false, // 0xA4
-  x: 0, // 0xA8
-  y: 0, // 0xAC
+  x: 36, // 0xA8    
+  y: 244, // 0xAC
   yVelocity: 0, // 0xB0
-
+  divingDirection: 0, // 0xB4
+  lyingDownDurationLeft: -1, // 0xB8
+  isCollisionWithBallHappened: false, // 0xBC
   // state
   // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
   // 4: lying_down_after_diving
   // 5: win!, 6: lost..
-  state: 0, // 0xC0 
-  divingDirection: 0, // 0xB4
-  lyingDownDurationLeft: -1, // 0xB8
-  isCollisionWithBallHappened: false,  // 0xBC
-  frameNumber: 0,  // 0xC4
-  normalStatusArmSwingDirection: 1,
+  state: 0, // 0xC0
+  frameNumber: 0, // 0xC4
+  normalStatusArmSwingDirection: 1, // 0xC8
   delayBeforeNextFrame: 0, // 0xCC
   isWinner: false, // 0xD0
-  gameOver: false  // 0xD4
+  gameOver: false, // 0xD4
+  randomNumberForRound: rand() % 5, // 0xD8
+  randomNumberZeroOrOne: 0  // 0xDC
 };
 
 // player on right side
 const player2 = {
   isPlayer2: true, // 0xA0
   isComputer: false, // 0xA4
-  x: 0, // 0xA8
-  y: 0, // 0xAC
+  x: 396, // 0xA8
+  y: 244, // 0xAC
   yVelocity: 0, // 0xB0
-  
+  divingDirection: 0, // 0xB4
+  lyingDownDurationLeft: -1, // 0xB8
+  isCollisionWithBallHappened: false, // 0xBC
   // state
   // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
   // 4: lying_down_after_diving
   // 5: win!, 6: lost..
   state: 0, // 0xC0
-  lyingDownDurationLeft: -1, // 0xB8
-  isCollisionWithBallHappened: false,  // 0xBC
-  frameNumber: 0,  // 0xC4
-  normalStatusArmSwingDirection: 1,
+  frameNumber: 0, // 0xC4
+  normalStatusArmSwingDirection: 1,  // 0xC8
   delayBeforeNextFrame: 0, // 0xCC
   isWinner: false, // 0xD0
-  gameOver: false  // 0xD4
+  gameOver: false, // 0xD4
+  randomNumberForRound: rand() % 5, // 0xD8
+  randomNumberZeroOrOne: 0  // 0xDC
 };
 
 const ball = {
-  x: 0, // 0x30
+  x: 56, // 0x30    // initial value: 56 or 376
   y: 0, // 0x34
   xVelocity: 0, // 0x38
-  yVelocity: 0, // 0x3C
+  yVelocity: 1, // 0x3C
   expectedLandingPointX: 40000, // 0x40
+  x4c: 0,
   isPowerHit: false // 0x68
 };
 
 const keyboard = {
-  xDirection: 0,  // 0: not pressed, -1: left-direction pressed, 1: right-direction pressed
-  yDirection: 0,   // 0: not pressed, -1: up-direction pressed, 1: down-direction pressed
-  powerHitKeyPressedThisKeyShouldNotAutoRepeated: false
+  xDirection: 0, // 0: not pressed, -1: left-direction pressed, 1: right-direction pressed
+  yDirection: 0, // 0: not pressed, -1: up-direction pressed, 1: down-direction pressed
+  powerHitKeyPressedThisKeyShouldNotAutoRepeated: 0 // 0: not pressed, 1: pressed
+};
+
+function rand() {
+  return Math.floor(32768*Math.random());
 }
 
 function physicsFunction(player1, player2, ball, keyboard) {
-  const wasBallTouchedGround = processCollisionBetweenBallAndWorld(p_to_ball);  // p_to_ball: this + 0x14
+  const wasBallTouchedGround = processCollisionBetweenBallAndWorld(p_to_ball); // p_to_ball: this + 0x14
 
   let player, theOtherPlayer;
-  let local_14 = [0, 0, 0, 0, 0] // array
+  let local_14 = [0, 0, 0, 0, 0]; // array
   let local_lc = [0, 0]; // array
   let local_38 = [0, 0];
 
@@ -105,10 +114,19 @@ function physicsFunction(player1, player2, ball, keyboard) {
     // TODO: clean up
     //FUN_00402810
     copyPlayerInfoToArray(player, local_38);
-    const is_happend = isCollisionBetweenBallAndPlayerHappened(ball, player.x, player.y);
+    const is_happend = isCollisionBetweenBallAndPlayerHappened(
+      ball,
+      player.x,
+      player.y
+    );
     if (is_happend === true) {
       if (player.isCollisionWithBallHappened === false) {
-        processCollisionBetweenBallAndPlayer(ball, player.x, keyboard, player.state);
+        processCollisionBetweenBallAndPlayer(
+          ball,
+          player.x,
+          keyboard,
+          player.state
+        );
         player.isCollisionWithBallHappened = true;
       }
     } else {
@@ -197,7 +215,7 @@ function processPlayerMovement(player, keyboard, theOtherPlayer, ball) {
 
   if (player.isComputer === true) {
     // maybe computer ai function?
-    FUN_00402460(player, ball, theOtherPlayer, keyboard);
+    letComputerDecideKeyboardPress(player, ball, theOtherPlayer, keyboard);
   }
 
   // if player is lying down..
@@ -243,8 +261,8 @@ function processPlayerMovement(player, keyboard, theOtherPlayer, ball) {
   // jump
   if (
     player.state < 3 &&
-    keyboard.yDirection === -1 &&    // up-key downed
-    player.y === 244    // player is touching on the ground
+    keyboard.yDirection === -1 && // up-key downed
+    player.y === 244 // player is touching on the ground
   ) {
     player.yVelocity = -16;
     player.state = 1;
@@ -273,9 +291,7 @@ function processPlayerMovement(player, keyboard, theOtherPlayer, ball) {
     }
   }
 
-  if (
-    keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated === true
-  ) {
+  if (keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated === 1) {
     if (player.state === 1) {
       // if player is jumping..
       // then player do power hit!
@@ -286,10 +302,7 @@ function processPlayerMovement(player, keyboard, theOtherPlayer, ball) {
       //TODO: sound function "pik~" (0x90 + 0x18)
       //TODO: stereo sound function FUN_00408470 (0x94)
       //TODO: sound function "ika!" (0x90 + 0x14)
-    } else if (
-      player.state === 0 &&
-      keyboard.xDirection !== 0
-    ) {
+    } else if (player.state === 0 && keyboard.xDirection !== 0) {
       // then player do diving!
       player.state = 3;
       player.frameNumber = 0;
@@ -320,7 +333,8 @@ function processPlayerMovement(player, keyboard, theOtherPlayer, ball) {
       if (temp < 0 || temp > 4) {
         player.normalStatusArmSwingDirection = -player.normalStatusArmSwingDirection;
       }
-      player.frameNumber = player.frameNumber + player.normalStatusArmSwingDirection;
+      player.frameNumber =
+        player.frameNumber + player.normalStatusArmSwingDirection;
     }
   }
 
@@ -362,10 +376,12 @@ function processCollisionBetweenBallAndPlayer(
 
   // If ball velocity x is 0, randomly choose one of -1, 0, 1.
   if (ball.xVelocity === 0) {
-    // the original source code use "_rand()" function
-    // I could't figure out how this function works exactly.
+    // The original source code use "_rand()" function in Visual Studio 1988 Libarary.
+    // I could't find out how this function works exactly.
     // But, anyhow, it should be a funtion that generate a random number.
-    ball.xVelocity = Math.floor(3 * Math.random()) - 1;
+    // I decided to use custom rand function which generates random integer from [0, 32767]
+    // which follows rand() function in Visual Studio 2017 Library.
+    ball.xVelocity = (rand() % 3) - 1;
   }
 
   const ballAbsVelocityY = Math.abs(ball.yVelocity);
@@ -375,7 +391,7 @@ function processCollisionBetweenBallAndPlayer(
     ball.yVelocity = -15;
   }
 
-  // if power hit key down
+  // player is jumping and power hitting
   if (playerState === 2) {
     // if player is jumping and power hitting
     // TODO: manymany other
@@ -397,7 +413,7 @@ function processCollisionBetweenBallAndPlayer(
   }
 
   // TODO: here call function which expect landing point x of ball
-  caculate_expected_landing_point_x_for(ball)
+  caculate_expected_landing_point_x_for(ball);
 
   return 1;
 }
@@ -447,7 +463,7 @@ function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
 function caculate_expected_landing_point_x_for(ball) {
   const copyBall = {
     x: ball.x,
-    y: ball.y, 
+    y: ball.y,
     xVelocity: ball.xVelocity,
     yVelocity: ball.yVelocity
   };
@@ -459,12 +475,12 @@ function caculate_expected_landing_point_x_for(ball) {
     if (copyBall.y + copyBall.yVelocity < 0) {
       copyBall.yVelocity = 1;
     }
-    
+
     // If copy ball touches net
     if (Math.abs(copyBall.x - 216) < 25 && copyBall.y > 176) {
       // TODO: it maybe should be 193 as in process_collision_with_ball_and_world function
       // original author's mistake?
-      if (copyBall.y < 192) {  
+      if (copyBall.y < 192) {
         if (copyBall.yVelocity > 0) {
           copyBall.yVelocity = -copyBall.yVelocity;
         }
@@ -487,4 +503,189 @@ function caculate_expected_landing_point_x_for(ball) {
   }
   ball.expectedLandingPointX = copyBall.x;
   return 1;
+}
+
+// TODO: Math.abs(ball.x - player.x) appears too many.. refactor!
+function letComputerDecideKeyboardPress(player, ball, theOtherPlayer, keyboard) {
+  keyboard.xDirection = 0;
+  keyboard.yDirection = 0;
+  keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated = 0;
+  // TODO what is 4th property?? of keyboard??
+
+  let virtualExpectedLandingPointX = ball.expectedLandingPointX;
+  if (
+    Math.abs(ball.x - player.x) > 100 &&
+    Math.abs(ball.xVelocity) < player.randomNumberForRound + 5
+  ) {
+    let temp = player.isPlayer2 * 216;
+    if (
+      (ball.expectedLandingPointX <= temp ||
+        ball.expectedLandingPointX >= player.isPlayer2 * 432 + 216) &&
+      player.randomNumberZeroOrOne === 0
+    ) {
+      temp += 108;
+      virtualExpectedLandingPointX = temp;
+    }
+  }
+
+  if (Math.abs(virtualExpectedLandingPointX - player.x) > player.randomNumberForRound + 8) {
+    if (player.x < virtualExpectedLandingPointX) {
+      keyboard.xDirection = 1;
+    } else {
+      keyboard.xDirection = -1;
+    }
+  } else if (rand() % 20 === 0) {
+    player.randomNumberZeroOrOne = rand() % 2;
+  }
+
+  if (player.state === 0) {
+    if (
+      Math.abs(ball.y) < player.randomNumberForRound + 3 &&
+      Math.abs(ball.x - player.x) < 32 &&
+      ball.y > -36 &&
+      ball.y < 10 * player.randomNumberForRound + 84 &&
+      ball.yVelocity > 0
+    ) {
+      keyboard.yDirection = -1;
+    }
+
+    const left_boundary = player.isPlayer2 * 216;
+    const right_boundary = (player.isPlayer2 + 1) * 216;
+    if (
+      ball.expectedLandingPointX > left_boundary &&
+      ball.expectedLandingPointX < right_boundary &&
+      Math.abs(ball.x - player.x) > player.randomNumberForRound * 5 + 64 &&
+      ball.expectedLandingPointX < ball.x &&
+      ball.x < right_boundary &&
+      ball.y > 174
+    ) {
+      keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated = 1;
+      if (player.x < ball.x) {
+        keyboard.xDirection = 1;
+      } else {
+        keyboard.xDirection = -1;
+      }
+    }
+  } else if (player.state === 1 || player.state === 2) {
+    if (Math.abs(ball.x - player.x) > 8) {
+      if (player.x < ball.x) {
+        keyboard.xDirection = 1;
+      } else {
+        keyboard.xDirection = -1;
+      }
+    }
+    if (Math.abs(ball.x - player.x) < 48 && Math.abs(ball.y - player.y) < 48) {
+      const iVar2 = decideWhetherDoPowerHit(player, ball, theOtherPlayer, keyboard);
+      if (iVar2 === 1) {
+        keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated = 1;
+        if (
+          Math.abs(theOtherPlayer.x - player.x) < 80 &&
+          keyboard.yDirection !== -1
+        ) {
+          keyboard.yDirection = -1;
+        }
+      }
+    }
+  }
+}
+
+// FUN_00402630
+// return 1 : do power hit
+// return 0 : don't do power hit
+// this function also do keyboard key setting,
+// so that decide also the direction of power hit 
+function decideWhetherDoPowerHit(player, ball, theOtherPlayer, keyboard) {
+  if (rand() % 2 === 0) {
+    for (let xDirection = 1; xDirection > -1; xDirection--) {
+      for (let yDirection = -1; yDirection < 2; yDirection++) {
+        const expectedLandingPointX = expectedLandingPointXWhenPowerHit(
+          xDirection,
+          yDirection,
+          ball
+        );
+        if (
+          (expectedLandingPointX <= player.isPlayer2 * 216 ||
+            expectedLandingPointX >= player.isPlayer2 * 432 + 216) &&
+          Math.abs(expectedLandingPointX, theOtherPlayer.x) > 64
+        ) {
+          keyboard.xDirection = xDirection;
+          keyboard.yDirection = yDirection;
+          return 1;
+        }
+      }
+    }
+  } else {
+    for (let xDirection = 1; xDirection > -1; xDirection--) {
+      for (let yDirection = 1; yDirection > -2; yDirection--) {
+        const expectedLandingPointX = expectedLandingPointXWhenPowerHit(
+          xDirection,
+          yDirection,
+          ball
+        );
+        if (
+          (expectedLandingPointX <= player.isPlayer2 * 216 ||
+            expectedLandingPointX >= player.isPlayer2 * 432 + 216) &&
+          Math.abs(expectedLandingPointX, theOtherPlayer.x) > 64
+        ) {
+          keyboard.xDirection = xDirection;
+          keyboard.yDirection = yDirection;
+          return 1;
+        }
+      }
+    }
+  }
+  return 0;
+}
+
+function expectedLandingPointXWhenPowerHit(
+  keyboardXDirection,
+  keyboardYDirection,
+  ball
+) {
+  const copyBall = {
+    x: ball.x,
+    y: ball.y,
+    xVelocity: ball.xVelocity,
+    yVelocity: ball.yVelocity
+  };
+  if (copyBall.x < 216) {
+    copyBall.xVelocity = (Math.abs(keyboardXDirection) + 1) * 10;
+  } else {
+    copyBall.xVelocity = -(Math.abs(keyboardXDirection) + 1) * 10;
+  }
+  copyBall.yVelocity = Math.abs(copyBall.yVelocity) * keyboardYDirection * 2;
+
+  while (true) {
+    const futureCopyBallX = copyBall.x + copyBall.xVelocity;
+    if (futureCopyBallX < 20 || futureCopyBallX > 432) {
+      copyBall.xVelocity = -copyBall.xVelocity;
+    }
+    if (copyBall.y + copyBall.yVelocity < 0) {
+      copyBall.yVelocity = 1;
+    }
+    if (Math.abs(copyBall.x - 216) < 31 && copyBall.y > 176) {
+      // TODO: is it real??
+      // it's just same as
+      //
+      // if (copyBall.yVelocity > 0) {
+      //    copyBall.yVelocity = -copyBall.yVelocity;
+      // }
+      //
+      // maybe this is mistake of the original author....
+      //
+      if (copyBall.y < 193) {
+        if (copyBall.yVelocity > 0) {
+          copyBall.yVelocity = -copyBall.yVelocity;
+        }
+      } else if (copyBall.yVelocity > 0) {
+        copyBall.yVelocity = -copyBall.yVelocity;
+      }
+    }
+    copyBall.y = copyBall.y + copyBall.yVelocity;
+    if (copyBall.y > 252) {
+      return copyBall.x;
+    }
+    copyBall.x = copyBall.x + copyBall.xVelocity;
+    copyBall.yVelocity += 1;
+  }
 }
