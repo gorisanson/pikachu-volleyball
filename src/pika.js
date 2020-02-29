@@ -44,6 +44,18 @@ const ball = {
 
 // FUN_00402dc0
 function process_ball_world_collision(ball) {
+  let iVar2 = ball.velocity_xl;
+  let iVar5 = iVar2 / 2 + ball.x48;
+  ball.x48 = iVar5;
+  if (iVar5 < 0) {
+    iVar5 += 50;
+  } else if (iVar5 > 50) {
+    iVar5 += -50;
+  }
+  ball.x48 = iVar5;
+
+  ball.x44 = ((ball.x48 / 10) >> 0);  // integer division
+
   const future_ball_x = ball.x + ball.velocity_x;
   // If the center of ball would get out of left world bound or right world bound
   //
@@ -62,7 +74,7 @@ function process_ball_world_collision(ball) {
     ball.velocity_y = 1;
   }
 
-  // If ball touch net
+  // If ball touches net
   if (Math.abs(ball.x - 216) < 25 && ball.y > 176) {
     if (ball.y < 193) {
       if (ball.velocity_y > 0) {
@@ -81,8 +93,13 @@ function process_ball_world_collision(ball) {
   // if ball would touch ground
   if (future_ball_y > 252) {
     // TODO: many many other
+    //FUN_0048470
+    //SOUND?
     ball.velocity_y = -ball.velocity_y;
+    ball.x50 = ball.x;
     ball.y = 252;
+    ball.x4c = 20;
+    ball.x54 = 272;
     return 1;
   }
   ball.y = future_ball_y;
