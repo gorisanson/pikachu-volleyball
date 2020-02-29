@@ -55,6 +55,57 @@ const keyboard = {
   power_hit_key_pressed_this_key_should_not_auto_repeated: false;
 }
 
+function physics_function(player1, player2, ball, keyboard) {
+  const was_ball_touched_ground = process_collision_between_ball_and_world(p_to_ball);  // p_to_ball: this + 0x14
+
+  let player, the_other_player;
+  let local_14 = [0, 0, 0, 0, 0] // array
+  let local_lc = [0, 0]; // array
+  let local_38 = [0, 0];
+
+  for (let i = 0; i < 2; i++) {
+    if (i == 0) {
+      player = player1;
+      the_other_player = player2;
+    } else {
+      player = player2;
+      the_other_player = player1;
+    }
+    // TODO: clean up... and don't forget to include calc_expected_x!
+    //FUN_00402d90
+    copy_ball_info_to_array_and_calc_expected_x(ball, local_14);
+    //FUN_00402810
+    copy_player_info_to_array(the_other_player, local_lc);
+    //FUN_00401fc0
+    process_player_movement(player, keyboard, the_other_player, ball);
+    // TODO: what is this??? two.. functions...
+    // TODO: what is this??
+  }
+
+  for (let i = 0; i < 2; i++) {
+    if (i == 0) {
+      player = player1;
+    } else {
+      player = player2;
+    }
+    // TODO: clean up
+    //FUN_00402810
+    copy_player_info_to_array(player, local_38);
+    const is_happend = is_collision_between_ball_and_player_happened(ball, player.x, player.y);
+    if (is_happend === true) {
+      if (player.bc === 0) {
+        process_collision_between_ball_and_player(ball, player.x, keyboard, player.status);
+        player.bc = 1;
+      }
+    } else {
+      player.bc = 0;
+    }
+  }
+  // TODO: what Function is this?
+  // TODO: what Function is this?
+  return was_ball_touched_ground;
+}
+
 // FUN_00402dc0
 function process_collision_between_ball_and_world(ball) {
   let iVar2 = ball.velocity_xl;
@@ -119,118 +170,6 @@ function process_collision_between_ball_and_world(ball) {
   ball.velocity_y += 1;
 
   return 0;
-}
-
-// FUN_004030a0
-function process_collision_between_ball_and_player(
-  ball,
-  player_x,
-  keyboard,
-  player_status
-) {
-  // player_x is maybe pika's x position
-  // if collision occur,
-  // greater the x position difference between pika and ball,
-  // greater the x velocity of the ball.
-  if (ball.x < player_x) {
-    // Since javascript division is float division by default
-    // I use "Math.floor" to do integer division
-    ball.velocity_x = -Math.floor(Math.abs(ball.x - player_x) / 3);
-  } else if (ball.x > player_x) {
-    ball.velocity_x = Math.floor(Math.abs(ball.x - player_x) / 3);
-  }
-
-  // If ball velocity x is 0, randomly choose one of -1, 0, 1.
-  if (ball.velocity_x === 0) {
-    // the original source code use "_rand()" function
-    // I could't figure out how this function works exactly.
-    // But, anyhow, it should be a funtion that generate a random number.
-    ball.velocity_x = Math.floor(3 * Math.random()) - 1;
-  }
-
-  const ball_abs_velocity_y = Math.abs(ball.velocity_y);
-  ball.velocity_y = -ball_abs_velocity_y;
-
-  if (ball_abs_velocity_y < 15) {
-    ball.velocity_y = -15;
-  }
-
-  // if power hit key down
-  if (player_status === 2) {
-    // if player is jumping and power hitting
-    // TODO: manymany other
-    if (ball.x < 216) {
-      ball.velocity_x = (Math.abs(keyboard.x_direction) + 1) * 10;
-    } else {
-      ball.velocity_x = -(Math.abs(keyboard.x_direction) + 1) * 10;
-    }
-    ball.x50 = ball.x;
-    ball.x54 = ball.y;
-
-    ball.velocity_y = Math.abs(ball.velocity_y) * keyboard.y_direction * 2;
-    ball.x4c = 20;
-    // TODO: IMAGE FUN_00408470 (0x24)
-    // TODO: SOUND power hit sound (0x24 + 0x10)
-    ball.is_power_hit = true;
-  } else {
-    ball.is_power_hit = false;
-  }
-
-  // TODO: here call function which expect landing point x of ball
-  // FUN_004031b0(ball)
-
-  return 1;
-}
-
-function physics_function(player1, player2, ball, keyboard) {
-  const was_ball_touched_ground = process_collision_between_ball_and_world(p_to_ball);  // p_to_ball: this + 0x14
-
-  let player, the_other_player;
-  let local_14 = [0, 0, 0, 0, 0] // array
-  let local_lc = [0, 0]; // array
-  let local_38 = [0, 0];
-
-  for (let i = 0; i < 2; i++) {
-    if (i == 0) {
-      player = player1;
-      the_other_player = player2;
-    } else {
-      player = player2;
-      the_other_player = player1;
-    }
-    // TODO: clean up... and don't forget to include calc_expected_x!
-    //FUN_00402d90
-    copy_ball_info_to_array_and_calc_expected_x(ball, local_14);
-    //FUN_00402810
-    copy_player_info_to_array(the_other_player, local_lc);
-    //FUN_00401fc0
-    process_player_movement(player, keyboard, the_other_player, ball);
-    // TODO: what is this??? two.. functions...
-    // TODO: what is this??
-  }
-
-  for (let i = 0; i < 2; i++) {
-    if (i == 0) {
-      player = player1;
-    } else {
-      player = player2;
-    }
-    // TODO: clean up
-    //FUN_00402810
-    copy_player_info_to_array(player, local_38);
-    const is_happend = is_collision_between_ball_and_player_happened(ball, player.x, player.y);
-    if (is_happend === true) {
-      if (player.bc === 0) {
-        process_collision_between_ball_and_player(ball, player.x, keyboard, player.status);
-        player.bc = 1;
-      }
-    } else {
-      player.bc = 0;
-    }
-  }
-  // TODO: what Function is this?
-  // TODO: what Function is this?
-  return was_ball_touched_ground;
 }
 
 // FUN_00401fc0
@@ -390,6 +329,67 @@ function process_player_movement(player, keyboard, the_other_player, ball) {
     }
     FUN_004025e0(player);
   }
+  return 1;
+}
+
+// FUN_004030a0
+function process_collision_between_ball_and_player(
+  ball,
+  player_x,
+  keyboard,
+  player_status
+) {
+  // player_x is maybe pika's x position
+  // if collision occur,
+  // greater the x position difference between pika and ball,
+  // greater the x velocity of the ball.
+  if (ball.x < player_x) {
+    // Since javascript division is float division by default
+    // I use "Math.floor" to do integer division
+    ball.velocity_x = -Math.floor(Math.abs(ball.x - player_x) / 3);
+  } else if (ball.x > player_x) {
+    ball.velocity_x = Math.floor(Math.abs(ball.x - player_x) / 3);
+  }
+
+  // If ball velocity x is 0, randomly choose one of -1, 0, 1.
+  if (ball.velocity_x === 0) {
+    // the original source code use "_rand()" function
+    // I could't figure out how this function works exactly.
+    // But, anyhow, it should be a funtion that generate a random number.
+    ball.velocity_x = Math.floor(3 * Math.random()) - 1;
+  }
+
+  const ball_abs_velocity_y = Math.abs(ball.velocity_y);
+  ball.velocity_y = -ball_abs_velocity_y;
+
+  if (ball_abs_velocity_y < 15) {
+    ball.velocity_y = -15;
+  }
+
+  // if power hit key down
+  if (player_status === 2) {
+    // if player is jumping and power hitting
+    // TODO: manymany other
+    if (ball.x < 216) {
+      ball.velocity_x = (Math.abs(keyboard.x_direction) + 1) * 10;
+    } else {
+      ball.velocity_x = -(Math.abs(keyboard.x_direction) + 1) * 10;
+    }
+    ball.x50 = ball.x;
+    ball.x54 = ball.y;
+
+    ball.velocity_y = Math.abs(ball.velocity_y) * keyboard.y_direction * 2;
+    ball.x4c = 20;
+    // TODO: IMAGE FUN_00408470 (0x24)
+    // TODO: SOUND power hit sound (0x24 + 0x10)
+    ball.is_power_hit = true;
+  } else {
+    ball.is_power_hit = false;
+  }
+
+  // TODO: here call function which expect landing point x of ball
+  // FUN_004031b0(ball)
+
   return 1;
 }
 
