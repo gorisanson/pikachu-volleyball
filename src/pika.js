@@ -11,68 +11,68 @@
 
 // player on left side
 const player1 = {
-  is_player2: false, // 0xA0
-  is_computer: false, // 0xA4
+  isPlayer2: false, // 0xA0
+  isComputer: false, // 0xA4
   x: 0, // 0xA8
   y: 0, // 0xAC
-  velocity_y: 0, // 0xB0
+  yVelocity: 0, // 0xB0
 
   // state
   // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
   // 4: lying_down_after_diving
   // 5: win!, 6: lost..
   state: 0, // 0xC0 
-  diving_direction: 0, // 0xB4
-  lying_down_duration_left: -1, // 0xB8
-  is_collision_with_ball_happened: false,  // 0xBC
-  frame_number: 0,  // 0xC4
-  normal_status_arm_swing_direction: 1,
-  delay_before_next_frame: 0, // 0xCC
-  is_winner: false, // 0xD0
-  game_over: false  // 0xD4
+  divingDirection: 0, // 0xB4
+  lyingDownDurationLeft: -1, // 0xB8
+  isCollisionWithBallHappened: false,  // 0xBC
+  frameNumber: 0,  // 0xC4
+  normalStatusArmSwingDirection: 1,
+  delayBeforeNextFrame: 0, // 0xCC
+  isWinner: false, // 0xD0
+  gameOver: false  // 0xD4
 };
 
 // player on right side
 const player2 = {
-  is_player2: true, // 0xA0
-  is_computer: false, // 0xA4
+  isPlayer2: true, // 0xA0
+  isComputer: false, // 0xA4
   x: 0, // 0xA8
   y: 0, // 0xAC
-  velocity_y: 0, // 0xB0
+  yVelocity: 0, // 0xB0
   
   // state
   // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
   // 4: lying_down_after_diving
   // 5: win!, 6: lost..
   state: 0, // 0xC0
-  lying_down_duration_left: -1, // 0xB8
-  is_collision_with_ball_happened: false,  // 0xBC
-  frame_number: 0,  // 0xC4
-  normal_status_arm_swing_direction: 1,
-  delay_before_next_frame: 0, // 0xCC
-  is_winner: false, // 0xD0
-  game_over: false  // 0xD4
+  lyingDownDurationLeft: -1, // 0xB8
+  isCollisionWithBallHappened: false,  // 0xBC
+  frameNumber: 0,  // 0xC4
+  normalStatusArmSwingDirection: 1,
+  delayBeforeNextFrame: 0, // 0xCC
+  isWinner: false, // 0xD0
+  gameOver: false  // 0xD4
 };
 
 const ball = {
   x: 0, // 0x30
   y: 0, // 0x34
-  velocity_x: 0, // 0x38
-  velocity_y: 0, // 0x3C
-  expected_landing_point_x: 40000, // 0x40
-  is_power_hit: false // 0x68
+  xVelocity: 0, // 0x38
+  yVelocity: 0, // 0x3C
+  expectedLandingPointX: 40000, // 0x40
+  isPowerHit: false // 0x68
 };
 
 const keyboard = {
-  x_direction: 0,  // 0: not pressed, -1: left-direction pressed, 1: right-direction pressed
-  y_direction: 0,   // 0: not pressed, -1: up-direction pressed, 1: down-direction pressed
-  power_hit_key_pressed_this_key_should_not_auto_repeated: false;
+  xDirection: 0,  // 0: not pressed, -1: left-direction pressed, 1: right-direction pressed
+  yDirection: 0,   // 0: not pressed, -1: up-direction pressed, 1: down-direction pressed
+  powerHitKeyPressedThisKeyShouldNotAutoRepeated: false
 }
 
-function physics_function(player1, player2, ball, keyboard) {
-  const was_ball_touched_ground = process_collision_between_ball_and_world(p_to_ball);  // p_to_ball: this + 0x14
+function physicsFunction(player1, player2, ball, keyboard) {
+  const wasBallTouchedGround = processCollisionBetweenBallAndWorld(p_to_ball);  // p_to_ball: this + 0x14
 
-  let player, the_other_player;
+  let player, theOtherPlayer;
   let local_14 = [0, 0, 0, 0, 0] // array
   let local_lc = [0, 0]; // array
   let local_38 = [0, 0];
@@ -80,18 +80,18 @@ function physics_function(player1, player2, ball, keyboard) {
   for (let i = 0; i < 2; i++) {
     if (i == 0) {
       player = player1;
-      the_other_player = player2;
+      theOtherPlayer = player2;
     } else {
       player = player2;
-      the_other_player = player1;
+      theOtherPlayer = player1;
     }
     // TODO: clean up... and don't forget to include calc_expected_x!
     //FUN_00402d90
-    copy_ball_info_to_array_and_calc_expected_x(ball, local_14);
+    copyBallInfoToArrayAndCalcExpectedX(ball, local_14);
     //FUN_00402810
-    copy_player_info_to_array(the_other_player, local_lc);
+    copyPlayerInfoToArray(theOtherPlayer, local_lc);
     //FUN_00401fc0
-    process_player_movement(player, keyboard, the_other_player, ball);
+    processPlayerMovement(player, keyboard, theOtherPlayer, ball);
     // TODO: what is this??? two.. functions...
     // TODO: what is this??
   }
@@ -104,25 +104,25 @@ function physics_function(player1, player2, ball, keyboard) {
     }
     // TODO: clean up
     //FUN_00402810
-    copy_player_info_to_array(player, local_38);
-    const is_happend = is_collision_between_ball_and_player_happened(ball, player.x, player.y);
+    copyPlayerInfoToArray(player, local_38);
+    const is_happend = isCollisionBetweenBallAndPlayerHappened(ball, player.x, player.y);
     if (is_happend === true) {
-      if (player.is_collision_with_ball_happened === false) {
-        process_collision_between_ball_and_player(ball, player.x, keyboard, player.state);
-        player.is_collision_with_ball_happened = true;
+      if (player.isCollisionWithBallHappened === false) {
+        processCollisionBetweenBallAndPlayer(ball, player.x, keyboard, player.state);
+        player.isCollisionWithBallHappened = true;
       }
     } else {
-      player.is_collision_with_ball_happened = false;
+      player.isCollisionWithBallHappened = false;
     }
   }
   // TODO: what Function is this?
   // TODO: what Function is this?
-  return was_ball_touched_ground;
+  return wasBallTouchedGround;
 }
 
 // FUN_00402dc0
-function process_collision_between_ball_and_world(ball) {
-  let iVar2 = ball.velocity_xl;
+function processCollisionBetweenBallAndWorld(ball) {
+  let iVar2 = ball.xVelocity;
   let iVar5 = iVar2 / 2 + ball.x48;
   ball.x48 = iVar5;
   if (iVar5 < 0) {
@@ -134,54 +134,54 @@ function process_collision_between_ball_and_world(ball) {
 
   ball.x44 = (ball.x48 / 10) >> 0; // integer division
 
-  const future_ball_x = ball.x + ball.velocity_x;
+  const futureBallX = ball.x + ball.xVelocity;
   // If the center of ball would get out of left world bound or right world bound
   //
   // TODO:
-  // future_ball_x > 432 should be changed to future_ball_x > (432 - 20)
+  // futureBallX > 432 should be changed to futureBallX > (432 - 20)
   // [maybe upper one is more possible when seeing pikachu player's x-direction boundary]
-  // or, future_ball_x < 20 should be changed to future_ball_x < 0
+  // or, futureBallX < 20 should be changed to futureBallX < 0
   // I think this is a mistake of the author of the original game.
-  if (future_ball_x < 20 || future_ball_x > 432) {
-    ball.velocity_x = -ball.velocity_x;
+  if (futureBallX < 20 || futureBallX > 432) {
+    ball.xVelocity = -ball.xVelocity;
   }
 
-  let future_ball_y = ball.y + ball.velocity_y;
+  let futureBallY = ball.y + ball.yVelocity;
   // if the center of ball would get out of upper world bound
-  if (future_ball_y < 0) {
-    ball.velocity_y = 1;
+  if (futureBallY < 0) {
+    ball.yVelocity = 1;
   }
 
   // If ball touches net
   if (Math.abs(ball.x - 216) < 25 && ball.y > 176) {
     if (ball.y < 193) {
-      if (ball.velocity_y > 0) {
-        ball.velocity_y = -ball.velocity_y;
+      if (ball.yVelocity > 0) {
+        ball.yVelocity = -ball.yVelocity;
       }
     } else {
       if (ball_x < 216) {
-        ball.velocity_x = -Math.abs(ball.velocity_x);
+        ball.xVelocity = -Math.abs(ball.xVelocity);
       } else {
-        ball.velocity_x = Math.abs(ball.velocity_x);
+        ball.xVelocity = Math.abs(ball.xVelocity);
       }
     }
   }
 
-  future_ball_y = ball.y + ball.velocity_y;
+  futureBallY = ball.y + ball.yVelocity;
   // if ball would touch ground
-  if (future_ball_y > 252) {
+  if (futureBallY > 252) {
     //TODO: FUN_00408470 stereo SOUND (0x28)
     //TODO: SOUND function : ball touch ground sound (0x28 + 0x10)
-    ball.velocity_y = -ball.velocity_y;
+    ball.yVelocity = -ball.yVelocity;
     ball.x50 = ball.x;
     ball.y = 252;
     ball.x4c = 20;
     ball.x54 = 272;
     return 1;
   }
-  ball.y = future_ball_y;
-  ball.x = ball.x + ball.velocity_x;
-  ball.velocity_y += 1;
+  ball.y = futureBallY;
+  ball.x = ball.x + ball.xVelocity;
+  ball.yVelocity += 1;
 
   return 0;
 }
@@ -190,52 +190,52 @@ function process_collision_between_ball_and_world(ball) {
 // param1_array maybe keyboard (if param_1[1] === -1, up_key downed)
 // param1[0] === -1: left key downed, param1[0] === 1: right key downed.
 // param1[0] === 0: left/right key not downed.
-function process_player_movement(player, keyboard, the_other_player, ball) {
+function processPlayerMovement(player, keyboard, theOtherPlayer, ball) {
   if (player === null || ball === null) {
     return 0;
   }
 
-  if (player.is_computer === true) {
+  if (player.isComputer === true) {
     // maybe computer ai function?
-    FUN_00402460(player, ball, the_other_player, keyboard);
+    FUN_00402460(player, ball, theOtherPlayer, keyboard);
   }
 
   // if player is lying down..
   if (player.state === 4) {
-    player.lying_down_duration_left += -1;
-    if (player.lying_down_duration_left < -1) {
+    player.lyingDownDurationLeft += -1;
+    if (player.lyingDownDurationLeft < -1) {
       player.state = 0;
     }
     return 1;
   }
 
   // process x-direction movement
-  let player_velocity_x = 0;
+  let playerVelocityX = 0;
   if (player.state < 5) {
     if (player.state < 3) {
-      player_velocity_x = keyboard.x_direction * 6;
+      playerVelocityX = keyboard.xDirection * 6;
     } else {
       // if player is diving..
-      player_velocity_x = player.diving_direction * 8;
+      playerVelocityX = player.divingDirection * 8;
     }
   }
 
-  let future_player_x = player.x + player_velocity_x;
-  player.x = future_player_x;
+  let futurePlayerX = player.x + playerVelocityX;
+  player.x = futurePlayerX;
 
   // process player's x-direction world boundary
-  if (player.is_player2 === false) {
+  if (player.isPlayer2 === false) {
     // if player is player1
-    if (future_player_x < 32) {
+    if (futurePlayerX < 32) {
       player.x = 32;
-    } else if (future_player_x > 216 - 32) {
+    } else if (futurePlayerX > 216 - 32) {
       player.x = 216 - 32;
     }
   } else {
     // if player is player2
-    if (future_player_x < 216 + 32) {
+    if (futurePlayerX < 216 + 32) {
       player.x = 216 + 32;
-    } else if (future_player_x > 432 - 32) {
+    } else if (futurePlayerX > 432 - 32) {
       player.x = 432 - 32;
     }
   }
@@ -243,102 +243,98 @@ function process_player_movement(player, keyboard, the_other_player, ball) {
   // jump
   if (
     player.state < 3 &&
-    keyboard.y_direction === -1 &&    // up-key downed
+    keyboard.yDirection === -1 &&    // up-key downed
     player.y === 244    // player is touching on the ground
   ) {
-    player.velocity_y = -16;
+    player.yVelocity = -16;
     player.state = 1;
-    player.frame_number = 0;
+    player.frameNumber = 0;
     //TODO: stereo sound function FUN_00408470 (0x90)
     //TODO: sound function "chu~" (0x90 + 0x10)
   }
 
   // gravity
-  let future_player_y = player.y + player.velocity_y;
-  player.y = future_player_y;
-  if (future_player_y < 244) {
-    player.velocity_y += 1;
-  } else if (future_player_y > 244) {
+  let futurePlayerY = player.y + player.yVelocity;
+  player.y = futurePlayerY;
+  if (futurePlayerY < 244) {
+    player.yVelocity += 1;
+  } else if (futurePlayerY > 244) {
     // if player is landing..
-    player.velocity_y = 0;
+    player.yVelocity = 0;
     player.y = 244;
-    player.frame_number = 0;
+    player.frameNumber = 0;
     if (player.state === 3) {
       // if player is diving..
       player.state = 4;
-      player.frame_number = 0;
-      player.lying_down_duration_left = 3;
+      player.frameNumber = 0;
+      player.lyingDownDurationLeft = 3;
     } else {
       player.state = 0;
     }
   }
 
   if (
-    keyboard.power_hit_key_pressed_this_key_should_not_auto_repeated === true
+    keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated === true
   ) {
     if (player.state === 1) {
       // if player is jumping..
       // then player do power hit!
       iVar3 = player.x;
-      player.delay_before_next_frame = 5;
-      player.frame_number = 0;
+      player.delayBeforeNextFrame = 5;
+      player.frameNumber = 0;
       player.state = 2;
       //TODO: sound function "pik~" (0x90 + 0x18)
       //TODO: stereo sound function FUN_00408470 (0x94)
       //TODO: sound function "ika!" (0x90 + 0x14)
     } else if (
       player.state === 0 &&
-      keyboard.x_direction !== 0
+      keyboard.xDirection !== 0
     ) {
       // then player do diving!
       player.state = 3;
-      player.frame_number = 0;
-      if (left_key_downed === true) {
-        player.diving_direction = -1;
-      } else {
-        player.diving_direction = +1;
-      }
-      player.velocity_y = -5;
+      player.frameNumber = 0;
+      player.divingDirection = keyboard.xDirection;
+      player.yVelocity = -5;
       //TODO: stereo sound function FUN_00408470 (0x90)
       //TODO: sound function "chu~" (0x90 + 0x10)
     }
   }
 
   if (player.state === 1) {
-    player.frame_number = (player.frame_number + 1) % 3;
+    player.frameNumber = (player.frameNumber + 1) % 3;
   } else if (player.state === 2) {
-    if (player.delay_before_next_frame < 1) {
-      player.frame_number += 1;
-      if (player.frame_number > 4) {
-        player.frame_number = 0;
+    if (player.delayBeforeNextFrame < 1) {
+      player.frameNumber += 1;
+      if (player.frameNumber > 4) {
+        player.frameNumber = 0;
         player.state = 1;
       }
     } else {
-      player.delay_before_next_frame -= 1;
+      player.delayBeforeNextFrame -= 1;
     }
   } else if (player.state === 0) {
-    player.delay_before_next_frame += 1;
-    if (player.delay_before_next_frame > 3) {
-      player.delay_before_next_frame = 0;
-      temp = player.frame_number + player.normal_status_arm_swing_direction;
+    player.delayBeforeNextFrame += 1;
+    if (player.delayBeforeNextFrame > 3) {
+      player.delayBeforeNextFrame = 0;
+      temp = player.frameNumber + player.normalStatusArmSwingDirection;
       if (temp < 0 || temp > 4) {
-        player.normal_status_arm_swing_direction = -player.normal_status_arm_swing_direction;
+        player.normalStatusArmSwingDirection = -player.normalStatusArmSwingDirection;
       }
-      player.frame_number = player.frame_number + player.normal_status_arm_swing_direction;
+      player.frameNumber = player.frameNumber + player.normalStatusArmSwingDirection;
     }
   }
 
-  if (player.game_over === true) {
+  if (player.gameOver === true) {
     if (player.state === 0) {
-      if (player.is_winner === true) {
+      if (player.isWinner === true) {
         player.state = 5;
         //TODO: stereo sound function FUN_00408470 (0x98)
         //TODO: sound function "what?" (0x98 + 0x10) "pik~"?
       } else {
         player.state === 6;
       }
-      player.delay_before_next_frame = 0;
-      player.frame_number = 0;
+      player.delayBeforeNextFrame = 0;
+      player.frameNumber = 0;
     }
     FUN_004025e0(player);
   }
@@ -346,58 +342,58 @@ function process_player_movement(player, keyboard, the_other_player, ball) {
 }
 
 // FUN_004030a0
-function process_collision_between_ball_and_player(
+function processCollisionBetweenBallAndPlayer(
   ball,
-  player_x,
+  playerX,
   keyboard,
-  player_status
+  playerState
 ) {
-  // player_x is maybe pika's x position
+  // playerX is maybe pika's x position
   // if collision occur,
   // greater the x position difference between pika and ball,
   // greater the x velocity of the ball.
-  if (ball.x < player_x) {
+  if (ball.x < playerX) {
     // Since javascript division is float division by default
     // I use "Math.floor" to do integer division
-    ball.velocity_x = -Math.floor(Math.abs(ball.x - player_x) / 3);
-  } else if (ball.x > player_x) {
-    ball.velocity_x = Math.floor(Math.abs(ball.x - player_x) / 3);
+    ball.xVelocity = -Math.floor(Math.abs(ball.x - playerX) / 3);
+  } else if (ball.x > playerX) {
+    ball.xVelocity = Math.floor(Math.abs(ball.x - playerX) / 3);
   }
 
   // If ball velocity x is 0, randomly choose one of -1, 0, 1.
-  if (ball.velocity_x === 0) {
+  if (ball.xVelocity === 0) {
     // the original source code use "_rand()" function
     // I could't figure out how this function works exactly.
     // But, anyhow, it should be a funtion that generate a random number.
-    ball.velocity_x = Math.floor(3 * Math.random()) - 1;
+    ball.xVelocity = Math.floor(3 * Math.random()) - 1;
   }
 
-  const ball_abs_velocity_y = Math.abs(ball.velocity_y);
-  ball.velocity_y = -ball_abs_velocity_y;
+  const ballAbsVelocityY = Math.abs(ball.yVelocity);
+  ball.yVelocity = -ballAbsVelocityY;
 
-  if (ball_abs_velocity_y < 15) {
-    ball.velocity_y = -15;
+  if (ballAbsVelocityY < 15) {
+    ball.yVelocity = -15;
   }
 
   // if power hit key down
-  if (player_status === 2) {
+  if (playerState === 2) {
     // if player is jumping and power hitting
     // TODO: manymany other
     if (ball.x < 216) {
-      ball.velocity_x = (Math.abs(keyboard.x_direction) + 1) * 10;
+      ball.xVelocity = (Math.abs(keyboard.xDirection) + 1) * 10;
     } else {
-      ball.velocity_x = -(Math.abs(keyboard.x_direction) + 1) * 10;
+      ball.xVelocity = -(Math.abs(keyboard.xDirection) + 1) * 10;
     }
     ball.x50 = ball.x;
     ball.x54 = ball.y;
 
-    ball.velocity_y = Math.abs(ball.velocity_y) * keyboard.y_direction * 2;
+    ball.yVelocity = Math.abs(ball.yVelocity) * keyboard.yDirection * 2;
     ball.x4c = 20;
     // TODO: stereo SOUND FUN_00408470 (0x24)
     // TODO: SOUND power hit sound (0x24 + 0x10)
-    ball.is_power_hit = true;
+    ball.isPowerHit = true;
   } else {
-    ball.is_power_hit = false;
+    ball.isPowerHit = false;
   }
 
   // TODO: here call function which expect landing point x of ball
@@ -407,11 +403,11 @@ function process_collision_between_ball_and_player(
 }
 
 function FUN_004025e0(player) {
-  if (player.game_over === true && player.frame_number < 4) {
-    player.delay_before_next_frame += 1;
-    if (player.delay_before_next_frame > 4) {
-      player.delay_before_next_frame = 0;
-      player.frame_number += 1;
+  if (player.gameOver === true && player.frameNumber < 4) {
+    player.delayBeforeNextFrame += 1;
+    if (player.delayBeforeNextFrame > 4) {
+      player.delayBeforeNextFrame = 0;
+      player.frameNumber += 1;
     }
     return 1;
   }
@@ -419,27 +415,27 @@ function FUN_004025e0(player) {
 }
 
 // FUN_00402d90
-function copy_ball_info_to_array_and_calc_expected_x(ball, ball, dest) {
+function copyBallInfoToArrayAndCalcExpectedX(ball, ball, dest) {
   dest[0] = ball.x;
   dest[1] = ball.y;
-  dest[2] = ball.velocity_x;
-  dest[3] = ball.velocity_y;
-  dest[4] = ball.expected_landing_point_x;
+  dest[2] = ball.xVelocity;
+  dest[3] = ball.yVelocity;
+  dest[4] = ball.expectedLandingPointX;
   // TODO: can I extract this FUN below??
   caculate_expected_landing_point_x_for(ball); // calculate expected_X;
 }
 
 //FUN_00402810
-function copy_player_info_to_array(player, dest) {
+function copyPlayerInfoToArray(player, dest) {
   dest[0] = player.x;
   dest[1] = player.y;
 }
 
 //FUN_00403070
-function is_collision_between_ball_and_player_happened(ball, player_x, player_y) {
-  let diff = ball.x - player_x;
+function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
+  let diff = ball.x - playerX;
   if (Math.abs(diff) < 33) {
-    diff = ball.y - param_2;
+    diff = ball.y - playerY;
     if (Math.abs(diff) < 33) {
       return true;
     }
@@ -449,46 +445,46 @@ function is_collision_between_ball_and_player_happened(ball, player_x, player_y)
 
 // FUN_004031b0
 function caculate_expected_landing_point_x_for(ball) {
-  const copy_ball = {
+  const copyBall = {
     x: ball.x,
     y: ball.y, 
-    velocity_x: ball.velocity_x,
-    velocity_y: ball.velocity_y
+    xVelocity: ball.xVelocity,
+    yVelocity: ball.yVelocity
   };
   while (true) {
-    const future_copy_ball_x = copy_ball.velocity_x + copy_ball.x;
-    if (future_copy_ball_x < 20 || future_copy_ball_x > 432) {
-      copy_ball.velocity_x = -copy_ball.velocity_x;
+    const futureCopyBallX = copyBall.xVelocity + copyBall.x;
+    if (futureCopyBallX < 20 || futureCopyBallX > 432) {
+      copyBall.xVelocity = -copyBall.xVelocity;
     }
-    if (copy_ball.y + copy_ball.velocity_y < 0) {
-      copy_ball.velocity_y = 1;
+    if (copyBall.y + copyBall.yVelocity < 0) {
+      copyBall.yVelocity = 1;
     }
     
     // If copy ball touches net
-    if (Math.abs(copy_ball.x - 216) < 25 && copy_ball.y > 176) {
+    if (Math.abs(copyBall.x - 216) < 25 && copyBall.y > 176) {
       // TODO: it maybe should be 193 as in process_collision_with_ball_and_world function
       // original author's mistake?
-      if (copy_ball.y < 192) {  
-        if (copy_ball.velocity_y > 0) {
-          copy_ball.velocity_y = -copy_ball.velocity_y;
+      if (copyBall.y < 192) {  
+        if (copyBall.yVelocity > 0) {
+          copyBall.yVelocity = -copyBall.yVelocity;
         }
       } else {
         if (ball_x < 216) {
-          copy_ball.velocity_x = -Math.abs(copy_ball.velocity_x);
+          copyBall.xVelocity = -Math.abs(copyBall.xVelocity);
         } else {
-          copy_ball.velocity_x = Math.abs(copy_ball.velocity_x);
+          copyBall.xVelocity = Math.abs(copyBall.xVelocity);
         }
       }
     }
 
-    copy_ball.y = copy_ball.y + copy_ball.velocity_y;
-    // if copy_ball would touch ground
-    if (copy_ball.y > 252) {
+    copyBall.y = copyBall.y + copyBall.yVelocity;
+    // if copyBall would touch ground
+    if (copyBall.y > 252) {
       break;
     }
-    copy_ball.x = copy_ball.x + copy_ball.velocity_x;
-    copy_ball.velocity_y += 1;
+    copyBall.x = copyBall.x + copyBall.xVelocity;
+    copyBall.yVelocity += 1;
   }
-  ball.expected_landing_point_x = copy_ball.x;
+  ball.expectedLandingPointX = copyBall.x;
   return 1;
 }
