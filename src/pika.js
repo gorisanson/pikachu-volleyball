@@ -401,7 +401,7 @@ function process_collision_between_ball_and_player(
   }
 
   // TODO: here call function which expect landing point x of ball
-  FUN_004031b0(ball)
+  caculate_expected_landing_point_x_for(ball)
 
   return 1;
 }
@@ -426,7 +426,7 @@ function copy_ball_info_to_array_and_calc_expected_x(ball, ball, dest) {
   dest[3] = ball.velocity_y;
   dest[4] = ball.expected_landing_point_x;
   // TODO: can I extract this FUN below??
-  FUN_004031b0(ball); // calculate expected_X;
+  caculate_expected_landing_point_x_for(ball); // calculate expected_X;
 }
 
 //FUN_00402810
@@ -447,3 +447,48 @@ function is_collision_between_ball_and_player_happened(ball, player_x, player_y)
   return false;
 }
 
+// FUN_004031b0
+function caculate_expected_landing_point_x_for(ball) {
+  const copy_ball = {
+    x: ball.x,
+    y: ball.y, 
+    velocity_x: ball.velocity_x,
+    velocity_y: ball.velocity_y
+  };
+  while (true) {
+    const future_copy_ball_x = copy_ball.velocity_x + copy_ball.x;
+    if (future_copy_ball_x < 20 || future_copy_ball_x > 432) {
+      copy_ball.velocity_x = -copy_ball.velocity_x;
+    }
+    if (copy_ball.y + copy_ball.velocity_y < 0) {
+      copy_ball.velocity_y = 1;
+    }
+    
+    // If copy ball touches net
+    if (Math.abs(copy_ball.x - 216) < 25 && copy_ball.y > 176) {
+      // TODO: it maybe should be 193 as in process_collision_with_ball_and_world function
+      // original author's mistake?
+      if (copy_ball.y < 192) {  
+        if (copy_ball.velocity_y > 0) {
+          copy_ball.velocity_y = -copy_ball.velocity_y;
+        }
+      } else {
+        if (ball_x < 216) {
+          copy_ball.velocity_x = -Math.abs(copy_ball.velocity_x);
+        } else {
+          copy_ball.velocity_x = Math.abs(copy_ball.velocity_x);
+        }
+      }
+    }
+
+    copy_ball.y = copy_ball.y + copy_ball.velocity_y;
+    // if copy_ball would touch ground
+    if (copy_ball.y > 252) {
+      break;
+    }
+    copy_ball.x = copy_ball.x + copy_ball.velocity_x;
+    copy_ball.velocity_y += 1;
+  }
+  ball.expected_landing_point_x = copy_ball.x;
+  return 1;
+}
