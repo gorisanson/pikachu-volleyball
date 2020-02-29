@@ -17,12 +17,19 @@ const player1 = {
   y: 0, // 0xAC
   velocity_y: 0, // 0xB0
 
+  // state
   // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
   // 4: lying_down_after_diving
   // 5: win!, 6: lost..
-  status: 0, // 0xC0 
+  state: 0, // 0xC0 
   diving_direction: 0, // 0xB4
-  lying_down_duration_left: -1 // 0xB8
+  lying_down_duration_left: -1, // 0xB8
+  is_collision_with_ball_happened: false,  // 0xBC
+  frame_number: 0,  // 0xC4
+  normal_status_arm_swing_direction: 1,
+  delay_before_next_frame: 0, // 0xCC
+  is_winner: false, // 0xD0
+  game_over: false  // 0xD4
 };
 
 // player on right side
@@ -32,12 +39,19 @@ const player2 = {
   x: 0, // 0xA8
   y: 0, // 0xAC
   velocity_y: 0, // 0xB0
-
+  
+  // state
   // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
   // 4: lying_down_after_diving
   // 5: win!, 6: lost..
-  status: 0, // 0xC0
-  lying_down_duration_left: -1 // 0xB8
+  state: 0, // 0xC0
+  lying_down_duration_left: -1, // 0xB8
+  is_collision_with_ball_happened: false,  // 0xBC
+  frame_number: 0,  // 0xC4
+  normal_status_arm_swing_direction: 1,
+  delay_before_next_frame: 0, // 0xCC
+  is_winner: false, // 0xD0
+  game_over: false  // 0xD4
 };
 
 const ball = {
@@ -93,12 +107,12 @@ function physics_function(player1, player2, ball, keyboard) {
     copy_player_info_to_array(player, local_38);
     const is_happend = is_collision_between_ball_and_player_happened(ball, player.x, player.y);
     if (is_happend === true) {
-      if (player.bc === 0) {
-        process_collision_between_ball_and_player(ball, player.x, keyboard, player.status);
-        player.bc = 1;
+      if (player.is_collision_with_ball_happened === false) {
+        process_collision_between_ball_and_player(ball, player.x, keyboard, player.state);
+        player.is_collision_with_ball_happened = true;
       }
     } else {
-      player.bc = 0;
+      player.is_collision_with_ball_happened = false;
     }
   }
   // TODO: what Function is this?
@@ -187,18 +201,18 @@ function process_player_movement(player, keyboard, the_other_player, ball) {
   }
 
   // if player is lying down..
-  if (player.status === 4) {
+  if (player.state === 4) {
     player.lying_down_duration_left += -1;
     if (player.lying_down_duration_left < -1) {
-      player.status = 0;
+      player.state = 0;
     }
     return 1;
   }
 
   // process x-direction movement
   let player_velocity_x = 0;
-  if (player.status < 5) {
-    if (player.status < 3) {
+  if (player.state < 5) {
+    if (player.state < 3) {
       player_velocity_x = keyboard.x_direction * 6;
     } else {
       // if player is diving..
@@ -227,15 +241,14 @@ function process_player_movement(player, keyboard, the_other_player, ball) {
   }
 
   // jump
-  
   if (
-    player.status < 3 &&
+    player.state < 3 &&
     keyboard.y_direction === -1 &&    // up-key downed
     player.y === 244    // player is touching on the ground
   ) {
     player.velocity_y = -16;
-    player.status = 1;
-    player.c4 = 0;
+    player.state = 1;
+    player.frame_number = 0;
     //TODO: stereo sound function FUN_00408470 (0x90)
     //TODO: sound function "chu~" (0x90 + 0x10)
   }
@@ -249,37 +262,37 @@ function process_player_movement(player, keyboard, the_other_player, ball) {
     // if player is landing..
     player.velocity_y = 0;
     player.y = 244;
-    player.c4 = 0;
-    if (player.status === 3) {
+    player.frame_number = 0;
+    if (player.state === 3) {
       // if player is diving..
-      player.status = 4;
-      player.c4 = 0;
+      player.state = 4;
+      player.frame_number = 0;
       player.lying_down_duration_left = 3;
     } else {
-      player.status = 0;
+      player.state = 0;
     }
   }
 
   if (
     keyboard.power_hit_key_pressed_this_key_should_not_auto_repeated === true
   ) {
-    if (player.status === 1) {
+    if (player.state === 1) {
       // if player is jumping..
       // then player do power hit!
       iVar3 = player.x;
-      player.cc = 5;
-      player.c4 = 0;
-      player.status = 2;
+      player.delay_before_next_frame = 5;
+      player.frame_number = 0;
+      player.state = 2;
       //TODO: sound function "pik~" (0x90 + 0x18)
       //TODO: stereo sound function FUN_00408470 (0x94)
       //TODO: sound function "ika!" (0x90 + 0x14)
     } else if (
-      player.status === 0 &&
+      player.state === 0 &&
       keyboard.x_direction !== 0
     ) {
       // then player do diving!
-      player.status = 3;
-      player.c4 = 0;
+      player.state = 3;
+      player.frame_number = 0;
       if (left_key_downed === true) {
         player.diving_direction = -1;
       } else {
@@ -291,41 +304,41 @@ function process_player_movement(player, keyboard, the_other_player, ball) {
     }
   }
 
-  if (player.status === 1) {
-    player.c4 = (player.c4 + 1) % 3;
-  } else if (player.status === 2) {
-    if (player.cc < 1) {
-      player.c4 += 1;
-      if (player.c4 > 4) {
-        player.c4 = 0;
-        player.status = 1;
+  if (player.state === 1) {
+    player.frame_number = (player.frame_number + 1) % 3;
+  } else if (player.state === 2) {
+    if (player.delay_before_next_frame < 1) {
+      player.frame_number += 1;
+      if (player.frame_number > 4) {
+        player.frame_number = 0;
+        player.state = 1;
       }
     } else {
-      player.cc -= 1;
+      player.delay_before_next_frame -= 1;
     }
-  } else if (player.status === 0) {
-    player.cc += 1;
-    if (player.cc > 3) {
-      player.cc = 0;
-      temp = player.c4 + player.c8;
+  } else if (player.state === 0) {
+    player.delay_before_next_frame += 1;
+    if (player.delay_before_next_frame > 3) {
+      player.delay_before_next_frame = 0;
+      temp = player.frame_number + player.normal_status_arm_swing_direction;
       if (temp < 0 || temp > 4) {
-        player.c8 = -player.c8;
+        player.normal_status_arm_swing_direction = -player.normal_status_arm_swing_direction;
       }
-      player.c4 = player.c4 + player.c8;
+      player.frame_number = player.frame_number + player.normal_status_arm_swing_direction;
     }
   }
 
-  if (player.d4 === 1) {
-    if (player.status === 0) {
-      if (player.d0 === 1) {
-        player.status = 5;
+  if (player.game_over === true) {
+    if (player.state === 0) {
+      if (player.is_winner === true) {
+        player.state = 5;
         //TODO: stereo sound function FUN_00408470 (0x98)
         //TODO: sound function "what?" (0x98 + 0x10) "pik~"?
       } else {
-        player.status === 6;
+        player.state === 6;
       }
-      player.cc = 0;
-      player.c4 = 0;
+      player.delay_before_next_frame = 0;
+      player.frame_number = 0;
     }
     FUN_004025e0(player);
   }
@@ -394,12 +407,11 @@ function process_collision_between_ball_and_player(
 }
 
 function FUN_004025e0(player) {
-  let iVar1;
-  if (player.d4 !== 0 && player.c4 < 4) {
-    player.cc += 1;
-    if (player.cc > 4) {
-      player.cc = 0;
-      player.c4 += 1;
+  if (player.game_over === true && player.frame_number < 4) {
+    player.delay_before_next_frame += 1;
+    if (player.delay_before_next_frame > 4) {
+      player.delay_before_next_frame = 0;
+      player.frame_number += 1;
     }
     return 1;
   }
