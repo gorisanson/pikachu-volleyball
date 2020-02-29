@@ -156,7 +156,7 @@ function process_collision_between_ball_and_world(ball) {
   future_ball_y = ball.y + ball.velocity_y;
   // if ball would touch ground
   if (future_ball_y > 252) {
-    //TODO: FUN_00408470 IMAGE (0x28)
+    //TODO: FUN_00408470 stereo SOUND (0x28)
     //TODO: SOUND function : ball touch ground sound (0x28 + 0x10)
     ball.velocity_y = -ball.velocity_y;
     ball.x50 = ball.x;
@@ -236,7 +236,7 @@ function process_player_movement(player, keyboard, the_other_player, ball) {
     player.velocity_y = -16;
     player.status = 1;
     player.c4 = 0;
-    //TODO: image function FUN_00408470 (0x90)
+    //TODO: stereo sound function FUN_00408470 (0x90)
     //TODO: sound function "chu~" (0x90 + 0x10)
   }
 
@@ -271,7 +271,7 @@ function process_player_movement(player, keyboard, the_other_player, ball) {
       player.c4 = 0;
       player.status = 2;
       //TODO: sound function "pik~" (0x90 + 0x18)
-      //TODO: image function FUN_00408470 (0x94)
+      //TODO: stereo sound function FUN_00408470 (0x94)
       //TODO: sound function "ika!" (0x90 + 0x14)
     } else if (
       player.status === 0 &&
@@ -286,7 +286,7 @@ function process_player_movement(player, keyboard, the_other_player, ball) {
         player.diving_direction = +1;
       }
       player.velocity_y = -5;
-      //TODO: image function FUN_00408470 (0x90)
+      //TODO: stereo sound function FUN_00408470 (0x90)
       //TODO: sound function "chu~" (0x90 + 0x10)
     }
   }
@@ -319,7 +319,7 @@ function process_player_movement(player, keyboard, the_other_player, ball) {
     if (player.status === 0) {
       if (player.d0 === 1) {
         player.status = 5;
-        //TODO: image function FUN_00408470 (0x98)
+        //TODO: stereo sound function FUN_00408470 (0x98)
         //TODO: sound function "what?" (0x98 + 0x10) "pik~"?
       } else {
         player.status === 6;
@@ -380,7 +380,7 @@ function process_collision_between_ball_and_player(
 
     ball.velocity_y = Math.abs(ball.velocity_y) * keyboard.y_direction * 2;
     ball.x4c = 20;
-    // TODO: IMAGE FUN_00408470 (0x24)
+    // TODO: stereo SOUND FUN_00408470 (0x24)
     // TODO: SOUND power hit sound (0x24 + 0x10)
     ball.is_power_hit = true;
   } else {
@@ -388,7 +388,7 @@ function process_collision_between_ball_and_player(
   }
 
   // TODO: here call function which expect landing point x of ball
-  // FUN_004031b0(ball)
+  FUN_004031b0(ball)
 
   return 1;
 }
