@@ -350,7 +350,7 @@ function processPlayerMovement(player, keyboard, theOtherPlayer, ball) {
       player.delayBeforeNextFrame = 0;
       player.frameNumber = 0;
     }
-    FUN_004025e0(player);
+    processGameOverFrameFor(player);
   }
   return 1;
 }
@@ -418,7 +418,7 @@ function processCollisionBetweenBallAndPlayer(
   return 1;
 }
 
-function FUN_004025e0(player) {
+function processGameOverFrameFor(player) {
   if (player.gameOver === true && player.frameNumber < 4) {
     player.delayBeforeNextFrame += 1;
     if (player.delayBeforeNextFrame > 4) {
