@@ -7,12 +7,12 @@
  *
  *  Ball radius: 20 = 0x14
  *  Ball diameter: 40 = 0x28
- *  
+ *
  *  Player half-width: 32 = 0x20
  *  Player half-height: 32 = 0x20
  *  Player width: 64 = 0x40
  *  Player height: 64 = 0x40
- * 
+ *
  *  Game speed:
  *    slow: 1 frame per 33ms = 30.303030...Hz
  *    medium: 1 frame per 40ms = 25Hz
@@ -41,7 +41,7 @@ const player1 = {
   isWinner: false, // 0xD0
   gameOver: false, // 0xD4
   randomNumberForRound: rand() % 5, // 0xD8  // initialized to (_rand() % 5)
-  randomNumberZeroOrOne: 0  // 0xDC
+  randomNumberZeroOrOne: 0 // 0xDC
 };
 
 // player on right side
@@ -60,12 +60,12 @@ const player2 = {
   // 5: win!, 6: lost..
   state: 0, // 0xC0
   frameNumber: 0, // 0xC4
-  normalStatusArmSwingDirection: 1,  // 0xC8
+  normalStatusArmSwingDirection: 1, // 0xC8
   delayBeforeNextFrame: 0, // 0xCC
   isWinner: false, // 0xD0
   gameOver: false, // 0xD4
-  randomNumberForRound: rand() % 5, // 0xD8
-  randomNumberZeroOrOne: 0  // 0xDC
+  randomNumberForRound: rand() % 5, // 0xD8  // random number for random control of the AI (determined per round)
+  randomNumberZeroOrOne: 0 // 0xDC  // random number for random contrl of the AI
 };
 
 // Initial Values: refer FUN_000403a90 && FUN_00402d60
@@ -75,7 +75,11 @@ const ball = {
   xVelocity: 0, // 0x38  // initialized to 0
   yVelocity: 1, // 0x3C  // initialized to 1
   expectedLandingPointX: 0, // 0x40
-  x4c: 0,  // 0x4c // initialized to 0
+  rotation: 0, // 0x44 // ball rotation frame selector // one of 0, 1, 2, 3, 4 // if it is other value, hyper ball glitch occur?
+  fineRotation: 0,
+  x4c: 0, // 0x4c // initialized to 0
+  punchEffectX: 0, // coordinate X for punch effect
+  punchEffectY: 0, // coordinate Y for punch effect
   isPowerHit: false // 0x68  // initialized to 0 i.e. false
 };
 
@@ -86,11 +90,13 @@ const keyboard = {
 };
 
 function rand() {
-  return Math.floor(32768*Math.random());
+  return Math.floor(32768 * Math.random());
 }
 
 function physicsEngine(player1, player2, ball, keyboard) {
-  const wasBallTouchedGround = processCollisionBetweenBallAndWorldAndSetBallPosition(p_to_ball); // p_to_ball: this + 0x14
+  const wasBallTouchedGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
+    p_to_ball
+  ); // p_to_ball: this + 0x14
 
   let player, theOtherPlayer;
   let local_14 = [0, 0, 0, 0, 0]; // array
@@ -111,7 +117,12 @@ function physicsEngine(player1, player2, ball, keyboard) {
     //FUN_00402810
     copyPlayerInfoToArray(theOtherPlayer, local_lc);
     //FUN_00401fc0
-    processPlayerMovementAndSetPlayerPosition(player, keyboard, theOtherPlayer, ball);
+    processPlayerMovementAndSetPlayerPosition(
+      player,
+      keyboard,
+      theOtherPlayer,
+      ball
+    );
     // TODO: what is this??? two.. functions...
     // TODO: what is this??
     // maybe graphic function!
@@ -155,17 +166,14 @@ function physicsEngine(player1, player2, ball, keyboard) {
 
 // FUN_00402dc0
 function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
-  let iVar2 = ball.xVelocity;
-  let iVar5 = iVar2 / 2 + ball.x48;
-  ball.x48 = iVar5;
-  if (iVar5 < 0) {
-    iVar5 += 50;
-  } else if (iVar5 > 50) {
-    iVar5 += -50;
+  let futureFineRotation = ball.fineRotation + ball.xVelocity / 2;
+  if (futureFineRotation < 0) {
+    futureFineRotation += 50;
+  } else if (futureFineRotation > 50) {
+    futureFineRotation += -50;
   }
-  ball.x48 = iVar5;
-
-  ball.x44 = (ball.x48 / 10) >> 0; // integer division
+  ball.fineRotation = futureFineRotation;
+  ball.rotation = (ball.fineRotation / 10) >> 0; // integer division
 
   const futureBallX = ball.x + ball.xVelocity;
   // If the center of ball would get out of left world bound or right world bound
@@ -206,10 +214,10 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
     //TODO: FUN_00408470 stereo SOUND (0x28)
     //TODO: SOUND function : ball touch ground sound (0x28 + 0x10)
     ball.yVelocity = -ball.yVelocity;
-    ball.x50 = ball.x;
+    ball.punchEffectX = ball.x;
     ball.y = 252;
     ball.x4c = 20;
-    ball.x54 = 272;
+    ball.punchEffectY = 272;
     return 1;
   }
   ball.y = futureBallY;
@@ -223,7 +231,12 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
 // param1_array maybe keyboard (if param_1[1] === -1, up_key downed)
 // param1[0] === -1: left key downed, param1[0] === 1: right key downed.
 // param1[0] === 0: left/right key not downed.
-function processPlayerMovementAndSetPlayerPosition(player, keyboard, theOtherPlayer, ball) {
+function processPlayerMovementAndSetPlayerPosition(
+  player,
+  keyboard,
+  theOtherPlayer,
+  ball
+) {
   if (player === null || ball === null) {
     return 0;
   }
@@ -415,8 +428,8 @@ function processCollisionBetweenBallAndPlayer(
     } else {
       ball.xVelocity = -(Math.abs(keyboard.xDirection) + 1) * 10;
     }
-    ball.x50 = ball.x;
-    ball.x54 = ball.y;
+    ball.punchEffectX = ball.x;
+    ball.punchEffectY = ball.y;
 
     ball.yVelocity = Math.abs(ball.yVelocity) * keyboard.yDirection * 2;
     ball.x4c = 20;
@@ -521,7 +534,12 @@ function caculate_expected_landing_point_x_for(ball) {
 }
 
 // TODO: Math.abs(ball.x - player.x) appears too many.. refactor!
-function letComputerDecideKeyboardPress(player, ball, theOtherPlayer, keyboard) {
+function letComputerDecideKeyboardPress(
+  player,
+  ball,
+  theOtherPlayer,
+  keyboard
+) {
   keyboard.xDirection = 0;
   keyboard.yDirection = 0;
   keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated = 0;
@@ -543,7 +561,10 @@ function letComputerDecideKeyboardPress(player, ball, theOtherPlayer, keyboard) 
     }
   }
 
-  if (Math.abs(virtualExpectedLandingPointX - player.x) > player.randomNumberForRound + 8) {
+  if (
+    Math.abs(virtualExpectedLandingPointX - player.x) >
+    player.randomNumberForRound + 8
+  ) {
     if (player.x < virtualExpectedLandingPointX) {
       keyboard.xDirection = 1;
     } else {
@@ -590,7 +611,12 @@ function letComputerDecideKeyboardPress(player, ball, theOtherPlayer, keyboard) 
       }
     }
     if (Math.abs(ball.x - player.x) < 48 && Math.abs(ball.y - player.y) < 48) {
-      const iVar2 = decideWhetherDoPowerHit(player, ball, theOtherPlayer, keyboard);
+      const iVar2 = decideWhetherDoPowerHit(
+        player,
+        ball,
+        theOtherPlayer,
+        keyboard
+      );
       if (iVar2 === 1) {
         keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated = 1;
         if (
@@ -608,7 +634,7 @@ function letComputerDecideKeyboardPress(player, ball, theOtherPlayer, keyboard) 
 // return 1 : do power hit
 // return 0 : don't do power hit
 // this function also do keyboard key setting,
-// so that decide also the direction of power hit 
+// so that decide also the direction of power hit
 function decideWhetherDoPowerHit(player, ball, theOtherPlayer, keyboard) {
   if (rand() % 2 === 0) {
     for (let xDirection = 1; xDirection > -1; xDirection--) {
