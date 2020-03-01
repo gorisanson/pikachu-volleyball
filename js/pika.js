@@ -21,9 +21,9 @@
 
 // Initial Values: refer FUN_000403a90 && FUN_00401f40
 // player on left side
-const player1 = {
+let player1 = {
   isPlayer2: false, // 0xA0
-  isComputer: false, // 0xA4
+  isComputer: true, // 0xA4
   x: 36, // 0xA8    // initialized to 36 (player1) or 396 (player2)
   y: 244, // 0xAC   // initialized to 244
   yVelocity: 0, // 0xB0  // initialized to 0
@@ -45,9 +45,9 @@ const player1 = {
 };
 
 // player on right side
-const player2 = {
+let player2 = {
   isPlayer2: true, // 0xA0
-  isComputer: false, // 0xA4
+  isComputer: true, // 0xA4
   x: 396, // 0xA8
   y: 244, // 0xAC
   yVelocity: 0, // 0xB0
@@ -69,7 +69,7 @@ const player2 = {
 };
 
 // Initial Values: refer FUN_000403a90 && FUN_00402d60
-const ball = {
+let ball = {
   x: 56, // 0x30    // initialized to 56 or 376
   y: 0, // 0x34   // initialized to 0
   xVelocity: 0, // 0x38  // initialized to 0
@@ -86,7 +86,7 @@ const ball = {
 const keyboard = {
   xDirection: 0, // 0: not pressed, -1: left-direction pressed, 1: right-direction pressed
   yDirection: 0, // 0: not pressed, -1: up-direction pressed, 1: down-direction pressed
-  powerHitKeyPressedThisKeyShouldNotAutoRepeated: 0 // 0: not pressed, 1: pressed
+  powerHit: 0 // 0: auto-repeated or not pressed, 1: newly pressed
 };
 
 function rand() {
@@ -94,10 +94,10 @@ function rand() {
 }
 
 // FUN_00403dd0
-function physicsEngine(player1, player2, ball, keyboard) {
+function physicsEngine(player1, player2, ball, keyboardArray) {
   const wasBallTouchedGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
-    p_to_ball
-  ); // p_to_ball: this + 0x14
+    ball
+  );
 
   let player, theOtherPlayer;
   let local_14 = [0, 0, 0, 0, 0]; // array
@@ -120,7 +120,7 @@ function physicsEngine(player1, player2, ball, keyboard) {
     //FUN_00401fc0
     processPlayerMovementAndSetPlayerPosition(
       player,
-      keyboard,
+      keyboardArray[i],
       theOtherPlayer,
       ball
     );
@@ -149,7 +149,7 @@ function physicsEngine(player1, player2, ball, keyboard) {
         processCollisionBetweenBallAndPlayer(
           ball,
           player.x,
-          keyboard,
+          keyboardArray[i],
           player.state
         );
         player.isCollisionWithBallHappened = true;
@@ -201,7 +201,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
         ball.yVelocity = -ball.yVelocity;
       }
     } else {
-      if (ball_x < 216) {
+      if (ball.x < 216) {
         ball.xVelocity = -Math.abs(ball.xVelocity);
       } else {
         ball.xVelocity = Math.abs(ball.xVelocity);
@@ -320,7 +320,7 @@ function processPlayerMovementAndSetPlayerPosition(
     }
   }
 
-  if (keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated === 1) {
+  if (keyboard.powerHit === 1) {
     if (player.state === 1) {
       // if player is jumping..
       // then player do power hit!
@@ -461,7 +461,7 @@ function processGameOverFrameFor(player) {
 }
 
 // FUN_00402d90
-function copyBallInfoToArrayAndCalcExpectedX(ball, ball, dest) {
+function copyBallInfoToArrayAndCalcExpectedX(ball, dest) {
   dest[0] = ball.x;
   dest[1] = ball.y;
   dest[2] = ball.xVelocity;
@@ -515,7 +515,7 @@ function caculate_expected_landing_point_x_for(ball) {
           copyBall.yVelocity = -copyBall.yVelocity;
         }
       } else {
-        if (ball_x < 216) {
+        if (copyBall.x < 216) {
           copyBall.xVelocity = -Math.abs(copyBall.xVelocity);
         } else {
           copyBall.xVelocity = Math.abs(copyBall.xVelocity);
@@ -545,7 +545,7 @@ function letComputerDecideKeyboardPress(
 ) {
   keyboard.xDirection = 0;
   keyboard.yDirection = 0;
-  keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated = 0;
+  keyboard.powerHit = 0;
   // TODO what is 4th property?? of keyboard??
 
   let virtualExpectedLandingPointX = ball.expectedLandingPointX;
@@ -598,7 +598,7 @@ function letComputerDecideKeyboardPress(
       ball.x < right_boundary &&
       ball.y > 174
     ) {
-      keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated = 1;
+      keyboard.powerHit = 1;
       if (player.x < ball.x) {
         keyboard.xDirection = 1;
       } else {
@@ -614,14 +614,14 @@ function letComputerDecideKeyboardPress(
       }
     }
     if (Math.abs(ball.x - player.x) < 48 && Math.abs(ball.y - player.y) < 48) {
-      const iVar2 = decideWhetherDoPowerHit(
+      const willPressPowerHitKey = decideWhetherPressPowerHitKey(
         player,
         ball,
         theOtherPlayer,
         keyboard
       );
-      if (iVar2 === 1) {
-        keyboard.powerHitKeyPressedThisKeyShouldNotAutoRepeated = 1;
+      if (willPressPowerHitKey === 1) {
+        keyboard.powerHit = 1;
         if (
           Math.abs(theOtherPlayer.x - player.x) < 80 &&
           keyboard.yDirection !== -1
@@ -638,7 +638,7 @@ function letComputerDecideKeyboardPress(
 // return 0 : don't do power hit
 // this function also do keyboard key setting,
 // so that decide also the direction of power hit
-function decideWhetherDoPowerHit(player, ball, theOtherPlayer, keyboard) {
+function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
   if (rand() % 2 === 0) {
     for (let xDirection = 1; xDirection > -1; xDirection--) {
       for (let yDirection = -1; yDirection < 2; yDirection++) {
