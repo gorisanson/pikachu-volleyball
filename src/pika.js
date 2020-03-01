@@ -93,6 +93,7 @@ function rand() {
   return Math.floor(32768 * Math.random());
 }
 
+// FUN_00403dd0
 function physicsEngine(player1, player2, ball, keyboard) {
   const wasBallTouchedGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
     p_to_ball
@@ -446,6 +447,7 @@ function processCollisionBetweenBallAndPlayer(
   return 1;
 }
 
+// FUN_004025e0
 function processGameOverFrameFor(player) {
   if (player.gameOver === true && player.frameNumber < 4) {
     player.delayBeforeNextFrame += 1;
@@ -534,6 +536,7 @@ function caculate_expected_landing_point_x_for(ball) {
 }
 
 // TODO: Math.abs(ball.x - player.x) appears too many.. refactor!
+// FUN_00402360
 function letComputerDecideKeyboardPress(
   player,
   ball,
@@ -678,6 +681,7 @@ function decideWhetherDoPowerHit(player, ball, theOtherPlayer, keyboard) {
   return 0;
 }
 
+// FUN_00402870
 function expectedLandingPointXWhenPowerHit(
   keyboardXDirection,
   keyboardYDirection,
