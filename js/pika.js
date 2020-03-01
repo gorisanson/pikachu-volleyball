@@ -579,7 +579,7 @@ function letComputerDecideKeyboardPress(
 
   if (player.state === 0) {
     if (
-      Math.abs(ball.y) < player.randomNumberForRound + 3 &&
+      Math.abs(ball.xVelocity) < player.randomNumberForRound + 3 &&
       Math.abs(ball.x - player.x) < 32 &&
       ball.y > -36 &&
       ball.y < 10 * player.randomNumberForRound + 84 &&
