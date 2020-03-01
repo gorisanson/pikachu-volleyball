@@ -6,7 +6,17 @@
  *  Y position coord down-direction increasing
  *
  *  Ball radius: 20 = 0x14
+ *  Ball diameter: 40 = 0x28
+ *  
  *  Player half-width: 32 = 0x20
+ *  Player half-height: 32 = 0x20
+ *  Player width: 64 = 0x40
+ *  Player height: 64 = 0x40
+ * 
+ *  Game speed:
+ *    slow: 1 frame per 33ms = 30.303030...Hz
+ *    medium: 1 frame per 40ms = 25Hz
+ *    fast: 1 frame per 50ms = 20Hz
  */
 
 // Initial Values: refer FUN_000403a90 && FUN_00401f40
@@ -14,23 +24,23 @@
 const player1 = {
   isPlayer2: false, // 0xA0
   isComputer: false, // 0xA4
-  x: 36, // 0xA8    
-  y: 244, // 0xAC
-  yVelocity: 0, // 0xB0
+  x: 36, // 0xA8    // initialized to 36 (player1) or 396 (player2)
+  y: 244, // 0xAC   // initialized to 244
+  yVelocity: 0, // 0xB0  // initialized to 0
   divingDirection: 0, // 0xB4
   lyingDownDurationLeft: -1, // 0xB8
-  isCollisionWithBallHappened: false, // 0xBC
+  isCollisionWithBallHappened: false, // 0xBC   // initizlized to 0 i.e false
   // state
   // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
   // 4: lying_down_after_diving
   // 5: win!, 6: lost..
-  state: 0, // 0xC0
-  frameNumber: 0, // 0xC4
-  normalStatusArmSwingDirection: 1, // 0xC8
-  delayBeforeNextFrame: 0, // 0xCC
+  state: 0, // 0xC0   // initialized to 0
+  frameNumber: 0, // 0xC4   // initialized to 0
+  normalStatusArmSwingDirection: 1, // 0xC8  // initialized to 1
+  delayBeforeNextFrame: 0, // 0xCC  // initizlized to 0
   isWinner: false, // 0xD0
   gameOver: false, // 0xD4
-  randomNumberForRound: rand() % 5, // 0xD8
+  randomNumberForRound: rand() % 5, // 0xD8  // initialized to (_rand() % 5)
   randomNumberZeroOrOne: 0  // 0xDC
 };
 
@@ -58,14 +68,15 @@ const player2 = {
   randomNumberZeroOrOne: 0  // 0xDC
 };
 
+// Initial Values: refer FUN_000403a90 && FUN_00402d60
 const ball = {
-  x: 56, // 0x30    // initial value: 56 or 376
-  y: 0, // 0x34
-  xVelocity: 0, // 0x38
-  yVelocity: 1, // 0x3C
-  expectedLandingPointX: 40000, // 0x40
-  x4c: 0,
-  isPowerHit: false // 0x68
+  x: 56, // 0x30    // initialized to 56 or 376
+  y: 0, // 0x34   // initialized to 0
+  xVelocity: 0, // 0x38  // initialized to 0
+  yVelocity: 1, // 0x3C  // initialized to 1
+  expectedLandingPointX: 0, // 0x40
+  x4c: 0,  // 0x4c // initialized to 0
+  isPowerHit: false // 0x68  // initialized to 0 i.e. false
 };
 
 const keyboard = {
@@ -78,8 +89,8 @@ function rand() {
   return Math.floor(32768*Math.random());
 }
 
-function physicsFunction(player1, player2, ball, keyboard) {
-  const wasBallTouchedGround = processCollisionBetweenBallAndWorld(p_to_ball); // p_to_ball: this + 0x14
+function physicsEngine(player1, player2, ball, keyboard) {
+  const wasBallTouchedGround = processCollisionBetweenBallAndWorldAndSetBallPosition(p_to_ball); // p_to_ball: this + 0x14
 
   let player, theOtherPlayer;
   let local_14 = [0, 0, 0, 0, 0]; // array
@@ -100,9 +111,11 @@ function physicsFunction(player1, player2, ball, keyboard) {
     //FUN_00402810
     copyPlayerInfoToArray(theOtherPlayer, local_lc);
     //FUN_00401fc0
-    processPlayerMovement(player, keyboard, theOtherPlayer, ball);
+    processPlayerMovementAndSetPlayerPosition(player, keyboard, theOtherPlayer, ball);
     // TODO: what is this??? two.. functions...
     // TODO: what is this??
+    // maybe graphic function!
+    // draw(player.x - 32, player.y - 32, 64, 64)
   }
 
   for (let i = 0; i < 2; i++) {
@@ -135,11 +148,13 @@ function physicsFunction(player1, player2, ball, keyboard) {
   }
   // TODO: what Function is this?
   // TODO: what Function is this?
+  // maybe graphic funcation
+  // draw(ball.x - 20, ball.y- 20, 20, 20)
   return wasBallTouchedGround;
 }
 
 // FUN_00402dc0
-function processCollisionBetweenBallAndWorld(ball) {
+function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   let iVar2 = ball.xVelocity;
   let iVar5 = iVar2 / 2 + ball.x48;
   ball.x48 = iVar5;
@@ -208,7 +223,7 @@ function processCollisionBetweenBallAndWorld(ball) {
 // param1_array maybe keyboard (if param_1[1] === -1, up_key downed)
 // param1[0] === -1: left key downed, param1[0] === 1: right key downed.
 // param1[0] === 0: left/right key not downed.
-function processPlayerMovement(player, keyboard, theOtherPlayer, ball) {
+function processPlayerMovementAndSetPlayerPosition(player, keyboard, theOtherPlayer, ball) {
   if (player === null || ball === null) {
     return 0;
   }
