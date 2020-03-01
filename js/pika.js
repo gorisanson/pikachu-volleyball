@@ -708,7 +708,7 @@ function expectedLandingPointXWhenPowerHit(
     if (copyBall.y + copyBall.yVelocity < 0) {
       copyBall.yVelocity = 1;
     }
-    if (Math.abs(copyBall.x - 216) < 31 && copyBall.y > 176) {
+    if (Math.abs(copyBall.x - 216) < 25 && copyBall.y > 176) {
       // TODO: is it real??
       // it's just same as
       //
