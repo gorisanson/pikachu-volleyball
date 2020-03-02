@@ -7,7 +7,9 @@ let Application = PIXI.Application,
   loader = PIXI.Loader.shared,
   resources = loader.resources,
   Sprite = PIXI.Sprite,
-  Rectangle = PIXI.Rectangle;
+  Rectangle = PIXI.Rectangle,
+  AnimatedSprite = PIXI.AnimatedSprite,
+  Container = PIXI.Container;
 
 //Create a Pixi Application
 let app = new Application({
@@ -26,7 +28,7 @@ loader.add("assets/sprite_sheet.json").load(setup);
 
 function setup() {
   const textures = loader.resources["assets/sprite_sheet.json"].textures;
-  const bgContainer = new PIXI.Container();
+  const bgContainer = new Container();
   let tile;
 
   // sky
@@ -95,39 +97,66 @@ function setup() {
     addChildToParentAndSetLocalPosition(bgContainer, tile, 213, 184 + 8 * j);
   }
 
-  const ball = new Sprite(textures["ball/ball_0.png"]);
-  const player1 = new Sprite(textures["pikachu/pikachu_0_0.png"]);
-  const player2 = new Sprite(textures["pikachu/pikachu_0_0.png"]);
-  player2.scale.x = -1;
+  const getPlayerTexture = (i, j) => textures[`pikachu/pikachu_${i}_${j}.png`];
+  const playerTextureArray = [];
+  for (let i = 0; i < 7; i++) {
+    if (i === 3) {
+      playerTextureArray.push(getPlayerTexture(i, 0));
+      playerTextureArray.push(getPlayerTexture(i, 1));
+    } else if (i === 4) {
+      playerTextureArray.push(getPlayerTexture(i, 0));
+    } else {
+      for (let j = 0; j < 5; j++) {
+        playerTextureArray.push(getPlayerTexture(i, j));
+      }
+    }
+  }
+  const player1AnimatedSprite = new AnimatedSprite(playerTextureArray);
+  const player2AnimatedSprite = new AnimatedSprite(playerTextureArray);
+  player2AnimatedSprite.scale.x = -1;
+
+  const getBallTexture = s => textures[`ball/ball_${s}.png`];
+  const ballTextureArray = [
+    getBallTexture(0),
+    getBallTexture(1),
+    getBallTexture(2),
+    getBallTexture(3),
+    getBallTexture(4),
+    getBallTexture("hyper"), // TODO: hyper-glitch how occur?
+    getBallTexture("trail"), // TODO: trail, punch needed??
+    getBallTexture("punch")
+  ];
+  const ball = new AnimatedSprite(ballTextureArray);
+  ball.play();
 
   ball.anchor.x = 0.5;
   ball.anchor.y = 0.5;
-  player1.anchor.x = 0.5;
-  player1.anchor.y = 0.5;
-  player2.anchor.x = 0.5;
-  player2.anchor.y = 0.5;
+  player1AnimatedSprite.anchor.x = 0.5;
+  player1AnimatedSprite.anchor.y = 0.5;
+  player2AnimatedSprite.anchor.x = 0.5;
+  player2AnimatedSprite.anchor.y = 0.5;
 
   app.stage.addChild(bgContainer);
-  app.stage.addChild(player1);
-  app.stage.addChild(player2);
+  app.stage.addChild(player1AnimatedSprite);
+  app.stage.addChild(player2AnimatedSprite);
   app.stage.addChild(ball);
 
   bgContainer.x = 0;
   bgContainer.y = 0;
 
-  player1.x = 60;
-  player1.y = 180;
+  player1AnimatedSprite.x = 60;
+  player1AnimatedSprite.y = 180;
 
   ball.x = 216;
   ball.y = 100;
 
-  player2.x = 300;
-  player2.y = 180;
+  player2AnimatedSprite.x = 300;
+  player2AnimatedSprite.y = 180;
 
   //Render the stage
   //app.render();
   //app.renderer.render(app.stage);
-  //const keyboard1 = new Keyboard("d", "g", "r", "f", "z");
+  const keyboard1 = new Keyboard("d", "g", "r", "f", "z");
   const keyboard2 = new Keyboard(
     "ArrowLeft",
     "ArrowRight",
@@ -136,14 +165,14 @@ function setup() {
     "Enter"
   );
 
-  keyboardArray[0] = keyboard;
-  keyboardArray[1] = Object.assign({}, keyboard);
-  //keyboardArray[0] = keyboard1;
-  //keyboardArray[1] = keyboard2;
+  //keyboardArray[0] = keyboard;
+  //keyboardArray[1] = Object.assign({}, keyboard);
+  keyboardArray[0] = keyboard1;
+  keyboardArray[1] = keyboard2;
 
   state = play;
-  gameSprite.player1 = player1;
-  gameSprite.player2 = player2;
+  gameSprite.player1 = player1AnimatedSprite;
+  gameSprite.player2 = player2AnimatedSprite;
   gameSprite.ball = ball;
   app.ticker.maxFPS = 25;
   app.ticker.add(delta => gameLoop(delta));
@@ -218,15 +247,30 @@ function play(delta) {
       isPowerHit: false // 0x68  // initialized to 0 i.e. false
     };
   }
-  //keyboardArray[0].updateProperties();
-  //keyboardArray[1].updateProperties();
-  ballTouchedGround = physicsEngine(player1, player2, ball, keyboardArray);
+
+  gameSprite.ball.x = ball.x;
+  gameSprite.ball.y = ball.y;
+  gameSprite.ball.gotoAndStop(ball.rotation);
+
   gameSprite.player1.x = player1.x;
   gameSprite.player1.y = player1.y;
   gameSprite.player2.x = player2.x;
   gameSprite.player2.y = player2.y;
-  gameSprite.ball.x = ball.x;
-  gameSprite.ball.y = ball.y;
+
+  const frameNumber1 = getFrameNumberForPlayerAnimatedStripe(
+    player1.state,
+    player1.frameNumber
+  );
+  const frameNumber2 = getFrameNumberForPlayerAnimatedStripe(
+    player2.state,
+    player2.frameNumber
+  );
+  gameSprite.player1.gotoAndStop(frameNumber1);
+  gameSprite.player2.gotoAndStop(frameNumber2);
+
+  keyboardArray[0].updateProperties();
+  keyboardArray[1].updateProperties();
+  ballTouchedGround = physicsEngine(player1, player2, ball, keyboardArray);
 }
 
 function addChildToParentAndSetLocalPosition(parent, child, x, y) {
@@ -235,4 +279,18 @@ function addChildToParentAndSetLocalPosition(parent, child, x, y) {
   child.anchor.y = 0;
   child.x = x;
   child.y = y;
+}
+
+// number of frames for state 0, state 1 and state 2 is 5 for each.
+// number of frames for state 3 is 2.
+// number of frames for state 4 is 1.
+// number of frames for state 5, state 6 is 5 for each.
+function getFrameNumberForPlayerAnimatedStripe(state, frameNumber) {
+  if (state < 4) {
+    return 5 * state + frameNumber;
+  } else if (state === 4) {
+    return 17 + frameNumber;
+  } else if (state > 4) {
+    return 18 + frameNumber;
+  }
 }
