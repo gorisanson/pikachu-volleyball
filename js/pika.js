@@ -76,10 +76,15 @@ let ball = {
   yVelocity: 1, // 0x3C  // initialized to 1
   expectedLandingPointX: 0, // 0x40
   rotation: 0, // 0x44 // ball rotation frame selector // one of 0, 1, 2, 3, 4 // if it is other value, hyper ball glitch occur?
-  fineRotation: 0,
-  x4c: 0, // 0x4c // initialized to 0
-  punchEffectX: 0, // coordinate X for punch effect
-  punchEffectY: 0, // coordinate Y for punch effect
+  fineRotation: 0, // 0x48
+  punchEffectRadius: 0, // 0x4c // initialized to 0
+  punchEffectX: 0, // 0x50 // coordinate X for punch effect
+  punchEffectY: 0, // 0x54 // coordinate Y for punch effect
+  // previous values are for trailing effect for power hit
+  previousX: 0, // 0x58
+  previousPreviousX: 0, // 0x5c
+  previousY: 0, // 0x60
+  previousPreviousY: 0, // 0x64
   isPowerHit: false // 0x68  // initialized to 0 i.e. false
 };
 
@@ -168,6 +173,12 @@ function physicsEngine(player1, player2, ball, keyboardArray) {
 // FUN_00402dc0
 function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   let futureFineRotation = ball.fineRotation + ball.xVelocity / 2;
+  // If futureFineRotation === 50, it skips next if statement finely.
+  // Then ball.fineRoation = 50, and then ball.rotation = 5 (which designates hyperball sprite!).
+  // In this way, hyper ball glitch occur!
+  // If this happen at the end of round,
+  // since ball.xVeloicy is 0-initailized at each start of round,
+  // hyper ball sprite is rendered continuously until a collision happens.
   if (futureFineRotation < 0) {
     futureFineRotation += 50;
   } else if (futureFineRotation > 50) {
@@ -217,7 +228,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
     ball.yVelocity = -ball.yVelocity;
     ball.punchEffectX = ball.x;
     ball.y = 252;
-    ball.x4c = 20;
+    ball.punchEffectRadius = 20;
     ball.punchEffectY = 272;
     return 1;
   }
@@ -433,7 +444,7 @@ function processCollisionBetweenBallAndPlayer(
     ball.punchEffectY = ball.y;
 
     ball.yVelocity = Math.abs(ball.yVelocity) * keyboard.yDirection * 2;
-    ball.x4c = 20;
+    ball.punchEffectRadius = 20;
     // TODO: stereo SOUND FUN_00408470 (0x24)
     // TODO: SOUND power hit sound (0x24 + 0x10)
     ball.isPowerHit = true;
