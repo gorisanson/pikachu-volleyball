@@ -22,20 +22,82 @@ let app = new Application({
 //Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 
-loader.add(["images/BITMAP103_1.png", "images/BITMAP104_1.png"]).load(setup);
+loader.add("assets/sprite_sheet.json").load(setup);
 
 function setup() {
-  const ballTexture = resources["images/BITMAP104_1.png"].texture;
-  const ballRectangle = new Rectangle(0, 0, 40, 40);
-  ballTexture.frame = ballRectangle;
+  const textures = loader.resources["assets/sprite_sheet.json"].textures;
+  const bgContainer = new PIXI.Container();
+  let tile;
 
-  const playerTexture = resources["images/BITMAP103_1.png"].texture;
-  const playerRectangle = new Rectangle(0, 0, 64, 64);
-  playerTexture.frame = playerRectangle;
+  // sky
+  let texture = textures["objects/sky_blue.png"];
+  for (let j = 0; j < 11; j++) {
+    for (let i = 0; i < 432 / 16; i++) {
+      tile = new Sprite(texture);
+      addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 16 * j);
+    }
+  }
 
-  const ball = new Sprite(ballTexture);
-  const player1 = new Sprite(playerTexture);
-  const player2 = new Sprite(playerTexture);
+  // mountain
+  texture = textures["objects/mountain.png"];
+  tile = new Sprite(texture);
+  addChildToParentAndSetLocalPosition(bgContainer, tile, 0, 176);
+
+  // ground_red
+  texture = textures["objects/ground_red.png"];
+  for (let i = 0; i < 432 / 16; i++) {
+    tile = new Sprite(texture);
+    addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 248);
+  }
+
+  // ground_line
+  texture = textures["objects/ground_line.png"];
+  for (let i = 1; i < 432 / 16 - 1; i++) {
+    tile = new Sprite(texture);
+    addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 264);
+  }
+  texture = textures["objects/ground_line_leftmost.png"];
+  tile = new Sprite(texture);
+  addChildToParentAndSetLocalPosition(bgContainer, tile, 0, 264);
+  texture = textures["objects/ground_line_rightmost.png"];
+  tile = new Sprite(texture);
+  addChildToParentAndSetLocalPosition(bgContainer, tile, 432 - 16, 264);
+
+  // ground_yellow
+  texture = textures["objects/ground_yellow.png"];
+  for (let j = 0; j < 2; j++) {
+    for (let i = 0; i < 432 / 16; i++) {
+      tile = new Sprite(texture);
+      addChildToParentAndSetLocalPosition(
+        bgContainer,
+        tile,
+        16 * i,
+        280 + 16 * j
+      );
+    }
+  }
+
+  // TODO: wave moving
+  // wave
+  texture = textures["objects/wave.png"];
+  for (let i = 0; i < 432 / 16; i++) {
+    tile = new Sprite(texture);
+    addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 280);
+  }
+
+  // net pillar
+  texture = textures["objects/net_pillar_top.png"];
+  tile = new Sprite(texture);
+  addChildToParentAndSetLocalPosition(bgContainer, tile, 213, 176);
+  texture = textures["objects/net_pillar.png"];
+  for (let j = 0; j < 12; j++) {
+    tile = new Sprite(texture);
+    addChildToParentAndSetLocalPosition(bgContainer, tile, 213, 184 + 8 * j);
+  }
+
+  const ball = new Sprite(textures["ball/ball_0.png"]);
+  const player1 = new Sprite(textures["pikachu/pikachu_0_0.png"]);
+  const player2 = new Sprite(textures["pikachu/pikachu_0_0.png"]);
   player2.scale.x = -1;
 
   ball.anchor.x = 0.5;
@@ -45,9 +107,13 @@ function setup() {
   player2.anchor.x = 0.5;
   player2.anchor.y = 0.5;
 
+  app.stage.addChild(bgContainer);
   app.stage.addChild(player1);
   app.stage.addChild(player2);
   app.stage.addChild(ball);
+
+  bgContainer.x = 0;
+  bgContainer.y = 0;
 
   player1.x = 60;
   player1.y = 180;
@@ -161,4 +227,12 @@ function play(delta) {
   gameSprite.player2.y = player2.y;
   gameSprite.ball.x = ball.x;
   gameSprite.ball.y = ball.y;
+}
+
+function addChildToParentAndSetLocalPosition(parent, child, x, y) {
+  parent.addChild(child);
+  child.anchor.x = 0;
+  child.anchor.y = 0;
+  child.x = x;
+  child.y = y;
 }
