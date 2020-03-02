@@ -392,7 +392,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu/pikachu_3_2.png":
+"pikachu/pikachu_4_0.png":
 {
 	"frame": {"x":192,"y":224,"w":64,"h":64},
 	"rotated": false,
@@ -400,7 +400,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu/pikachu_4_0.png":
+"pikachu/pikachu_5_0.png":
 {
 	"frame": {"x":256,"y":224,"w":64,"h":64},
 	"rotated": false,
@@ -408,7 +408,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu/pikachu_4_1.png":
+"pikachu/pikachu_5_1.png":
 {
 	"frame": {"x":320,"y":224,"w":64,"h":64},
 	"rotated": false,
@@ -416,7 +416,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu/pikachu_4_2.png":
+"pikachu/pikachu_5_2.png":
 {
 	"frame": {"x":384,"y":224,"w":64,"h":64},
 	"rotated": false,
@@ -424,7 +424,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu/pikachu_4_3.png":
+"pikachu/pikachu_5_3.png":
 {
 	"frame": {"x":0,"y":288,"w":64,"h":64},
 	"rotated": false,
@@ -432,7 +432,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu/pikachu_4_4.png":
+"pikachu/pikachu_5_4.png":
 {
 	"frame": {"x":64,"y":288,"w":64,"h":64},
 	"rotated": false,
@@ -440,7 +440,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu/pikachu_5_0.png":
+"pikachu/pikachu_6_0.png":
 {
 	"frame": {"x":128,"y":288,"w":64,"h":64},
 	"rotated": false,
@@ -448,7 +448,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu/pikachu_5_1.png":
+"pikachu/pikachu_6_1.png":
 {
 	"frame": {"x":192,"y":288,"w":64,"h":64},
 	"rotated": false,
@@ -456,7 +456,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu/pikachu_5_2.png":
+"pikachu/pikachu_6_2.png":
 {
 	"frame": {"x":256,"y":288,"w":64,"h":64},
 	"rotated": false,
@@ -464,7 +464,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu/pikachu_5_3.png":
+"pikachu/pikachu_6_3.png":
 {
 	"frame": {"x":320,"y":288,"w":64,"h":64},
 	"rotated": false,
@@ -472,7 +472,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu/pikachu_5_4.png":
+"pikachu/pikachu_6_4.png":
 {
 	"frame": {"x":384,"y":288,"w":64,"h":64},
 	"rotated": false,
@@ -542,9 +542,9 @@
 	"pikachu/pikachu_0": ["pikachu/pikachu_0_0.png","pikachu/pikachu_0_1.png","pikachu/pikachu_0_2.png","pikachu/pikachu_0_3.png","pikachu/pikachu_0_4.png"],
 	"pikachu/pikachu_1": ["pikachu/pikachu_1_0.png","pikachu/pikachu_1_1.png","pikachu/pikachu_1_2.png","pikachu/pikachu_1_3.png","pikachu/pikachu_1_4.png"],
 	"pikachu/pikachu_2": ["pikachu/pikachu_2_0.png","pikachu/pikachu_2_1.png","pikachu/pikachu_2_2.png","pikachu/pikachu_2_3.png","pikachu/pikachu_2_4.png"],
-	"pikachu/pikachu_3": ["pikachu/pikachu_3_0.png","pikachu/pikachu_3_1.png","pikachu/pikachu_3_2.png"],
-	"pikachu/pikachu_4": ["pikachu/pikachu_4_0.png","pikachu/pikachu_4_1.png","pikachu/pikachu_4_2.png","pikachu/pikachu_4_3.png","pikachu/pikachu_4_4.png"],
-	"pikachu/pikachu_5": ["pikachu/pikachu_5_0.png","pikachu/pikachu_5_1.png","pikachu/pikachu_5_2.png","pikachu/pikachu_5_3.png","pikachu/pikachu_5_4.png"]
+	"pikachu/pikachu_3": ["pikachu/pikachu_3_0.png","pikachu/pikachu_3_1.png"],
+	"pikachu/pikachu_5": ["pikachu/pikachu_5_0.png","pikachu/pikachu_5_1.png","pikachu/pikachu_5_2.png","pikachu/pikachu_5_3.png","pikachu/pikachu_5_4.png"],
+	"pikachu/pikachu_6": ["pikachu/pikachu_6_0.png","pikachu/pikachu_6_1.png","pikachu/pikachu_6_2.png","pikachu/pikachu_6_3.png","pikachu/pikachu_6_4.png"]
 },
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
@@ -553,6 +553,6 @@
 	"format": "RGBA8888",
 	"size": {"w":464,"h":584},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:6d9783ab5e5416de19a99aa81a792a72:80c652463154e23dc31332cdbb700209:6cc8953523e0367402f95f3c9a630665$"
+	"smartupdate": "$TexturePacker:SmartUpdate:e41c85dcf9357e6afe0265d65bd15a4a:80c652463154e23dc31332cdbb700209:6cc8953523e0367402f95f3c9a630665$"
 }
 }
