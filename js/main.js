@@ -126,32 +126,37 @@ function setup() {
     getBallTexture("trail"), // TODO: trail, punch needed??
     getBallTexture("punch")
   ];
-  const ball = new AnimatedSprite(ballTextureArray);
-  ball.play();
+  const ballAnimatedSprite = new AnimatedSprite(ballTextureArray);
 
-  ball.anchor.x = 0.5;
-  ball.anchor.y = 0.5;
+  const ballHyperSprite = new Sprite(textures["ball/ball_hyper.png"]);
+  const ballTrailSprite = new Sprite(textures["ball/ball_trail.png"]);
+  const ballPunchSprite = new Sprite(textures["ball/ball_punch.png"]);
+
+  ballAnimatedSprite.anchor.x = 0.5;
+  ballAnimatedSprite.anchor.y = 0.5;
+  ballHyperSprite.anchor.x = 0.5;
+  ballTrailSprite.anchor.x = 0.5;
+  ballPunchSprite.anchor.x = 0.5;
   player1AnimatedSprite.anchor.x = 0.5;
   player1AnimatedSprite.anchor.y = 0.5;
   player2AnimatedSprite.anchor.x = 0.5;
   player2AnimatedSprite.anchor.y = 0.5;
 
+  // TODO: careful with the order of addChild, the later, the fronter?
   app.stage.addChild(bgContainer);
   app.stage.addChild(player1AnimatedSprite);
   app.stage.addChild(player2AnimatedSprite);
-  app.stage.addChild(ball);
+  app.stage.addChild(ballTrailSprite);
+  app.stage.addChild(ballHyperSprite);
+  app.stage.addChild(ballAnimatedSprite);
+  app.stage.addChild(ballPunchSprite);
 
   bgContainer.x = 0;
   bgContainer.y = 0;
 
-  player1AnimatedSprite.x = 60;
-  player1AnimatedSprite.y = 180;
-
-  ball.x = 216;
-  ball.y = 100;
-
-  player2AnimatedSprite.x = 300;
-  player2AnimatedSprite.y = 180;
+  ballTrailSprite.visible = false;
+  ballHyperSprite.visible = false;
+  ballPunchSprite.visible = false;
 
   //Render the stage
   //app.render();
@@ -173,7 +178,11 @@ function setup() {
   state = play;
   gameSprite.player1 = player1AnimatedSprite;
   gameSprite.player2 = player2AnimatedSprite;
-  gameSprite.ball = ball;
+  gameSprite.ball = ballAnimatedSprite;
+  gameSprite.hyper = ballHyperSprite;
+  gameSprite.trail = ballTrailSprite;
+  gameSprite.punch = ballPunchSprite;
+
   app.ticker.maxFPS = 25;
   app.ticker.add(delta => gameLoop(delta));
 }
@@ -257,16 +266,27 @@ function play(delta) {
   gameSprite.player2.x = player2.x;
   gameSprite.player2.y = player2.y;
 
-  const frameNumber1 = getFrameNumberForPlayerAnimatedStripe(
+  const frameNumber1 = getFrameNumberForPlayerAnimatedSprite(
     player1.state,
     player1.frameNumber
   );
-  const frameNumber2 = getFrameNumberForPlayerAnimatedStripe(
+  const frameNumber2 = getFrameNumberForPlayerAnimatedSprite(
     player2.state,
     player2.frameNumber
   );
   gameSprite.player1.gotoAndStop(frameNumber1);
   gameSprite.player2.gotoAndStop(frameNumber2);
+
+  if (ball.punchEffectRadius > 0) {
+    ball.punchEffectRadius -= 2;
+    gameSprite.punch.width = 2 * ball.punchEffectRadius;
+    gameSprite.punch.height = 2 * ball.punchEffectRadius;
+    gameSprite.punch.x = ball.punchEffectX;
+    gameSprite.punch.y = ball.punchEffectY;
+    gameSprite.punch.visible = true;
+  } else {
+    gameSprite.punch.visible = false;
+  }
 
   keyboardArray[0].updateProperties();
   keyboardArray[1].updateProperties();
@@ -285,7 +305,7 @@ function addChildToParentAndSetLocalPosition(parent, child, x, y) {
 // number of frames for state 3 is 2.
 // number of frames for state 4 is 1.
 // number of frames for state 5, state 6 is 5 for each.
-function getFrameNumberForPlayerAnimatedStripe(state, frameNumber) {
+function getFrameNumberForPlayerAnimatedSprite(state, frameNumber) {
   if (state < 4) {
     return 5 * state + frameNumber;
   } else if (state === 4) {
