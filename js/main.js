@@ -1,6 +1,7 @@
 let state;
 const gameSprite = {};
 let keyboardArray = [null, null];
+const audio = {};
 
 //Aliases
 let Application = PIXI.Application,
@@ -24,7 +25,19 @@ let app = new Application({
 //Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 
-loader.add("assets/sprite_sheet.json").load(setup);
+audio.bgm = new Audio("assets/bgm.mp3");
+audio.bgm.addEventListener("loadeddata", event => {
+  loader.add("assets/sprite_sheet.json").load(setup);
+});
+audio.bgm.loop = true;
+
+audio.pipikachu = new Audio("assets/WAVE140_1.wav");
+audio.pika = new Audio("assets/WAVE141_1.wav");
+audio.chu = new Audio("assets/WAVE142_1.wav");
+pi = new Audio("assets/WAVE143_1.wav");
+pikachu = new Audio("assets/WAVE144_1.wav");
+punch = new Audio("assets/WAVE145_1.wav");
+ballTouchesGround = new Audio("assets/WAVE146_1.wav");
 
 function setup() {
   const textures = loader.resources["assets/sprite_sheet.json"].textures;
@@ -174,8 +187,14 @@ function setup() {
   gameSprite.player1 = player1AnimatedSprite;
   gameSprite.player2 = player2AnimatedSprite;
   gameSprite.ball = ball;
+
+  app.view.addEventListener("click", gameStart, { once: true });
+}
+
+function gameStart() {
   app.ticker.maxFPS = 25;
   app.ticker.add(delta => gameLoop(delta));
+  audio.bgm.play();
 }
 
 function gameLoop(delta) {
