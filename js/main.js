@@ -288,6 +288,23 @@ function play(delta) {
     gameSprite.punch.visible = false;
   }
 
+  if (ball.isPowerHit === true) {
+    gameSprite.hyper.x = ball.previousX;
+    gameSprite.hyper.y = ball.previousY;
+    gameSprite.trail.x = ball.previousPreviousX;
+    gameSprite.trail.y = ball.previousPreviousY;
+
+    gameSprite.hyper.visible = true;
+    gameSprite.trail.visible = true;
+  } else {
+    gameSprite.hyper.visible = false;
+    gameSprite.trail.visible = false;
+  }
+  ball.previousPreviousX = ball.previousX;
+  ball.previousPreviousY = ball.previousY;
+  ball.previousX = ball.x;
+  ball.previousY = ball.y;
+
   keyboardArray[0].updateProperties();
   keyboardArray[1].updateProperties();
   ballTouchedGround = physicsEngine(player1, player2, ball, keyboardArray);
