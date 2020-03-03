@@ -145,15 +145,18 @@ function setup() {
   const ballTrailSprite = new Sprite(textures["ball/ball_trail.png"]);
   const ballPunchSprite = new Sprite(textures["ball/ball_punch.png"]);
 
-  ballAnimatedSprite.anchor.x = 0.5;
-  ballAnimatedSprite.anchor.y = 0.5;
-  ballHyperSprite.anchor.x = 0.5;
-  ballTrailSprite.anchor.x = 0.5;
-  ballPunchSprite.anchor.x = 0.5;
   player1AnimatedSprite.anchor.x = 0.5;
   player1AnimatedSprite.anchor.y = 0.5;
   player2AnimatedSprite.anchor.x = 0.5;
   player2AnimatedSprite.anchor.y = 0.5;
+  ballAnimatedSprite.anchor.x = 0.5;
+  ballAnimatedSprite.anchor.y = 0.5;
+  ballHyperSprite.anchor.x = 0.5;
+  ballHyperSprite.anchor.y = 0.5;
+  ballTrailSprite.anchor.x = 0.5;
+  ballTrailSprite.anchor.y = 0.5;
+  ballPunchSprite.anchor.x = 0.5;
+  ballPunchSprite.anchor.y = 0.5;
 
   // TODO: careful with the order of addChild, the later, the fronter?
   app.stage.addChild(bgContainer);
@@ -274,10 +277,6 @@ function play(delta) {
     };
   }
 
-  gameSprite.ball.x = ball.x;
-  gameSprite.ball.y = ball.y;
-  gameSprite.ball.gotoAndStop(ball.rotation);
-
   gameSprite.player1.x = player1.x;
   gameSprite.player1.y = player1.y;
   gameSprite.player2.x = player2.x;
@@ -293,6 +292,10 @@ function play(delta) {
   );
   gameSprite.player1.gotoAndStop(frameNumber1);
   gameSprite.player2.gotoAndStop(frameNumber2);
+
+  gameSprite.ball.x = ball.x;
+  gameSprite.ball.y = ball.y;
+  gameSprite.ball.gotoAndStop(ball.rotation);
 
   if (ball.punchEffectRadius > 0) {
     ball.punchEffectRadius -= 2;
