@@ -42,8 +42,8 @@ const pikaVolley = {
     sound: new Sound()
   },
   keyboardArray: [
-    new Keyboard("d", "g", "r", "f", "z"), // for player1
-    new Keyboard("ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Enter") // for player2
+    new PikaKeyboard("d", "g", "r", "f", "z"), // for player1
+    new PikaKeyboard("ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Enter") // for player2
   ]
 };
 

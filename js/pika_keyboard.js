@@ -33,7 +33,7 @@ class Key {
   }
 }
 
-class Keyboard {
+class PikaKeyboard {
   // left, right, up, down, powerHit: KeyboardEvent.key value for each
   // refer https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
   constructor(left, right, up, down, powerHit) {
