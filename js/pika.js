@@ -119,7 +119,13 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
       theOtherPlayer = player1;
     }
 
+    // FUN_00402d90 ommited
+    // FUN_00402810 ommited
+    // this javascript code is refactored not to need above two function except for
+    // a part of FUN_00402d90:
+    // FUN_00402d90 include FUN_004031b0(caculate_expected_landing_point_x_for)
     caculate_expected_landing_point_x_for(ball); // calculate expected_X;
+
     processPlayerMovementAndSetPlayerPosition(
       player,
       sound,
@@ -127,6 +133,10 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
       theOtherPlayer,
       ball
     );
+
+    // FUN_00402830 ommited
+    // FUN_00406020 ommited
+    // tow function ommited above maybe participates in graphic drawing for a player
   }
 
   for (let i = 0; i < 2; i++) {
@@ -135,6 +145,9 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
     } else {
       player = player2;
     }
+
+    // FUN_00402810 ommited: this javascript code is refactored not to need this function
+
     const is_happend = isCollisionBetweenBallAndPlayerHappened(
       ball,
       player.x,
@@ -155,6 +168,11 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
       player.isCollisionWithBallHappened = false;
     }
   }
+
+  // FUN_00403040
+  // FUN_00406020
+  // tow function ommited above maybe participates in graphic drawing for a ball
+
   return wasBallTouchedGround;
 }
 
@@ -211,8 +229,13 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball, sound) {
   futureBallY = ball.y + ball.yVelocity;
   // if ball would touch ground
   if (futureBallY > 252) {
-    //TODO: stereo SOUND
+    // FUN_00408470 omitted
+    // the function omitted above receives 100 * (ball.x - 216),
+    // i.e. horizontal displacement from net maybe for stereo sound?
+    // code function (ballpointer + 0x28 + 0x10)? omitted
+    // the omitted two functions maybe do a part of sound playback role.
     sound.ballTouchesGround = true;
+
     ball.yVelocity = -ball.yVelocity;
     ball.punchEffectX = ball.x;
     ball.y = 252;
@@ -243,7 +266,6 @@ function processPlayerMovementAndSetPlayerPosition(
   }
 
   if (player.isComputer === true) {
-    // maybe computer ai function?
     letComputerDecideKeyboardPress(player, ball, theOtherPlayer, keyboard);
   }
 
@@ -296,7 +318,9 @@ function processPlayerMovementAndSetPlayerPosition(
     player.yVelocity = -16;
     player.state = 1;
     player.frameNumber = 0;
-    //TODO: stereo sound
+    // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
+    // refer a detailed comment above about this function
+    // maybe-sound code function (playerpointer + 0x90 + 0x10)? ommited
     sound.chu = true;
   }
 
@@ -328,6 +352,10 @@ function processPlayerMovementAndSetPlayerPosition(
       player.delayBeforeNextFrame = 5;
       player.frameNumber = 0;
       player.state = 2;
+      // maybe-sound function (playerpointer + 0x90 + 0x18)? ommited
+      // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
+      // refer a detailed comment above about this function
+      // maybe-sound function (playerpointer + 0x90 + 0x14)? ommited
       sound.pika = true;
     } else if (player.state === 0 && keyboard.xDirection !== 0) {
       // then player do diving!
@@ -335,6 +363,9 @@ function processPlayerMovementAndSetPlayerPosition(
       player.frameNumber = 0;
       player.divingDirection = keyboard.xDirection;
       player.yVelocity = -5;
+      // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
+      // refer a detailed comment above about this function
+      // maybe-sound code function (playerpointer + 0x90 + 0x10)? ommited
       sound.chu = true;
     }
   }
@@ -368,6 +399,9 @@ function processPlayerMovementAndSetPlayerPosition(
     if (player.state === 0) {
       if (player.isWinner === true) {
         player.state = 5;
+        // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
+        // refer a detailed comment above about this function
+        // maybe-sound code function (0x98 + 0x10) ommited
         sound.pipikachu = true;
       } else {
         player.state === 6;
@@ -419,8 +453,6 @@ function processCollisionBetweenBallAndPlayer(
 
   // player is jumping and power hitting
   if (playerState === 2) {
-    // if player is jumping and power hitting
-    // TODO: manymany other
     if (ball.x < 216) {
       ball.xVelocity = (Math.abs(keyboard.xDirection) + 1) * 10;
     } else {
@@ -431,6 +463,9 @@ function processCollisionBetweenBallAndPlayer(
 
     ball.yVelocity = Math.abs(ball.yVelocity) * keyboard.yDirection * 2;
     ball.punchEffectRadius = 20;
+    // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
+    // refer a detailed comment above about this function
+    // maybe-soundcode function (ballpointer + 0x24 + 0x10) ommited:
     sound.powerHit = true;
 
     ball.isPowerHit = true;
