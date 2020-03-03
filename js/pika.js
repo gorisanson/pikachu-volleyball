@@ -238,7 +238,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball, sound) {
   if (futureBallY > 252) {
     //TODO: FUN_00408470 stereo SOUND (0x28)
     //TODO: SOUND function : ball touch ground sound (0x28 + 0x10)
-    sound.touchesGround = true;
+    sound.ballTouchesGround = true;
     ball.yVelocity = -ball.yVelocity;
     ball.punchEffectX = ball.x;
     ball.y = 252;
