@@ -58,8 +58,8 @@ class Player {
 
 // Initial Values: refer FUN_000403a90 && FUN_00402d60
 class Ball {
-  constructor() {
-    this.initialize();
+  constructor(isPlayer2Serve) {
+    this.initialize(isPlayer2Serve);
     this.expectedLandingPointX = 0; // 0x40
     this.rotation = 0; // 0x44 // ball rotation frame selector // one of 0, 1, 2, 3, 4 // if it is other value, hyper ball glitch occur?
     this.fineRotation = 0; // 0x48
@@ -72,8 +72,11 @@ class Ball {
     this.previousPreviousY = 0; // 0x64
   }
 
-  initialize() {
+  initialize(isPlayer2Serve) {
     this.x = 56; // 0x30    // initialized to 56 or 376
+    if (isPlayer2Serve === true) {
+      this.x = 376;
+    }
     this.y = 0; // 0x34   // initialized to 0
     this.xVelocity = 0; // 0x38  // initialized to 0
     this.yVelocity = 1; // 0x3C  // initialized to 1
