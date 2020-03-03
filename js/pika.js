@@ -88,6 +88,16 @@ let ball = {
   isPowerHit: false // 0x68  // initialized to 0 i.e. false
 };
 
+let sound = {
+  pipikachu: false,
+  pika: false,
+  chu: false,
+  pi: false,
+  pikachu: false,
+  powerHit: false,
+  ballTouchesGround: false
+};
+
 const keyboard = {
   xDirection: 0, // 0: not pressed, -1: left-direction pressed, 1: right-direction pressed
   yDirection: 0, // 0: not pressed, -1: up-direction pressed, 1: down-direction pressed
@@ -99,9 +109,10 @@ function rand() {
 }
 
 // FUN_00403dd0
-function physicsEngine(player1, player2, ball, keyboardArray) {
+function physicsEngine(player1, player2, ball, sound, keyboardArray) {
   const wasBallTouchedGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
-    ball
+    ball,
+    sound
   );
 
   let player, theOtherPlayer;
@@ -125,6 +136,7 @@ function physicsEngine(player1, player2, ball, keyboardArray) {
     //FUN_00401fc0
     processPlayerMovementAndSetPlayerPosition(
       player,
+      sound,
       keyboardArray[i],
       theOtherPlayer,
       ball
@@ -153,6 +165,7 @@ function physicsEngine(player1, player2, ball, keyboardArray) {
       if (player.isCollisionWithBallHappened === false) {
         processCollisionBetweenBallAndPlayer(
           ball,
+          sound,
           player.x,
           keyboardArray[i],
           player.state
@@ -171,7 +184,7 @@ function physicsEngine(player1, player2, ball, keyboardArray) {
 }
 
 // FUN_00402dc0
-function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
+function processCollisionBetweenBallAndWorldAndSetBallPosition(ball, sound) {
   let futureFineRotation = ball.fineRotation + ball.xVelocity / 2;
   // If futureFineRotation === 50, it skips next if statement finely.
   // Then ball.fineRoation = 50, and then ball.rotation = 5 (which designates hyperball sprite!).
@@ -225,6 +238,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   if (futureBallY > 252) {
     //TODO: FUN_00408470 stereo SOUND (0x28)
     //TODO: SOUND function : ball touch ground sound (0x28 + 0x10)
+    sound.touchesGround = true;
     ball.yVelocity = -ball.yVelocity;
     ball.punchEffectX = ball.x;
     ball.y = 252;
@@ -245,6 +259,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
 // param1[0] === 0: left/right key not downed.
 function processPlayerMovementAndSetPlayerPosition(
   player,
+  sound,
   keyboard,
   theOtherPlayer,
   ball
@@ -309,6 +324,7 @@ function processPlayerMovementAndSetPlayerPosition(
     player.frameNumber = 0;
     //TODO: stereo sound function FUN_00408470 (0x90)
     //TODO: sound function "chu~" (0x90 + 0x10)
+    sound.chu = true;
   }
 
   // gravity
@@ -342,6 +358,7 @@ function processPlayerMovementAndSetPlayerPosition(
       //TODO: sound function "pik~" (0x90 + 0x18)
       //TODO: stereo sound function FUN_00408470 (0x94)
       //TODO: sound function "ika!" (0x90 + 0x14)
+      sound.pika = true;
     } else if (player.state === 0 && keyboard.xDirection !== 0) {
       // then player do diving!
       player.state = 3;
@@ -350,6 +367,7 @@ function processPlayerMovementAndSetPlayerPosition(
       player.yVelocity = -5;
       //TODO: stereo sound function FUN_00408470 (0x90)
       //TODO: sound function "chu~" (0x90 + 0x10)
+      sound.chu = true;
     }
   }
 
@@ -384,6 +402,7 @@ function processPlayerMovementAndSetPlayerPosition(
         player.state = 5;
         //TODO: stereo sound function FUN_00408470 (0x98)
         //TODO: sound function "what?" (0x98 + 0x10) "pik~"?
+        sound.pipikachu = true;
       } else {
         player.state === 6;
       }
@@ -398,6 +417,7 @@ function processPlayerMovementAndSetPlayerPosition(
 // FUN_004030a0
 function processCollisionBetweenBallAndPlayer(
   ball,
+  sound,
   playerX,
   keyboard,
   playerState
@@ -447,6 +467,8 @@ function processCollisionBetweenBallAndPlayer(
     ball.punchEffectRadius = 20;
     // TODO: stereo SOUND FUN_00408470 (0x24)
     // TODO: SOUND power hit sound (0x24 + 0x10)
+    sound.powerHit = true;
+
     ball.isPowerHit = true;
   } else {
     ball.isPowerHit = false;
