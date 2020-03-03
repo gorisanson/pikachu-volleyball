@@ -23,7 +23,8 @@ const pikaVolley = {
     ball: null,
     ballHyper: null,
     ballTrail: null,
-    punch: null
+    punch: null,
+    black: null // for fade out effect
   },
   audio: {
     bgm: new Audio("assets/bgm.mp3"),
@@ -75,6 +76,9 @@ function setup() {
   pikaVolley.app.stage.addChild(sprites.ballHyper);
   pikaVolley.app.stage.addChild(sprites.ballTrail);
   pikaVolley.app.stage.addChild(sprites.punch);
+  pikaVolley.app.stage.addChild(sprites.black);
+  sprites.black.x = 0;
+  sprites.black.y = 0;
 
   state = play;
   pikaVolley.app.view.addEventListener("click", gameStart, { once: true });
@@ -91,25 +95,36 @@ function gameLoop(delta) {
 }
 
 let roundEnded = false;
-const totalEndOfRoundFrame = 10;
-let elapsedEndOfRoundFrame = 0;
+const numEndOfRoundFrames = 10;
+let elapsedEndOfRoundFrames = 0;
+const numOfFadeOutFrames = 25;
+let elapsedFadeOutFrames = 0;
 function play(delta) {
   const player1 = pikaVolley.physics.player1;
   const player2 = pikaVolley.physics.player2;
   const ball = pikaVolley.physics.ball;
 
   if (roundEnded === true) {
-    if (elapsedEndOfRoundFrame < totalEndOfRoundFrame) {
+    if (elapsedEndOfRoundFrames < numEndOfRoundFrames) {
       if (pikaVolley.app.ticker.maxFPS === 25) {
         pikaVolley.app.ticker.maxFPS = 1;
       }
-      //pikaVolley.app.ticker.maxFPS--;
-      elapsedEndOfRoundFrame++;
+      elapsedEndOfRoundFrames++;
     } else {
       pikaVolley.app.ticker.maxFPS = 25;
-      elapsedEndOfRoundFrame = 0;
+      const black = pikaVolley.sprites.black;
+      black.visible = true;
+      if (elapsedFadeOutFrames < numOfFadeOutFrames) {
+        elapsedFadeOutFrames++;
+        black.alpha += 0.04;
+        return;
+      }
+      black.alpha = 0;
+      black.visible = false;
 
       roundEnded = false;
+      elapsedEndOfRoundFrames = 0;
+      elapsedFadeOutFrames = 0;
       player1.initialize();
       player2.initialize();
       ball.initialize();
@@ -323,6 +338,16 @@ function setSprites() {
   const ballTrailSprite = new Sprite(textures["ball/ball_trail.png"]);
   const ballPunchSprite = new Sprite(textures["ball/ball_punch.png"]);
 
+  const blackContainer = new Container();
+  const texture = textures["black.png"];
+  for (let j = 0; j < 304; j++) {
+    for (let i = 0; i < 432; i++) {
+      const blackSprite = new Sprite(textures["black.png"]);
+      addChildToParentAndSetLocalPosition(blackContainer, blackSprite, i, j);
+    }
+  }
+  blackContainer.alpha = 0;
+
   player1AnimatedSprite.anchor.x = 0.5;
   player1AnimatedSprite.anchor.y = 0.5;
   player2AnimatedSprite.anchor.x = 0.5;
@@ -339,6 +364,7 @@ function setSprites() {
   ballTrailSprite.visible = false;
   ballHyperSprite.visible = false;
   ballPunchSprite.visible = false;
+  blackContainer.visible = false;
 
   pikaVolley.sprites.player1 = player1AnimatedSprite;
   pikaVolley.sprites.player2 = player2AnimatedSprite;
@@ -346,6 +372,7 @@ function setSprites() {
   pikaVolley.sprites.ballHyper = ballHyperSprite;
   pikaVolley.sprites.ballTrail = ballTrailSprite;
   pikaVolley.sprites.punch = ballPunchSprite;
+  pikaVolley.sprites.black = blackContainer;
 }
 
 function addChildToParentAndSetLocalPosition(parent, child, x, y) {
