@@ -34,9 +34,18 @@ const pikaVolley = {
     pikachu: new Audio("assets/WAVE144_1.wav"),
     powerHit: new Audio("assets/WAVE145_1.wav"),
     ballTouchesGround: new Audio("assets/WAVE146_1.wav")
-  }
+  },
+  physics: {
+    player1: new Player(false, true),
+    player2: new Player(true, true),
+    ball: new Ball(),
+    sound: new Sound()
+  },
+  keyboardArray: [
+    new Keyboard("d", "g", "r", "f", "z"), // for player1
+    new Keyboard("ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Enter") // for player2
+  ]
 };
-let keyboardArray = [null, null];
 
 document.body.appendChild(pikaVolley.app.view);
 pikaVolley.loader.add("assets/sprite_sheet.json").load(setup);
@@ -66,25 +75,7 @@ function setup() {
   pikaVolley.app.stage.addChild(sprites.ballTrail);
   pikaVolley.app.stage.addChild(sprites.punch);
 
-  //Render the stage
-  //app.render();
-  //app.renderer.render(app.stage);
-  const keyboard1 = new Keyboard("d", "g", "r", "f", "z");
-  const keyboard2 = new Keyboard(
-    "ArrowLeft",
-    "ArrowRight",
-    "ArrowUp",
-    "ArrowDown",
-    "Enter"
-  );
-
-  //keyboardArray[0] = keyboard;
-  //keyboardArray[1] = Object.assign({}, keyboard);
-  keyboardArray[0] = keyboard1;
-  keyboardArray[1] = keyboard2;
-
   state = play;
-
   pikaVolley.app.view.addEventListener("click", gameStart, { once: true });
 }
 
@@ -100,70 +91,17 @@ function gameLoop(delta) {
 
 let ballTouchedGround = false;
 function play(delta) {
+  const player1 = pikaVolley.physics.player1;
+  const player2 = pikaVolley.physics.player2;
+  const ball = pikaVolley.physics.ball;
+
   if (ballTouchedGround) {
-    player1 = {
-      isPlayer2: false, // 0xA0
-      isComputer: player1.isComputer, // 0xA4
-      x: 36, // 0xA8    // initialized to 36 (player1) or 396 (player2)
-      y: 244, // 0xAC   // initialized to 244
-      yVelocity: 0, // 0xB0  // initialized to 0
-      divingDirection: 0, // 0xB4
-      lyingDownDurationLeft: -1, // 0xB8
-      isCollisionWithBallHappened: false, // 0xBC   // initizlized to 0 i.e false
-      // state
-      // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
-      // 4: lying_down_after_diving
-      // 5: win!, 6: lost..
-      state: 0, // 0xC0   // initialized to 0
-      frameNumber: 0, // 0xC4   // initialized to 0
-      normalStatusArmSwingDirection: 1, // 0xC8  // initialized to 1
-      delayBeforeNextFrame: 0, // 0xCC  // initizlized to 0
-      isWinner: false, // 0xD0
-      gameOver: false, // 0xD4
-      randomNumberForRound: rand() % 5, // 0xD8  // initialized to (_rand() % 5)
-      randomNumberZeroOrOne: 0 // 0xDC
-    };
-
-    // player on right side
-    player2 = {
-      isPlayer2: true, // 0xA0
-      isComputer: player2.isComputer, // 0xA4
-      x: 396, // 0xA8
-      y: 244, // 0xAC
-      yVelocity: 0, // 0xB0
-      divingDirection: 0, // 0xB4
-      lyingDownDurationLeft: -1, // 0xB8
-      isCollisionWithBallHappened: false, // 0xBC
-      // state
-      // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
-      // 4: lying_down_after_diving
-      // 5: win!, 6: lost..
-      state: 0, // 0xC0
-      frameNumber: 0, // 0xC4
-      normalStatusArmSwingDirection: 1, // 0xC8
-      delayBeforeNextFrame: 0, // 0xCC
-      isWinner: false, // 0xD0
-      gameOver: false, // 0xD4
-      randomNumberForRound: rand() % 5, // 0xD8  // random number for random control of the AI (determined per round)
-      randomNumberZeroOrOne: 0 // 0xDC  // random number for random contrl of the AI
-    };
-
-    // Initial Values: refer FUN_000403a90 && FUN_00402d60
-    ball = {
-      x: 56, // 0x30    // initialized to 56 or 376
-      y: 0, // 0x34   // initialized to 0
-      xVelocity: 0, // 0x38  // initialized to 0
-      yVelocity: 1, // 0x3C  // initialized to 1
-      expectedLandingPointX: 0, // 0x40
-      rotation: 0, // 0x44 // ball rotation frame selector // one of 0, 1, 2, 3, 4 // if it is other value, ballHyper ball glitch occur?
-      fineRotation: 0,
-      x4c: 0, // 0x4c // initialized to 0
-      punchEffectX: 0, // coordinate X for punch effect
-      punchEffectY: 0, // coordinate Y for punch effect
-      isPowerHit: false // 0x68  // initialized to 0 i.e. false
-    };
+    player1.initialize();
+    player2.initialize();
+    ball.initialize();
   }
 
+  const sound = pikaVolley.physics.sound;
   const audio = pikaVolley.audio;
   if (sound.pipikachu === true) {
     audio.pipikachu.play();
@@ -236,6 +174,7 @@ function play(delta) {
   ball.previousX = ball.x;
   ball.previousY = ball.y;
 
+  const keyboardArray = pikaVolley.keyboardArray;
   keyboardArray[0].updateProperties();
   keyboardArray[1].updateProperties();
   ballTouchedGround = physicsEngine(

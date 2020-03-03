@@ -20,89 +20,79 @@
  */
 
 // Initial Values: refer FUN_000403a90 && FUN_00401f40
-// player on left side
-let player1 = {
-  isPlayer2: false, // 0xA0
-  isComputer: true, // 0xA4
-  x: 36, // 0xA8    // initialized to 36 (player1) or 396 (player2)
-  y: 244, // 0xAC   // initialized to 244
-  yVelocity: 0, // 0xB0  // initialized to 0
-  divingDirection: 0, // 0xB4
-  lyingDownDurationLeft: -1, // 0xB8
-  isCollisionWithBallHappened: false, // 0xBC   // initizlized to 0 i.e false
-  // state
-  // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
-  // 4: lying_down_after_diving
-  // 5: win!, 6: lost..
-  state: 0, // 0xC0   // initialized to 0
-  frameNumber: 0, // 0xC4   // initialized to 0
-  normalStatusArmSwingDirection: 1, // 0xC8  // initialized to 1
-  delayBeforeNextFrame: 0, // 0xCC  // initizlized to 0
-  isWinner: false, // 0xD0
-  gameOver: false, // 0xD4
-  randomNumberForRound: rand() % 5, // 0xD8  // initialized to (_rand() % 5)
-  randomNumberZeroOrOne: 0 // 0xDC
-};
+class Player {
+  // isPlayer2: boolean, isComputer: boolean
+  constructor(isPlayer2, isComputer) {
+    this.isPlayer2 = isPlayer2; // 0xA0 // Assumes that player1 play on the left side
+    this.isComputer = isComputer; // 0xA4
+    this.initialize();
 
-// player on right side
-let player2 = {
-  isPlayer2: true, // 0xA0
-  isComputer: true, // 0xA4
-  x: 396, // 0xA8
-  y: 244, // 0xAC
-  yVelocity: 0, // 0xB0
-  divingDirection: 0, // 0xB4
-  lyingDownDurationLeft: -1, // 0xB8
-  isCollisionWithBallHappened: false, // 0xBC
-  // state
-  // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
-  // 4: lying_down_after_diving
-  // 5: win!, 6: lost..
-  state: 0, // 0xC0
-  frameNumber: 0, // 0xC4
-  normalStatusArmSwingDirection: 1, // 0xC8
-  delayBeforeNextFrame: 0, // 0xCC
-  isWinner: false, // 0xD0
-  gameOver: false, // 0xD4
-  randomNumberForRound: rand() % 5, // 0xD8  // random number for random control of the AI (determined per round)
-  randomNumberZeroOrOne: 0 // 0xDC  // random number for random contrl of the AI
-};
+    this.divingDirection = 0; // 0xB4
+    this.lyingDownDurationLeft = -1; // 0xB8
+    this.isWinner = false; // 0xD0
+    this.gameOver = false; // 0xD4
+    this.randomNumberZeroOrOne = 0; // 0xDC
+  }
+
+  // properties that are initialized per round in here
+  initialize() {
+    this.x = 36; // 0xA8 // initialized to 36 (player1) or 396 (player2)
+    if (this.isPlayer2) {
+      this.x = 396;
+    }
+    this.y = 244; // 0xAC   // initialized to 244
+    this.yVelocity = 0; // 0xB0  // initialized to 0
+    this.isCollisionWithBallHappened = false; // 0xBC   // initizlized to 0 i.e false
+
+    // state
+    // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
+    // 4: lying_down_after_diving
+    // 5: win!, 6: lost..
+    this.state = 0; // 0xC0   // initialized to 0
+    this.frameNumber = 0; // 0xC4   // initialized to 0
+    this.normalStatusArmSwingDirection = 1; // 0xC8  // initialized to 1
+    this.delayBeforeNextFrame = 0; // 0xCC  // initizlized to 0
+    this.randomNumberForRound = rand() % 5; // 0xD8  // initialized to (_rand() % 5)
+  }
+}
 
 // Initial Values: refer FUN_000403a90 && FUN_00402d60
-let ball = {
-  x: 56, // 0x30    // initialized to 56 or 376
-  y: 0, // 0x34   // initialized to 0
-  xVelocity: 0, // 0x38  // initialized to 0
-  yVelocity: 1, // 0x3C  // initialized to 1
-  expectedLandingPointX: 0, // 0x40
-  rotation: 0, // 0x44 // ball rotation frame selector // one of 0, 1, 2, 3, 4 // if it is other value, hyper ball glitch occur?
-  fineRotation: 0, // 0x48
-  punchEffectRadius: 0, // 0x4c // initialized to 0
-  punchEffectX: 0, // 0x50 // coordinate X for punch effect
-  punchEffectY: 0, // 0x54 // coordinate Y for punch effect
-  // previous values are for trailing effect for power hit
-  previousX: 0, // 0x58
-  previousPreviousX: 0, // 0x5c
-  previousY: 0, // 0x60
-  previousPreviousY: 0, // 0x64
-  isPowerHit: false // 0x68  // initialized to 0 i.e. false
-};
+class Ball {
+  constructor() {
+    this.initialize();
+    this.expectedLandingPointX = 0; // 0x40
+    this.rotation = 0; // 0x44 // ball rotation frame selector // one of 0, 1, 2, 3, 4 // if it is other value, hyper ball glitch occur?
+    this.fineRotation = 0; // 0x48
+    this.punchEffectX = 0; // 0x50 // coordinate X for punch effect
+    this.punchEffectY = 0; // 0x54 // coordinate Y for punch effect
+    // previous values are for trailing effect for power hit
+    this.previousX = 0; // 0x58
+    this.previousPreviousX = 0; // 0x5c
+    this.previousY = 0; // 0x60
+    this.previousPreviousY = 0; // 0x64
+  }
 
-let sound = {
-  pipikachu: false,
-  pika: false,
-  chu: false,
-  pi: false,
-  pikachu: false,
-  powerHit: false,
-  ballTouchesGround: false
-};
+  initialize() {
+    this.x = 56; // 0x30    // initialized to 56 or 376
+    this.y = 0; // 0x34   // initialized to 0
+    this.xVelocity = 0; // 0x38  // initialized to 0
+    this.yVelocity = 1; // 0x3C  // initialized to 1
+    this.punchEffectRadius = 0; // 0x4c // initialized to 0
+    this.isPowerHit = false; // 0x68  // initialized to 0 i.e. false
+  }
+}
 
-const keyboard = {
-  xDirection: 0, // 0: not pressed, -1: left-direction pressed, 1: right-direction pressed
-  yDirection: 0, // 0: not pressed, -1: up-direction pressed, 1: down-direction pressed
-  powerHit: 0 // 0: auto-repeated or not pressed, 1: newly pressed
-};
+class Sound {
+  constructor() {
+    this.pipikachu = false;
+    this.pika = false;
+    this.chu = false;
+    this.pi = false;
+    this.pikachu = false;
+    this.powerHit = false;
+    this.ballTouchesGround = false;
+  }
+}
 
 function rand() {
   return Math.floor(32768 * Math.random());
@@ -128,12 +118,8 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
       player = player2;
       theOtherPlayer = player1;
     }
-    // TODO: clean up... and don't forget to include calc_expected_x!
-    //FUN_00402d90
-    copyBallInfoToArrayAndCalcExpectedX(ball, local_14);
-    //FUN_00402810
-    copyPlayerInfoToArray(theOtherPlayer, local_lc);
-    //FUN_00401fc0
+
+    caculate_expected_landing_point_x_for(ball); // calculate expected_X;
     processPlayerMovementAndSetPlayerPosition(
       player,
       sound,
@@ -141,10 +127,6 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
       theOtherPlayer,
       ball
     );
-    // TODO: what is this??? two.. functions...
-    // TODO: what is this??
-    // maybe graphic function!
-    // draw(player.x - 32, player.y - 32, 64, 64)
   }
 
   for (let i = 0; i < 2; i++) {
@@ -153,9 +135,6 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
     } else {
       player = player2;
     }
-    // TODO: clean up
-    //FUN_00402810
-    copyPlayerInfoToArray(player, local_38);
     const is_happend = isCollisionBetweenBallAndPlayerHappened(
       ball,
       player.x,
@@ -176,10 +155,6 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
       player.isCollisionWithBallHappened = false;
     }
   }
-  // TODO: what Function is this?
-  // TODO: what Function is this?
-  // maybe graphic funcation
-  // draw(ball.x - 20, ball.y- 20, 20, 20)
   return wasBallTouchedGround;
 }
 
@@ -236,8 +211,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball, sound) {
   futureBallY = ball.y + ball.yVelocity;
   // if ball would touch ground
   if (futureBallY > 252) {
-    //TODO: FUN_00408470 stereo SOUND (0x28)
-    //TODO: SOUND function : ball touch ground sound (0x28 + 0x10)
+    //TODO: stereo SOUND
     sound.ballTouchesGround = true;
     ball.yVelocity = -ball.yVelocity;
     ball.punchEffectX = ball.x;
@@ -322,8 +296,7 @@ function processPlayerMovementAndSetPlayerPosition(
     player.yVelocity = -16;
     player.state = 1;
     player.frameNumber = 0;
-    //TODO: stereo sound function FUN_00408470 (0x90)
-    //TODO: sound function "chu~" (0x90 + 0x10)
+    //TODO: stereo sound
     sound.chu = true;
   }
 
@@ -355,9 +328,6 @@ function processPlayerMovementAndSetPlayerPosition(
       player.delayBeforeNextFrame = 5;
       player.frameNumber = 0;
       player.state = 2;
-      //TODO: sound function "pik~" (0x90 + 0x18)
-      //TODO: stereo sound function FUN_00408470 (0x94)
-      //TODO: sound function "ika!" (0x90 + 0x14)
       sound.pika = true;
     } else if (player.state === 0 && keyboard.xDirection !== 0) {
       // then player do diving!
@@ -365,8 +335,6 @@ function processPlayerMovementAndSetPlayerPosition(
       player.frameNumber = 0;
       player.divingDirection = keyboard.xDirection;
       player.yVelocity = -5;
-      //TODO: stereo sound function FUN_00408470 (0x90)
-      //TODO: sound function "chu~" (0x90 + 0x10)
       sound.chu = true;
     }
   }
@@ -400,8 +368,6 @@ function processPlayerMovementAndSetPlayerPosition(
     if (player.state === 0) {
       if (player.isWinner === true) {
         player.state = 5;
-        //TODO: stereo sound function FUN_00408470 (0x98)
-        //TODO: sound function "what?" (0x98 + 0x10) "pik~"?
         sound.pipikachu = true;
       } else {
         player.state === 6;
@@ -465,8 +431,6 @@ function processCollisionBetweenBallAndPlayer(
 
     ball.yVelocity = Math.abs(ball.yVelocity) * keyboard.yDirection * 2;
     ball.punchEffectRadius = 20;
-    // TODO: stereo SOUND FUN_00408470 (0x24)
-    // TODO: SOUND power hit sound (0x24 + 0x10)
     sound.powerHit = true;
 
     ball.isPowerHit = true;
@@ -474,7 +438,6 @@ function processCollisionBetweenBallAndPlayer(
     ball.isPowerHit = false;
   }
 
-  // TODO: here call function which expect landing point x of ball
   caculate_expected_landing_point_x_for(ball);
 
   return 1;
@@ -491,23 +454,6 @@ function processGameOverFrameFor(player) {
     return 1;
   }
   return 0;
-}
-
-// FUN_00402d90
-function copyBallInfoToArrayAndCalcExpectedX(ball, dest) {
-  dest[0] = ball.x;
-  dest[1] = ball.y;
-  dest[2] = ball.xVelocity;
-  dest[3] = ball.yVelocity;
-  dest[4] = ball.expectedLandingPointX;
-  // TODO: can I extract this FUN below??
-  caculate_expected_landing_point_x_for(ball); // calculate expected_X;
-}
-
-//FUN_00402810
-function copyPlayerInfoToArray(player, dest) {
-  dest[0] = player.x;
-  dest[1] = player.y;
 }
 
 //FUN_00403070
