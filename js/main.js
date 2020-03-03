@@ -1,16 +1,26 @@
+// Aliases
+const Application = PIXI.Application;
+const loader = PIXI.Loader.shared;
+const resources = loader.resources;
+const Sprite = PIXI.Sprite;
+const Rectangle = PIXI.Rectangle;
+const AnimatedSprite = PIXI.AnimatedSprite;
+const Container = PIXI.Container;
+
 let state;
 const gameSprite = {};
 let keyboardArray = [null, null];
 const audio = {};
 
-//Aliases
-let Application = PIXI.Application,
-  loader = PIXI.Loader.shared,
-  resources = loader.resources,
-  Sprite = PIXI.Sprite,
-  Rectangle = PIXI.Rectangle,
-  AnimatedSprite = PIXI.AnimatedSprite,
-  Container = PIXI.Container;
+audio.bgm = new Audio("assets/bgm.mp3");
+audio.pipikachu = new Audio("assets/WAVE140_1.wav");
+audio.pika = new Audio("assets/WAVE141_1.wav");
+audio.chu = new Audio("assets/WAVE142_1.wav");
+audio.pi = new Audio("assets/WAVE143_1.wav");
+audio.pikachu = new Audio("assets/WAVE144_1.wav");
+audio.punch = new Audio("assets/WAVE145_1.wav");
+audio.ballTouchesGround = new Audio("assets/WAVE146_1.wav");
+audio.bgm.loop = true;
 
 //Create a Pixi Application
 let app = new Application({
@@ -25,19 +35,7 @@ let app = new Application({
 //Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 
-audio.bgm = new Audio("assets/bgm.mp3");
-audio.bgm.addEventListener("loadeddata", event => {
-  loader.add("assets/sprite_sheet.json").load(setup);
-});
-audio.bgm.loop = true;
-
-audio.pipikachu = new Audio("assets/WAVE140_1.wav");
-audio.pika = new Audio("assets/WAVE141_1.wav");
-audio.chu = new Audio("assets/WAVE142_1.wav");
-pi = new Audio("assets/WAVE143_1.wav");
-pikachu = new Audio("assets/WAVE144_1.wav");
-punch = new Audio("assets/WAVE145_1.wav");
-ballTouchesGround = new Audio("assets/WAVE146_1.wav");
+loader.add("assets/sprite_sheet.json").load(setup);
 
 function setup() {
   const textures = loader.resources["assets/sprite_sheet.json"].textures;
