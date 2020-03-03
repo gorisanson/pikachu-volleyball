@@ -217,7 +217,7 @@ function play(delta) {
   if (ballTouchedGround) {
     player1 = {
       isPlayer2: false, // 0xA0
-      isComputer: true, // 0xA4
+      isComputer: player1.isComputer, // 0xA4
       x: 36, // 0xA8    // initialized to 36 (player1) or 396 (player2)
       y: 244, // 0xAC   // initialized to 244
       yVelocity: 0, // 0xB0  // initialized to 0
@@ -241,7 +241,7 @@ function play(delta) {
     // player on right side
     player2 = {
       isPlayer2: true, // 0xA0
-      isComputer: true, // 0xA4
+      isComputer: player2.isComputer, // 0xA4
       x: 396, // 0xA8
       y: 244, // 0xAC
       yVelocity: 0, // 0xB0
