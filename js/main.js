@@ -37,7 +37,7 @@ const pikaVolley = {
   },
   physics: {
     player1: new Player(false, true),
-    player2: new Player(true, true),
+    player2: new Player(true, false),
     ball: new Ball(),
     sound: new Sound(),
     ballTouchedGround: false
@@ -90,18 +90,33 @@ function gameLoop(delta) {
   state(delta);
 }
 
+let roundEnded = false;
+const totalEndOfRoundFrame = 10;
+let elapsedEndOfRoundFrame = 0;
 function play(delta) {
   const player1 = pikaVolley.physics.player1;
   const player2 = pikaVolley.physics.player2;
   const ball = pikaVolley.physics.ball;
 
-  if (pikaVolley.physics.ballTouchedGround) {
-    player1.initialize();
-    player2.initialize();
-    ball.initialize();
+  if (roundEnded === true) {
+    if (elapsedEndOfRoundFrame < totalEndOfRoundFrame) {
+      if (pikaVolley.app.ticker.maxFPS === 25) {
+        pikaVolley.app.ticker.maxFPS = 1;
+      }
+      //pikaVolley.app.ticker.maxFPS--;
+      elapsedEndOfRoundFrame++;
+    } else {
+      pikaVolley.app.ticker.maxFPS = 25;
+      elapsedEndOfRoundFrame = 0;
+
+      roundEnded = false;
+      player1.initialize();
+      player2.initialize();
+      ball.initialize();
+    }
   }
 
-  // sound effect
+  // process sound effect
   const sound = pikaVolley.physics.sound;
   const audio = pikaVolley.audio;
   if (sound.pipikachu === true) {
@@ -125,7 +140,7 @@ function play(delta) {
     sound.ballTouchesGround = false;
   }
 
-  // graphic
+  // process graphic
   const sprites = pikaVolley.sprites;
 
   sprites.player1.x = player1.x;
@@ -181,13 +196,17 @@ function play(delta) {
   keyboardArray[0].updateProperties();
   keyboardArray[1].updateProperties();
 
-  pikaVolley.physics.ballTouchedGround = physicsEngine(
+  const ballTouchedGround = physicsEngine(
     player1,
     player2,
     ball,
     sound,
     keyboardArray
   );
+
+  if (ballTouchedGround) {
+    roundEnded = true;
+  }
 }
 
 // set background
