@@ -18,7 +18,7 @@ audio.pika = new Audio("assets/WAVE141_1.wav");
 audio.chu = new Audio("assets/WAVE142_1.wav");
 audio.pi = new Audio("assets/WAVE143_1.wav");
 audio.pikachu = new Audio("assets/WAVE144_1.wav");
-audio.punch = new Audio("assets/WAVE145_1.wav");
+audio.powerHit = new Audio("assets/WAVE145_1.wav");
 audio.ballTouchesGround = new Audio("assets/WAVE146_1.wav");
 audio.bgm.loop = true;
 
@@ -275,6 +275,27 @@ function play(delta) {
     };
   }
 
+  if (sound.pipikachu === true) {
+    audio.pipikachu.play();
+    sound.pipikachu = false;
+  }
+  if (sound.pika === true) {
+    audio.pika.play();
+    sound.pika = false;
+  }
+  if (sound.chu === true) {
+    audio.chu.play();
+    sound.chu = false;
+  }
+  if (sound.powerHit === true) {
+    audio.powerHit.play();
+    sound.powerHit = false;
+  }
+  if (sound.ballTouchesGround === true) {
+    audio.ballTouchesGround.play();
+    sound.ballTouchesGround = false;
+  }
+
   gameSprite.player1.x = player1.x;
   gameSprite.player1.y = player1.y;
   gameSprite.player2.x = player2.x;
@@ -325,7 +346,13 @@ function play(delta) {
 
   keyboardArray[0].updateProperties();
   keyboardArray[1].updateProperties();
-  ballTouchedGround = physicsEngine(player1, player2, ball, keyboardArray);
+  ballTouchedGround = physicsEngine(
+    player1,
+    player2,
+    ball,
+    sound,
+    keyboardArray
+  );
 }
 
 function addChildToParentAndSetLocalPosition(parent, child, x, y) {
