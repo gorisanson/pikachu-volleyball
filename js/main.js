@@ -21,6 +21,9 @@ audio.pikachu = new Audio("assets/WAVE144_1.wav");
 audio.powerHit = new Audio("assets/WAVE145_1.wav");
 audio.ballTouchesGround = new Audio("assets/WAVE146_1.wav");
 audio.bgm.loop = true;
+for (p in audio) {
+  audio[p].volume = 0.3;
+}
 
 //Create a Pixi Application
 let app = new Application({
