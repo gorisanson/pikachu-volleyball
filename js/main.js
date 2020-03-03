@@ -39,7 +39,8 @@ const pikaVolley = {
     player1: new Player(false, true),
     player2: new Player(true, true),
     ball: new Ball(),
-    sound: new Sound()
+    sound: new Sound(),
+    ballTouchedGround: false
   },
   keyboardArray: [
     new PikaKeyboard("d", "g", "r", "f", "z"), // for player1
@@ -89,18 +90,18 @@ function gameLoop(delta) {
   state(delta);
 }
 
-let ballTouchedGround = false;
 function play(delta) {
   const player1 = pikaVolley.physics.player1;
   const player2 = pikaVolley.physics.player2;
   const ball = pikaVolley.physics.ball;
 
-  if (ballTouchedGround) {
+  if (pikaVolley.physics.ballTouchedGround) {
     player1.initialize();
     player2.initialize();
     ball.initialize();
   }
 
+  // sound effect
   const sound = pikaVolley.physics.sound;
   const audio = pikaVolley.audio;
   if (sound.pipikachu === true) {
@@ -124,6 +125,7 @@ function play(delta) {
     sound.ballTouchesGround = false;
   }
 
+  // graphic
   const sprites = pikaVolley.sprites;
 
   sprites.player1.x = player1.x;
@@ -174,10 +176,12 @@ function play(delta) {
   ball.previousX = ball.x;
   ball.previousY = ball.y;
 
+  // catch keyboard input and freeze it
   const keyboardArray = pikaVolley.keyboardArray;
   keyboardArray[0].updateProperties();
   keyboardArray[1].updateProperties();
-  ballTouchedGround = physicsEngine(
+
+  pikaVolley.physics.ballTouchedGround = physicsEngine(
     player1,
     player2,
     ball,
