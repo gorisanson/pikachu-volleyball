@@ -4,6 +4,7 @@ const Sprite = PIXI.Sprite;
 const Rectangle = PIXI.Rectangle;
 const AnimatedSprite = PIXI.AnimatedSprite;
 const Container = PIXI.Container;
+const Graphics = PIXI.Graphics;
 
 // global variables are in "pikaVolley"
 const pikaVolley = {
@@ -17,6 +18,9 @@ const pikaVolley = {
     resolution: 1.5
   }),
   state: null,
+  nextState: null,
+  FPS: 25,
+  isPlayer2Serve: false,
   sprites: {
     player1: null,
     player2: null,
@@ -80,12 +84,14 @@ function setup() {
   sprites.black.x = 0;
   sprites.black.y = 0;
 
-  state = play;
+  // TODO: state = startOfNewGame;
+  // startOfNewGame function not made yet
+  state = beforeStartOfNextRound;
   pikaVolley.app.view.addEventListener("click", gameStart, { once: true });
 }
 
 function gameStart() {
-  pikaVolley.app.ticker.maxFPS = 25;
+  pikaVolley.app.ticker.maxFPS = pikaVolley.FPS;
   pikaVolley.app.ticker.add(delta => gameLoop(delta));
   pikaVolley.audio.bgm.play();
 }
@@ -94,44 +100,126 @@ function gameLoop(delta) {
   state(delta);
 }
 
-let roundEnded = false;
-const numEndOfRoundFrames = 10;
-let elapsedEndOfRoundFrames = 0;
-const numOfFadeOutFrames = 25;
-let elapsedFadeOutFrames = 0;
-function play(delta) {
-  const player1 = pikaVolley.physics.player1;
-  const player2 = pikaVolley.physics.player2;
-  const ball = pikaVolley.physics.ball;
+function afterEndOfRound(delta) {
+  const black = pikaVolley.sprites.black;
+  black.visible = true;
+  black.alpha = Math.min(1, black.alpha + 0.2); // steadily increase alpha to 1 (fade out)
+  if (black.alpha === 1) {
+    state = beforeStartOfNextRound;
+    return;
+  }
+}
 
+const numOfFadeInFrames = 10;
+let elapsedFadeInFrames = 0;
+function beforeStartOfNextRound(delta) {
+  const black = pikaVolley.sprites.black;
+  if (elapsedFadeInFrames === 0) {
+    drawGraphicForRoundStart();
+  }
+  if (elapsedFadeInFrames < numOfFadeInFrames) {
+    elapsedFadeInFrames++;
+    if (black.alpha > 0) {
+      black.alpha = Math.max(0, black.alpha - 0.1);
+    }
+    return;
+  }
+  black.visible = false;
+  black.alpha = 0;
+  elapsedFadeInFrames = 0;
+  roundEnded = false;
+  state = round;
+}
+
+let roundEnded = false;
+const numEndOfRoundFrames = 7;
+let elapsedEndOfRoundFrames = 0;
+const fpsEndOfRound = 5;
+let skippedTick = 0;
+function round(delta) {
   if (roundEnded === true) {
     if (elapsedEndOfRoundFrames < numEndOfRoundFrames) {
-      if (pikaVolley.app.ticker.maxFPS === 25) {
-        pikaVolley.app.ticker.maxFPS = 1;
-      }
-      elapsedEndOfRoundFrames++;
-    } else {
-      pikaVolley.app.ticker.maxFPS = 25;
-      const black = pikaVolley.sprites.black;
-      black.visible = true;
-      if (elapsedFadeOutFrames < numOfFadeOutFrames) {
-        elapsedFadeOutFrames++;
-        black.alpha += 0.04;
+      skippedTick++;
+      if (skippedTick % Math.round(pikaVolley.FPS / fpsEndOfRound) === 0) {
+        elapsedEndOfRoundFrames++;
+        // if this is the last frame of this round, begin fade out somewhat early
+        if (elapsedEndOfRoundFrames === numEndOfRoundFrames) {
+          const black = pikaVolley.sprites.black;
+          black.visible = true;
+          black.alpha += 0.2;
+        }
+      } else {
         return;
       }
-      black.alpha = 0;
-      black.visible = false;
-
-      roundEnded = false;
+    } else {
       elapsedEndOfRoundFrames = 0;
       elapsedFadeOutFrames = 0;
-      player1.initialize();
-      player2.initialize();
-      ball.initialize();
+      skippedTick = 0;
+
+      state = afterEndOfRound;
+      return;
+      // const black = pikaVolley.sprites.black;
+      // black.visible = true;
+      // if (elapsedFadeOutFrames < numOfFadeOutFrames) {
+      //   elapsedFadeOutFrames++;
+      //   if (black.alpha < 1) {
+      //     black.alpha += 0.1;
+      //   }
+      //   return;
+      // }
+      // black.visible = false;
+      // black.alpha = 0;
+
+      // roundEnded = false;
+
+      // player1.initialize();
+      // player2.initialize();
+      // ball.initialize();
     }
   }
 
-  // process sound effect
+  // catch keyboard input and freeze it
+  pikaVolley.keyboardArray[0].updateProperties();
+  pikaVolley.keyboardArray[1].updateProperties();
+
+  const ballTouchedGround = physicsEngine(
+    pikaVolley.physics.player1,
+    pikaVolley.physics.player2,
+    pikaVolley.physics.ball,
+    pikaVolley.physics.sound,
+    pikaVolley.keyboardArray
+  );
+
+  playSoundEffect();
+  drawGraphicForPlayerAndBall();
+
+  // TODO: move these to physics engine
+  const ball = pikaVolley.physics.ball;
+  ball.previousPreviousX = ball.previousX;
+  ball.previousPreviousY = ball.previousY;
+  ball.previousX = ball.x;
+  ball.previousY = ball.y;
+
+  if (ballTouchedGround) {
+    roundEnded = true;
+    // TODO: is it better for move this to physics function?
+    // by including isPlayer2Serve property into ball
+    if (ball.punchEffectX < 216) {
+      pikaVolley.isPlayer2Serve = true;
+    } else {
+      pikaVolley.isPlayer2Serve = false;
+    }
+  }
+}
+
+function drawGraphicForRoundStart(delta) {
+  pikaVolley.physics.player1.initialize();
+  pikaVolley.physics.player2.initialize();
+  pikaVolley.physics.ball.initialize(pikaVolley.isPlayer2Serve);
+  drawGraphicForPlayerAndBall();
+}
+
+function playSoundEffect() {
   const sound = pikaVolley.physics.sound;
   const audio = pikaVolley.audio;
   if (sound.pipikachu === true) {
@@ -154,10 +242,14 @@ function play(delta) {
     audio.ballTouchesGround.play();
     sound.ballTouchesGround = false;
   }
+}
 
-  // process graphic
+function drawGraphicForPlayerAndBall() {
+  const player1 = pikaVolley.physics.player1;
+  const player2 = pikaVolley.physics.player2;
+  const ball = pikaVolley.physics.ball;
+
   const sprites = pikaVolley.sprites;
-
   sprites.player1.x = player1.x;
   sprites.player1.y = player1.y;
   sprites.player2.x = player2.x;
@@ -200,27 +292,6 @@ function play(delta) {
   } else {
     sprites.ballHyper.visible = false;
     sprites.ballTrail.visible = false;
-  }
-  ball.previousPreviousX = ball.previousX;
-  ball.previousPreviousY = ball.previousY;
-  ball.previousX = ball.x;
-  ball.previousY = ball.y;
-
-  // catch keyboard input and freeze it
-  const keyboardArray = pikaVolley.keyboardArray;
-  keyboardArray[0].updateProperties();
-  keyboardArray[1].updateProperties();
-
-  const ballTouchedGround = physicsEngine(
-    player1,
-    player2,
-    ball,
-    sound,
-    keyboardArray
-  );
-
-  if (ballTouchedGround) {
-    roundEnded = true;
   }
 }
 
@@ -338,16 +409,6 @@ function setSprites() {
   const ballTrailSprite = new Sprite(textures["ball/ball_trail.png"]);
   const ballPunchSprite = new Sprite(textures["ball/ball_punch.png"]);
 
-  const blackContainer = new Container();
-  const texture = textures["black.png"];
-  for (let j = 0; j < 304; j++) {
-    for (let i = 0; i < 432; i++) {
-      const blackSprite = new Sprite(textures["black.png"]);
-      addChildToParentAndSetLocalPosition(blackContainer, blackSprite, i, j);
-    }
-  }
-  blackContainer.alpha = 0;
-
   player1AnimatedSprite.anchor.x = 0.5;
   player1AnimatedSprite.anchor.y = 0.5;
   player2AnimatedSprite.anchor.x = 0.5;
@@ -364,7 +425,6 @@ function setSprites() {
   ballTrailSprite.visible = false;
   ballHyperSprite.visible = false;
   ballPunchSprite.visible = false;
-  blackContainer.visible = false;
 
   pikaVolley.sprites.player1 = player1AnimatedSprite;
   pikaVolley.sprites.player2 = player2AnimatedSprite;
@@ -372,7 +432,16 @@ function setSprites() {
   pikaVolley.sprites.ballHyper = ballHyperSprite;
   pikaVolley.sprites.ballTrail = ballTrailSprite;
   pikaVolley.sprites.punch = ballPunchSprite;
-  pikaVolley.sprites.black = blackContainer;
+
+  // this is more efficient way than using 1x1px resources["black.png"]
+  const blackRectangle = new Graphics();
+  blackRectangle.beginFill(0x000000);
+  blackRectangle.drawRect(0, 0, 432, 304);
+  blackRectangle.endFill();
+  blackRectangle.alpha = 0;
+  blackRectangle.visible = false;
+
+  pikaVolley.sprites.black = blackRectangle;
 }
 
 function addChildToParentAndSetLocalPosition(parent, child, x, y) {
