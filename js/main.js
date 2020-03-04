@@ -9,6 +9,7 @@ const Graphics = PIXI.Graphics;
 // global variables are in "pikaVolley"
 const pikaVolley = {
   loader: PIXI.Loader.shared,
+  textures: null,
   app: new Application({
     width: 432,
     height: 304,
@@ -21,6 +22,8 @@ const pikaVolley = {
   nextState: null,
   FPS: 25,
   isPlayer2Serve: false,
+  // TODO: is it better to include this to player porperty?
+  scores: [0, 0], // score[0] for player1, score[1] for player2
   sprites: {
     player1: null,
     player2: null,
@@ -28,6 +31,7 @@ const pikaVolley = {
     ballHyper: null,
     ballTrail: null,
     punch: null,
+    scoreBoards: [null, null], // scoreBoards[0] for player1, scoreBoards[1] for player2
     black: null // for fade out effect
   },
   audio: {
@@ -57,12 +61,9 @@ document.body.appendChild(pikaVolley.app.view);
 pikaVolley.loader.add("assets/sprite_sheet.json").load(setup);
 
 function setup() {
-  // adjust audio setting
-  const audio = pikaVolley.audio;
-  audio.bgm.loop = true;
-  for (p in audio) {
-    audio[p].volume = 0.3;
-  }
+  // set texture resources
+  pikaVolley.textures =
+    pikaVolley.loader.resources["assets/sprite_sheet.json"].textures;
 
   // background
   const bgContainer = setAndReturnBGContainer();
@@ -71,7 +72,6 @@ function setup() {
   bgContainer.y = 0;
 
   // TODO: careful with the order of addChild, the later, the fronter?
-
   setSprites();
   const sprites = pikaVolley.sprites;
   pikaVolley.app.stage.addChild(sprites.player1);
@@ -80,12 +80,27 @@ function setup() {
   pikaVolley.app.stage.addChild(sprites.ballHyper);
   pikaVolley.app.stage.addChild(sprites.ballTrail);
   pikaVolley.app.stage.addChild(sprites.punch);
+  pikaVolley.app.stage.addChild(sprites.scoreBoards[0]);
+  pikaVolley.app.stage.addChild(sprites.scoreBoards[1]);
   pikaVolley.app.stage.addChild(sprites.black);
+
+  sprites.scoreBoards[0].x = 14; // score board is 14 pixel distant from boundary
+  sprites.scoreBoards[0].y = 10;
+  sprites.scoreBoards[1].x = 432 - 32 - 32 - 14; // 32 pixel is for number (32x32px) width; one score board has tow numbers
+  sprites.scoreBoards[1].y = 10;
   sprites.black.x = 0;
   sprites.black.y = 0;
 
+  // adjust audio setting
+  const audio = pikaVolley.audio;
+  audio.bgm.loop = true;
+  for (p in audio) {
+    audio[p].volume = 0.3;
+  }
+
   // TODO: state = startOfNewGame;
   // startOfNewGame function not made yet
+  showScoreToScoreBoard(); // TODO: this should be included in the startOfGame;
   state = beforeStartOfNextRound;
   pikaVolley.app.view.addEventListener("click", gameStart, { once: true });
 }
@@ -138,43 +153,21 @@ const fpsEndOfRound = 5;
 let skippedTick = 0;
 function round(delta) {
   if (roundEnded === true) {
-    if (elapsedEndOfRoundFrames < numEndOfRoundFrames) {
-      skippedTick++;
-      if (skippedTick % Math.round(pikaVolley.FPS / fpsEndOfRound) === 0) {
-        elapsedEndOfRoundFrames++;
-        // if this is the last frame of this round, begin fade out somewhat early
-        if (elapsedEndOfRoundFrames === numEndOfRoundFrames) {
-          const black = pikaVolley.sprites.black;
-          black.visible = true;
-          black.alpha += 0.2;
-        }
-      } else {
-        return;
-      }
-    } else {
+    skippedTick++;
+    if (skippedTick % Math.round(pikaVolley.FPS / fpsEndOfRound) !== 0) {
+      return;
+    }
+    elapsedEndOfRoundFrames++;
+    // if this is the last frame of this round, begin fade out
+    if (elapsedEndOfRoundFrames === numEndOfRoundFrames) {
+      const black = pikaVolley.sprites.black;
+      black.visible = true;
+      black.alpha += 0.2;
       elapsedEndOfRoundFrames = 0;
       elapsedFadeOutFrames = 0;
       skippedTick = 0;
 
       state = afterEndOfRound;
-      return;
-      // const black = pikaVolley.sprites.black;
-      // black.visible = true;
-      // if (elapsedFadeOutFrames < numOfFadeOutFrames) {
-      //   elapsedFadeOutFrames++;
-      //   if (black.alpha < 1) {
-      //     black.alpha += 0.1;
-      //   }
-      //   return;
-      // }
-      // black.visible = false;
-      // black.alpha = 0;
-
-      // roundEnded = false;
-
-      // player1.initialize();
-      // player2.initialize();
-      // ball.initialize();
     }
   }
 
@@ -203,12 +196,15 @@ function round(delta) {
   if (ballTouchedGround) {
     roundEnded = true;
     // TODO: is it better for move this to physics function?
-    // by including isPlayer2Serve property into ball
+    // by including isPlayer2Serve property into ball, score to player
     if (ball.punchEffectX < 216) {
       pikaVolley.isPlayer2Serve = true;
+      pikaVolley.scores[1] += 1;
     } else {
       pikaVolley.isPlayer2Serve = false;
+      pikaVolley.scores[0] += 1;
     }
+    showScoreToScoreBoard();
   }
 }
 
@@ -298,8 +294,7 @@ function drawGraphicForPlayerAndBall() {
 // set background
 // return: Container object that has objects in the backgournd as children
 function setAndReturnBGContainer() {
-  const textures =
-    pikaVolley.loader.resources["assets/sprite_sheet.json"].textures;
+  const textures = pikaVolley.textures;
   const bgContainer = new Container();
   let tile;
 
@@ -373,10 +368,15 @@ function setAndReturnBGContainer() {
 }
 
 function setSprites() {
-  const textures =
-    pikaVolley.loader.resources["assets/sprite_sheet.json"].textures;
+  setPlayerSprites();
+  setBallSprites();
+  setScoreBoardSprites();
+  setBlackSprites();
+}
 
-  const getPlayerTexture = (i, j) => textures[`pikachu/pikachu_${i}_${j}.png`];
+function setPlayerSprites() {
+  const getPlayerTexture = (i, j) =>
+    pikaVolley.textures[`pikachu/pikachu_${i}_${j}.png`];
   const playerTextureArray = [];
   for (let i = 0; i < 7; i++) {
     if (i === 3) {
@@ -390,11 +390,21 @@ function setSprites() {
       }
     }
   }
-  const player1AnimatedSprite = new AnimatedSprite(playerTextureArray);
-  const player2AnimatedSprite = new AnimatedSprite(playerTextureArray);
+  const player1AnimatedSprite = new AnimatedSprite(playerTextureArray, false);
+  const player2AnimatedSprite = new AnimatedSprite(playerTextureArray, false);
   player2AnimatedSprite.scale.x = -1;
 
-  const getBallTexture = s => textures[`ball/ball_${s}.png`];
+  player1AnimatedSprite.anchor.x = 0.5;
+  player1AnimatedSprite.anchor.y = 0.5;
+  player2AnimatedSprite.anchor.x = 0.5;
+  player2AnimatedSprite.anchor.y = 0.5;
+
+  pikaVolley.sprites.player1 = player1AnimatedSprite;
+  pikaVolley.sprites.player2 = player2AnimatedSprite;
+}
+
+function setBallSprites() {
+  const getBallTexture = s => pikaVolley.textures[`ball/ball_${s}.png`];
   const ballTextureArray = [
     getBallTexture(0),
     getBallTexture(1),
@@ -403,16 +413,18 @@ function setSprites() {
     getBallTexture(4),
     getBallTexture("hyper")
   ];
-  const ballAnimatedSprite = new AnimatedSprite(ballTextureArray);
+  const ballAnimatedSprite = new AnimatedSprite(ballTextureArray, false);
 
-  const ballHyperSprite = new Sprite(textures["ball/ball_hyper.png"]);
-  const ballTrailSprite = new Sprite(textures["ball/ball_trail.png"]);
-  const ballPunchSprite = new Sprite(textures["ball/ball_punch.png"]);
+  const ballHyperSprite = new Sprite(
+    pikaVolley.textures["ball/ball_hyper.png"]
+  );
+  const ballTrailSprite = new Sprite(
+    pikaVolley.textures["ball/ball_trail.png"]
+  );
+  const ballPunchSprite = new Sprite(
+    pikaVolley.textures["ball/ball_punch.png"]
+  );
 
-  player1AnimatedSprite.anchor.x = 0.5;
-  player1AnimatedSprite.anchor.y = 0.5;
-  player2AnimatedSprite.anchor.x = 0.5;
-  player2AnimatedSprite.anchor.y = 0.5;
   ballAnimatedSprite.anchor.x = 0.5;
   ballAnimatedSprite.anchor.y = 0.5;
   ballHyperSprite.anchor.x = 0.5;
@@ -426,13 +438,13 @@ function setSprites() {
   ballHyperSprite.visible = false;
   ballPunchSprite.visible = false;
 
-  pikaVolley.sprites.player1 = player1AnimatedSprite;
-  pikaVolley.sprites.player2 = player2AnimatedSprite;
   pikaVolley.sprites.ball = ballAnimatedSprite;
   pikaVolley.sprites.ballHyper = ballHyperSprite;
   pikaVolley.sprites.ballTrail = ballTrailSprite;
   pikaVolley.sprites.punch = ballPunchSprite;
+}
 
+function setBlackSprites() {
   // this is more efficient way than using 1x1px resources["black.png"]
   const blackRectangle = new Graphics();
   blackRectangle.beginFill(0x000000);
@@ -442,6 +454,71 @@ function setSprites() {
   blackRectangle.visible = false;
 
   pikaVolley.sprites.black = blackRectangle;
+}
+
+function setScoreBoardSprites() {
+  const getNumberTexture = n => pikaVolley.textures[`number/number_${n}.png`];
+  const numberTextureArray = [];
+  for (let i = 0; i < 10; i++) {
+    numberTextureArray.push(getNumberTexture(i));
+  }
+  const numberAnimatedSprites = [null, null, null, null];
+  numberAnimatedSprites[0] = new AnimatedSprite(numberTextureArray, false);
+  numberAnimatedSprites[1] = new AnimatedSprite(numberTextureArray, false);
+  numberAnimatedSprites[2] = new AnimatedSprite(numberTextureArray, false);
+  numberAnimatedSprites[3] = new AnimatedSprite(numberTextureArray, false);
+
+  const scoreBoards = [null, null];
+  scoreBoards[0] = new Container();
+  scoreBoards[1] = new Container();
+  addChildToParentAndSetLocalPosition(
+    scoreBoards[0],
+    numberAnimatedSprites[0],
+    32,
+    0
+  ); // for units
+  addChildToParentAndSetLocalPosition(
+    scoreBoards[0],
+    numberAnimatedSprites[1],
+    0,
+    0
+  ); // for tens
+  addChildToParentAndSetLocalPosition(
+    scoreBoards[1],
+    numberAnimatedSprites[2],
+    32,
+    0
+  ); // for units
+  addChildToParentAndSetLocalPosition(
+    scoreBoards[1],
+    numberAnimatedSprites[3],
+    0,
+    0
+  ); // for tens
+
+  scoreBoards[0].setChildIndex(numberAnimatedSprites[0], 0); // for units
+  scoreBoards[0].setChildIndex(numberAnimatedSprites[1], 1); // for tens
+  scoreBoards[1].setChildIndex(numberAnimatedSprites[2], 0); // for units
+  scoreBoards[1].setChildIndex(numberAnimatedSprites[3], 1); // for tens
+
+  pikaVolley.sprites.scoreBoards[0] = scoreBoards[0];
+  pikaVolley.sprites.scoreBoards[1] = scoreBoards[1];
+}
+
+function showScoreToScoreBoard() {
+  for (let i = 0; i < 2; i++) {
+    const scoreBoard = pikaVolley.sprites.scoreBoards[i];
+    const score = pikaVolley.scores[i];
+    const unitsAnimatedSprite = scoreBoard.getChildAt(0);
+    const tensAnimatedSprite = scoreBoard.getChildAt(1);
+    unitsAnimatedSprite.gotoAndStop(score % 10);
+    tensAnimatedSprite.gotoAndStop(Math.floor(score / 10) % 10);
+    if (score >= 10) {
+      tensAnimatedSprite.visible = true;
+    } else {
+      tensAnimatedSprite.visible = false;
+    }
+  }
 }
 
 function addChildToParentAndSetLocalPosition(parent, child, x, y) {
