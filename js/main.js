@@ -20,7 +20,11 @@ const pikaVolley = {
   }),
   state: null,
   nextState: null,
-  FPS: 25,
+  normalFPS: 25,
+  slowMotionFPS: 5,
+  slowMotionFramesLeft: 0,
+  slowMotionNumOfSkippedFrames: 0,
+  SLOW_MOTION_FRAMES_NUM: 6,
   isPlayer2Serve: false,
   // TODO: is it better to include this to player porperty?
   scores: [0, 0], // score[0] for player1, score[1] for player2
@@ -106,13 +110,26 @@ function setup() {
 }
 
 function gameStart() {
-  pikaVolley.app.ticker.maxFPS = pikaVolley.FPS;
+  pikaVolley.app.ticker.maxFPS = pikaVolley.normalFPS;
   pikaVolley.app.ticker.add(delta => gameLoop(delta));
   pikaVolley.audio.bgm.play();
 }
 
 function gameLoop(delta) {
-  state(delta);
+  if (pikaVolley.slowMotionFramesLeft > 0) {
+    pikaVolley.slowMotionNumOfSkippedFrames++;
+    if (
+      pikaVolley.slowMotionNumOfSkippedFrames %
+        Math.round(pikaVolley.normalFPS / pikaVolley.slowMotionFPS) ===
+      0
+    ) {
+      pikaVolley.slowMotionFramesLeft--;
+      pikaVolley.slowMotionNumOfSkippedFrames = 0;
+      state(delta);
+    }
+  } else {
+    state(delta);
+  }
 }
 
 function afterEndOfRound(delta) {
@@ -147,30 +164,7 @@ function beforeStartOfNextRound(delta) {
 }
 
 let roundEnded = false;
-const numEndOfRoundFrames = 7;
-let elapsedEndOfRoundFrames = 0;
-const fpsEndOfRound = 5;
-let skippedTick = 0;
 function round(delta) {
-  if (roundEnded === true) {
-    skippedTick++;
-    if (skippedTick % Math.round(pikaVolley.FPS / fpsEndOfRound) !== 0) {
-      return;
-    }
-    elapsedEndOfRoundFrames++;
-    // if this is the last frame of this round, begin fade out
-    if (elapsedEndOfRoundFrames === numEndOfRoundFrames) {
-      const black = pikaVolley.sprites.black;
-      black.visible = true;
-      black.alpha += 0.2;
-      elapsedEndOfRoundFrames = 0;
-      elapsedFadeOutFrames = 0;
-      skippedTick = 0;
-
-      state = afterEndOfRound;
-    }
-  }
-
   // catch keyboard input and freeze it
   pikaVolley.keyboardArray[0].updateProperties();
   pikaVolley.keyboardArray[1].updateProperties();
@@ -194,6 +188,9 @@ function round(delta) {
   ball.previousY = ball.y;
 
   if (ballTouchedGround) {
+    if (roundEnded === false) {
+      pikaVolley.slowMotionFramesLeft = pikaVolley.SLOW_MOTION_FRAMES_NUM;
+    }
     roundEnded = true;
     // TODO: is it better for move this to physics function?
     // by including isPlayer2Serve property into ball, score to player
@@ -205,6 +202,17 @@ function round(delta) {
       pikaVolley.scores[0] += 1;
     }
     showScoreToScoreBoard();
+  }
+
+  if (roundEnded === true) {
+    // if this is the last frame of this round, begin fade out
+    if (pikaVolley.slowMotionFramesLeft === 0) {
+      const black = pikaVolley.sprites.black;
+      black.visible = true;
+      black.alpha += 0.2;
+
+      state = afterEndOfRound;
+    }
   }
 }
 
@@ -503,6 +511,20 @@ function setScoreBoardSprites() {
 
   pikaVolley.sprites.scoreBoards[0] = scoreBoards[0];
   pikaVolley.sprites.scoreBoards[1] = scoreBoards[1];
+}
+
+function setAndReturnCloudContainer(numOfClouds) {
+  const cloudContainer = new Container();
+
+  const texture = pikaVolley.textures["objects/cloud.png"];
+  for (let i = 0; i < numOfClouds; i++) {
+    const cloud = new Sprite(texture);
+    cloud.anchor.x = 0;
+    cloud.anchor.y = 0;
+    cloudContainer.addChild(cloud);
+  }
+
+  return cloudContainer;
 }
 
 function showScoreToScoreBoard() {
