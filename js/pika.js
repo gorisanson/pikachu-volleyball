@@ -656,7 +656,7 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
         if (
           (expectedLandingPointX <= player.isPlayer2 * 216 ||
             expectedLandingPointX >= player.isPlayer2 * 432 + 216) &&
-          Math.abs(expectedLandingPointX, theOtherPlayer.x) > 64
+          Math.abs(expectedLandingPointX - theOtherPlayer.x) > 64
         ) {
           keyboard.xDirection = xDirection;
           keyboard.yDirection = yDirection;
@@ -675,7 +675,7 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
         if (
           (expectedLandingPointX <= player.isPlayer2 * 216 ||
             expectedLandingPointX >= player.isPlayer2 * 432 + 216) &&
-          Math.abs(expectedLandingPointX, theOtherPlayer.x) > 64
+          Math.abs(expectedLandingPointX - theOtherPlayer.x) > 64
         ) {
           keyboard.xDirection = xDirection;
           keyboard.yDirection = yDirection;
