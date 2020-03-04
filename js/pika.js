@@ -349,7 +349,6 @@ function processPlayerMovementAndSetPlayerPosition(
     if (player.state === 1) {
       // if player is jumping..
       // then player do power hit!
-      iVar3 = player.x;
       player.delayBeforeNextFrame = 5;
       player.frameNumber = 0;
       player.state = 2;
@@ -461,10 +460,10 @@ function processCollisionBetweenBallAndPlayer(
     ball.xVelocity = (rand() % 3) - 1;
   }
 
-  const ballAbsVelocityY = Math.abs(ball.yVelocity);
-  ball.yVelocity = -ballAbsVelocityY;
+  const ballAbsYVelocity = Math.abs(ball.yVelocity);
+  ball.yVelocity = -ballAbsYVelocity;
 
-  if (ballAbsVelocityY < 15) {
+  if (ballAbsYVelocity < 15) {
     ball.yVelocity = -15;
   }
 
@@ -716,15 +715,18 @@ function expectedLandingPointXWhenPowerHit(
       copyBall.yVelocity = 1;
     }
     if (Math.abs(copyBall.x - 216) < 25 && copyBall.y > 176) {
-      // TODO: is it real??
-      // it's just same as
-      //
-      // if (copyBall.yVelocity > 0) {
-      //    copyBall.yVelocity = -copyBall.yVelocity;
-      // }
-      //
-      // maybe this is mistake of the original author....
-      //
+      /*
+        TODO: is it real??
+        it's just same as
+        
+        if (copyBall.yVelocity > 0) {
+          copyBall.yVelocity = -copyBall.yVelocity;
+        }
+        
+        maybe this is mistake of the original author....
+
+        Or is it for making AI doing mistakes??
+      */
       if (copyBall.y < 193) {
         if (copyBall.yVelocity > 0) {
           copyBall.yVelocity = -copyBall.yVelocity;
@@ -732,6 +734,20 @@ function expectedLandingPointXWhenPowerHit(
       } else if (copyBall.yVelocity > 0) {
         copyBall.yVelocity = -copyBall.yVelocity;
       }
+
+      // The one for AI not doing those mistakes is as below.
+
+      // if (copyBall.y < 193) {
+      //   if (copyBall.yVelocity > 0) {
+      //     copyBall.yVelocity = -copyBall.yVelocity;
+      //   }
+      // } else {
+      //   if (copyBall.x < 216) {
+      //     copyBall.xVelocity = -Math.abs(copyBall.xVelocity);
+      //   } else {
+      //     copyBall.xVelocity = Math.abs(copyBall.xVelocity);
+      //   }
+      // }
     }
     copyBall.y = copyBall.y + copyBall.yVelocity;
     if (copyBall.y > 252) {
