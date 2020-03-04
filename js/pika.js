@@ -109,10 +109,6 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
   );
 
   let player, theOtherPlayer;
-  let local_14 = [0, 0, 0, 0, 0]; // array
-  let local_lc = [0, 0]; // array
-  let local_38 = [0, 0];
-
   for (let i = 0; i < 2; i++) {
     if (i == 0) {
       player = player1;
