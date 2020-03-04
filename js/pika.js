@@ -176,6 +176,7 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
 }
 
 // FUN_00402dc0
+// "sound" parameter is not in the original machine (assembly) code
 function processCollisionBetweenBallAndWorldAndSetBallPosition(ball, sound) {
   let futureFineRotation = ball.fineRotation + ball.xVelocity / 2;
   // If futureFineRotation === 50, it skips next if statement finely.
@@ -253,6 +254,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball, sound) {
 // param1_array maybe keyboard (if param_1[1] === -1, up_key downed)
 // param1[0] === -1: left key downed, param1[0] === 1: right key downed.
 // param1[0] === 0: left/right key not downed.
+// "sound" parameter is not in the original machine (assembly) code
 function processPlayerMovementAndSetPlayerPosition(
   player,
   sound,
@@ -427,6 +429,9 @@ function processGameOverFrameFor(player) {
 }
 
 // FUN_004030a0
+// "sound" parameter is not in the original machine (assembly) code.
+// "playerY" parameter is in the origianl machine (assembly) code
+// but not used in this function.
 function processCollisionBetweenBallAndPlayer(
   ball,
   sound,
@@ -448,7 +453,7 @@ function processCollisionBetweenBallAndPlayer(
 
   // If ball velocity x is 0, randomly choose one of -1, 0, 1.
   if (ball.xVelocity === 0) {
-    // The original source code use "_rand()" function in Visual Studio 1988 Libarary.
+    // The original machine (assembly) code use "_rand()" function in Visual Studio 1988 Libarary.
     // I could't find out how this function works exactly.
     // But, anyhow, it should be a funtion that generate a random number.
     // I decided to use custom rand function which generates random integer from [0, 32767]
