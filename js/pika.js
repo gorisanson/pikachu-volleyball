@@ -538,6 +538,7 @@ function caculate_expected_landing_point_x_for(ball) {
 
 // TODO: Math.abs(ball.x - player.x) appears too many.. refactor!
 // FUN_00402360
+// the AI function
 function letComputerDecideKeyboardPress(
   player,
   ball,
