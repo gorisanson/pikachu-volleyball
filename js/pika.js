@@ -417,6 +417,19 @@ function processPlayerMovementAndSetPlayerPosition(
   return 1;
 }
 
+// FUN_004025e0
+function processGameOverFrameFor(player) {
+  if (player.gameOver === true && player.frameNumber < 4) {
+    player.delayBeforeNextFrame += 1;
+    if (player.delayBeforeNextFrame > 4) {
+      player.delayBeforeNextFrame = 0;
+      player.frameNumber += 1;
+    }
+    return 1;
+  }
+  return 0;
+}
+
 // FUN_004030a0
 function processCollisionBetweenBallAndPlayer(
   ball,
@@ -479,31 +492,6 @@ function processCollisionBetweenBallAndPlayer(
   caculate_expected_landing_point_x_for(ball);
 
   return 1;
-}
-
-// FUN_004025e0
-function processGameOverFrameFor(player) {
-  if (player.gameOver === true && player.frameNumber < 4) {
-    player.delayBeforeNextFrame += 1;
-    if (player.delayBeforeNextFrame > 4) {
-      player.delayBeforeNextFrame = 0;
-      player.frameNumber += 1;
-    }
-    return 1;
-  }
-  return 0;
-}
-
-//FUN_00403070
-function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
-  let diff = ball.x - playerX;
-  if (Math.abs(diff) < 33) {
-    diff = ball.y - playerY;
-    if (Math.abs(diff) < 33) {
-      return true;
-    }
-  }
-  return false;
 }
 
 // FUN_004031b0
@@ -750,4 +738,16 @@ function expectedLandingPointXWhenPowerHit(
     copyBall.x = copyBall.x + copyBall.xVelocity;
     copyBall.yVelocity += 1;
   }
+}
+
+//FUN_00403070
+function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
+  let diff = ball.x - playerX;
+  if (Math.abs(diff) < 33) {
+    diff = ball.y - playerY;
+    if (Math.abs(diff) < 33) {
+      return true;
+    }
+  }
+  return false;
 }
