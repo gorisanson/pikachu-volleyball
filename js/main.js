@@ -25,6 +25,18 @@ const pikaVolley = {
   slowMotionFramesLeft: 0,
   slowMotionNumOfSkippedFrames: 0,
   SLOW_MOTION_FRAMES_NUM: 6,
+  NUM_OF_CLOUDS: 10,
+  cloudContainer: null,
+  cloudXVelocities: null,
+  cloudSizeInfos: null,
+  cloudSizeArrays: [
+    [48, 24],
+    [49, 26],
+    [51, 29],
+    [53, 30],
+    [55, 32],
+    [58, 35]
+  ],
   isPlayer2Serve: false,
   // TODO: is it better to include this to player porperty?
   scores: [0, 0], // score[0] for player1, score[1] for player2
@@ -50,7 +62,7 @@ const pikaVolley = {
   },
   physics: {
     player1: new Player(false, true),
-    player2: new Player(true, false),
+    player2: new Player(true, true),
     ball: new Ball(),
     sound: new Sound(),
     ballTouchedGround: false
@@ -74,6 +86,11 @@ function setup() {
   pikaVolley.app.stage.addChild(bgContainer);
   bgContainer.x = 0;
   bgContainer.y = 0;
+
+  setCloudContainer();
+  pikaVolley.app.stage.addChild(pikaVolley.cloudContainer);
+  pikaVolley.cloudContainer.x = 0;
+  pikaVolley.cloudContainer.y = 0;
 
   // TODO: careful with the order of addChild, the later, the fronter?
   setSprites();
@@ -104,7 +121,8 @@ function setup() {
 
   // TODO: state = startOfNewGame;
   // startOfNewGame function not made yet
-  showScoreToScoreBoard(); // TODO: this should be included in the startOfGame;
+  showScoreToScoreBoard(); // TODO: this should be included in the startOfGame
+  setCloudsRandomly(); // TODO: this should be included in the startOfGame
   state = beforeStartOfNextRound;
   pikaVolley.app.view.addEventListener("click", gameStart, { once: true });
 }
@@ -126,9 +144,46 @@ function gameLoop(delta) {
       pikaVolley.slowMotionFramesLeft--;
       pikaVolley.slowMotionNumOfSkippedFrames = 0;
       state(delta);
+      moveClouds(delta);
     }
   } else {
     state(delta);
+    moveClouds(delta);
+  }
+}
+
+function setCloudsRandomly(delta) {
+  const cloudContainer = pikaVolley.cloudContainer;
+  const cloudXVelocities = [];
+  const cloudSizeInfos = [];
+  for (i = 0; i < pikaVolley.NUM_OF_CLOUDS; i++) {
+    const cloud = cloudContainer.getChildAt(i);
+    cloud.x = -68 + Math.floor((432 + 2 * 68) * Math.random());
+    cloud.y = 17 + Math.floor((176 - 34) * Math.random());
+    cloudXVelocities.push(1 + Math.floor(2 * Math.random()));
+    cloudSizeInfos.push(Math.floor(11 * Math.random()));
+  }
+  pikaVolley.cloudXVelocities = cloudXVelocities;
+  pikaVolley.cloudSizeInfos = cloudSizeInfos;
+}
+
+function moveClouds(delta) {
+  const cloudContainer = pikaVolley.cloudContainer;
+  const cloudXVelocities = pikaVolley.cloudXVelocities;
+  const cloudSizeInfos = pikaVolley.cloudSizeInfos;
+  for (i = 0; i < pikaVolley.NUM_OF_CLOUDS; i++) {
+    const cloud = cloudContainer.getChildAt(i);
+    cloud.x += cloudXVelocities[i];
+    const index = 5 - Math.abs(cloudSizeInfos[i] - 5);
+    cloud.width = pikaVolley.cloudSizeArrays[index][0];
+    cloud.height = pikaVolley.cloudSizeArrays[index][1];
+    cloudSizeInfos[i] = (cloudSizeInfos[i] + 1) % 11;
+    if (cloud.x > 432 + 58) {
+      cloud.x = -58;
+      cloud.y = 17 + Math.floor((176 - 34) * Math.random());
+      cloudXVelocities[i] = 1 + Math.floor(2 * Math.random());
+      cloudSizeInfos[i] = Math.floor(11 * Math.random());
+    }
   }
 }
 
@@ -513,18 +568,17 @@ function setScoreBoardSprites() {
   pikaVolley.sprites.scoreBoards[1] = scoreBoards[1];
 }
 
-function setAndReturnCloudContainer(numOfClouds) {
+function setCloudContainer() {
   const cloudContainer = new Container();
-
   const texture = pikaVolley.textures["objects/cloud.png"];
-  for (let i = 0; i < numOfClouds; i++) {
+  for (let i = 0; i < pikaVolley.NUM_OF_CLOUDS; i++) {
     const cloud = new Sprite(texture);
-    cloud.anchor.x = 0;
-    cloud.anchor.y = 0;
+    cloud.anchor.x = 0.5;
+    cloud.anchor.y = 0.5;
     cloudContainer.addChild(cloud);
   }
 
-  return cloudContainer;
+  pikaVolley.cloudContainer = cloudContainer;
 }
 
 function showScoreToScoreBoard() {
