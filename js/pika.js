@@ -31,7 +31,12 @@ class Player {
     this.lyingDownDurationLeft = -1; // 0xB8
     this.isWinner = false; // 0xD0
     this.gameOver = false; // 0xD4
-    this.randomNumberZeroOrOne = 0; // 0xDC
+
+    // 0 or 1: it flips randomly by the ai function (FUN_00402360)
+    // When ball is hanging around on the other player's side:
+    // If it is 0, computer player stands by around the middle point of their side.
+    // If it is 1, computer player stands by adjecent to the net.
+    this.computerWhereToStandBy = 0; // 0xDC
   }
 
   // properties that are initialized per round in here
@@ -52,7 +57,18 @@ class Player {
     this.frameNumber = 0; // 0xC4   // initialized to 0
     this.normalStatusArmSwingDirection = 1; // 0xC8  // initialized to 1
     this.delayBeforeNextFrame = 0; // 0xCC  // initizlized to 0
-    this.randomNumberForRound = rand() % 5; // 0xD8  // initialized to (_rand() % 5)
+
+    // 0, 1, 2, 3, or 4:
+    // it is initialized to (_rand() % 5) before the start of every round.
+    // the greater the number, the bolder the computer player.
+    //
+    // If computer has higher boldness,
+    // judges more the ball is haing around the other player's side,
+    // has greater distance to the expected landing point of the ball,
+    // jumps more,
+    // dives less.
+    // See the source code of the ai function (FUN_00402360).
+    this.computerBoldness = rand() % 5; // 0xD8  // initialized to (_rand() % 5)
   }
 }
 
@@ -557,21 +573,21 @@ function letComputerDecideKeyboardPress(
   let virtualExpectedLandingPointX = ball.expectedLandingPointX;
   if (
     Math.abs(ball.x - player.x) > 100 &&
-    Math.abs(ball.xVelocity) < player.randomNumberForRound + 5
+    Math.abs(ball.xVelocity) < player.computerBoldness + 5
   ) {
     let leftBoundary = player.isPlayer2 * 216;
     if (
       (ball.expectedLandingPointX <= leftBoundary ||
         ball.expectedLandingPointX >= player.isPlayer2 * 432 + 216) &&
-      player.randomNumberZeroOrOne === 0
+      player.computerWhereToStandBy === 0
     ) {
-      virtualExpectedLandingPointX = leftBoundary + 108;
+      virtualExpectedLandingPointX = leftBoundary + 216 / 2;
     }
   }
 
   if (
     Math.abs(virtualExpectedLandingPointX - player.x) >
-    player.randomNumberForRound + 8
+    player.computerBoldness + 8
   ) {
     if (player.x < virtualExpectedLandingPointX) {
       keyboard.xDirection = 1;
@@ -579,15 +595,15 @@ function letComputerDecideKeyboardPress(
       keyboard.xDirection = -1;
     }
   } else if (rand() % 20 === 0) {
-    player.randomNumberZeroOrOne = rand() % 2;
+    player.computerWhereToStandBy = rand() % 2;
   }
 
   if (player.state === 0) {
     if (
-      Math.abs(ball.xVelocity) < player.randomNumberForRound + 3 &&
+      Math.abs(ball.xVelocity) < player.computerBoldness + 3 &&
       Math.abs(ball.x - player.x) < 32 &&
       ball.y > -36 &&
-      ball.y < 10 * player.randomNumberForRound + 84 &&
+      ball.y < 10 * player.computerBoldness + 84 &&
       ball.yVelocity > 0
     ) {
       keyboard.yDirection = -1;
@@ -598,7 +614,7 @@ function letComputerDecideKeyboardPress(
     if (
       ball.expectedLandingPointX > leftBoundary &&
       ball.expectedLandingPointX < rightBoundary &&
-      Math.abs(ball.x - player.x) > player.randomNumberForRound * 5 + 64 &&
+      Math.abs(ball.x - player.x) > player.computerBoldness * 5 + 64 &&
       ball.x > leftBoundary &&
       ball.x < rightBoundary &&
       ball.y > 174
