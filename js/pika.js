@@ -559,14 +559,13 @@ function letComputerDecideKeyboardPress(
     Math.abs(ball.x - player.x) > 100 &&
     Math.abs(ball.xVelocity) < player.randomNumberForRound + 5
   ) {
-    let temp = player.isPlayer2 * 216;
+    let leftBoundary = player.isPlayer2 * 216;
     if (
-      (ball.expectedLandingPointX <= temp ||
+      (ball.expectedLandingPointX <= leftBoundary ||
         ball.expectedLandingPointX >= player.isPlayer2 * 432 + 216) &&
       player.randomNumberZeroOrOne === 0
     ) {
-      temp += 108;
-      virtualExpectedLandingPointX = temp;
+      virtualExpectedLandingPointX = leftBoundary + 108;
     }
   }
 
@@ -594,14 +593,14 @@ function letComputerDecideKeyboardPress(
       keyboard.yDirection = -1;
     }
 
-    const left_boundary = player.isPlayer2 * 216;
-    const right_boundary = (player.isPlayer2 + 1) * 216;
+    const leftBoundary = player.isPlayer2 * 216;
+    const rightBoundary = (player.isPlayer2 + 1) * 216;
     if (
-      ball.expectedLandingPointX > left_boundary &&
-      ball.expectedLandingPointX < right_boundary &&
+      ball.expectedLandingPointX > leftBoundary &&
+      ball.expectedLandingPointX < rightBoundary &&
       Math.abs(ball.x - player.x) > player.randomNumberForRound * 5 + 64 &&
-      ball.x > left_boundary &&
-      ball.x < right_boundary &&
+      ball.x > leftBoundary &&
+      ball.x < rightBoundary &&
       ball.y > 174
     ) {
       keyboard.powerHit = 1;
