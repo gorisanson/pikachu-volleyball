@@ -41,6 +41,11 @@ const pikaVolley = {
   // TODO: is it better to include this to player porperty?
   scores: [0, 0], // score[0] for player1, score[1] for player2
   sprites: {
+    shadows: {
+      forPlayer1: null,
+      forPlayer2: null,
+      forBall: null
+    },
     player1: null,
     player2: null,
     ball: null,
@@ -95,6 +100,9 @@ function setup() {
   // TODO: careful with the order of addChild, the later, the fronter?
   setSprites();
   const sprites = pikaVolley.sprites;
+  pikaVolley.app.stage.addChild(sprites.shadows.forPlayer1);
+  pikaVolley.app.stage.addChild(sprites.shadows.forPlayer2);
+  pikaVolley.app.stage.addChild(sprites.shadows.forBall);
   pikaVolley.app.stage.addChild(sprites.player1);
   pikaVolley.app.stage.addChild(sprites.player2);
   pikaVolley.app.stage.addChild(sprites.ball);
@@ -311,8 +319,10 @@ function drawGraphicForPlayerAndBall() {
   const sprites = pikaVolley.sprites;
   sprites.player1.x = player1.x;
   sprites.player1.y = player1.y;
+  sprites.shadows.forPlayer1.x = player1.x;
   sprites.player2.x = player2.x;
   sprites.player2.y = player2.y;
+  sprites.shadows.forPlayer2.x = player2.x;
 
   const frameNumber1 = getFrameNumberForPlayerAnimatedSprite(
     player1.state,
@@ -327,6 +337,7 @@ function drawGraphicForPlayerAndBall() {
 
   sprites.ball.x = ball.x;
   sprites.ball.y = ball.y;
+  sprites.shadows.forBall.x = ball.x;
   sprites.ball.gotoAndStop(ball.rotation);
 
   if (ball.punchEffectRadius > 0) {
@@ -431,6 +442,7 @@ function setAndReturnBGContainer() {
 }
 
 function setSprites() {
+  setShadowSprites();
   setPlayerSprites();
   setBallSprites();
   setScoreBoardSprites();
@@ -505,6 +517,25 @@ function setBallSprites() {
   pikaVolley.sprites.ballHyper = ballHyperSprite;
   pikaVolley.sprites.ballTrail = ballTrailSprite;
   pikaVolley.sprites.punch = ballPunchSprite;
+}
+
+function setShadowSprites() {
+  const shadowTexture = pikaVolley.textures["objects/shadow.png"];
+  const shadowSpriteForPlayer1 = new Sprite(shadowTexture);
+  const shadowSpriteForPlayer2 = new Sprite(shadowTexture);
+  const shadowSpriteForBall = new Sprite(shadowTexture);
+  shadowSpriteForPlayer1.anchor.x = 0.5;
+  shadowSpriteForPlayer1.anchor.y = 0.5;
+  shadowSpriteForPlayer2.anchor.x = 0.5;
+  shadowSpriteForPlayer2.anchor.y = 0.5;
+  shadowSpriteForBall.anchor.x = 0.5;
+  shadowSpriteForBall.anchor.y = 0.5;
+  shadowSpriteForPlayer1.y = 272;
+  shadowSpriteForPlayer2.y = 272;
+  shadowSpriteForBall.y = 272;
+  pikaVolley.sprites.shadows.forPlayer1 = shadowSpriteForPlayer1;
+  pikaVolley.sprites.shadows.forPlayer2 = shadowSpriteForPlayer2;
+  pikaVolley.sprites.shadows.forBall = shadowSpriteForBall;
 }
 
 function setBlackSprites() {
