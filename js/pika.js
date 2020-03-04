@@ -601,7 +601,7 @@ function letComputerDecideKeyboardPress(
       ball.expectedLandingPointX > left_boundary &&
       ball.expectedLandingPointX < right_boundary &&
       Math.abs(ball.x - player.x) > player.randomNumberForRound * 5 + 64 &&
-      ball.expectedLandingPointX < ball.x &&
+      ball.x > left_boundary &&
       ball.x < right_boundary &&
       ball.y > 174
     ) {
