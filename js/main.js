@@ -37,6 +37,8 @@ const pikaVolley = {
     [55, 32],
     [58, 35]
   ],
+  waveContainer: null,
+  wavePosition: 0,
   isPlayer2Serve: false,
   // TODO: is it better to include this to player porperty?
   scores: [0, 0], // score[0] for player1, score[1] for player2
@@ -120,6 +122,11 @@ function setup() {
   sprites.black.x = 0;
   sprites.black.y = 0;
 
+  setWaveContainer();
+  pikaVolley.app.stage.addChild(pikaVolley.waveContainer);
+  pikaVolley.waveContainer.x = 0;
+  pikaVolley.waveContainer.y = 280;
+
   // adjust audio setting
   const audio = pikaVolley.audio;
   audio.bgm.loop = true;
@@ -153,10 +160,12 @@ function gameLoop(delta) {
       pikaVolley.slowMotionNumOfSkippedFrames = 0;
       state(delta);
       moveClouds(delta);
+      moveWave(delta);
     }
   } else {
     state(delta);
     moveClouds(delta);
+    moveWave(delta);
   }
 }
 
@@ -193,6 +202,12 @@ function moveClouds(delta) {
       cloudSizeInfos[i] = Math.floor(11 * Math.random());
     }
   }
+}
+
+function moveWave(delta) {
+  const waveContainer = pikaVolley.waveContainer;
+  waveContainer.y = 280 + Math.abs(pikaVolley.wavePosition - 48);
+  pikaVolley.wavePosition = (pikaVolley.wavePosition + 2) % 96;
 }
 
 function afterEndOfRound(delta) {
@@ -420,14 +435,6 @@ function setAndReturnBGContainer() {
     }
   }
 
-  // TODO: wave moving
-  // wave
-  texture = textures["objects/wave.png"];
-  for (let i = 0; i < 432 / 16; i++) {
-    tile = new Sprite(texture);
-    addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 280);
-  }
-
   // net pillar
   texture = textures["objects/net_pillar_top.png"];
   tile = new Sprite(texture);
@@ -610,6 +617,19 @@ function setCloudContainer() {
   }
 
   pikaVolley.cloudContainer = cloudContainer;
+}
+
+function setWaveContainer() {
+  // TODO: wave moving
+  // wave
+  const waveContainer = new Container();
+  const texture = pikaVolley.textures["objects/wave.png"];
+  for (let i = 0; i < 432 / 16; i++) {
+    tile = new Sprite(texture);
+    addChildToParentAndSetLocalPosition(waveContainer, tile, 16 * i, 0);
+  }
+
+  pikaVolley.waveContainer = waveContainer;
 }
 
 function showScoreToScoreBoard() {
