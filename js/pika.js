@@ -19,6 +19,15 @@
  *    fast: 1 frame per 50ms = 20Hz
  */
 
+// The original machine (assembly) code use "_rand()" function in Visual Studio 1988 Library.
+// I could't find out how this function works exactly.
+// But, anyhow, it should be a funtion that generate a random number.
+// I decided to use custom rand function which generates random integer from [0, 32767]
+// which follows rand() function in Visual Studio 2017 Library.
+function rand() {
+  return Math.floor(32768 * Math.random());
+}
+
 // Initial Values: refer FUN_000403a90 && FUN_00401f40
 class Player {
   // isPlayer2: boolean, isComputer: boolean
@@ -113,10 +122,6 @@ class Sound {
   }
 }
 
-function rand() {
-  return Math.floor(32768 * Math.random());
-}
-
 // FUN_00403dd0
 function physicsEngine(player1, player2, ball, sound, keyboardArray) {
   const wasBallTouchedGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
@@ -189,6 +194,18 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
   // tow function ommited above maybe participates in graphic drawing for a ball
 
   return wasBallTouchedGround;
+}
+
+//FUN_00403070
+function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
+  let diff = ball.x - playerX;
+  if (Math.abs(diff) < 33) {
+    diff = ball.y - playerY;
+    if (Math.abs(diff) < 33) {
+      return true;
+    }
+  }
+  return false;
 }
 
 // FUN_00402dc0
@@ -468,11 +485,6 @@ function processCollisionBetweenBallAndPlayer(
 
   // If ball velocity x is 0, randomly choose one of -1, 0, 1.
   if (ball.xVelocity === 0) {
-    // The original machine (assembly) code use "_rand()" function in Visual Studio 1988 Libarary.
-    // I could't find out how this function works exactly.
-    // But, anyhow, it should be a funtion that generate a random number.
-    // I decided to use custom rand function which generates random integer from [0, 32767]
-    // which follows rand() function in Visual Studio 2017 Library.
     ball.xVelocity = (rand() % 3) - 1;
   }
 
@@ -771,16 +783,4 @@ function expectedLandingPointXWhenPowerHit(
     copyBall.x = copyBall.x + copyBall.xVelocity;
     copyBall.yVelocity += 1;
   }
-}
-
-//FUN_00403070
-function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
-  let diff = ball.x - playerX;
-  if (Math.abs(diff) < 33) {
-    diff = ball.y - playerY;
-    if (Math.abs(diff) < 33) {
-      return true;
-    }
-  }
-  return false;
 }
