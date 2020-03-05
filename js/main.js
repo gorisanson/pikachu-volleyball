@@ -502,19 +502,19 @@ function setAndReturnBGContainer() {
   const bgContainer = new Container();
   let tile;
 
+  // mountain
+  let texture = textures["objects/mountain.png"];
+  tile = new Sprite(texture);
+  addChildToParentAndSetLocalPosition(bgContainer, tile, 0, 180);
+
   // sky
-  let texture = textures["objects/sky_blue.png"];
+  texture = textures["objects/sky_blue.png"];
   for (let j = 0; j < 12; j++) {
     for (let i = 0; i < 432 / 16; i++) {
       tile = new Sprite(texture);
       addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 16 * j);
     }
   }
-
-  // mountain
-  texture = textures["objects/mountain.png"];
-  tile = new Sprite(texture);
-  addChildToParentAndSetLocalPosition(bgContainer, tile, 0, 180);
 
   // ground_red
   texture = textures["objects/ground_red.png"];
