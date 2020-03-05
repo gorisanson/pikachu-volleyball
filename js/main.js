@@ -235,8 +235,12 @@ function startOfNewGame(delta) {
 
   const w = 96; // game start message texture width
   const h = 24; // game start message texture height
-  const halfWidth = w * (pikaVolley.elapsedStartOfNewGameFrame / 50);
-  const halfHeight = h * (pikaVolley.elapsedStartOfNewGameFrame / 50);
+  const halfWidth = Math.floor(
+    (w * pikaVolley.elapsedStartOfNewGameFrame) / 50
+  );
+  const halfHeight = Math.floor(
+    (h * pikaVolley.elapsedStartOfNewGameFrame) / 50
+  );
   gameStartMessage.x = 216 - halfWidth;
   gameStartMessage.y = 50 + 2 * halfHeight;
   gameStartMessage.width = 2 * halfWidth;
@@ -308,9 +312,9 @@ function gameEnd(delta) {
   }
   if (pikaVolley.elapsedGameEndFrame < 50) {
     const halfWidthIncrement =
-      (2 * ((50 - pikaVolley.elapsedGameEndFrame) * w)) / 50;
+      2 * Math.floor(((50 - pikaVolley.elapsedGameEndFrame) * w) / 50);
     const halfHeightIncrement =
-      (2 * ((50 - pikaVolley.elapsedGameEndFrame) * h)) / 50;
+      2 * Math.floor(((50 - pikaVolley.elapsedGameEndFrame) * h) / 50);
 
     gameEndMessage.x = 216 - w / 2 - halfWidthIncrement;
     gameEndMessage.y = 50 - halfHeightIncrement;
