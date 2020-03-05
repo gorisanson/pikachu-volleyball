@@ -127,9 +127,9 @@ function setup() {
   pikaVolley.app.stage.addChild(sprites.shadows.forBall);
   pikaVolley.app.stage.addChild(sprites.player1);
   pikaVolley.app.stage.addChild(sprites.player2);
-  pikaVolley.app.stage.addChild(sprites.ball);
-  pikaVolley.app.stage.addChild(sprites.ballHyper);
   pikaVolley.app.stage.addChild(sprites.ballTrail);
+  pikaVolley.app.stage.addChild(sprites.ballHyper);
+  pikaVolley.app.stage.addChild(sprites.ball);
   pikaVolley.app.stage.addChild(sprites.punch);
   pikaVolley.app.stage.addChild(sprites.scoreBoards[0]);
   pikaVolley.app.stage.addChild(sprites.scoreBoards[1]);
