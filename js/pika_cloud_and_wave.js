@@ -85,3 +85,23 @@ function cloudAndWaveEngine(cloudArray, wave) {
   }
   return 1;
 }
+
+// refer FUN_00403f20
+function FUN_00403f20() {
+  // param[0x11]: game start font size
+}
+
+function FUN_00404070() {
+  if (param_1 < 50) {
+    width = 96;
+    height = height;
+    iVar2 = ((50 - param_1) * width) / 50;
+    iVar3 = ((50 - param_1) * height) / 50;
+    setRect(
+      216 - width / 2 - 2 * iVar2,
+      50 - 2 * iVar3,
+      iVar2 * 4 + width,
+      iVar3 * 4 + height
+    );
+  }
+}

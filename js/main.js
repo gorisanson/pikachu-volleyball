@@ -1,3 +1,5 @@
+"use strict";
+
 // Aliases
 const Application = PIXI.Application;
 const Sprite = PIXI.Sprite;
@@ -54,7 +56,8 @@ const pikaVolley = {
     scoreBoards: [null, null], // scoreBoards[0] for player1, scoreBoards[1] for player2
     messages: {
       gameStart: null,
-      ready: null
+      ready: null,
+      gameEnd: null
     },
     black: null // for fade out effect
   },
@@ -128,8 +131,12 @@ function setup() {
   pikaVolley.app.stage.addChild(sprites.scoreBoards[0]);
   pikaVolley.app.stage.addChild(sprites.scoreBoards[1]);
   pikaVolley.app.stage.addChild(sprites.messages.gameStart);
+  pikaVolley.app.stage.addChild(sprites.messages.ready);
+  pikaVolley.app.stage.addChild(sprites.messages.gameEnd);
   pikaVolley.app.stage.addChild(sprites.black);
 
+  sprites.messages.ready.x = 50;
+  sprites.messages.ready.y = 200;
   sprites.scoreBoards[0].x = 14; // score board is 14 pixel distant from boundary
   sprites.scoreBoards[0].y = 10;
   sprites.scoreBoards[1].x = 432 - 32 - 32 - 14; // 32 pixel is for number (32x32px) width; one score board has tow numbers
@@ -142,14 +149,11 @@ function setup() {
   // adjust audio setting
   const audio = pikaVolley.audio;
   audio.bgm.loop = true;
-  for (p in audio) {
+  for (const p in audio) {
     audio[p].volume = 0.3;
   }
 
-  // TODO: state = startOfNewGame;
-  // startOfNewGame function not made yet
-  showScoreToScoreBoard(); // TODO: this should be included in the startOfGame
-  state = startOfNewGame;
+  pikaVolley.state = startOfNewGame;
   pikaVolley.app.view.addEventListener("click", gameStart, { once: true });
 }
 
@@ -168,11 +172,11 @@ function gameLoop(delta) {
     ) {
       pikaVolley.slowMotionFramesLeft--;
       pikaVolley.slowMotionNumOfSkippedFrames = 0;
-      state(delta);
+      pikaVolley.state(delta);
       moveCloudsAndWaves(delta);
     }
   } else {
-    state(delta);
+    pikaVolley.state(delta);
     moveCloudsAndWaves(delta);
   }
 }
@@ -184,7 +188,7 @@ function moveCloudsAndWaves(delta) {
 
   cloudAndWaveEngine(clouds, wave);
 
-  for (i = 0; i < NUM_OF_CLOUDS; i++) {
+  for (let i = 0; i < NUM_OF_CLOUDS; i++) {
     const cloud = clouds[i];
     const cloudSprite = pikaVolley.cloudContainer.getChildAt(i);
     cloudSprite.x = cloud.spriteTopLeftPointX;
@@ -214,8 +218,11 @@ function startOfNewGame(delta) {
     pikaVolley.audio.bgm.play();
   }
 
-  const halfWidth = 96 * (pikaVolley.elapsedStartOfNewGameFrame / 50);
-  const halfHeight = 24 * (pikaVolley.elapsedStartOfNewGameFrame / 50);
+  // refer FUN_00403f20
+  const w = 96; // game start message texture width
+  const h = 24; // game start message texture height
+  const halfWidth = w * (pikaVolley.elapsedStartOfNewGameFrame / 50);
+  const halfHeight = h * (pikaVolley.elapsedStartOfNewGameFrame / 50);
   gameStartMessage.x = 216 - halfWidth;
   gameStartMessage.y = 50 + 2 * halfHeight;
   gameStartMessage.width = 2 * halfWidth;
@@ -228,8 +235,8 @@ function startOfNewGame(delta) {
     pikaVolley.elapsedStartOfNewGameFrame >= pikaVolley.startOfNewGameFrameNum
   ) {
     gameStartMessage.visible = false;
-    black.alpha.visible = false;
-    state = round;
+    black.visible = false;
+    pikaVolley.state = round;
   }
 }
 
@@ -241,7 +248,7 @@ function afterEndOfRound(delta) {
     pikaVolley.elapsedAfterEndOfRoundFrame >= pikaVolley.afterEndOfRoundFrameNum
   ) {
     pikaVolley.elapsedAfterEndOfRoundFrame = 0;
-    state = beforeStartOfNextRound;
+    pikaVolley.state = beforeStartOfNextRound;
   }
 }
 
@@ -259,7 +266,7 @@ function beforeStartOfNextRound(delta) {
   black.alpha = Math.max(0, black.alpha - 1 / 16);
 
   if (pikaVolley.elapsedBeforeStartOfNextRoundFrame % 5 === 0) {
-    readyMessage.visibe = !readyMessage.visible;
+    readyMessage.visible = !readyMessage.visible;
   }
 
   if (
@@ -271,7 +278,39 @@ function beforeStartOfNextRound(delta) {
     black.visible = false;
     pikaVolley.elapsedBeforeStartOfNextRoundFrame = 0;
     pikaVolley.roundEnded = false;
-    state = round;
+    pikaVolley.state = round;
+  }
+}
+
+pikaVolley.elapsedGameEndFrame = 0;
+// gameSet
+function gameEnd(delta) {
+  const gameEndMessage = pikaVolley.sprites.messages.gameEnd;
+  const w = 96; // game over message texture width;
+  const h = 24; // game over message texture height;
+
+  if (pikaVolley.elapsedGameEndFrame === 0) {
+    gameEndMessage.visible = true;
+  }
+  if (pikaVolley.elapsedGameEndFrame < 50) {
+    const halfWidthIncrement =
+      (2 * ((50 - pikaVolley.elapsedGameEndFrame) * w)) / 50;
+    const halfHeightIncrement =
+      (2 * ((50 - pikaVolley.elapsedGameEndFrame) * h)) / 50;
+
+    gameEndMessage.x = 216 - w / 2 - halfWidthIncrement;
+    gameEndMessage.y = 50 - halfHeightIncrement;
+    gameEndMessage.width = w + 2 * halfWidthIncrement;
+    gameEndMessage.height = h + 2 * halfHeightIncrement;
+  } else {
+    gameEndMessage.x = 216 - w / 2;
+    gameEndMessage.y = 50;
+    gameEndMessage.width = w;
+    gameEndMessage.height = h;
+  }
+  pikaVolley.elapsedGameEndFrame++;
+  if (pikaVolley.elapsedGameEndFrame > 210) {
+    //pikaVolley.state = next;
   }
 }
 
@@ -322,7 +361,7 @@ function round(delta) {
       black.visible = true;
       black.alpha += 1 / 16;
 
-      state = afterEndOfRound;
+      pikaVolley.state = afterEndOfRound;
     }
   }
 }
@@ -599,11 +638,17 @@ function setMessageAndOtherSprites() {
   sprite.visible = false;
   sprites.messages.gameStart = sprite;
 
-  sprite = new Sprite(textures["BITMAP124_1.png"]);
+  sprite = new Sprite(textures["words/BITMAP124_1.png"]);
   sprite.anchor.x = 0;
   sprite.anchor.y = 0;
   sprite.visible = false;
   sprites.messages.ready = sprite;
+
+  sprite = new Sprite(textures["words/BITMAP131_1.png"]);
+  sprite.anchor.x = 0;
+  sprite.anchor.y = 0;
+  sprite.visible = false;
+  sprites.messages.gameEnd = sprite;
 }
 
 function setScoreBoardSprites() {
@@ -674,7 +719,7 @@ function setWaveContainer() {
   const waveContainer = new Container();
   const texture = pikaVolley.textures["objects/wave.png"];
   for (let i = 0; i < 432 / 16; i++) {
-    tile = new Sprite(texture);
+    const tile = new Sprite(texture);
     addChildToParentAndSetLocalPosition(waveContainer, tile, 16 * i, 0);
   }
 
