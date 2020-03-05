@@ -1,4 +1,7 @@
 "use strict";
+PIXI.settings.RESOLUTION = window.devicePixelRatio;
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+PIXI.settings.ROUND_PIXELS = true;
 
 // Aliases
 const Application = PIXI.Application;
@@ -17,10 +20,10 @@ const pikaVolley = {
   app: new Application({
     width: 432,
     height: 304,
+    autoDensity: true,
     antialias: false,
     backgroundColor: 0x00ff00,
-    transparent: false,
-    resolution: 1.5
+    transparent: false
   }),
   state: null,
   nextState: null,
