@@ -31,10 +31,14 @@ const pikaVolley = {
   waveContainer: null,
   isPlayer2Serve: false,
   roundEnded: false,
-  fadeInFrameNum: 10,
-  elapsedFadeInFrames: 0,
+  startOfNewGameFrameNum: 71,
+  elapsedStartOfNewGameFrame: 0,
+  afterEndOfRoundFrameNum: 5,
+  elapsedAfterEndOfRoundFrame: 0,
+  beForeStartOfNextRoundFrameNum: 30,
+  elapsedBeforeStartOfNextRoundFrame: 0,
   // TODO: is it better to include this to player porperty?
-  scores: [0, 0], // score[0] for player1, score[1] for player2
+  scores: [0, 0], // scores[0] for player1, scores[1] for player2
   sprites: {
     shadows: {
       forPlayer1: null,
@@ -48,6 +52,10 @@ const pikaVolley = {
     ballTrail: null,
     punch: null,
     scoreBoards: [null, null], // scoreBoards[0] for player1, scoreBoards[1] for player2
+    messages: {
+      gameStart: null,
+      ready: null
+    },
     black: null // for fade out effect
   },
   audio: {
@@ -62,7 +70,7 @@ const pikaVolley = {
   },
   physics: {
     player1: new Player(false, true),
-    player2: new Player(true, true),
+    player2: new Player(true, false),
     ball: new Ball(),
     sound: new Sound(),
     ballTouchedGround: false,
@@ -119,6 +127,7 @@ function setup() {
   pikaVolley.app.stage.addChild(sprites.punch);
   pikaVolley.app.stage.addChild(sprites.scoreBoards[0]);
   pikaVolley.app.stage.addChild(sprites.scoreBoards[1]);
+  pikaVolley.app.stage.addChild(sprites.messages.gameStart);
   pikaVolley.app.stage.addChild(sprites.black);
 
   sprites.scoreBoards[0].x = 14; // score board is 14 pixel distant from boundary
@@ -127,6 +136,8 @@ function setup() {
   sprites.scoreBoards[1].y = 10;
   sprites.black.x = 0;
   sprites.black.y = 0;
+  sprites.black.alph = 1;
+  sprites.black.visible = true;
 
   // adjust audio setting
   const audio = pikaVolley.audio;
@@ -138,14 +149,13 @@ function setup() {
   // TODO: state = startOfNewGame;
   // startOfNewGame function not made yet
   showScoreToScoreBoard(); // TODO: this should be included in the startOfGame
-  state = beforeStartOfNextRound;
+  state = startOfNewGame;
   pikaVolley.app.view.addEventListener("click", gameStart, { once: true });
 }
 
 function gameStart() {
   pikaVolley.app.ticker.maxFPS = pikaVolley.normalFPS;
   pikaVolley.app.ticker.add(delta => gameLoop(delta));
-  pikaVolley.audio.bgm.play();
 }
 
 function gameLoop(delta) {
@@ -189,33 +199,80 @@ function moveCloudsAndWaves(delta) {
   }
 }
 
+function startOfNewGame(delta) {
+  const gameStartMessage = pikaVolley.sprites.messages.gameStart;
+  const black = pikaVolley.sprites.black;
+  if (pikaVolley.elapsedStartOfNewGameFrame === 0) {
+    gameStartMessage.visible = true;
+    black.visible = true;
+    black.alpha = 1;
+
+    pikaVolley.scores[0] = 0;
+    pikaVolley.scores[1] = 0;
+    showScoreToScoreBoard();
+    drawGraphicForRoundStart();
+    pikaVolley.audio.bgm.play();
+  }
+
+  const halfWidth = 96 * (pikaVolley.elapsedStartOfNewGameFrame / 50);
+  const halfHeight = 24 * (pikaVolley.elapsedStartOfNewGameFrame / 50);
+  gameStartMessage.x = 216 - halfWidth;
+  gameStartMessage.y = 50 + 2 * halfHeight;
+  gameStartMessage.width = 2 * halfWidth;
+  gameStartMessage.height = 2 * halfHeight;
+
+  black.alpha = Math.max(0, black.alpha - 1 / 17);
+  pikaVolley.elapsedStartOfNewGameFrame++;
+
+  if (
+    pikaVolley.elapsedStartOfNewGameFrame >= pikaVolley.startOfNewGameFrameNum
+  ) {
+    gameStartMessage.visible = false;
+    black.alpha.visible = false;
+    state = round;
+  }
+}
+
 function afterEndOfRound(delta) {
   const black = pikaVolley.sprites.black;
-  black.visible = true;
-  black.alpha = Math.min(1, black.alpha + 0.2); // steadily increase alpha to 1 (fade out)
-  if (black.alpha === 1) {
+  black.alpha = Math.min(1, black.alpha + 1 / 16); // steadily increase alpha to 1 (fade out)
+  pikaVolley.elapsedAfterEndOfRoundFrame++;
+  if (
+    pikaVolley.elapsedAfterEndOfRoundFrame >= pikaVolley.afterEndOfRoundFrameNum
+  ) {
+    pikaVolley.elapsedAfterEndOfRoundFrame = 0;
     state = beforeStartOfNextRound;
-    return;
   }
 }
 
 function beforeStartOfNextRound(delta) {
+  const readyMessage = pikaVolley.sprites.messages.ready;
   const black = pikaVolley.sprites.black;
-  if (pikaVolley.elapsedFadeInFrames === 0) {
+  if (pikaVolley.elapsedBeforeStartOfNextRoundFrame === 0) {
+    readyMessage.visible = false;
+    black.visible = true;
+    black.alpha = 1;
     drawGraphicForRoundStart();
   }
-  if (pikaVolley.elapsedFadeInFrames < pikaVolley.fadeInFrameNum) {
-    pikaVolley.elapsedFadeInFrames++;
-    if (black.alpha > 0) {
-      black.alpha = Math.max(0, black.alpha - 0.1);
-    }
-    return;
+
+  pikaVolley.elapsedBeforeStartOfNextRoundFrame++;
+  black.alpha = Math.max(0, black.alpha - 1 / 16);
+
+  if (pikaVolley.elapsedBeforeStartOfNextRoundFrame % 5 === 0) {
+    readyMessage.visibe = !readyMessage.visible;
   }
-  black.visible = false;
-  black.alpha = 0;
-  pikaVolley.elapsedFadeInFrames = 0;
-  pikaVolley.roundEnded = false;
-  state = round;
+
+  if (
+    pikaVolley.elapsedBeforeStartOfNextRoundFrame >=
+    pikaVolley.beForeStartOfNextRoundFrameNum
+  ) {
+    readyMessage.visible = false;
+    black.alpha = 0;
+    black.visible = false;
+    pikaVolley.elapsedBeforeStartOfNextRoundFrame = 0;
+    pikaVolley.roundEnded = false;
+    state = round;
+  }
 }
 
 function round(delta) {
@@ -263,7 +320,7 @@ function round(delta) {
     if (pikaVolley.slowMotionFramesLeft === 0) {
       const black = pikaVolley.sprites.black;
       black.visible = true;
-      black.alpha += 0.2;
+      black.alpha += 1 / 16;
 
       state = afterEndOfRound;
     }
@@ -429,6 +486,7 @@ function setSprites() {
   setPlayerSprites();
   setBallSprites();
   setScoreBoardSprites();
+  setMessageAndOtherSprites();
   setBlackSprites();
 }
 
@@ -527,10 +585,25 @@ function setBlackSprites() {
   blackRectangle.beginFill(0x000000);
   blackRectangle.drawRect(0, 0, 432, 304);
   blackRectangle.endFill();
-  blackRectangle.alpha = 0;
-  blackRectangle.visible = false;
 
   pikaVolley.sprites.black = blackRectangle;
+}
+
+function setMessageAndOtherSprites() {
+  const textures = pikaVolley.textures;
+  const sprites = pikaVolley.sprites;
+
+  let sprite = new Sprite(textures["words/BITMAP122_1.png"]);
+  sprite.anchor.x = 0;
+  sprite.anchor.y = 0;
+  sprite.visible = false;
+  sprites.messages.gameStart = sprite;
+
+  sprite = new Sprite(textures["BITMAP124_1.png"]);
+  sprite.anchor.x = 0;
+  sprite.anchor.y = 0;
+  sprite.visible = false;
+  sprites.messages.ready = sprite;
 }
 
 function setScoreBoardSprites() {
