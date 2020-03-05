@@ -297,8 +297,8 @@ function beforeStartOfNextRound(delta) {
 // refered FUN_00404070
 function gameEnd(delta) {
   const gameEndMessage = pikaVolley.sprites.messages.gameEnd;
-  const w = 96; // game over message texture width;
-  const h = 24; // game over message texture height;
+  const w = 96; // game end message texture width;
+  const h = 24; // game end message texture height;
 
   if (pikaVolley.elapsedGameEndFrame === 0) {
     gameEndMessage.visible = true;
