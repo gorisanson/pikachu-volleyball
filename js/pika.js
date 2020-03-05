@@ -40,7 +40,7 @@ class Player {
     this.divingDirection = 0; // 0xB4
     this.lyingDownDurationLeft = -1; // 0xB8
     this.isWinner = false; // 0xD0
-    this.gameOver = false; // 0xD4
+    this.gameEnded = false; // 0xD4
 
     // 0 or 1: it flips randomly by the ai function (FUN_00402360)
     // When ball is hanging around on the other player's side:
@@ -430,7 +430,7 @@ function processPlayerMovementAndSetPlayerPosition(
     }
   }
 
-  if (player.gameOver === true) {
+  if (player.gameEnded === true) {
     if (player.state === 0) {
       if (player.isWinner === true) {
         player.state = 5;
@@ -444,14 +444,14 @@ function processPlayerMovementAndSetPlayerPosition(
       player.delayBeforeNextFrame = 0;
       player.frameNumber = 0;
     }
-    processGameOverFrameFor(player);
+    processGameEndFrameFor(player);
   }
   return 1;
 }
 
 // FUN_004025e0
-function processGameOverFrameFor(player) {
-  if (player.gameOver === true && player.frameNumber < 4) {
+function processGameEndFrameFor(player) {
+  if (player.gameEnded === true && player.frameNumber < 4) {
     player.delayBeforeNextFrame += 1;
     if (player.delayBeforeNextFrame > 4) {
       player.delayBeforeNextFrame = 0;
