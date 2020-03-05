@@ -135,8 +135,8 @@ function setup() {
   pikaVolley.app.stage.addChild(sprites.messages.gameEnd);
   pikaVolley.app.stage.addChild(sprites.black);
 
-  sprites.messages.ready.x = 50;
-  sprites.messages.ready.y = 200;
+  sprites.messages.ready.x = 176;
+  sprites.messages.ready.y = 38;
   sprites.scoreBoards[0].x = 14; // score board is 14 pixel distant from boundary
   sprites.scoreBoards[0].y = 10;
   sprites.scoreBoards[1].x = 432 - 32 - 32 - 14; // 32 pixel is for number (32x32px) width; one score board has tow numbers
@@ -203,6 +203,7 @@ function moveCloudsAndWaves(delta) {
   }
 }
 
+// refered FUN_00403f20
 function startOfNewGame(delta) {
   const gameStartMessage = pikaVolley.sprites.messages.gameStart;
   const black = pikaVolley.sprites.black;
@@ -218,7 +219,6 @@ function startOfNewGame(delta) {
     pikaVolley.audio.bgm.play();
   }
 
-  // refer FUN_00403f20
   const w = 96; // game start message texture width
   const h = 24; // game start message texture height
   const halfWidth = w * (pikaVolley.elapsedStartOfNewGameFrame / 50);
@@ -283,7 +283,9 @@ function beforeStartOfNextRound(delta) {
 }
 
 pikaVolley.elapsedGameEndFrame = 0;
+
 // gameSet
+// refered FUN_00404070
 function gameEnd(delta) {
   const gameEndMessage = pikaVolley.sprites.messages.gameEnd;
   const w = 96; // game over message texture width;
