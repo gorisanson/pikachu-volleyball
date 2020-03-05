@@ -39,8 +39,11 @@ const pikaVolley = {
   elapsedAfterEndOfRoundFrame: 0,
   beForeStartOfNextRoundFrameNum: 30,
   elapsedBeforeStartOfNextRoundFrame: 0,
+  elapsedGameEndFrame: 0,
   // TODO: is it better to include this to player porperty?
   scores: [0, 0], // scores[0] for player1, scores[1] for player2
+  goalScore: 15,
+  gameEnded: false,
   sprites: {
     shadows: {
       forPlayer1: null,
@@ -212,6 +215,14 @@ function startOfNewGame(delta) {
     black.visible = true;
     black.alpha = 1;
 
+    pikaVolley.gameEnded = false;
+    pikaVolley.roundEnded = false;
+    pikaVolley.physics.player1.gameEnded = false;
+    pikaVolley.physics.player1.isWinner = false;
+    pikaVolley.physics.player2.gameEnded = false;
+    pikaVolley.physics.player2.isWinner = false;
+    pikaVolley.isPlayer2Serve = false;
+
     pikaVolley.scores[0] = 0;
     pikaVolley.scores[1] = 0;
     showScoreToScoreBoard();
@@ -234,6 +245,7 @@ function startOfNewGame(delta) {
   if (
     pikaVolley.elapsedStartOfNewGameFrame >= pikaVolley.startOfNewGameFrameNum
   ) {
+    pikaVolley.elapsedStartOfNewGameFrame = 0;
     gameStartMessage.visible = false;
     black.visible = false;
     pikaVolley.state = round;
@@ -282,9 +294,6 @@ function beforeStartOfNextRound(delta) {
   }
 }
 
-pikaVolley.elapsedGameEndFrame = 0;
-
-// gameSet
 // refered FUN_00404070
 function gameEnd(delta) {
   const gameEndMessage = pikaVolley.sprites.messages.gameEnd;
@@ -312,7 +321,9 @@ function gameEnd(delta) {
   }
   pikaVolley.elapsedGameEndFrame++;
   if (pikaVolley.elapsedGameEndFrame > 210) {
-    //pikaVolley.state = next;
+    pikaVolley.elapsedGameEndFrame = 0;
+    gameEndMessage.visible = false;
+    pikaVolley.state = startOfNewGame;
   }
 }
 
@@ -339,24 +350,47 @@ function round(delta) {
   ball.previousX = ball.x;
   ball.previousY = ball.y;
 
-  if (ballTouchedGround) {
-    if (pikaVolley.roundEnded === false) {
-      pikaVolley.slowMotionFramesLeft = pikaVolley.SLOW_MOTION_FRAMES_NUM;
-    }
-    pikaVolley.roundEnded = true;
+  if (pikaVolley.gameEnded === true) {
+    gameEnd();
+    return;
+  }
+
+  if (
+    ballTouchedGround &&
+    pikaVolley.roundEnded === false &&
+    pikaVolley.gameEnded === false
+  ) {
     // TODO: is it better for move this to physics function?
     // by including isPlayer2Serve property into ball, score to player
     if (ball.punchEffectX < 216) {
       pikaVolley.isPlayer2Serve = true;
       pikaVolley.scores[1] += 1;
+      if (pikaVolley.scores[1] >= pikaVolley.goalScore) {
+        pikaVolley.gameEnded = true;
+        pikaVolley.physics.player1.isWinner = false;
+        pikaVolley.physics.player2.isWinner = true;
+        pikaVolley.physics.player1.gameEnded = true;
+        pikaVolley.physics.player2.gameEnded = true;
+      }
     } else {
       pikaVolley.isPlayer2Serve = false;
       pikaVolley.scores[0] += 1;
+      if (pikaVolley.scores[0] >= pikaVolley.goalScore) {
+        pikaVolley.gameEnded = true;
+        pikaVolley.physics.player1.isWinner = true;
+        pikaVolley.physics.player2.isWinner = false;
+        pikaVolley.physics.player1.gameEnded = true;
+        pikaVolley.physics.player2.gameEnded = true;
+      }
     }
     showScoreToScoreBoard();
+    if (pikaVolley.roundEnded === false && pikaVolley.gameEnded === false) {
+      pikaVolley.slowMotionFramesLeft = pikaVolley.SLOW_MOTION_FRAMES_NUM;
+    }
+    pikaVolley.roundEnded = true;
   }
 
-  if (pikaVolley.roundEnded === true) {
+  if (pikaVolley.roundEnded === true && pikaVolley.gameEnded === false) {
     // if this is the last frame of this round, begin fade out
     if (pikaVolley.slowMotionFramesLeft === 0) {
       const black = pikaVolley.sprites.black;
@@ -762,6 +796,6 @@ function getFrameNumberForPlayerAnimatedSprite(state, frameNumber) {
   } else if (state === 4) {
     return 17 + frameNumber;
   } else if (state > 4) {
-    return 18 + frameNumber;
+    return 18 + 5 * (state - 5) + frameNumber;
   }
 }
