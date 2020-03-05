@@ -1,3 +1,4 @@
+"use strict";
 /*
  *  X width: 432 = 0x1B0
  *  Y width: 304 = 0x130
@@ -419,8 +420,9 @@ function processPlayerMovementAndSetPlayerPosition(
     player.delayBeforeNextFrame += 1;
     if (player.delayBeforeNextFrame > 3) {
       player.delayBeforeNextFrame = 0;
-      temp = player.frameNumber + player.normalStatusArmSwingDirection;
-      if (temp < 0 || temp > 4) {
+      const futureFrameNumber =
+        player.frameNumber + player.normalStatusArmSwingDirection;
+      if (futureFrameNumber < 0 || futureFrameNumber > 4) {
         player.normalStatusArmSwingDirection = -player.normalStatusArmSwingDirection;
       }
       player.frameNumber =
