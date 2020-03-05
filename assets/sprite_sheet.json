@@ -2,7 +2,7 @@
 
 "ball/ball_0.png":
 {
-	"frame": {"x":144,"y":56,"w":40,"h":40},
+	"frame": {"x":240,"y":96,"w":40,"h":40},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
@@ -10,7 +10,7 @@
 },
 "ball/ball_1.png":
 {
-	"frame": {"x":184,"y":56,"w":40,"h":40},
+	"frame": {"x":280,"y":96,"w":40,"h":40},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
@@ -18,7 +18,7 @@
 },
 "ball/ball_2.png":
 {
-	"frame": {"x":224,"y":56,"w":40,"h":40},
+	"frame": {"x":320,"y":96,"w":40,"h":40},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
@@ -26,7 +26,7 @@
 },
 "ball/ball_3.png":
 {
-	"frame": {"x":264,"y":56,"w":40,"h":40},
+	"frame": {"x":360,"y":96,"w":40,"h":40},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
@@ -34,7 +34,7 @@
 },
 "ball/ball_4.png":
 {
-	"frame": {"x":304,"y":56,"w":40,"h":40},
+	"frame": {"x":400,"y":96,"w":40,"h":40},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
@@ -42,7 +42,7 @@
 },
 "ball/ball_hyper.png":
 {
-	"frame": {"x":344,"y":56,"w":40,"h":40},
+	"frame": {"x":440,"y":96,"w":40,"h":40},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
@@ -50,7 +50,7 @@
 },
 "ball/ball_punch.png":
 {
-	"frame": {"x":384,"y":56,"w":40,"h":40},
+	"frame": {"x":0,"y":136,"w":40,"h":40},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
@@ -58,31 +58,151 @@
 },
 "ball/ball_trail.png":
 {
-	"frame": {"x":424,"y":56,"w":40,"h":40},
+	"frame": {"x":40,"y":136,"w":40,"h":40},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
 	"sourceSize": {"w":40,"h":40}
 },
-"black.png":
+"messages/common/game_end.png":
 {
-	"frame": {"x":0,"y":0,"w":1,"h":1},
+	"frame": {"x":0,"y":40,"w":96,"h":24},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1,"h":1},
-	"sourceSize": {"w":1,"h":1}
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":24},
+	"sourceSize": {"w":96,"h":24}
 },
-"mark.png":
+"messages/common/ready.png":
 {
-	"frame": {"x":104,"y":424,"w":88,"h":110},
+	"frame": {"x":96,"y":40,"w":80,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":24},
+	"sourceSize": {"w":80,"h":24}
+},
+"messages/common/sachisoft.png":
+{
+	"frame": {"x":144,"y":0,"w":360,"h":20},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":360,"h":20},
+	"sourceSize": {"w":360,"h":20}
+},
+"messages/jp/fight.png":
+{
+	"frame": {"x":88,"y":653,"w":160,"h":160},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":160,"h":160},
+	"sourceSize": {"w":160,"h":160}
+},
+"messages/jp/game_start.png":
+{
+	"frame": {"x":176,"y":40,"w":96,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":24},
+	"sourceSize": {"w":96,"h":24}
+},
+"messages/jp/mark.png":
+{
+	"frame": {"x":380,"y":543,"w":88,"h":110},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":88,"h":110},
 	"sourceSize": {"w":88,"h":110}
 },
+"messages/jp/pikachu_volleyball.png":
+{
+	"frame": {"x":0,"y":464,"w":276,"h":79},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":276,"h":79},
+	"sourceSize": {"w":276,"h":79}
+},
+"messages/jp/pokemon.png":
+{
+	"frame": {"x":0,"y":64,"w":200,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":32},
+	"sourceSize": {"w":200,"h":32}
+},
+"messages/jp/with_computer.png":
+{
+	"frame": {"x":0,"y":20,"w":120,"h":20},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":120,"h":20},
+	"sourceSize": {"w":120,"h":20}
+},
+"messages/jp/with_friend.png":
+{
+	"frame": {"x":120,"y":20,"w":120,"h":20},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":120,"h":20},
+	"sourceSize": {"w":120,"h":20}
+},
+"messages/ko/fight.png":
+{
+	"frame": {"x":248,"y":653,"w":160,"h":160},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":160,"h":160},
+	"sourceSize": {"w":160,"h":160}
+},
+"messages/ko/game_start.png":
+{
+	"frame": {"x":272,"y":40,"w":96,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":24},
+	"sourceSize": {"w":96,"h":24}
+},
+"messages/ko/mark.png":
+{
+	"frame": {"x":0,"y":653,"w":88,"h":110},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":88,"h":110},
+	"sourceSize": {"w":88,"h":110}
+},
+"messages/ko/pikachu_volleyball.png":
+{
+	"frame": {"x":0,"y":543,"w":276,"h":79},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":276,"h":79},
+	"sourceSize": {"w":276,"h":79}
+},
+"messages/ko/pokemon.png":
+{
+	"frame": {"x":200,"y":64,"w":200,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":32},
+	"sourceSize": {"w":200,"h":32}
+},
+"messages/ko/with_computer.png":
+{
+	"frame": {"x":240,"y":20,"w":120,"h":20},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":120,"h":20},
+	"sourceSize": {"w":120,"h":20}
+},
+"messages/ko/with_friend.png":
+{
+	"frame": {"x":360,"y":20,"w":120,"h":20},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":120,"h":20},
+	"sourceSize": {"w":120,"h":20}
+},
 "number/number_0.png":
 {
-	"frame": {"x":272,"y":24,"w":32,"h":32},
+	"frame": {"x":400,"y":64,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -90,7 +210,7 @@
 },
 "number/number_1.png":
 {
-	"frame": {"x":304,"y":24,"w":32,"h":32},
+	"frame": {"x":432,"y":64,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -98,7 +218,7 @@
 },
 "number/number_2.png":
 {
-	"frame": {"x":336,"y":24,"w":32,"h":32},
+	"frame": {"x":464,"y":64,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -106,7 +226,7 @@
 },
 "number/number_3.png":
 {
-	"frame": {"x":368,"y":24,"w":32,"h":32},
+	"frame": {"x":0,"y":96,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -114,7 +234,7 @@
 },
 "number/number_4.png":
 {
-	"frame": {"x":400,"y":24,"w":32,"h":32},
+	"frame": {"x":32,"y":96,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -122,7 +242,7 @@
 },
 "number/number_5.png":
 {
-	"frame": {"x":432,"y":24,"w":32,"h":32},
+	"frame": {"x":64,"y":96,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -130,7 +250,7 @@
 },
 "number/number_6.png":
 {
-	"frame": {"x":0,"y":56,"w":32,"h":32},
+	"frame": {"x":96,"y":96,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -138,7 +258,7 @@
 },
 "number/number_7.png":
 {
-	"frame": {"x":32,"y":56,"w":32,"h":32},
+	"frame": {"x":128,"y":96,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -146,7 +266,7 @@
 },
 "number/number_8.png":
 {
-	"frame": {"x":64,"y":56,"w":32,"h":32},
+	"frame": {"x":160,"y":96,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -154,7 +274,7 @@
 },
 "number/number_9.png":
 {
-	"frame": {"x":96,"y":56,"w":32,"h":32},
+	"frame": {"x":192,"y":96,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -162,7 +282,7 @@
 },
 "objects/cloud.png":
 {
-	"frame": {"x":385,"y":0,"w":48,"h":24},
+	"frame": {"x":368,"y":40,"w":48,"h":24},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":24},
@@ -170,7 +290,7 @@
 },
 "objects/ground_line.png":
 {
-	"frame": {"x":49,"y":0,"w":16,"h":16},
+	"frame": {"x":48,"y":0,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -178,7 +298,7 @@
 },
 "objects/ground_line_leftmost.png":
 {
-	"frame": {"x":65,"y":0,"w":16,"h":16},
+	"frame": {"x":64,"y":0,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -186,7 +306,7 @@
 },
 "objects/ground_line_rightmost.png":
 {
-	"frame": {"x":81,"y":0,"w":16,"h":16},
+	"frame": {"x":80,"y":0,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -194,7 +314,7 @@
 },
 "objects/ground_red.png":
 {
-	"frame": {"x":97,"y":0,"w":16,"h":16},
+	"frame": {"x":96,"y":0,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -202,7 +322,7 @@
 },
 "objects/ground_yellow.png":
 {
-	"frame": {"x":113,"y":0,"w":16,"h":16},
+	"frame": {"x":112,"y":0,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -210,7 +330,7 @@
 },
 "objects/mountain.png":
 {
-	"frame": {"x":0,"y":352,"w":432,"h":72},
+	"frame": {"x":64,"y":392,"w":432,"h":72},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":432,"h":72},
@@ -218,7 +338,7 @@
 },
 "objects/net_pillar.png":
 {
-	"frame": {"x":1,"y":0,"w":8,"h":8},
+	"frame": {"x":0,"y":0,"w":8,"h":8},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":8},
@@ -226,7 +346,7 @@
 },
 "objects/net_pillar_top.png":
 {
-	"frame": {"x":9,"y":0,"w":8,"h":8},
+	"frame": {"x":8,"y":0,"w":8,"h":8},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":8},
@@ -234,7 +354,7 @@
 },
 "objects/shadow.png":
 {
-	"frame": {"x":17,"y":0,"w":32,"h":8},
+	"frame": {"x":16,"y":0,"w":32,"h":8},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":8},
@@ -242,7 +362,7 @@
 },
 "objects/sky_blue.png":
 {
-	"frame": {"x":129,"y":0,"w":16,"h":16},
+	"frame": {"x":128,"y":0,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -250,7 +370,7 @@
 },
 "objects/wave.png":
 {
-	"frame": {"x":128,"y":56,"w":16,"h":32},
+	"frame": {"x":224,"y":96,"w":16,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":32},
@@ -258,7 +378,7 @@
 },
 "pikachu/pikachu_0_0.png":
 {
-	"frame": {"x":0,"y":96,"w":64,"h":64},
+	"frame": {"x":80,"y":136,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -266,7 +386,7 @@
 },
 "pikachu/pikachu_0_1.png":
 {
-	"frame": {"x":64,"y":96,"w":64,"h":64},
+	"frame": {"x":144,"y":136,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -274,7 +394,7 @@
 },
 "pikachu/pikachu_0_2.png":
 {
-	"frame": {"x":128,"y":96,"w":64,"h":64},
+	"frame": {"x":208,"y":136,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -282,7 +402,7 @@
 },
 "pikachu/pikachu_0_3.png":
 {
-	"frame": {"x":192,"y":96,"w":64,"h":64},
+	"frame": {"x":272,"y":136,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -290,7 +410,7 @@
 },
 "pikachu/pikachu_0_4.png":
 {
-	"frame": {"x":256,"y":96,"w":64,"h":64},
+	"frame": {"x":336,"y":136,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -298,7 +418,7 @@
 },
 "pikachu/pikachu_1_0.png":
 {
-	"frame": {"x":320,"y":96,"w":64,"h":64},
+	"frame": {"x":400,"y":136,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -306,7 +426,7 @@
 },
 "pikachu/pikachu_1_1.png":
 {
-	"frame": {"x":384,"y":96,"w":64,"h":64},
+	"frame": {"x":0,"y":200,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -314,7 +434,7 @@
 },
 "pikachu/pikachu_1_2.png":
 {
-	"frame": {"x":0,"y":160,"w":64,"h":64},
+	"frame": {"x":64,"y":200,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -322,7 +442,7 @@
 },
 "pikachu/pikachu_1_3.png":
 {
-	"frame": {"x":64,"y":160,"w":64,"h":64},
+	"frame": {"x":128,"y":200,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -330,7 +450,7 @@
 },
 "pikachu/pikachu_1_4.png":
 {
-	"frame": {"x":128,"y":160,"w":64,"h":64},
+	"frame": {"x":192,"y":200,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -338,7 +458,7 @@
 },
 "pikachu/pikachu_2_0.png":
 {
-	"frame": {"x":192,"y":160,"w":64,"h":64},
+	"frame": {"x":256,"y":200,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -346,7 +466,7 @@
 },
 "pikachu/pikachu_2_1.png":
 {
-	"frame": {"x":256,"y":160,"w":64,"h":64},
+	"frame": {"x":320,"y":200,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -354,7 +474,7 @@
 },
 "pikachu/pikachu_2_2.png":
 {
-	"frame": {"x":320,"y":160,"w":64,"h":64},
+	"frame": {"x":384,"y":200,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -362,7 +482,7 @@
 },
 "pikachu/pikachu_2_3.png":
 {
-	"frame": {"x":384,"y":160,"w":64,"h":64},
+	"frame": {"x":0,"y":264,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -370,7 +490,7 @@
 },
 "pikachu/pikachu_2_4.png":
 {
-	"frame": {"x":0,"y":224,"w":64,"h":64},
+	"frame": {"x":64,"y":264,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -378,7 +498,7 @@
 },
 "pikachu/pikachu_3_0.png":
 {
-	"frame": {"x":64,"y":224,"w":64,"h":64},
+	"frame": {"x":128,"y":264,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -386,7 +506,7 @@
 },
 "pikachu/pikachu_3_1.png":
 {
-	"frame": {"x":128,"y":224,"w":64,"h":64},
+	"frame": {"x":192,"y":264,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -394,7 +514,7 @@
 },
 "pikachu/pikachu_4_0.png":
 {
-	"frame": {"x":192,"y":224,"w":64,"h":64},
+	"frame": {"x":256,"y":264,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -402,7 +522,7 @@
 },
 "pikachu/pikachu_5_0.png":
 {
-	"frame": {"x":256,"y":224,"w":64,"h":64},
+	"frame": {"x":320,"y":264,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -410,7 +530,7 @@
 },
 "pikachu/pikachu_5_1.png":
 {
-	"frame": {"x":320,"y":224,"w":64,"h":64},
+	"frame": {"x":384,"y":264,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -418,7 +538,7 @@
 },
 "pikachu/pikachu_5_2.png":
 {
-	"frame": {"x":384,"y":224,"w":64,"h":64},
+	"frame": {"x":0,"y":328,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -426,7 +546,7 @@
 },
 "pikachu/pikachu_5_3.png":
 {
-	"frame": {"x":0,"y":288,"w":64,"h":64},
+	"frame": {"x":64,"y":328,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -434,7 +554,7 @@
 },
 "pikachu/pikachu_5_4.png":
 {
-	"frame": {"x":64,"y":288,"w":64,"h":64},
+	"frame": {"x":128,"y":328,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -442,7 +562,7 @@
 },
 "pikachu/pikachu_6_0.png":
 {
-	"frame": {"x":128,"y":288,"w":64,"h":64},
+	"frame": {"x":192,"y":328,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -450,7 +570,7 @@
 },
 "pikachu/pikachu_6_1.png":
 {
-	"frame": {"x":192,"y":288,"w":64,"h":64},
+	"frame": {"x":256,"y":328,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -458,7 +578,7 @@
 },
 "pikachu/pikachu_6_2.png":
 {
-	"frame": {"x":256,"y":288,"w":64,"h":64},
+	"frame": {"x":320,"y":328,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -466,7 +586,7 @@
 },
 "pikachu/pikachu_6_3.png":
 {
-	"frame": {"x":320,"y":288,"w":64,"h":64},
+	"frame": {"x":384,"y":328,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -474,7 +594,7 @@
 },
 "pikachu/pikachu_6_4.png":
 {
-	"frame": {"x":384,"y":288,"w":64,"h":64},
+	"frame": {"x":0,"y":392,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -482,59 +602,11 @@
 },
 "pikachu_sitting.png":
 {
-	"frame": {"x":0,"y":424,"w":104,"h":104},
+	"frame": {"x":276,"y":543,"w":104,"h":104},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
 	"sourceSize": {"w":104,"h":104}
-},
-"words/BITMAP113_1.png":
-{
-	"frame": {"x":192,"y":424,"w":160,"h":160},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":160,"h":160},
-	"sourceSize": {"w":160,"h":160}
-},
-"words/BITMAP122_1.png":
-{
-	"frame": {"x":0,"y":24,"w":96,"h":24},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":24},
-	"sourceSize": {"w":96,"h":24}
-},
-"words/BITMAP124_1.png":
-{
-	"frame": {"x":96,"y":24,"w":80,"h":24},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":24},
-	"sourceSize": {"w":80,"h":24}
-},
-"words/BITMAP131_1.png":
-{
-	"frame": {"x":176,"y":24,"w":96,"h":24},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":24},
-	"sourceSize": {"w":96,"h":24}
-},
-"words/with_computer.png":
-{
-	"frame": {"x":145,"y":0,"w":120,"h":20},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":120,"h":20},
-	"sourceSize": {"w":120,"h":20}
-},
-"words/with_friend.png":
-{
-	"frame": {"x":265,"y":0,"w":120,"h":20},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":120,"h":20},
-	"sourceSize": {"w":120,"h":20}
 }},
 "animations": {
 	"ball/ball": ["ball/ball_0.png","ball/ball_1.png","ball/ball_2.png","ball/ball_3.png","ball/ball_4.png"],
@@ -551,8 +623,8 @@
 	"version": "1.0",
 	"image": "sprite_sheet.png",
 	"format": "RGBA8888",
-	"size": {"w":464,"h":584},
+	"size": {"w":504,"h":813},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:e41c85dcf9357e6afe0265d65bd15a4a:80c652463154e23dc31332cdbb700209:6cc8953523e0367402f95f3c9a630665$"
+	"smartupdate": "$TexturePacker:SmartUpdate:4e16bb39a2d5239b73f912a74950847e:d067c251d10560d8dfe8f627c9a91cf1:6cc8953523e0367402f95f3c9a630665$"
 }
 }

@@ -668,19 +668,19 @@ function setMessageAndOtherSprites() {
   const textures = pikaVolley.textures;
   const sprites = pikaVolley.sprites;
 
-  let sprite = new Sprite(textures["words/BITMAP122_1.png"]);
+  let sprite = new Sprite(textures["messages/ko/game_start.png"]);
   sprite.anchor.x = 0;
   sprite.anchor.y = 0;
   sprite.visible = false;
   sprites.messages.gameStart = sprite;
 
-  sprite = new Sprite(textures["words/BITMAP124_1.png"]);
+  sprite = new Sprite(textures["messages/common/ready.png"]);
   sprite.anchor.x = 0;
   sprite.anchor.y = 0;
   sprite.visible = false;
   sprites.messages.ready = sprite;
 
-  sprite = new Sprite(textures["words/BITMAP131_1.png"]);
+  sprite = new Sprite(textures["messages/common/game_end.png"]);
   sprite.anchor.x = 0;
   sprite.anchor.y = 0;
   sprite.visible = false;
