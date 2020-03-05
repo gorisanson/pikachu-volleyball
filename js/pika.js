@@ -439,7 +439,7 @@ function processPlayerMovementAndSetPlayerPosition(
         // maybe-sound code function (0x98 + 0x10) ommited
         sound.pipikachu = true;
       } else {
-        player.state === 6;
+        player.state = 6;
       }
       player.delayBeforeNextFrame = 0;
       player.frameNumber = 0;
