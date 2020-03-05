@@ -30,6 +30,9 @@ const pikaVolley = {
   cloudContainer: null,
   waveContainer: null,
   isPlayer2Serve: false,
+  roundEnded: false,
+  fadeInFrameNum: 10,
+  elapsedFadeInFrames: 0,
   // TODO: is it better to include this to player porperty?
   scores: [0, 0], // score[0] for player1, score[1] for player2
   sprites: {
@@ -196,15 +199,13 @@ function afterEndOfRound(delta) {
   }
 }
 
-const numOfFadeInFrames = 10;
-let elapsedFadeInFrames = 0;
 function beforeStartOfNextRound(delta) {
   const black = pikaVolley.sprites.black;
-  if (elapsedFadeInFrames === 0) {
+  if (pikaVolley.elapsedFadeInFrames === 0) {
     drawGraphicForRoundStart();
   }
-  if (elapsedFadeInFrames < numOfFadeInFrames) {
-    elapsedFadeInFrames++;
+  if (pikaVolley.elapsedFadeInFrames < pikaVolley.fadeInFrameNum) {
+    pikaVolley.elapsedFadeInFrames++;
     if (black.alpha > 0) {
       black.alpha = Math.max(0, black.alpha - 0.1);
     }
@@ -212,12 +213,11 @@ function beforeStartOfNextRound(delta) {
   }
   black.visible = false;
   black.alpha = 0;
-  elapsedFadeInFrames = 0;
-  roundEnded = false;
+  pikaVolley.elapsedFadeInFrames = 0;
+  pikaVolley.roundEnded = false;
   state = round;
 }
 
-let roundEnded = false;
 function round(delta) {
   // catch keyboard input and freeze it
   pikaVolley.keyboardArray[0].updateProperties();
@@ -242,10 +242,10 @@ function round(delta) {
   ball.previousY = ball.y;
 
   if (ballTouchedGround) {
-    if (roundEnded === false) {
+    if (pikaVolley.roundEnded === false) {
       pikaVolley.slowMotionFramesLeft = pikaVolley.SLOW_MOTION_FRAMES_NUM;
     }
-    roundEnded = true;
+    pikaVolley.roundEnded = true;
     // TODO: is it better for move this to physics function?
     // by including isPlayer2Serve property into ball, score to player
     if (ball.punchEffectX < 216) {
@@ -258,7 +258,7 @@ function round(delta) {
     showScoreToScoreBoard();
   }
 
-  if (roundEnded === true) {
+  if (pikaVolley.roundEnded === true) {
     // if this is the last frame of this round, begin fade out
     if (pikaVolley.slowMotionFramesLeft === 0) {
       const black = pikaVolley.sprites.black;
