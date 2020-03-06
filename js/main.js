@@ -61,6 +61,7 @@ const pikaVolley = {
     punch: null,
     scoreBoards: [null, null], // scoreBoards[0] for player1, scoreBoards[1] for player2
     messages: {
+      fight: null,
       gameStart: null,
       ready: null,
       gameEnd: null
@@ -139,6 +140,7 @@ function setup() {
   pikaVolley.app.stage.addChild(sprites.messages.gameStart);
   pikaVolley.app.stage.addChild(sprites.messages.ready);
   pikaVolley.app.stage.addChild(sprites.messages.gameEnd);
+  pikaVolley.app.stage.addChild(sprites.messages.fight);
   pikaVolley.app.stage.addChild(sprites.black);
 
   sprites.messages.ready.x = 176;
@@ -331,6 +333,63 @@ function gameEnd(delta) {
     pikaVolley.elapsedGameEndFrame = 0;
     gameEndMessage.visible = false;
     pikaVolley.state = startOfNewGame;
+  }
+}
+
+pikaVolley.fightMessageSizeInfo = 0;
+pikaVolley.fightMessageEnlarged = false;
+// FUN_00405d50
+function moveFightMessage(delta) {
+  const sizeArray = [20, 22, 25, 27, 30, 27, 25, 22, 20];
+  const fightMessageWidth = 160;
+  const fightMessageHeight = 160;
+  const fightMessage = pikaVolley.sprites.messages.fight;
+  if (pikaVolley.fightMessageEnlarged === false) {
+    if (pikaVolley.fightMessageSizeInfo === 0) {
+      pikaVolley.sprites.black.visible = false;
+      fightMessage.visible = true;
+    }
+    pikaVolley.fightMessageSizeInfo += 1;
+
+    const halfWidth = Math.floor(
+      Math.floor((pikaVolley.fightMessageSizeInfo * fightMessageWidth) / 30) / 2
+    );
+    const halfHeight = Math.floor(
+      Math.floor((pikaVolley.fightMessageSizeInfo * fightMessageHeight) / 30) /
+        2
+    );
+    fightMessage.width = halfWidth * 2; // width
+    fightMessage.height = halfHeight * 2; // height
+    fightMessage.x = 100 - halfWidth; // x coor
+    fightMessage.y = 70 - halfHeight; // y coord
+
+    //// iVar3 = code ??
+    // FUN_00409690
+    if (pikaVolley.fightMessageSizeInfo > 29) {
+      pikaVolley.fightMessageEnlarged = true;
+      // FUN_00408ee0
+      //param_1[0x1d] = 200;
+      return;
+    }
+  } else {
+    pikaVolley.fightMessageSizeInfo = (pikaVolley.fightMessageSizeInfo + 1) % 9;
+    // code ...
+    const halfWidth = Math.floor(
+      Math.floor(
+        (sizeArray[pikaVolley.fightMessageSizeInfo] * fightMessageWidth) / 30
+      ) / 2
+    );
+    const halfHeight = Math.floor(
+      Math.floor(
+        (sizeArray[pikaVolley.fightMessageSizeInfo] * fightMessageHeight) / 30
+      ) / 2
+    );
+    fightMessage.width = halfWidth * 2; // width
+    fightMessage.height = halfHeight * 2; // heigth
+    fightMessage.y = 70 - halfHeight; // y coord
+    fightMessage.x = 100 - halfWidth; // x coord
+    //iVar3 = code ??
+    // FUN_00409690
   }
 }
 
@@ -674,8 +733,15 @@ function setBlackSprites() {
 function setMessageAndOtherSprites() {
   const textures = pikaVolley.textures;
   const sprites = pikaVolley.sprites;
+  let sprite;
 
-  let sprite = new Sprite(textures["messages/ko/game_start.png"]);
+  sprite = new Sprite(textures["messages/ko/fight.png"]);
+  sprite.anchor.x = 0;
+  sprite.anchor.y = 0;
+  sprite.visible = false;
+  sprites.messages.fight = sprite;
+
+  sprite = new Sprite(textures["messages/ko/game_start.png"]);
   sprite.anchor.x = 0;
   sprite.anchor.y = 0;
   sprite.visible = false;
