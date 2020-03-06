@@ -1,4 +1,8 @@
-class Cloud {
+"use strict";
+
+import { rand } from "./pika.js";
+
+export class Cloud {
   constructor() {
     this.topLeftPointX = -68 + (rand() % (432 + 68));
     this.topLeftPointY = rand() % 152;
@@ -28,7 +32,7 @@ class Cloud {
   }
 }
 
-class Wave {
+export class Wave {
   constructor() {
     this.verticalCoord = 0;
     this.verticalCoordVelocity = 2;
@@ -40,7 +44,7 @@ class Wave {
 }
 
 // FUN_00404770
-function cloudAndWaveEngine(cloudArray, wave) {
+export function cloudAndWaveEngine(cloudArray, wave) {
   // local_2c = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
 
   // code funtion what is it??

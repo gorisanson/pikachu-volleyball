@@ -1,3 +1,5 @@
+"use strict";
+
 class Key {
   constructor(value) {
     this.value = value;
@@ -33,7 +35,7 @@ class Key {
   }
 }
 
-class PikaKeyboard {
+export class PikaKeyboard {
   // left, right, up, down, powerHit: KeyboardEvent.key value for each
   // refer https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
   constructor(left, right, up, down, powerHit) {

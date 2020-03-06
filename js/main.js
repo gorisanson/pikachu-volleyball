@@ -1,4 +1,10 @@
 "use strict";
+
+//import * as PIXI from "./pixi/pixi.min.js"; // not working..
+import { PikaKeyboard } from "./pika_keyboard.js";
+import { Player, Ball, Sound, physicsEngine } from "./pika.js";
+import { Cloud, Wave, cloudAndWaveEngine } from "./pika_cloud_and_wave.js";
+
 PIXI.settings.RESOLUTION = window.devicePixelRatio;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 PIXI.settings.ROUND_PIXELS = true;

@@ -25,12 +25,12 @@
 // But, anyhow, it should be a funtion that generate a random number.
 // I decided to use custom rand function which generates random integer from [0, 32767]
 // which follows rand() function in Visual Studio 2017 Library.
-function rand() {
+export function rand() {
   return Math.floor(32768 * Math.random());
 }
 
 // Initial Values: refer FUN_000403a90 && FUN_00401f40
-class Player {
+export class Player {
   // isPlayer2: boolean, isComputer: boolean
   constructor(isPlayer2, isComputer) {
     this.isPlayer2 = isPlayer2; // 0xA0 // Assumes that player1 play on the left side
@@ -83,7 +83,7 @@ class Player {
 }
 
 // Initial Values: refer FUN_000403a90 && FUN_00402d60
-class Ball {
+export class Ball {
   constructor(isPlayer2Serve) {
     this.initialize(isPlayer2Serve);
     this.expectedLandingPointX = 0; // 0x40
@@ -111,7 +111,7 @@ class Ball {
   }
 }
 
-class Sound {
+export class Sound {
   constructor() {
     this.pipikachu = false;
     this.pika = false;
@@ -124,7 +124,7 @@ class Sound {
 }
 
 // FUN_00403dd0
-function physicsEngine(player1, player2, ball, sound, keyboardArray) {
+export function physicsEngine(player1, player2, ball, sound, keyboardArray) {
   const wasBallTouchedGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
     ball,
     sound
