@@ -12,7 +12,6 @@ PIXI.settings.ROUND_PIXELS = true;
 // Aliases
 const Application = PIXI.Application;
 const Sprite = PIXI.Sprite;
-const Rectangle = PIXI.Rectangle;
 const AnimatedSprite = PIXI.AnimatedSprite;
 const Container = PIXI.Container;
 const Graphics = PIXI.Graphics;
