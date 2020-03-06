@@ -1,6 +1,6 @@
 "use strict";
 
-import { rand } from "./pika.js";
+import { rand } from "./rand.js";
 
 export class Cloud {
   constructor() {

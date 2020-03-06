@@ -1,4 +1,3 @@
-"use strict";
 /*
  *  X width: 432 = 0x1B0
  *  Y width: 304 = 0x130
@@ -19,23 +18,50 @@
  *    medium: 1 frame per 40ms = 25Hz
  *    fast: 1 frame per 50ms = 20Hz
  */
+"use strict";
+import { rand } from "./rand.js";
 
-// The original machine (assembly) code use "_rand()" function in Visual Studio 1988 Library.
-// I could't find out how this function works exactly.
-// But, anyhow, it should be a funtion that generate a random number.
-// I decided to use custom rand function which generates random integer from [0, 32767]
-// which follows rand() function in Visual Studio 2017 Library.
-export function rand() {
-  return Math.floor(32768 * Math.random());
+export class PikaPhysics {
+  constructor(isComputer1, isComputer2) {
+    this.player1 = new Player(false, isComputer1);
+    this.player2 = new Player(true, isComputer2);
+    this.ball = new Ball();
+    this.sound = new Sound();
+  }
+
+  initializeForNewRound(isPlayer2Serve) {
+    this.player1.initializeForNewRound();
+    this.player2.initializeForNewRound();
+    this.ball.initializeForNewRound(isPlayer2Serve);
+  }
+
+  initializeForNewGame(isPlayer2Serve) {
+    this.player1.gameEnded = false;
+    this.player1.isWinner = false;
+    this.player2.gameEnded = false;
+    this.player2.isWinner = false;
+    initializeForNewRound(isPlayer2Serve);
+  }
+
+  runEngineForNextFrame(keyboardArray) {
+    const isBallTouchingGournd = physicsEngine(
+      this.player1,
+      this.player2,
+      this.ball,
+      this.sound,
+      keyboardArray
+    );
+    return isBallTouchingGournd;
+  }
 }
 
 // Initial Values: refer FUN_000403a90 && FUN_00401f40
-export class Player {
+class Player {
   // isPlayer2: boolean, isComputer: boolean
   constructor(isPlayer2, isComputer) {
     this.isPlayer2 = isPlayer2; // 0xA0 // Assumes that player1 play on the left side
     this.isComputer = isComputer; // 0xA4
-    this.initialize();
+    this.initializeForNewRound();
 
     this.divingDirection = 0; // 0xB4
     this.lyingDownDurationLeft = -1; // 0xB8
@@ -50,7 +76,7 @@ export class Player {
   }
 
   // properties that are initialized per round in here
-  initialize() {
+  initializeForNewRound() {
     this.x = 36; // 0xA8 // initialized to 36 (player1) or 396 (player2)
     if (this.isPlayer2) {
       this.x = 396;
@@ -83,9 +109,9 @@ export class Player {
 }
 
 // Initial Values: refer FUN_000403a90 && FUN_00402d60
-export class Ball {
+class Ball {
   constructor(isPlayer2Serve) {
-    this.initialize(isPlayer2Serve);
+    this.initializeForNewRound(isPlayer2Serve);
     this.expectedLandingPointX = 0; // 0x40
     this.rotation = 0; // 0x44 // ball rotation frame selector // one of 0, 1, 2, 3, 4 // if it is other value, hyper ball glitch occur?
     this.fineRotation = 0; // 0x48
@@ -98,7 +124,7 @@ export class Ball {
     this.previousPreviousY = 0; // 0x64
   }
 
-  initialize(isPlayer2Serve) {
+  initializeForNewRound(isPlayer2Serve) {
     this.x = 56; // 0x30    // initialized to 56 or 376
     if (isPlayer2Serve === true) {
       this.x = 376;
@@ -111,7 +137,7 @@ export class Ball {
   }
 }
 
-export class Sound {
+class Sound {
   constructor() {
     this.pipikachu = false;
     this.pika = false;
@@ -123,9 +149,11 @@ export class Sound {
   }
 }
 
+// This is the Pikachu Volleyball physics engine!
+// This physics engine calculates and set the physics values for the next frame.
 // FUN_00403dd0
-export function physicsEngine(player1, player2, ball, sound, keyboardArray) {
-  const wasBallTouchedGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
+function physicsEngine(player1, player2, ball, sound, keyboardArray) {
+  const isBallTouchingGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
     ball,
     sound
   );
@@ -194,7 +222,7 @@ export function physicsEngine(player1, player2, ball, sound, keyboardArray) {
   // FUN_00406020
   // tow function ommited above maybe participates in graphic drawing for a ball
 
-  return wasBallTouchedGround;
+  return isBallTouchingGround;
 }
 
 //FUN_00403070

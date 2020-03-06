@@ -2,7 +2,8 @@
 
 //import * as PIXI from "./pixi/pixi.min.js"; // not working..
 import { PikaKeyboard } from "./pika_keyboard.js";
-import { Player, Ball, Sound, physicsEngine } from "./pika.js";
+import { PikaPhysics } from "./pika.js";
+import { PikaAudio } from "./pika_audio.js";
 import { Cloud, Wave, cloudAndWaveEngine } from "./pika_cloud_and_wave.js";
 import { PikaSprites } from "./pika_sprites.js";
 
@@ -12,16 +13,14 @@ PIXI.settings.ROUND_PIXELS = true;
 
 // Aliases
 const Application = PIXI.Application;
-const Sprite = PIXI.Sprite;
-const AnimatedSprite = PIXI.AnimatedSprite;
-const Container = PIXI.Container;
-const Graphics = PIXI.Graphics;
+const Loader = PIXI.Loader;
 
 const NUM_OF_CLOUDS = 10;
 
 // global variables are in "pikaVolley"
+/*
 const pikaVolley = {
-  loader: PIXI.Loader.shared,
+  loader: Loader.shared,
   textures: null,
   app: new Application({
     width: 432,
@@ -89,7 +88,6 @@ const pikaVolley = {
     player2: new Player(true, false),
     ball: new Ball(),
     sound: new Sound(),
-    ballTouchedGround: false,
     clouds: (() => {
       const clouds = [];
       for (let i = 0; i < NUM_OF_CLOUDS; i++) {
@@ -104,17 +102,76 @@ const pikaVolley = {
     new PikaKeyboard("ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Enter") // for player2
   ]
 };
+*/
 
-document.body.appendChild(pikaVolley.app.view);
-pikaVolley.loader.add("assets/sprite_sheet.json").load(setup);
+const app = new Application({
+  width: 432,
+  height: 304,
+  autoDensity: true,
+  antialias: false,
+  backgroundColor: 0x00ff00,
+  transparent: false
+});
+document.body.appendChild(app.view);
+Loader.shared.add("assets/sprite_sheet.json").load(setup);
 
+class PikachuVolleyball {
+  constructor(pixiApplication, pikaSprites) {
+    this.app = pixiApplication;
+    this.sprites = pikaSprites;
+    this.audio = new PikaAudio();
+    this.physics = new PikaPhysics(true, false);
+    this.keyboardArray = [
+      new PikaKeyboard("d", "g", "r", "f", "z"), // for player1
+      new PikaKeyboard(
+        "ArrowLeft",
+        "ArrowRight",
+        "ArrowUp",
+        "ArrowDown",
+        "Enter"
+      ) // for player2
+    ];
+    this.clouds = (() => {
+      const clouds = [];
+      for (let i = 0; i < NUM_OF_CLOUDS; i++) {
+        clouds.push(new Cloud());
+      }
+      return clouds;
+    })();
+    this.wave = new Wave();
+    this.state = null;
+    this.nextState = null;
+    this.normalFPS = 25;
+    this.slowMotionFPS = 5;
+    this.slowMotionFramesLeft = 0;
+    this.slowMotionNumOfSkippedFrames = 0;
+    this.SLOW_MOTION_FRAMES_NUM = 6;
+    this.cloudContainer = null;
+    this.waveContainer = null;
+    this.isPlayer2Serve = false;
+    this.roundEnded = false;
+    this.startOfNewGameFrameNum = 71;
+    this.elapsedStartOfNewGameFrame = 0;
+    this.afterEndOfRoundFrameNum = 5;
+    this.elapsedAfterEndOfRoundFrame = 0;
+    this.beForeStartOfNextRoundFrameNum = 30;
+    this.elapsedBeforeStartOfNextRoundFrame = 0;
+    this.elapsedGameEndFrame = 0;
+    // TODO: is it better to include this to player porperty?
+    this.scores = [0, 0]; // scores[0] for player1, scores[1] for player2
+    this.goalScore = 15;
+    this.gameEnded = false;
+  }
+}
+
+let pikaVolley;
 function setup() {
-  // set texture resources
-  pikaVolley.textures =
-    pikaVolley.loader.resources["assets/sprite_sheet.json"].textures;
+  const textures = Loader.shared.resources["assets/sprite_sheet.json"].textures;
+  const pikaSprites = new PikaSprites(textures);
+
+  pikaVolley = new PikachuVolleyball(app, pikaSprites);
 
   // TODO: careful with the order of addChild, the later, the fronter?
-  pikaVolley.sprites = new PikaSprites(pikaVolley.textures);
   const sprites = pikaVolley.sprites;
   pikaVolley.app.stage.addChild(sprites.bgContainer);
   pikaVolley.app.stage.addChild(sprites.cloudContainer);
@@ -203,8 +260,8 @@ function gameLoop(delta) {
 
 // this funtion corresponds to FUN_00404770 in origianl machine (assembly) code
 function moveCloudsAndWaves(delta) {
-  const clouds = pikaVolley.physics.clouds;
-  const wave = pikaVolley.physics.wave;
+  const clouds = pikaVolley.clouds;
+  const wave = pikaVolley.wave;
 
   cloudAndWaveEngine(clouds, wave);
 
@@ -348,8 +405,8 @@ function gameEnd(delta) {
   }
 }
 
-pikaVolley.fightMessageSizeInfo = 0;
-pikaVolley.fightMessageEnlarged = false;
+//pikaVolley.fightMessageSizeInfo = 0;
+//pikaVolley.fightMessageEnlarged = false;
 // FUN_00405d50
 function moveFightMessage(delta) {
   const sizeArray = [20, 22, 25, 27, 30, 27, 25, 22, 20];
@@ -410,11 +467,7 @@ function round(delta) {
   pikaVolley.keyboardArray[0].updateProperties();
   pikaVolley.keyboardArray[1].updateProperties();
 
-  const ballTouchedGround = physicsEngine(
-    pikaVolley.physics.player1,
-    pikaVolley.physics.player2,
-    pikaVolley.physics.ball,
-    pikaVolley.physics.sound,
+  const isBallTouchingGround = pikaVolley.physics.runEngineForNextFrame(
     pikaVolley.keyboardArray
   );
 
@@ -434,7 +487,7 @@ function round(delta) {
   }
 
   if (
-    ballTouchedGround &&
+    isBallTouchingGround &&
     pikaVolley.roundEnded === false &&
     pikaVolley.gameEnded === false
   ) {
@@ -481,9 +534,9 @@ function round(delta) {
 }
 
 function drawGraphicForRoundStart(delta) {
-  pikaVolley.physics.player1.initialize();
-  pikaVolley.physics.player2.initialize();
-  pikaVolley.physics.ball.initialize(pikaVolley.isPlayer2Serve);
+  pikaVolley.physics.player1.initializeForNewRound();
+  pikaVolley.physics.player2.initializeForNewRound();
+  pikaVolley.physics.ball.initializeForNewRound(pikaVolley.isPlayer2Serve);
   drawGraphicForPlayerAndBall();
 }
 

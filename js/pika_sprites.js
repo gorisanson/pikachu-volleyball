@@ -76,7 +76,7 @@ export class PikaSprites {
     this.cloudContainer = makeCloudContainer(textures);
     this.waveContainer = makeWaveContainer(textures);
 
-    this.black = makeBlackSprite();
+    this.black = makeBlackSprite(); // for fade out effect
   }
 }
 
