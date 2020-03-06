@@ -35,14 +35,6 @@ export class PikaPhysics {
     this.ball.initializeForNewRound(isPlayer2Serve);
   }
 
-  initializeForNewGame(isPlayer2Serve) {
-    this.player1.gameEnded = false;
-    this.player1.isWinner = false;
-    this.player2.gameEnded = false;
-    this.player2.isWinner = false;
-    initializeForNewRound(isPlayer2Serve);
-  }
-
   runEngineForNextFrame(keyboardArray) {
     const isBallTouchingGournd = physicsEngine(
       this.player1,
