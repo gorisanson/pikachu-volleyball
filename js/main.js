@@ -4,6 +4,7 @@
 import { PikaKeyboard } from "./pika_keyboard.js";
 import { Player, Ball, Sound, physicsEngine } from "./pika.js";
 import { Cloud, Wave, cloudAndWaveEngine } from "./pika_cloud_and_wave.js";
+import { PikaSprites } from "./pika_sprites.js";
 
 PIXI.settings.RESOLUTION = window.devicePixelRatio;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
@@ -112,25 +113,12 @@ function setup() {
   pikaVolley.textures =
     pikaVolley.loader.resources["assets/sprite_sheet.json"].textures;
 
-  // background
-  const bgContainer = setAndReturnBGContainer();
-  pikaVolley.app.stage.addChild(bgContainer);
-  bgContainer.x = 0;
-  bgContainer.y = 0;
-
-  setCloudContainer();
-  pikaVolley.app.stage.addChild(pikaVolley.cloudContainer);
-  pikaVolley.cloudContainer.x = 0;
-  pikaVolley.cloudContainer.y = 0;
-
-  setWaveContainer();
-  pikaVolley.app.stage.addChild(pikaVolley.waveContainer);
-  pikaVolley.waveContainer.x = 0;
-  pikaVolley.waveContainer.y = 0;
-
   // TODO: careful with the order of addChild, the later, the fronter?
-  setSprites();
+  pikaVolley.sprites = new PikaSprites(pikaVolley.textures);
   const sprites = pikaVolley.sprites;
+  pikaVolley.app.stage.addChild(sprites.bgContainer);
+  pikaVolley.app.stage.addChild(sprites.cloudContainer);
+  pikaVolley.app.stage.addChild(sprites.waveContainer);
   pikaVolley.app.stage.addChild(sprites.shadows.forPlayer1);
   pikaVolley.app.stage.addChild(sprites.shadows.forPlayer2);
   pikaVolley.app.stage.addChild(sprites.shadows.forBall);
@@ -148,6 +136,13 @@ function setup() {
   pikaVolley.app.stage.addChild(sprites.messages.fight);
   pikaVolley.app.stage.addChild(sprites.black);
 
+  sprites.bgContainer.x = 0;
+  sprites.bgContainer.y = 0;
+  sprites.cloudContainer.x = 0;
+  sprites.cloudContainer.y = 0;
+  sprites.waveContainer.x = 0;
+  sprites.waveContainer.y = 0;
+
   sprites.messages.ready.x = 176;
   sprites.messages.ready.y = 38;
   sprites.scoreBoards[0].x = 14; // score board is 14 pixel distant from boundary
@@ -158,6 +153,18 @@ function setup() {
   sprites.black.y = 0;
   sprites.black.alph = 1;
   sprites.black.visible = true;
+
+  sprites.shadows.forPlayer1.y = 272;
+  sprites.shadows.forPlayer2.y = 272;
+  sprites.shadows.forBall.y = 272;
+
+  sprites.ballHyper.visible = false;
+  sprites.ballTrail.visible = false;
+  sprites.punch.visible = false;
+
+  for (const prop in sprites.messages) {
+    sprites.messages[prop].visible = false;
+  }
 
   // adjust audio setting
   const audio = pikaVolley.audio;
@@ -203,7 +210,7 @@ function moveCloudsAndWaves(delta) {
 
   for (let i = 0; i < NUM_OF_CLOUDS; i++) {
     const cloud = clouds[i];
-    const cloudSprite = pikaVolley.cloudContainer.getChildAt(i);
+    const cloudSprite = pikaVolley.sprites.cloudContainer.getChildAt(i);
     cloudSprite.x = cloud.spriteTopLeftPointX;
     cloudSprite.y = cloud.spriteTopLeftPointY;
     cloudSprite.width = cloud.spriteWidth;
@@ -211,7 +218,7 @@ function moveCloudsAndWaves(delta) {
   }
 
   for (let i = 0; i < 432 / 16; i++) {
-    const waveSprite = pikaVolley.waveContainer.getChildAt(i);
+    const waveSprite = pikaVolley.sprites.waveContainer.getChildAt(i);
     waveSprite.y = wave.yCoords[i];
   }
 }
@@ -559,287 +566,6 @@ function drawGraphicForPlayerAndBall() {
   }
 }
 
-// set background
-// return: Container object that has objects in the backgournd as children
-function setAndReturnBGContainer() {
-  const textures = pikaVolley.textures;
-  const bgContainer = new Container();
-  let tile;
-
-  // sky
-  let texture = textures["objects/sky_blue.png"];
-  for (let j = 0; j < 12; j++) {
-    for (let i = 0; i < 432 / 16; i++) {
-      tile = new Sprite(texture);
-      addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 16 * j);
-    }
-  }
-
-  // mountain
-  texture = textures["objects/mountain.png"];
-  tile = new Sprite(texture);
-  addChildToParentAndSetLocalPosition(bgContainer, tile, 0, 188);
-
-  // ground_red
-  texture = textures["objects/ground_red.png"];
-  for (let i = 0; i < 432 / 16; i++) {
-    tile = new Sprite(texture);
-    addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 248);
-  }
-
-  // ground_line
-  texture = textures["objects/ground_line.png"];
-  for (let i = 1; i < 432 / 16 - 1; i++) {
-    tile = new Sprite(texture);
-    addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 264);
-  }
-  texture = textures["objects/ground_line_leftmost.png"];
-  tile = new Sprite(texture);
-  addChildToParentAndSetLocalPosition(bgContainer, tile, 0, 264);
-  texture = textures["objects/ground_line_rightmost.png"];
-  tile = new Sprite(texture);
-  addChildToParentAndSetLocalPosition(bgContainer, tile, 432 - 16, 264);
-
-  // ground_yellow
-  texture = textures["objects/ground_yellow.png"];
-  for (let j = 0; j < 2; j++) {
-    for (let i = 0; i < 432 / 16; i++) {
-      tile = new Sprite(texture);
-      addChildToParentAndSetLocalPosition(
-        bgContainer,
-        tile,
-        16 * i,
-        280 + 16 * j
-      );
-    }
-  }
-
-  // net pillar
-  texture = textures["objects/net_pillar_top.png"];
-  tile = new Sprite(texture);
-  addChildToParentAndSetLocalPosition(bgContainer, tile, 213, 176);
-  texture = textures["objects/net_pillar.png"];
-  for (let j = 0; j < 12; j++) {
-    tile = new Sprite(texture);
-    addChildToParentAndSetLocalPosition(bgContainer, tile, 213, 184 + 8 * j);
-  }
-
-  return bgContainer;
-}
-
-function setSprites() {
-  setShadowSprites();
-  setPlayerSprites();
-  setBallSprites();
-  setScoreBoardSprites();
-  setMessageAndOtherSprites();
-  setBlackSprites();
-}
-
-function setPlayerSprites() {
-  const getPlayerTexture = (i, j) =>
-    pikaVolley.textures[`pikachu/pikachu_${i}_${j}.png`];
-  const playerTextureArray = [];
-  for (let i = 0; i < 7; i++) {
-    if (i === 3) {
-      playerTextureArray.push(getPlayerTexture(i, 0));
-      playerTextureArray.push(getPlayerTexture(i, 1));
-    } else if (i === 4) {
-      playerTextureArray.push(getPlayerTexture(i, 0));
-    } else {
-      for (let j = 0; j < 5; j++) {
-        playerTextureArray.push(getPlayerTexture(i, j));
-      }
-    }
-  }
-  const player1AnimatedSprite = new AnimatedSprite(playerTextureArray, false);
-  const player2AnimatedSprite = new AnimatedSprite(playerTextureArray, false);
-  player2AnimatedSprite.scale.x = -1;
-
-  player1AnimatedSprite.anchor.x = 0.5;
-  player1AnimatedSprite.anchor.y = 0.5;
-  player2AnimatedSprite.anchor.x = 0.5;
-  player2AnimatedSprite.anchor.y = 0.5;
-
-  pikaVolley.sprites.player1 = player1AnimatedSprite;
-  pikaVolley.sprites.player2 = player2AnimatedSprite;
-}
-
-function setBallSprites() {
-  const getBallTexture = s => pikaVolley.textures[`ball/ball_${s}.png`];
-  const ballTextureArray = [
-    getBallTexture(0),
-    getBallTexture(1),
-    getBallTexture(2),
-    getBallTexture(3),
-    getBallTexture(4),
-    getBallTexture("hyper")
-  ];
-  const ballAnimatedSprite = new AnimatedSprite(ballTextureArray, false);
-
-  const ballHyperSprite = new Sprite(
-    pikaVolley.textures["ball/ball_hyper.png"]
-  );
-  const ballTrailSprite = new Sprite(
-    pikaVolley.textures["ball/ball_trail.png"]
-  );
-  const ballPunchSprite = new Sprite(
-    pikaVolley.textures["ball/ball_punch.png"]
-  );
-
-  ballAnimatedSprite.anchor.x = 0.5;
-  ballAnimatedSprite.anchor.y = 0.5;
-  ballHyperSprite.anchor.x = 0.5;
-  ballHyperSprite.anchor.y = 0.5;
-  ballTrailSprite.anchor.x = 0.5;
-  ballTrailSprite.anchor.y = 0.5;
-  ballPunchSprite.anchor.x = 0.5;
-  ballPunchSprite.anchor.y = 0.5;
-
-  ballTrailSprite.visible = false;
-  ballHyperSprite.visible = false;
-  ballPunchSprite.visible = false;
-
-  pikaVolley.sprites.ball = ballAnimatedSprite;
-  pikaVolley.sprites.ballHyper = ballHyperSprite;
-  pikaVolley.sprites.ballTrail = ballTrailSprite;
-  pikaVolley.sprites.punch = ballPunchSprite;
-}
-
-function setShadowSprites() {
-  const shadowTexture = pikaVolley.textures["objects/shadow.png"];
-  const shadowSpriteForPlayer1 = new Sprite(shadowTexture);
-  const shadowSpriteForPlayer2 = new Sprite(shadowTexture);
-  const shadowSpriteForBall = new Sprite(shadowTexture);
-  shadowSpriteForPlayer1.anchor.x = 0.5;
-  shadowSpriteForPlayer1.anchor.y = 0.5;
-  shadowSpriteForPlayer2.anchor.x = 0.5;
-  shadowSpriteForPlayer2.anchor.y = 0.5;
-  shadowSpriteForBall.anchor.x = 0.5;
-  shadowSpriteForBall.anchor.y = 0.5;
-  shadowSpriteForPlayer1.y = 272;
-  shadowSpriteForPlayer2.y = 272;
-  shadowSpriteForBall.y = 272;
-  pikaVolley.sprites.shadows.forPlayer1 = shadowSpriteForPlayer1;
-  pikaVolley.sprites.shadows.forPlayer2 = shadowSpriteForPlayer2;
-  pikaVolley.sprites.shadows.forBall = shadowSpriteForBall;
-}
-
-function setBlackSprites() {
-  // this is more efficient way than using 1x1px resources["black.png"]
-  const blackRectangle = new Graphics();
-  blackRectangle.beginFill(0x000000);
-  blackRectangle.drawRect(0, 0, 432, 304);
-  blackRectangle.endFill();
-
-  pikaVolley.sprites.black = blackRectangle;
-}
-
-function setMessageAndOtherSprites() {
-  const textures = pikaVolley.textures;
-  const sprites = pikaVolley.sprites;
-  let sprite;
-
-  sprite = new Sprite(textures["messages/ko/fight.png"]);
-  sprite.anchor.x = 0;
-  sprite.anchor.y = 0;
-  sprite.visible = false;
-  sprites.messages.fight = sprite;
-
-  sprite = new Sprite(textures["messages/ko/game_start.png"]);
-  sprite.anchor.x = 0;
-  sprite.anchor.y = 0;
-  sprite.visible = false;
-  sprites.messages.gameStart = sprite;
-
-  sprite = new Sprite(textures["messages/common/ready.png"]);
-  sprite.anchor.x = 0;
-  sprite.anchor.y = 0;
-  sprite.visible = false;
-  sprites.messages.ready = sprite;
-
-  sprite = new Sprite(textures["messages/common/game_end.png"]);
-  sprite.anchor.x = 0;
-  sprite.anchor.y = 0;
-  sprite.visible = false;
-  sprites.messages.gameEnd = sprite;
-}
-
-function setScoreBoardSprites() {
-  const getNumberTexture = n => pikaVolley.textures[`number/number_${n}.png`];
-  const numberTextureArray = [];
-  for (let i = 0; i < 10; i++) {
-    numberTextureArray.push(getNumberTexture(i));
-  }
-  const numberAnimatedSprites = [null, null, null, null];
-  numberAnimatedSprites[0] = new AnimatedSprite(numberTextureArray, false);
-  numberAnimatedSprites[1] = new AnimatedSprite(numberTextureArray, false);
-  numberAnimatedSprites[2] = new AnimatedSprite(numberTextureArray, false);
-  numberAnimatedSprites[3] = new AnimatedSprite(numberTextureArray, false);
-
-  const scoreBoards = [null, null];
-  scoreBoards[0] = new Container();
-  scoreBoards[1] = new Container();
-  addChildToParentAndSetLocalPosition(
-    scoreBoards[0],
-    numberAnimatedSprites[0],
-    32,
-    0
-  ); // for units
-  addChildToParentAndSetLocalPosition(
-    scoreBoards[0],
-    numberAnimatedSprites[1],
-    0,
-    0
-  ); // for tens
-  addChildToParentAndSetLocalPosition(
-    scoreBoards[1],
-    numberAnimatedSprites[2],
-    32,
-    0
-  ); // for units
-  addChildToParentAndSetLocalPosition(
-    scoreBoards[1],
-    numberAnimatedSprites[3],
-    0,
-    0
-  ); // for tens
-
-  scoreBoards[0].setChildIndex(numberAnimatedSprites[0], 0); // for units
-  scoreBoards[0].setChildIndex(numberAnimatedSprites[1], 1); // for tens
-  scoreBoards[1].setChildIndex(numberAnimatedSprites[2], 0); // for units
-  scoreBoards[1].setChildIndex(numberAnimatedSprites[3], 1); // for tens
-
-  pikaVolley.sprites.scoreBoards[0] = scoreBoards[0];
-  pikaVolley.sprites.scoreBoards[1] = scoreBoards[1];
-}
-
-function setCloudContainer() {
-  const cloudContainer = new Container();
-  const texture = pikaVolley.textures["objects/cloud.png"];
-  for (let i = 0; i < NUM_OF_CLOUDS; i++) {
-    const cloud = new Sprite(texture);
-    cloud.anchor.x = 0;
-    cloud.anchor.y = 0;
-    cloudContainer.addChild(cloud);
-  }
-
-  pikaVolley.cloudContainer = cloudContainer;
-}
-
-function setWaveContainer() {
-  // TODO: wave moving
-  // wave
-  const waveContainer = new Container();
-  const texture = pikaVolley.textures["objects/wave.png"];
-  for (let i = 0; i < 432 / 16; i++) {
-    const tile = new Sprite(texture);
-    addChildToParentAndSetLocalPosition(waveContainer, tile, 16 * i, 0);
-  }
-
-  pikaVolley.waveContainer = waveContainer;
-}
-
 function showScoreToScoreBoard() {
   for (let i = 0; i < 2; i++) {
     const scoreBoard = pikaVolley.sprites.scoreBoards[i];
@@ -854,14 +580,6 @@ function showScoreToScoreBoard() {
       tensAnimatedSprite.visible = false;
     }
   }
-}
-
-function addChildToParentAndSetLocalPosition(parent, child, x, y) {
-  parent.addChild(child);
-  child.anchor.x = 0;
-  child.anchor.y = 0;
-  child.x = x;
-  child.y = y;
 }
 
 // number of frames for state 0, state 1 and state 2 is 5 for each.
