@@ -1,5 +1,5 @@
 import { PikaKeyboard } from "./pika_keyboard.js";
-import { PikaPhysics } from "./pika.js";
+import { PikaPhysics } from "./pika_physics.js";
 import { PikaAudio } from "./pika_audio.js";
 import { Cloud, Wave, cloudAndWaveEngine } from "./pika_cloud_and_wave.js";
 
