@@ -39,14 +39,13 @@ export class PikachuVolleyball {
     this.roundEnded = false;
     this.isPlayer2Serve = false;
 
-    this.startOfNewGameFrameNum = 71;
-    this.elapsedStartOfNewGameFrame = 0;
-    this.afterEndOfRoundFrameNum = 5;
-    this.elapsedAfterEndOfRoundFrame = 0;
-    this.beForeStartOfNextRoundFrameNum = 30;
-    this.elapsedBeforeStartOfNextRoundFrame = 0;
-    this.gameEndFrameNum = 211;
-    this.elapsedGameEndFrame = 0;
+    this.frameCounter = 0;
+    this.frameTotal = {
+      startOfNewGame: 71,
+      afterEndOfRound: 5,
+      beforeStartOfNextRound: 30,
+      gameEnd: 211
+    };
   }
 
   gameLoop() {
@@ -67,7 +66,7 @@ export class PikachuVolleyball {
   }
 
   startOfNewGame() {
-    if (this.elapsedStartOfNewGameFrame === 0) {
+    if (this.frameCounter === 0) {
       this.gameEnded = false;
       this.roundEnded = false;
       this.physics.player1.gameEnded = false;
@@ -91,15 +90,15 @@ export class PikachuVolleyball {
     }
 
     this.view.game.drawGameStartMessageForFrameNo(
-      this.elapsedStartOfNewGameFrame,
-      this.startOfNewGameFrameNum
+      this.frameCounter,
+      this.frameTotal.startOfNewGame
     );
     this.view.game.drawCloudsAndWave();
     this.view.game.changeFadeInOutBlackAlphaBy(-(1 / 17)); // fade in
-    this.elapsedStartOfNewGameFrame++;
+    this.frameCounter++;
 
-    if (this.elapsedStartOfNewGameFrame >= this.startOfNewGameFrameNum) {
-      this.elapsedStartOfNewGameFrame = 0;
+    if (this.frameCounter >= this.frameTotal.startOfNewGame) {
+      this.frameCounter = 0;
       this.view.game.setFadeInOutBlackAlphaTo(0);
       this.state = this.round;
     }
@@ -175,15 +174,15 @@ export class PikachuVolleyball {
 
   afterEndOfRound() {
     this.view.game.changeFadeInOutBlackAlphaBy(1 / 16);
-    this.elapsedAfterEndOfRoundFrame++;
-    if (this.elapsedAfterEndOfRoundFrame >= this.afterEndOfRoundFrameNum) {
-      this.elapsedAfterEndOfRoundFrame = 0;
+    this.frameCounter++;
+    if (this.frameCounter >= this.frameTotal.afterEndOfRound) {
+      this.frameCounter = 0;
       this.state = this.beforeStartOfNextRound;
     }
   }
 
   beforeStartOfNextRound() {
-    if (this.elapsedBeforeStartOfNextRoundFrame === 0) {
+    if (this.frameCounter === 0) {
       this.view.game.setFadeInOutBlackAlphaTo(1);
       this.view.game.showReadyMessage(false);
 
@@ -196,16 +195,13 @@ export class PikachuVolleyball {
     this.view.game.drawCloudsAndWave();
     this.view.game.changeFadeInOutBlackAlphaBy(-(1 / 16));
 
-    this.elapsedBeforeStartOfNextRoundFrame++;
-    if (this.elapsedBeforeStartOfNextRoundFrame % 5 === 0) {
+    this.frameCounter++;
+    if (this.frameCounter % 5 === 0) {
       this.view.game.toggleReadyMessage();
     }
 
-    if (
-      this.elapsedBeforeStartOfNextRoundFrame >=
-      this.beForeStartOfNextRoundFrameNum
-    ) {
-      this.elapsedBeforeStartOfNextRoundFrame = 0;
+    if (this.frameCounter >= this.frameTotal.beforeStartOfNextRound) {
+      this.frameCounter = 0;
       this.view.game.showReadyMessage(false);
       this.view.game.setFadeInOutBlackAlphaTo(0);
       this.roundEnded = false;
