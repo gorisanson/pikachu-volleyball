@@ -77,9 +77,11 @@ export class PikachuVolleyball {
   menu() {
     this.view.menu.visible = true;
     this.view.fadeInOut.setBlackAlphaTo(0);
-    this.view.menu.showSittingPikachuTiles(this.frameCounter);
     this.view.menu.showFightMessage(this.frameCounter);
     this.view.menu.showSachisoft(this.frameCounter);
+    this.view.menu.showSittingPikachuTiles(this.frameCounter);
+    this.view.menu.showPikachuVolleyBallMessage(this.frameCounter);
+    this.view.menu.showPokemonMessage(this.frameCounter);
 
     this.frameCounter++;
     this.keyboardArray[0].updateProperties();

@@ -66,9 +66,15 @@ export class MenuView {
       textures
     );
 
-    // refer FUN_004059f0
+    // refered FUN_004059f0
     this.messages.sachisoft.x = 216 - this.messages.sachisoft.texture.width / 2;
     this.messages.sachisoft.y = 264;
+
+    // refered FUN_00405b70
+    this.messages.pikachuVolleyball.x = 140;
+    this.messages.pikachuVolleyball.y = 80;
+    this.messages.pokemon.x = 170;
+    this.messages.pokemon.y = 40;
 
     this.container = new Container();
     this.container.addChild(this.sittingPikachuTilesContainer);
@@ -94,29 +100,6 @@ export class MenuView {
 
   set visible(bool) {
     this.container.visible = bool;
-  }
-
-  // refered FUN_00405ca0
-  showSittingPikachuTiles(frameCounter) {
-    if (frameCounter === 0) {
-      this.sittingPikachuTilesContainer.visible = true;
-      this.sittingPikachuTilesContainer.alpha = 0;
-    }
-
-    // movement
-    const h = this.sittingPikachuTilesContainer.getChildAt(0).texture.height;
-    this.sittingPikachuTilesDisplacement =
-      (this.sittingPikachuTilesDisplacement + 2) % h;
-    this.sittingPikachuTilesContainer.x = -this.sittingPikachuTilesDisplacement;
-    this.sittingPikachuTilesContainer.y = -this.sittingPikachuTilesDisplacement;
-
-    if (frameCounter > 30) {
-      // alpha
-      this.sittingPikachuTilesContainer.alpha = Math.min(
-        1,
-        this.sittingPikachuTilesContainer.alpha + 0.04
-      );
-    }
   }
 
   // refered FUN_00405d50
@@ -160,6 +143,62 @@ export class MenuView {
       1,
       this.messages.sachisoft.alpha + 0.04
     );
+  }
+
+  // refered FUN_00405ca0
+  showSittingPikachuTiles(frameCounter) {
+    if (frameCounter === 0) {
+      this.sittingPikachuTilesContainer.visible = true;
+      this.sittingPikachuTilesContainer.alpha = 0;
+    }
+
+    // movement
+    const h = this.sittingPikachuTilesContainer.getChildAt(0).texture.height;
+    this.sittingPikachuTilesDisplacement =
+      (this.sittingPikachuTilesDisplacement + 2) % h;
+    this.sittingPikachuTilesContainer.x = -this.sittingPikachuTilesDisplacement;
+    this.sittingPikachuTilesContainer.y = -this.sittingPikachuTilesDisplacement;
+
+    if (frameCounter > 30) {
+      // alpha
+      this.sittingPikachuTilesContainer.alpha = Math.min(
+        1,
+        this.sittingPikachuTilesContainer.alpha + 0.04
+      );
+    }
+  }
+
+  // refered FUN_00405b70
+  showPokemonMessage(frameCounter) {
+    if (frameCounter === 0) {
+      this.messages.pokemon.visible = false;
+    }
+    if (frameCounter > 71) {
+      this.messages.pokemon.visible = true;
+    }
+  }
+
+  // refered FUN_00405b70
+  showPikachuVolleyBallMessage(frameCounter) {
+    if (frameCounter === 0) {
+      this.messages.pikachuVolleyball.visible = false;
+    }
+    if (frameCounter > 30) {
+      this.messages.pikachuVolleyball.visible = true;
+    }
+    if (frameCounter > 30 && frameCounter <= 44) {
+      const xDiff = 195 - 15 * (frameCounter - 30);
+      this.messages.pikachuVolleyball.x = 140 + xDiff;
+    } else if (frameCounter > 44 && frameCounter <= 55) {
+      this.messages.pikachuVolleyball.x = 140;
+      this.messages.pikachuVolleyball.width = 200 - 15 * (frameCounter - 44);
+    } else if (frameCounter > 55 && frameCounter <= 71) {
+      this.messages.pikachuVolleyball.x = 140;
+      this.messages.pikachuVolleyball.width = 40 + 15 * (frameCounter - 55);
+    } else if (frameCounter > 71) {
+      this.messages.pikachuVolleyball.x = 140;
+      this.messages.pikachuVolleyball.width = this.messages.pikachuVolleyball.texture.width;
+    }
   }
 }
 
@@ -687,60 +726,5 @@ function getFrameNumberForPlayerAnimatedSprite(state, frameNumber) {
     return 17 + frameNumber;
   } else if (state > 4) {
     return 18 + 5 * (state - 5) + frameNumber;
-  }
-}
-
-function FUN_00405b70(param_1) {
-  piVar3 = param_1[0x1b];
-  if (piVar3 === 1) {
-    piVar3 = param_1[0x1d];
-    iVar5 = 0;
-    iVar4 = 80;
-    param_1[0x1d] -= 15;
-    iVar1 = piVar3 + 125;
-    // iVar2 = code func
-    FUN_00409480();
-    if (param_1[0x1d] < 0) {
-      param_1[0x1b] = 2;
-      param_1[0x1d] = 200;
-      return;
-    }
-  } else if (piVar3 === 2) {
-    iVar1 = param_1[2];
-    param_1[0x1d] -= 15;
-    // code fun
-    iVar5 = 0;
-    piVar3 = param_1[0x1d];
-    iVar4 = 80;
-    iVar2 = 140;
-    //iVar1 = code func
-    FUN_00409690();
-    if (param_1[0x1d] < 50) {
-      param_1[0x1d] = 40;
-      param_1[0x1b] = 3;
-      return;
-    }
-  } else if (piVar3 === 3) {
-    iVar1 = param_1[2];
-    param_1[0x1d] += 15;
-    // code fun
-    iVar5 = 0;
-    piVar3 = param_1[0x1d];
-    iVar4 = 80;
-    iVar2 = 140;
-    //iVar1 = code func
-    //????
-    // if ???
-    ///
-  } else if (piVar3 > 3) {
-    iVar5 = 0;
-    iVar4 = 80;
-    iVar2 = 140;
-    //iVar1 = code func
-    FUN_00409480();
-    iVar5 = 0;
-    iVar4 = 40;
-    iVar2 = 170;
-    FUN_00409480();
   }
 }
