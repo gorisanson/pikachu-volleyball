@@ -1,4 +1,7 @@
 "use strict";
+
+import { Cloud, Wave, cloudAndWaveEngine } from "./pika_cloud_and_wave.js";
+
 const Container = PIXI.Container;
 const Sprite = PIXI.Sprite;
 const AnimatedSprite = PIXI.AnimatedSprite;
@@ -34,9 +37,19 @@ PATH.GAME_START = "messages/ko/game_start.png";
 PATH.READY = "messages/common/ready.png";
 PATH.GAME_END = "messages/common/game_end.png";
 
-export class PikaSprites {
-  // textures: PIXI.Spritesheet.textures (e.g. loader.resources["assets/sprite_sheet.json"].textures)
+export class GameView {
+  // physics corresponds to model in MVC pattern
   constructor(textures) {
+    // clouds and wave model.
+    // This model is included in this view object, not on controller object
+    // since it is not dependent on user input, and only used for rendering.
+    this.cloudArray = [];
+    for (let i = 0; i < NUM_OF_CLOUDS; i++) {
+      this.cloudArray.push(new Cloud());
+    }
+    this.wave = new Wave();
+
+    // Display objects below
     this.bgContainer = makeBGContainer(textures);
     [this.player1, this.player2] = makePlayerAnimatedSprites(textures);
     this.ball = makeBallAnimatedSprites(textures);
@@ -67,7 +80,6 @@ export class PikaSprites {
     };
 
     this.messages = {
-      fight: makeSpriteWithAnchorXY(textures, PATH.FIGHT, 0, 0),
       gameStart: makeSpriteWithAnchorXY(textures, PATH.GAME_START, 0, 0),
       ready: makeSpriteWithAnchorXY(textures, PATH.READY, 0, 0),
       gameEnd: makeSpriteWithAnchorXY(textures, PATH.GAME_END, 0, 0)
@@ -77,6 +89,242 @@ export class PikaSprites {
     this.waveContainer = makeWaveContainer(textures);
 
     this.black = makeBlackSprite(); // for fade out effect
+
+    // container which include whold display objects
+    // Should be careful on addChild order
+    // The later added, the more front(z-index) on screen
+    this.container = new Container();
+    this.container.addChild(this.bgContainer);
+    this.container.addChild(this.cloudContainer);
+    this.container.addChild(this.waveContainer);
+    this.container.addChild(this.shadows.forPlayer1);
+    this.container.addChild(this.shadows.forPlayer2);
+    this.container.addChild(this.shadows.forBall);
+    this.container.addChild(this.player1);
+    this.container.addChild(this.player2);
+    this.container.addChild(this.ballTrail);
+    this.container.addChild(this.ballHyper);
+    this.container.addChild(this.ball);
+    this.container.addChild(this.punch);
+    this.container.addChild(this.scoreBoards[0]);
+    this.container.addChild(this.scoreBoards[1]);
+    this.container.addChild(this.messages.gameStart);
+    this.container.addChild(this.messages.ready);
+    this.container.addChild(this.messages.gameEnd);
+    this.container.addChild(this.black);
+
+    // location and visibility setting
+    this.bgContainer.x = 0;
+    this.bgContainer.y = 0;
+    this.cloudContainer.x = 0;
+    this.cloudContainer.y = 0;
+    this.waveContainer.x = 0;
+    this.waveContainer.y = 0;
+
+    this.messages.ready.x = 176;
+    this.messages.ready.y = 38;
+    this.scoreBoards[0].x = 14; // score board is 14 pixel distant from boundary
+    this.scoreBoards[0].y = 10;
+    this.scoreBoards[1].x = 432 - 32 - 32 - 14; // 32 pixel is for number (32x32px) width; one score board has tow numbers
+    this.scoreBoards[1].y = 10;
+    this.black.x = 0;
+    this.black.y = 0;
+    this.black.alph = 1;
+    this.black.visible = true;
+
+    this.shadows.forPlayer1.y = 272;
+    this.shadows.forPlayer2.y = 272;
+    this.shadows.forBall.y = 272;
+
+    this.ballHyper.visible = false;
+    this.ballTrail.visible = false;
+    this.punch.visible = false;
+
+    for (const prop in this.messages) {
+      this.messages[prop].visible = false;
+    }
+  }
+
+  get visible() {
+    return this.container.visible;
+  }
+
+  set visible(bool) {
+    this.container.visible = bool;
+  }
+
+  // physics: PikaPhysics object
+  drawPlayerAndBall(physics) {
+    const player1 = physics.player1;
+    const player2 = physics.player2;
+    const ball = physics.ball;
+
+    this.player1.x = player1.x;
+    this.player1.y = player1.y;
+    this.shadows.forPlayer1.x = player1.x;
+    this.player2.x = player2.x;
+    this.player2.y = player2.y;
+    this.shadows.forPlayer2.x = player2.x;
+
+    const frameNumber1 = getFrameNumberForPlayerAnimatedSprite(
+      player1.state,
+      player1.frameNumber
+    );
+    const frameNumber2 = getFrameNumberForPlayerAnimatedSprite(
+      player2.state,
+      player2.frameNumber
+    );
+    this.player1.gotoAndStop(frameNumber1);
+    this.player2.gotoAndStop(frameNumber2);
+
+    this.ball.x = ball.x;
+    this.ball.y = ball.y;
+    this.shadows.forBall.x = ball.x;
+    this.ball.gotoAndStop(ball.rotation);
+
+    if (ball.punchEffectRadius > 0) {
+      ball.punchEffectRadius -= 2;
+      this.punch.width = 2 * ball.punchEffectRadius;
+      this.punch.height = 2 * ball.punchEffectRadius;
+      this.punch.x = ball.punchEffectX;
+      this.punch.y = ball.punchEffectY;
+      this.punch.visible = true;
+    } else {
+      this.punch.visible = false;
+    }
+
+    if (ball.isPowerHit === true) {
+      this.ballHyper.x = ball.previousX;
+      this.ballHyper.y = ball.previousY;
+      this.ballTrail.x = ball.previousPreviousX;
+      this.ballTrail.y = ball.previousPreviousY;
+
+      this.ballHyper.visible = true;
+      this.ballTrail.visible = true;
+    } else {
+      this.ballHyper.visible = false;
+      this.ballTrail.visible = false;
+    }
+  }
+
+  // this funtion corresponds to FUN_00404770 in origianl machine (assembly) code
+  drawCloudsAndWave(delta) {
+    const cloudArray = this.cloudArray;
+    const wave = this.wave;
+
+    cloudAndWaveEngine(cloudArray, wave);
+
+    for (let i = 0; i < NUM_OF_CLOUDS; i++) {
+      const cloud = cloudArray[i];
+      const cloudSprite = this.cloudContainer.getChildAt(i);
+      cloudSprite.x = cloud.spriteTopLeftPointX;
+      cloudSprite.y = cloud.spriteTopLeftPointY;
+      cloudSprite.width = cloud.spriteWidth;
+      cloudSprite.height = cloud.spriteHeight;
+    }
+
+    for (let i = 0; i < 432 / 16; i++) {
+      const waveSprite = this.waveContainer.getChildAt(i);
+      waveSprite.y = wave.yCoords[i];
+    }
+  }
+
+  // refered FUN_00403f20
+  drawGameStartMessageForFrameNo(frameNumber, totalFrameNumber) {
+    if (frameNumber === 0) {
+      this.messages.gameStart.visible = true;
+    } else if (frameNumber >= totalFrameNumber - 1) {
+      this.messages.gameStart.visible = false;
+      return;
+    }
+
+    const gameStartMessage = this.messages.gameStart;
+    // game start message rendering
+    const w = gameStartMessage.texture.width; // game start message texture width
+    const h = gameStartMessage.texture.height; // game start message texture height
+    const halfWidth = Math.floor((w * frameNumber) / 50);
+    const halfHeight = Math.floor((h * frameNumber) / 50);
+    gameStartMessage.x = 216 - halfWidth;
+    gameStartMessage.y = 50 + 2 * halfHeight;
+    gameStartMessage.width = 2 * halfWidth;
+    gameStartMessage.height = 2 * halfHeight;
+  }
+
+  showReadyMessage(bool) {
+    this.messages.ready.visible = bool;
+  }
+
+  toggleReadyMessage() {
+    this.messages.ready.visible = !this.messages.ready.visible;
+  }
+
+  // refered FUN_00404070
+  drawGameEndMessageForFrameNo(frameNumber, totalFrameNumber) {
+    const gameEndMessage = this.messages.gameEnd;
+    const w = gameEndMessage.texture.width; // game end message texture width;
+    const h = gameEndMessage.texture.height; // game end message texture height;
+
+    if (frameNumber === 0) {
+      gameEndMessage.visible = true;
+    }
+    if (frameNumber < 50) {
+      const halfWidthIncrement = 2 * Math.floor(((50 - frameNumber) * w) / 50);
+      const halfHeightIncrement = 2 * Math.floor(((50 - frameNumber) * h) / 50);
+
+      gameEndMessage.x = 216 - w / 2 - halfWidthIncrement;
+      gameEndMessage.y = 50 - halfHeightIncrement;
+      gameEndMessage.width = w + 2 * halfWidthIncrement;
+      gameEndMessage.height = h + 2 * halfHeightIncrement;
+    } else {
+      gameEndMessage.x = 216 - w / 2;
+      gameEndMessage.y = 50;
+      gameEndMessage.width = w;
+      gameEndMessage.height = h;
+    }
+    if (frameNumber >= totalFrameNumber - 1) {
+      gameEndMessage.visible = false;
+    }
+  }
+
+  setFadeInOutBlackAlphaTo(alpha) {
+    this.black.alpha = alpha;
+    if (this.black.alpha === 0) {
+      this.black.visible = false;
+    } else {
+      this.black.visible = true;
+    }
+  }
+
+  // if alphsIncrement > 0: fade out, else fade in
+  changeFadeInOutBlackAlphaBy(alphaIncrement) {
+    if (alphaIncrement >= 0) {
+      this.black.alpha = Math.min(1, this.black.alpha + alphaIncrement);
+    } else {
+      this.black.alpha = Math.max(0, this.black.alpha + alphaIncrement);
+    }
+    if (this.black.alpha === 0) {
+      this.black.visible = false;
+    } else {
+      this.black.visible = true;
+    }
+  }
+
+  // scores: array with length 2
+  // scores[0] for player1 score, scores[1] for player2 score
+  showScoreToScoreBoard(scores) {
+    for (let i = 0; i < 2; i++) {
+      const scoreBoard = this.scoreBoards[i];
+      const score = scores[i];
+      const unitsAnimatedSprite = scoreBoard.getChildAt(0);
+      const tensAnimatedSprite = scoreBoard.getChildAt(1);
+      unitsAnimatedSprite.gotoAndStop(score % 10);
+      tensAnimatedSprite.gotoAndStop(Math.floor(score / 10) % 10);
+      if (score >= 10) {
+        tensAnimatedSprite.visible = true;
+      } else {
+        tensAnimatedSprite.visible = false;
+      }
+    }
   }
 }
 
@@ -269,4 +517,18 @@ function addChildToParentAndSetLocalPosition(parent, child, x, y) {
   child.anchor.y = 0;
   child.x = x;
   child.y = y;
+}
+
+// number of frames for state 0, state 1 and state 2 is 5 for each.
+// number of frames for state 3 is 2.
+// number of frames for state 4 is 1.
+// number of frames for state 5, state 6 is 5 for each.
+function getFrameNumberForPlayerAnimatedSprite(state, frameNumber) {
+  if (state < 4) {
+    return 5 * state + frameNumber;
+  } else if (state === 4) {
+    return 17 + frameNumber;
+  } else if (state > 4) {
+    return 18 + 5 * (state - 5) + frameNumber;
+  }
 }
