@@ -302,9 +302,8 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball, sound) {
   ball.yVelocity += 1;
 
   // This is not part of this function in the original assembly code.
-  // In the original assembly code, it is process in outer function.
+  // In the original assembly code, it is processed in other function (FUN_00402ee0)
   // But it is proper to process here.
-  // TODO: what is the outer function address? add it to comment
   ball.previousPreviousX = ball.previousX;
   ball.previousPreviousY = ball.previousY;
   ball.previousX = ball.x;

@@ -182,6 +182,7 @@ export class GameView {
     this.shadows.forBall.x = ball.x;
     this.ball.gotoAndStop(ball.rotation);
 
+    // For punch effect, refer FUN_00402ee0
     if (ball.punchEffectRadius > 0) {
       ball.punchEffectRadius -= 2;
       this.punch.width = 2 * ball.punchEffectRadius;
