@@ -115,13 +115,6 @@ export class PikachuVolleyball {
     this.view.game.drawPlayerAndBall(this.physics);
     this.view.game.drawCloudsAndWave();
 
-    // TODO: move these to physics engine
-    const ball = this.physics.ball;
-    ball.previousPreviousX = ball.previousX;
-    ball.previousPreviousY = ball.previousY;
-    ball.previousX = ball.x;
-    ball.previousY = ball.y;
-
     if (this.gameEnded === true) {
       //TODO: refactor 211
       this.view.game.drawGameEndMessageForFrameNo(
@@ -141,9 +134,7 @@ export class PikachuVolleyball {
       this.roundEnded === false &&
       this.gameEnded === false
     ) {
-      // TODO: is it better for move this to physics function?
-      // by including isPlayer2Serve property into ball, score to player
-      if (ball.punchEffectX < 216) {
+      if (this.physics.ball.punchEffectX < 216) {
         this.isPlayer2Serve = true;
         this.scores[1] += 1;
         if (this.scores[1] >= this.goalScore) {
