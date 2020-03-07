@@ -24,25 +24,29 @@ export class PikachuVolleyball {
       )
     ];
     this.state = null;
+
     this.normalFPS = 25;
     this.slowMotionFPS = 5;
+
+    this.SLOW_MOTION_FRAMES_NUM = 6;
     this.slowMotionFramesLeft = 0;
     this.slowMotionNumOfSkippedFrames = 0;
-    this.SLOW_MOTION_FRAMES_NUM = 6;
-    this.cloudContainer = null;
-    this.waveContainer = null;
-    this.isPlayer2Serve = false;
+
+    this.scores = [0, 0]; // scores[0] for player1, scores[1] for player2
+    this.goalScore = 15;
+
+    this.gameEnded = false;
     this.roundEnded = false;
+    this.isPlayer2Serve = false;
+
     this.startOfNewGameFrameNum = 71;
     this.elapsedStartOfNewGameFrame = 0;
     this.afterEndOfRoundFrameNum = 5;
     this.elapsedAfterEndOfRoundFrame = 0;
     this.beForeStartOfNextRoundFrameNum = 30;
     this.elapsedBeforeStartOfNextRoundFrame = 0;
+    this.gameEndFrameNum = 211;
     this.elapsedGameEndFrame = 0;
-    this.scores = [0, 0]; // scores[0] for player1, scores[1] for player2
-    this.goalScore = 15;
-    this.gameEnded = false;
   }
 
   gameLoop() {
@@ -94,7 +98,6 @@ export class PikachuVolleyball {
     this.view.game.changeFadeInOutBlackAlphaBy(-(1 / 17)); // fade in
     this.elapsedStartOfNewGameFrame++;
 
-    // TODO: when it was 71 frame.... game start message disapper? or on next frame??
     if (this.elapsedStartOfNewGameFrame >= this.startOfNewGameFrameNum) {
       this.elapsedStartOfNewGameFrame = 0;
       this.view.game.setFadeInOutBlackAlphaTo(0);
@@ -116,13 +119,12 @@ export class PikachuVolleyball {
     this.view.game.drawCloudsAndWave();
 
     if (this.gameEnded === true) {
-      //TODO: refactor 211
       this.view.game.drawGameEndMessageForFrameNo(
         this.elapsedGameEndFrame,
-        211
+        this.gameEndFrameNum
       );
       this.elapsedGameEndFrame++;
-      if (this.elapsedGameEndFrame >= 211) {
+      if (this.elapsedGameEndFrame >= this.gameEndFrameNum) {
         this.elapsedGameEndFrame = 0;
         this.state = this.startOfNewGame;
       }
