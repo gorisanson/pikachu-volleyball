@@ -1,15 +1,24 @@
 import { PikaKeyboard } from "./pika_keyboard.js";
 import { PikaPhysics } from "./pika_physics.js";
 import { PikaAudio } from "./pika_audio.js";
-import { GameView } from "./pika_view.js";
+import { MenuView, GameView, FadeInOut } from "./pika_view.js";
 
 export class PikachuVolleyball {
-  // pixiApplication: PIXI.Application object
-  // pikaSprites: PikaSprites object
-  constructor(textures) {
+  // pixiApp: PIXI.Application object
+  // textures: Loader.shared.resources["assets/sprite_sheet.json"].textures
+  constructor(pixiApp, textures) {
     this.view = {
-      game: new GameView(textures)
+      menu: new MenuView(textures),
+      game: new GameView(textures),
+      fadeInOut: new FadeInOut()
     };
+    pixiApp.stage.addChild(this.view.menu.container);
+    pixiApp.stage.addChild(this.view.game.container);
+    pixiApp.stage.addChild(this.view.fadeInOut.black);
+    this.view.menu.visible = false;
+    this.view.game.visible = false;
+    this.view.fadeInOut.visible = true;
+
     //this.sprites = pikaSprites;
     this.audio = new PikaAudio();
     this.physics = new PikaPhysics(true, false);
@@ -65,8 +74,27 @@ export class PikachuVolleyball {
     }
   }
 
+  menu() {
+    this.view.menu.visible = true;
+    this.view.fadeInOut.setBlackAlphaTo(0);
+    this.view.menu.moveFightMessage(this.frameCounter);
+    this.frameCounter++;
+    this.keyboardArray[0].updateProperties();
+    this.keyboardArray[1].updateProperties();
+
+    if (
+      this.keyboardArray[0].powerHit === 1 ||
+      this.keyboardArray[1].powerHit === 1
+    ) {
+      this.frameCounter = 0;
+      this.view.menu.visible = false;
+      this.state = this.startOfNewGame;
+    }
+  }
+
   startOfNewGame() {
     if (this.frameCounter === 0) {
+      this.view.game.visible = true;
       this.gameEnded = false;
       this.roundEnded = false;
       this.physics.player1.gameEnded = false;
@@ -84,7 +112,7 @@ export class PikachuVolleyball {
       this.physics.ball.initializeForNewRound(this.isPlayer2Serve);
       this.view.game.drawPlayerAndBall(this.physics);
 
-      this.view.game.setFadeInOutBlackAlphaTo(1); // set black screen
+      this.view.fadeInOut.setBlackAlphaTo(1); // set black screen
 
       this.audio.bgm.play();
     }
@@ -94,12 +122,12 @@ export class PikachuVolleyball {
       this.frameTotal.startOfNewGame
     );
     this.view.game.drawCloudsAndWave();
-    this.view.game.changeFadeInOutBlackAlphaBy(-(1 / 17)); // fade in
+    this.view.fadeInOut.changeBlackAlphaBy(-(1 / 17)); // fade in
     this.frameCounter++;
 
     if (this.frameCounter >= this.frameTotal.startOfNewGame) {
       this.frameCounter = 0;
-      this.view.game.setFadeInOutBlackAlphaTo(0);
+      this.view.fadeInOut.setBlackAlphaTo(0);
       this.state = this.round;
     }
   }
@@ -119,13 +147,14 @@ export class PikachuVolleyball {
 
     if (this.gameEnded === true) {
       this.view.game.drawGameEndMessageForFrameNo(
-        this.elapsedGameEndFrame,
-        this.gameEndFrameNum
+        this.frameCounter,
+        this.frameTotal.gameEnd
       );
-      this.elapsedGameEndFrame++;
-      if (this.elapsedGameEndFrame >= this.gameEndFrameNum) {
-        this.elapsedGameEndFrame = 0;
-        this.state = this.startOfNewGame;
+      this.frameCounter++;
+      if (this.frameCounter >= this.frameTotal.gameEnd) {
+        this.frameCounter = 0;
+        this.view.game.visible = false;
+        this.state = this.menu;
       }
       return;
     }
@@ -166,14 +195,14 @@ export class PikachuVolleyball {
     if (this.roundEnded === true && this.gameEnded === false) {
       // if this is the last frame of this round, begin fade out
       if (this.slowMotionFramesLeft === 0) {
-        this.view.game.changeFadeInOutBlackAlphaBy(1 / 16); // fade out
+        this.view.fadeInOut.changeBlackAlphaBy(1 / 16); // fade out
         this.state = this.afterEndOfRound;
       }
     }
   }
 
   afterEndOfRound() {
-    this.view.game.changeFadeInOutBlackAlphaBy(1 / 16);
+    this.view.fadeInOut.changeBlackAlphaBy(1 / 16);
     this.frameCounter++;
     if (this.frameCounter >= this.frameTotal.afterEndOfRound) {
       this.frameCounter = 0;
@@ -183,7 +212,7 @@ export class PikachuVolleyball {
 
   beforeStartOfNextRound() {
     if (this.frameCounter === 0) {
-      this.view.game.setFadeInOutBlackAlphaTo(1);
+      this.view.fadeInOut.setBlackAlphaTo(1);
       this.view.game.showReadyMessage(false);
 
       this.physics.player1.initializeForNewRound();
@@ -193,7 +222,7 @@ export class PikachuVolleyball {
     }
 
     this.view.game.drawCloudsAndWave();
-    this.view.game.changeFadeInOutBlackAlphaBy(-(1 / 16));
+    this.view.fadeInOut.changeBlackAlphaBy(-(1 / 16));
 
     this.frameCounter++;
     if (this.frameCounter % 5 === 0) {
@@ -203,7 +232,7 @@ export class PikachuVolleyball {
     if (this.frameCounter >= this.frameTotal.beforeStartOfNextRound) {
       this.frameCounter = 0;
       this.view.game.showReadyMessage(false);
-      this.view.game.setFadeInOutBlackAlphaTo(0);
+      this.view.fadeInOut.setBlackAlphaTo(0);
       this.roundEnded = false;
       this.state = this.round;
     }
@@ -231,62 +260,6 @@ export class PikachuVolleyball {
     if (sound.ballTouchesGround === true) {
       audio.ballTouchesGround.play();
       sound.ballTouchesGround = false;
-    }
-  }
-
-  //pikaVolley.fightMessageSizeInfo = 0;
-  //pikaVolley.fightMessageEnlarged = false;
-  // FUN_00405d50
-  moveFightMessage() {
-    const sizeArray = [20, 22, 25, 27, 30, 27, 25, 22, 20];
-    const fightMessageWidth = 160;
-    const fightMessageHeight = 160;
-    const fightMessage = this.sprites.messages.fight;
-    if (this.fightMessageEnlarged === false) {
-      if (this.fightMessageSizeInfo === 0) {
-        this.sprites.black.visible = false;
-        fightMessage.visible = true;
-      }
-      this.fightMessageSizeInfo += 1;
-
-      const halfWidth = Math.floor(
-        Math.floor((this.fightMessageSizeInfo * fightMessageWidth) / 30) / 2
-      );
-      const halfHeight = Math.floor(
-        Math.floor((this.fightMessageSizeInfo * fightMessageHeight) / 30) / 2
-      );
-      fightMessage.width = halfWidth * 2; // width
-      fightMessage.height = halfHeight * 2; // height
-      fightMessage.x = 100 - halfWidth; // x coor
-      fightMessage.y = 70 - halfHeight; // y coord
-
-      //// iVar3 = code ??
-      // FUN_00409690
-      if (this.fightMessageSizeInfo > 29) {
-        this.fightMessageEnlarged = true;
-        // FUN_00408ee0
-        //param_1[0x1d] = 200;
-        return;
-      }
-    } else {
-      this.fightMessageSizeInfo = (this.fightMessageSizeInfo + 1) % 9;
-      // code ...
-      const halfWidth = Math.floor(
-        Math.floor(
-          (sizeArray[this.fightMessageSizeInfo] * fightMessageWidth) / 30
-        ) / 2
-      );
-      const halfHeight = Math.floor(
-        Math.floor(
-          (sizeArray[this.fightMessageSizeInfo] * fightMessageHeight) / 30
-        ) / 2
-      );
-      fightMessage.width = halfWidth * 2; // width
-      fightMessage.height = halfHeight * 2; // heigth
-      fightMessage.y = 70 - halfHeight; // y coord
-      fightMessage.x = 100 - halfWidth; // x coord
-      //iVar3 = code ??
-      // FUN_00409690
     }
   }
 }

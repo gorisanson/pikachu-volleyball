@@ -16,7 +16,7 @@ const app = new Application({
   height: 304,
   autoDensity: true,
   antialias: false,
-  backgroundColor: 0x00ff00,
+  backgroundColor: 0x000000,
   transparent: false
 });
 document.body.appendChild(app.view);
@@ -24,8 +24,7 @@ Loader.shared.add("assets/sprite_sheet.json").load(setup);
 
 function setup() {
   const textures = Loader.shared.resources["assets/sprite_sheet.json"].textures;
-  const pikaVolley = new PikachuVolleyball(textures);
-  app.stage.addChild(pikaVolley.view.game.container);
+  const pikaVolley = new PikachuVolleyball(app, textures);
 
   // adjust audio setting
   const audio = pikaVolley.audio;
@@ -34,7 +33,7 @@ function setup() {
     audio[p].volume = 0.3;
   }
 
-  pikaVolley.state = pikaVolley.startOfNewGame;
+  pikaVolley.state = pikaVolley.menu;
   app.view.addEventListener("click", () => start(pikaVolley), { once: true });
 }
 

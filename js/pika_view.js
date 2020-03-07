@@ -32,13 +32,117 @@ PATH.BALL_PUNCH = "ball/ball_punch.png";
 PATH.CLOUD = "objects/cloud.png";
 PATH.WAVE = "objects/wave.png";
 
-PATH.FIGHT = "messages/ko/fight.png";
 PATH.GAME_START = "messages/ko/game_start.png";
 PATH.READY = "messages/common/ready.png";
 PATH.GAME_END = "messages/common/game_end.png";
 
+PATH.POKEMON = "messages/ko/pokemon.png";
+PATH.PIKACHU_VOLLEYBALL = "messages/ko/pikachu_volleyball.png";
+PATH.FIGHT = "messages/ko/fight.png";
+PATH.WITH_COMPUTER = "messages/ko/with_computer.png";
+PATH.WITH_FRIEND = "messages/ko/with_friend.png";
+
+PATH.SACHISOFT = "messages/common/sachisoft.png";
+PATH.MARK = "messages/ko/mark.png";
+PATH.SITTING_PIKACHU = "pikachu_sitting.png";
+
+export class MenuView {
+  constructor(textures) {
+    // this.sittingPikachu = ??
+    this.messages = {
+      pokemon: makeSpriteWithAnchorXY(textures, PATH.POKEMON, 0, 0),
+      pikachuVolleyball: makeSpriteWithAnchorXY(
+        textures,
+        PATH.PIKACHU_VOLLEYBALL,
+        0,
+        0
+      ),
+      withComputer: makeSpriteWithAnchorXY(textures, PATH.WITH_COMPUTER, 0, 0),
+      withFriend: makeSpriteWithAnchorXY(textures, PATH.WITH_FRIEND, 0, 0),
+      sachisoft: makeSpriteWithAnchorXY(textures, PATH.SACHISOFT, 0, 0),
+      fight: makeSpriteWithAnchorXY(textures, PATH.FIGHT, 0, 0)
+    };
+
+    this.container = new Container();
+    this.container.x = 0;
+    this.container.y = 0;
+    this.container.addChild(this.messages.pokemon);
+    this.container.addChild(this.messages.pikachuVolleyball);
+    this.container.addChild(this.messages.withComputer);
+    this.container.addChild(this.messages.withFriend);
+    this.container.addChild(this.messages.fight);
+
+    this.fightMessageSizeInfo = 0;
+    this.fightMessageEnlarged = false;
+
+    for (const prop in this.messages) {
+      this.messages[prop].visible = false;
+    }
+  }
+
+  get visible() {
+    return this.container.visible;
+  }
+
+  set visible(bool) {
+    this.container.visible = bool;
+  }
+
+  // refer FUN_00405d50
+  moveFightMessage(frameCounter) {
+    const sizeArray = [20, 22, 25, 27, 30, 27, 25, 22, 20];
+    const fightMessage = this.messages.fight;
+    const w = fightMessage.texture.width;
+    const h = fightMessage.texture.height;
+
+    if (frameCounter === 0) {
+      fightMessage.visible = true;
+      this.fightMessageSizeInfo = 0;
+      this.fightMessageEnlarged = false;
+    }
+
+    if (this.fightMessageEnlarged === false) {
+      this.fightMessageSizeInfo += 1;
+
+      const halfWidth = Math.floor(
+        Math.floor((this.fightMessageSizeInfo * w) / 30) / 2
+      );
+      const halfHeight = Math.floor(
+        Math.floor((this.fightMessageSizeInfo * h) / 30) / 2
+      );
+      fightMessage.width = halfWidth * 2; // width
+      fightMessage.height = halfHeight * 2; // height
+      fightMessage.x = 100 - halfWidth; // x coor
+      fightMessage.y = 70 - halfHeight; // y coord
+
+      //// iVar3 = code ??
+      // FUN_00409690
+      if (this.fightMessageSizeInfo > 29) {
+        this.fightMessageEnlarged = true;
+        // FUN_00408ee0
+        //param_1[0x1d] = 200;
+        return;
+      }
+    } else {
+      this.fightMessageSizeInfo = (this.fightMessageSizeInfo + 1) % 9;
+      // code ...
+      const halfWidth = Math.floor(
+        Math.floor((sizeArray[this.fightMessageSizeInfo] * w) / 30) / 2
+      );
+      const halfHeight = Math.floor(
+        Math.floor((sizeArray[this.fightMessageSizeInfo] * h) / 30) / 2
+      );
+      fightMessage.width = halfWidth * 2; // width
+      fightMessage.height = halfHeight * 2; // heigth
+      fightMessage.y = 70 - halfHeight; // y coord
+      fightMessage.x = 100 - halfWidth; // x coord
+      //iVar3 = code ??
+      // FUN_00409690
+    }
+  }
+}
+
 export class GameView {
-  // physics corresponds to model in MVC pattern
   constructor(textures) {
     // clouds and wave model.
     // This model is included in this view object, not on controller object
@@ -88,12 +192,12 @@ export class GameView {
     this.cloudContainer = makeCloudContainer(textures);
     this.waveContainer = makeWaveContainer(textures);
 
-    this.black = makeBlackSprite(); // for fade out effect
-
     // container which include whold display objects
     // Should be careful on addChild order
     // The later added, the more front(z-index) on screen
     this.container = new Container();
+    this.container.x = 0;
+    this.container.y = 0;
     this.container.addChild(this.bgContainer);
     this.container.addChild(this.cloudContainer);
     this.container.addChild(this.waveContainer);
@@ -111,7 +215,6 @@ export class GameView {
     this.container.addChild(this.messages.gameStart);
     this.container.addChild(this.messages.ready);
     this.container.addChild(this.messages.gameEnd);
-    this.container.addChild(this.black);
 
     // location and visibility setting
     this.bgContainer.x = 0;
@@ -127,10 +230,6 @@ export class GameView {
     this.scoreBoards[0].y = 10;
     this.scoreBoards[1].x = 432 - 32 - 32 - 14; // 32 pixel is for number (32x32px) width; one score board has tow numbers
     this.scoreBoards[1].y = 10;
-    this.black.x = 0;
-    this.black.y = 0;
-    this.black.alph = 1;
-    this.black.visible = true;
 
     this.shadows.forPlayer1.y = 272;
     this.shadows.forPlayer2.y = 272;
@@ -209,7 +308,7 @@ export class GameView {
   }
 
   // this funtion corresponds to FUN_00404770 in origianl machine (assembly) code
-  drawCloudsAndWave(delta) {
+  drawCloudsAndWave() {
     const cloudArray = this.cloudArray;
     const wave = this.wave;
 
@@ -231,10 +330,10 @@ export class GameView {
   }
 
   // refered FUN_00403f20
-  drawGameStartMessageForFrameNo(frameNumber, totalFrameNumber) {
-    if (frameNumber === 0) {
+  drawGameStartMessageForFrameNo(frameCounter, frameTotal) {
+    if (frameCounter === 0) {
       this.messages.gameStart.visible = true;
-    } else if (frameNumber >= totalFrameNumber - 1) {
+    } else if (frameCounter >= frameTotal - 1) {
       this.messages.gameStart.visible = false;
       return;
     }
@@ -243,8 +342,8 @@ export class GameView {
     // game start message rendering
     const w = gameStartMessage.texture.width; // game start message texture width
     const h = gameStartMessage.texture.height; // game start message texture height
-    const halfWidth = Math.floor((w * frameNumber) / 50);
-    const halfHeight = Math.floor((h * frameNumber) / 50);
+    const halfWidth = Math.floor((w * frameCounter) / 50);
+    const halfHeight = Math.floor((h * frameCounter) / 50);
     gameStartMessage.x = 216 - halfWidth;
     gameStartMessage.y = 50 + 2 * halfHeight;
     gameStartMessage.width = 2 * halfWidth;
@@ -260,17 +359,18 @@ export class GameView {
   }
 
   // refered FUN_00404070
-  drawGameEndMessageForFrameNo(frameNumber, totalFrameNumber) {
+  drawGameEndMessageForFrameNo(frameCounter, frameTotal) {
     const gameEndMessage = this.messages.gameEnd;
     const w = gameEndMessage.texture.width; // game end message texture width;
     const h = gameEndMessage.texture.height; // game end message texture height;
 
-    if (frameNumber === 0) {
+    if (frameCounter === 0) {
       gameEndMessage.visible = true;
     }
-    if (frameNumber < 50) {
-      const halfWidthIncrement = 2 * Math.floor(((50 - frameNumber) * w) / 50);
-      const halfHeightIncrement = 2 * Math.floor(((50 - frameNumber) * h) / 50);
+    if (frameCounter < 50) {
+      const halfWidthIncrement = 2 * Math.floor(((50 - frameCounter) * w) / 50);
+      const halfHeightIncrement =
+        2 * Math.floor(((50 - frameCounter) * h) / 50);
 
       gameEndMessage.x = 216 - w / 2 - halfWidthIncrement;
       gameEndMessage.y = 50 - halfHeightIncrement;
@@ -282,31 +382,8 @@ export class GameView {
       gameEndMessage.width = w;
       gameEndMessage.height = h;
     }
-    if (frameNumber >= totalFrameNumber - 1) {
+    if (frameCounter >= frameTotal - 1) {
       gameEndMessage.visible = false;
-    }
-  }
-
-  setFadeInOutBlackAlphaTo(alpha) {
-    this.black.alpha = alpha;
-    if (this.black.alpha === 0) {
-      this.black.visible = false;
-    } else {
-      this.black.visible = true;
-    }
-  }
-
-  // if alphsIncrement > 0: fade out, else fade in
-  changeFadeInOutBlackAlphaBy(alphaIncrement) {
-    if (alphaIncrement >= 0) {
-      this.black.alpha = Math.min(1, this.black.alpha + alphaIncrement);
-    } else {
-      this.black.alpha = Math.max(0, this.black.alpha + alphaIncrement);
-    }
-    if (this.black.alpha === 0) {
-      this.black.visible = false;
-    } else {
-      this.black.visible = true;
     }
   }
 
@@ -329,13 +406,65 @@ export class GameView {
   }
 }
 
-// set background
+export class FadeInOut {
+  constructor() {
+    this.black = new Graphics();
+    this.black.beginFill(0x000000);
+    this.black.drawRect(0, 0, 432, 304);
+    this.black.endFill();
+    this.black.x = 0;
+    this.black.y = 0;
+    this.black.alpha = 1;
+  }
+
+  get visible() {
+    return this.black.visible;
+  }
+
+  set visible(bool) {
+    this.black.visible = bool;
+  }
+
+  setBlackAlphaTo(alpha) {
+    this.black.alpha = alpha;
+    if (this.black.alpha === 0) {
+      this.black.visible = false;
+    } else {
+      this.black.visible = true;
+    }
+  }
+
+  // if alphaIncrement > 0: fade out, else fade in
+  changeBlackAlphaBy(alphaIncrement) {
+    if (alphaIncrement >= 0) {
+      this.black.alpha = Math.min(1, this.black.alpha + alphaIncrement);
+    } else {
+      this.black.alpha = Math.max(0, this.black.alpha + alphaIncrement);
+    }
+    if (this.black.alpha === 0) {
+      this.black.visible = false;
+    } else {
+      this.black.visible = true;
+    }
+  }
+}
+
+// make background
 // return: Container object that has objects in the backgournd as children
 function makeBGContainer(textures) {
   const bgContainer = new Container();
-  let tile;
+
+  // green background
+  const green = new Graphics();
+  green.beginFill(0x00ff00);
+  green.drawRect(0, 0, 432, 304);
+  green.endFill();
+  green.x = 0;
+  green.y = 0;
+  bgContainer.addChild(green);
 
   // sky
+  let tile;
   let texture = textures[PATH.SKY_BLUE];
   for (let j = 0; j < 12; j++) {
     for (let i = 0; i < 432 / 16; i++) {
@@ -446,16 +575,6 @@ function makeSpriteWithAnchorXY(textures, path, anchorX, anchorY) {
   sprite.anchor.x = anchorX;
   sprite.anchor.y = anchorY;
   return sprite;
-}
-
-function makeBlackSprite() {
-  // this is more efficient way than using 1x1px resources["black.png"]
-  const blackRectangle = new Graphics();
-  blackRectangle.beginFill(0x000000);
-  blackRectangle.drawRect(0, 0, 432, 304);
-  blackRectangle.endFill();
-
-  return blackRectangle;
 }
 
 function makeScoreBoardSprite(textures) {
