@@ -41,6 +41,8 @@ export class PikachuVolleyball {
     this.slowMotionFramesLeft = 0;
     this.slowMotionNumOfSkippedFrames = 0;
 
+    this.selectedWithWho = 0; // 0: with computer, 1: with friend
+
     this.scores = [0, 0]; // scores[0] for player1, scores[1] for player2
     this.goalScore = 15;
 
@@ -80,17 +82,72 @@ export class PikachuVolleyball {
     this.view.menu.showFightMessage(this.frameCounter);
     this.view.menu.showSachisoft(this.frameCounter);
     this.view.menu.showSittingPikachuTiles(this.frameCounter);
-    this.view.menu.showPikachuVolleyBallMessage(this.frameCounter);
+    this.view.menu.showPikachuVolleyballMessage(this.frameCounter);
     this.view.menu.showPokemonMessage(this.frameCounter);
+    this.view.menu.showWithWhoMessages(this.frameCounter);
 
+    if (this.frameCounter === 0) {
+      this.selectedWithWho = 0;
+      this.view.menu.selectWithWho(this.selectedWithWho);
+    }
     this.frameCounter++;
-    this.keyboardArray[0].updateProperties();
-    this.keyboardArray[1].updateProperties();
 
+    const keyboardArray = this.keyboardArray;
+    keyboardArray[0].updateProperties();
+    keyboardArray[1].updateProperties();
+    if (
+      this.frameCounter < 71 &&
+      (keyboardArray[0].powerHit === 1 || keyboardArray[1].powerHit === 1)
+    ) {
+      this.frameCounter = 71;
+      return;
+    }
+
+    if (this.frameCounter <= 71) {
+      return;
+    }
+
+    if (
+      (keyboardArray[0].yDirection === -1 ||
+        keyboardArray[1].yDirection === -1) &&
+      this.selectedWithWho === 1
+    ) {
+      this.selectedWithWho = 0;
+      this.view.menu.selectWithWho(this.selectedWithWho);
+      // this.audio.pi.play();
+      // If I use the normal code above...
+      // When I fastly alternate between up arrow and down arrow key,
+      // the "pi" sound does not respond to it. But the original game does it.
+      // So I use this below code since I love the "pipipipi~" sound.
+      new Audio("assets/WAVE143_1.wav").play();
+    } else if (
+      (keyboardArray[0].yDirection === 1 ||
+        keyboardArray[1].yDirection === 1) &&
+      this.selectedWithWho === 0
+    ) {
+      this.selectedWithWho = 1;
+      this.view.menu.selectWithWho(this.selectedWithWho);
+      this.audio.pi.pause();
+      // this.audio.pi.play();
+      // refer the comment above
+      new Audio("assets/WAVE143_1.wav").play();
+    }
     if (
       this.keyboardArray[0].powerHit === 1 ||
       this.keyboardArray[1].powerHit === 1
     ) {
+      if (this.selectedWithWho === 1) {
+        this.physics.player1.isComputer = false;
+        this.physics.player2.isComputer = false;
+      } else {
+        if (this.keyboardArray[0].powerHit === 1) {
+          this.physics.player1.isComputer = false;
+          this.physics.player2.isComputer = true;
+        } else if (this.keyboardArray[1].powerHit === 1) {
+          this.physics.player1.isComputer = true;
+          this.physics.player2.isComputer = false;
+        }
+      }
       this.frameCounter = 0;
       this.view.menu.visible = false;
       this.state = this.startOfNewGame;

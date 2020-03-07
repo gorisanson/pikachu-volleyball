@@ -57,8 +57,10 @@ export class MenuView {
         0,
         0
       ),
-      withComputer: makeSpriteWithAnchorXY(textures, PATH.WITH_COMPUTER, 0, 0),
-      withFriend: makeSpriteWithAnchorXY(textures, PATH.WITH_FRIEND, 0, 0),
+      withWho: [
+        makeSpriteWithAnchorXY(textures, PATH.WITH_COMPUTER, 0, 0),
+        makeSpriteWithAnchorXY(textures, PATH.WITH_FRIEND, 0, 0)
+      ],
       sachisoft: makeSpriteWithAnchorXY(textures, PATH.SACHISOFT, 0, 0),
       fight: makeSpriteWithAnchorXY(textures, PATH.FIGHT, 0, 0)
     };
@@ -80,14 +82,14 @@ export class MenuView {
     this.container.addChild(this.sittingPikachuTilesContainer);
     this.container.addChild(this.messages.pokemon);
     this.container.addChild(this.messages.pikachuVolleyball);
-    this.container.addChild(this.messages.withComputer);
-    this.container.addChild(this.messages.withFriend);
+    this.container.addChild(this.messages.withWho[0]);
+    this.container.addChild(this.messages.withWho[1]);
     this.container.addChild(this.messages.sachisoft);
     this.container.addChild(this.messages.fight);
 
     this.sittingPikachuTilesDisplacement = 0;
-    this.fightMessageSizeInfo = 0;
-    this.fightMessageEnlarged = false;
+    this.selectedWithWho = -1; // 0: with computer, 1: with friend, -1: not selected
+    this.selectedWithWhoMessageSizeIncrement = 2;
 
     for (const prop in this.messages) {
       this.messages[prop].visible = false;
@@ -143,6 +145,10 @@ export class MenuView {
       1,
       this.messages.sachisoft.alpha + 0.04
     );
+
+    if (frameCounter > 70) {
+      this.messages.sachisoft.alpha = 1;
+    }
   }
 
   // refered FUN_00405ca0
@@ -166,26 +172,23 @@ export class MenuView {
         this.sittingPikachuTilesContainer.alpha + 0.04
       );
     }
-  }
 
-  // refered FUN_00405b70
-  showPokemonMessage(frameCounter) {
-    if (frameCounter === 0) {
-      this.messages.pokemon.visible = false;
-    }
-    if (frameCounter > 71) {
-      this.messages.pokemon.visible = true;
+    if (frameCounter > 70) {
+      this.sittingPikachuTilesContainer.alpha = 1;
     }
   }
 
   // refered FUN_00405b70
-  showPikachuVolleyBallMessage(frameCounter) {
+  showPikachuVolleyballMessage(frameCounter) {
     if (frameCounter === 0) {
       this.messages.pikachuVolleyball.visible = false;
+      return;
     }
+
     if (frameCounter > 30) {
       this.messages.pikachuVolleyball.visible = true;
     }
+
     if (frameCounter > 30 && frameCounter <= 44) {
       const xDiff = 195 - 15 * (frameCounter - 30);
       this.messages.pikachuVolleyball.x = 140 + xDiff;
@@ -199,6 +202,57 @@ export class MenuView {
       this.messages.pikachuVolleyball.x = 140;
       this.messages.pikachuVolleyball.width = this.messages.pikachuVolleyball.texture.width;
     }
+  }
+
+  // refered FUN_00405b70
+  showPokemonMessage(frameCounter) {
+    if (frameCounter === 0) {
+      this.messages.pokemon.visible = false;
+      return;
+    }
+
+    if (frameCounter > 71) {
+      this.messages.pokemon.visible = true;
+    }
+  }
+
+  // refered FUN_00405ec0
+  showWithWhoMessages(frameCounter) {
+    const withWho = this.messages.withWho;
+    const w = withWho[0].texture.width;
+    const h = withWho[0].texture.height;
+
+    if (frameCounter === 0) {
+      for (let i = 0; i < 2; i++) {
+        withWho[i].visible = false;
+      }
+      return;
+    }
+
+    if (frameCounter > 70) {
+      if (this.selectedWithWhoMessageSizeIncrement < 10) {
+        this.selectedWithWhoMessageSizeIncrement += 1;
+      }
+      for (let i = 0; i < 2; i++) {
+        const selected = Number(this.selectedWithWho === i); // 1 if selected, 0 otherwise
+        const halfWidthIncrement =
+          selected * (this.selectedWithWhoMessageSizeIncrement + 2);
+        const halfHeightIncrement =
+          selected * this.selectedWithWhoMessageSizeIncrement;
+
+        withWho[i].visible = true;
+        withWho[i].x = 216 - w / 2 - halfWidthIncrement;
+        withWho[i].y = 184 + 30 * i - halfHeightIncrement;
+        withWho[i].width = w + 2 * halfWidthIncrement;
+        withWho[i].height = h + 2 * halfHeightIncrement;
+      }
+    }
+  }
+
+  // i: Number (0: withComputer, 1: withFriend)
+  selectWithWho(i) {
+    this.selectedWithWho = i;
+    this.selectedWithWhoMessageSizeIncrement = 2;
   }
 }
 
