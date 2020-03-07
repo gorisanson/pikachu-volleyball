@@ -62,16 +62,24 @@ export class MenuView {
       sachisoft: makeSpriteWithAnchorXY(textures, PATH.SACHISOFT, 0, 0),
       fight: makeSpriteWithAnchorXY(textures, PATH.FIGHT, 0, 0)
     };
+    this.sittingPikachuTilesContainer = makeSittingPikachuTilesContainer(
+      textures
+    );
+
+    // refer FUN_004059f0
+    this.messages.sachisoft.x = 216 - this.messages.sachisoft.texture.width / 2;
+    this.messages.sachisoft.y = 264;
 
     this.container = new Container();
-    this.container.x = 0;
-    this.container.y = 0;
+    this.container.addChild(this.sittingPikachuTilesContainer);
     this.container.addChild(this.messages.pokemon);
     this.container.addChild(this.messages.pikachuVolleyball);
     this.container.addChild(this.messages.withComputer);
     this.container.addChild(this.messages.withFriend);
+    this.container.addChild(this.messages.sachisoft);
     this.container.addChild(this.messages.fight);
 
+    this.sittingPikachuTilesDisplacement = 0;
     this.fightMessageSizeInfo = 0;
     this.fightMessageEnlarged = false;
 
@@ -88,8 +96,31 @@ export class MenuView {
     this.container.visible = bool;
   }
 
-  // refer FUN_00405d50
-  moveFightMessage(frameCounter) {
+  // refered FUN_00405ca0
+  showSittingPikachuTiles(frameCounter) {
+    if (frameCounter === 0) {
+      this.sittingPikachuTilesContainer.visible = true;
+      this.sittingPikachuTilesContainer.alpha = 0;
+    }
+
+    // movement
+    const h = this.sittingPikachuTilesContainer.getChildAt(0).texture.height;
+    this.sittingPikachuTilesDisplacement =
+      (this.sittingPikachuTilesDisplacement + 2) % h;
+    this.sittingPikachuTilesContainer.x = -this.sittingPikachuTilesDisplacement;
+    this.sittingPikachuTilesContainer.y = -this.sittingPikachuTilesDisplacement;
+
+    if (frameCounter > 30) {
+      // alpha
+      this.sittingPikachuTilesContainer.alpha = Math.min(
+        1,
+        this.sittingPikachuTilesContainer.alpha + 0.04
+      );
+    }
+  }
+
+  // refered FUN_00405d50
+  showFightMessage(frameCounter) {
     const sizeArray = [20, 22, 25, 27, 30, 27, 25, 22, 20];
     const fightMessage = this.messages.fight;
     const w = fightMessage.texture.width;
@@ -97,48 +128,38 @@ export class MenuView {
 
     if (frameCounter === 0) {
       fightMessage.visible = true;
-      this.fightMessageSizeInfo = 0;
-      this.fightMessageEnlarged = false;
     }
 
-    if (this.fightMessageEnlarged === false) {
-      this.fightMessageSizeInfo += 1;
-
-      const halfWidth = Math.floor(
-        Math.floor((this.fightMessageSizeInfo * w) / 30) / 2
-      );
-      const halfHeight = Math.floor(
-        Math.floor((this.fightMessageSizeInfo * h) / 30) / 2
-      );
+    if (frameCounter < 30) {
+      const halfWidth = Math.floor(Math.floor((frameCounter * w) / 30) / 2);
+      const halfHeight = Math.floor(Math.floor((frameCounter * h) / 30) / 2);
       fightMessage.width = halfWidth * 2; // width
       fightMessage.height = halfHeight * 2; // height
       fightMessage.x = 100 - halfWidth; // x coor
       fightMessage.y = 70 - halfHeight; // y coord
-
-      //// iVar3 = code ??
-      // FUN_00409690
-      if (this.fightMessageSizeInfo > 29) {
-        this.fightMessageEnlarged = true;
-        // FUN_00408ee0
-        //param_1[0x1d] = 200;
-        return;
-      }
     } else {
-      this.fightMessageSizeInfo = (this.fightMessageSizeInfo + 1) % 9;
+      const index = (frameCounter + 1) % 9;
       // code ...
-      const halfWidth = Math.floor(
-        Math.floor((sizeArray[this.fightMessageSizeInfo] * w) / 30) / 2
-      );
+      const halfWidth = Math.floor(Math.floor((sizeArray[index] * w) / 30) / 2);
       const halfHeight = Math.floor(
-        Math.floor((sizeArray[this.fightMessageSizeInfo] * h) / 30) / 2
+        Math.floor((sizeArray[index] * h) / 30) / 2
       );
       fightMessage.width = halfWidth * 2; // width
       fightMessage.height = halfHeight * 2; // heigth
       fightMessage.y = 70 - halfHeight; // y coord
       fightMessage.x = 100 - halfWidth; // x coord
-      //iVar3 = code ??
-      // FUN_00409690
     }
+  }
+
+  showSachisoft(frameCounter) {
+    if (frameCounter === 0) {
+      this.messages.sachisoft.visible = true;
+      this.messages.sachisoft.alpha = 0;
+    }
+    this.messages.sachisoft.alpha = Math.min(
+      1,
+      this.messages.sachisoft.alpha + 0.04
+    );
   }
 }
 
@@ -196,8 +217,6 @@ export class GameView {
     // Should be careful on addChild order
     // The later added, the more front(z-index) on screen
     this.container = new Container();
-    this.container.x = 0;
-    this.container.y = 0;
     this.container.addChild(this.bgContainer);
     this.container.addChild(this.cloudContainer);
     this.container.addChild(this.waveContainer);
@@ -449,6 +468,24 @@ export class FadeInOut {
   }
 }
 
+// make sitting pikachu tiles for menu
+function makeSittingPikachuTilesContainer(textures) {
+  const container = new Container();
+  const texture = textures[PATH.SITTING_PIKACHU];
+  const w = texture.width;
+  const h = texture.height;
+
+  let tile;
+  for (let j = 0; j < Math.floor(304 / h) + 2; j++) {
+    for (let i = 0; i < Math.floor(432 / w) + 2; i++) {
+      tile = new Sprite(texture);
+      addChildToParentAndSetLocalPosition(container, tile, w * i, h * j);
+    }
+  }
+
+  return container;
+}
+
 // make background
 // return: Container object that has objects in the backgournd as children
 function makeBGContainer(textures) {
@@ -650,5 +687,60 @@ function getFrameNumberForPlayerAnimatedSprite(state, frameNumber) {
     return 17 + frameNumber;
   } else if (state > 4) {
     return 18 + 5 * (state - 5) + frameNumber;
+  }
+}
+
+function FUN_00405b70(param_1) {
+  piVar3 = param_1[0x1b];
+  if (piVar3 === 1) {
+    piVar3 = param_1[0x1d];
+    iVar5 = 0;
+    iVar4 = 80;
+    param_1[0x1d] -= 15;
+    iVar1 = piVar3 + 125;
+    // iVar2 = code func
+    FUN_00409480();
+    if (param_1[0x1d] < 0) {
+      param_1[0x1b] = 2;
+      param_1[0x1d] = 200;
+      return;
+    }
+  } else if (piVar3 === 2) {
+    iVar1 = param_1[2];
+    param_1[0x1d] -= 15;
+    // code fun
+    iVar5 = 0;
+    piVar3 = param_1[0x1d];
+    iVar4 = 80;
+    iVar2 = 140;
+    //iVar1 = code func
+    FUN_00409690();
+    if (param_1[0x1d] < 50) {
+      param_1[0x1d] = 40;
+      param_1[0x1b] = 3;
+      return;
+    }
+  } else if (piVar3 === 3) {
+    iVar1 = param_1[2];
+    param_1[0x1d] += 15;
+    // code fun
+    iVar5 = 0;
+    piVar3 = param_1[0x1d];
+    iVar4 = 80;
+    iVar2 = 140;
+    //iVar1 = code func
+    //????
+    // if ???
+    ///
+  } else if (piVar3 > 3) {
+    iVar5 = 0;
+    iVar4 = 80;
+    iVar2 = 140;
+    //iVar1 = code func
+    FUN_00409480();
+    iVar5 = 0;
+    iVar4 = 40;
+    iVar2 = 170;
+    FUN_00409480();
   }
 }
