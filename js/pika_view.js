@@ -472,6 +472,24 @@ export class GameView {
     }
   }
 
+  // scores: array with length 2
+  // scores[0] for player1 score, scores[1] for player2 score
+  showScoreToScoreBoard(scores) {
+    for (let i = 0; i < 2; i++) {
+      const scoreBoard = this.scoreBoards[i];
+      const score = scores[i];
+      const unitsAnimatedSprite = scoreBoard.getChildAt(0);
+      const tensAnimatedSprite = scoreBoard.getChildAt(1);
+      unitsAnimatedSprite.gotoAndStop(score % 10);
+      tensAnimatedSprite.gotoAndStop(Math.floor(score / 10) % 10);
+      if (score >= 10) {
+        tensAnimatedSprite.visible = true;
+      } else {
+        tensAnimatedSprite.visible = false;
+      }
+    }
+  }
+
   // this funtion corresponds to FUN_00404770 in origianl machine (assembly) code
   drawCloudsAndWave() {
     const cloudArray = this.cloudArray;
@@ -546,24 +564,6 @@ export class GameView {
       gameEndMessage.y = 50;
       gameEndMessage.width = w;
       gameEndMessage.height = h;
-    }
-  }
-
-  // scores: array with length 2
-  // scores[0] for player1 score, scores[1] for player2 score
-  showScoreToScoreBoard(scores) {
-    for (let i = 0; i < 2; i++) {
-      const scoreBoard = this.scoreBoards[i];
-      const score = scores[i];
-      const unitsAnimatedSprite = scoreBoard.getChildAt(0);
-      const tensAnimatedSprite = scoreBoard.getChildAt(1);
-      unitsAnimatedSprite.gotoAndStop(score % 10);
-      tensAnimatedSprite.gotoAndStop(Math.floor(score / 10) % 10);
-      if (score >= 10) {
-        tensAnimatedSprite.visible = true;
-      } else {
-        tensAnimatedSprite.visible = false;
-      }
     }
   }
 }
