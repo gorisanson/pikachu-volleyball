@@ -7,11 +7,7 @@ PIXI.settings.RESOLUTION = window.devicePixelRatio;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 PIXI.settings.ROUND_PIXELS = true;
 
-// Aliases
-const Application = PIXI.Application;
-const Loader = PIXI.Loader;
-
-const app = new Application({
+const renderer = new PIXI.autoDetectRenderer({
   width: 432,
   height: 304,
   autoDensity: true,
@@ -19,12 +15,21 @@ const app = new Application({
   backgroundColor: 0x000000,
   transparent: false
 });
-document.body.appendChild(app.view);
-Loader.shared.add("assets/sprite_sheet.json").load(setup);
+const stage = new PIXI.Container();
+const loader = new PIXI.Loader();
+const ticker = new PIXI.Ticker();
+
+ticker.add(() => {
+  renderer.render(stage);
+}, PIXI.UPDATE_PRIORITY.LOW);
+ticker.start();
+
+document.body.appendChild(renderer.view);
+loader.add("assets/sprite_sheet.json").load(setup);
 
 function setup() {
-  const textures = Loader.shared.resources["assets/sprite_sheet.json"].textures;
-  const pikaVolley = new PikachuVolleyball(app, textures);
+  const textures = loader.resources["assets/sprite_sheet.json"].textures;
+  const pikaVolley = new PikachuVolleyball(stage, textures);
 
   // adjust audio setting
   const audio = pikaVolley.audio;
@@ -34,10 +39,12 @@ function setup() {
   }
 
   pikaVolley.state = pikaVolley.menu;
-  app.view.addEventListener("click", () => start(pikaVolley), { once: true });
+  renderer.view.addEventListener("click", () => start(pikaVolley), {
+    once: true
+  });
 }
 
 function start(pikaVolley) {
-  app.ticker.maxFPS = pikaVolley.normalFPS;
-  app.ticker.add(delta => pikaVolley.gameLoop(delta));
+  ticker.maxFPS = pikaVolley.normalFPS;
+  ticker.add(delta => pikaVolley.gameLoop(delta));
 }

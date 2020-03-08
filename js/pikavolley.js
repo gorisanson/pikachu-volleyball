@@ -4,17 +4,17 @@ import { PikaAudio } from "./pika_audio.js";
 import { MenuView, GameView, FadeInOut } from "./pika_view.js";
 
 export class PikachuVolleyball {
-  // pixiApp: PIXI.Application object
-  // textures: Loader.shared.resources["assets/sprite_sheet.json"].textures
-  constructor(pixiApp, textures) {
+  // stage: PIXI.Container object which is rendered by PIXI.Renderer or PIXI.CanvasRenderer
+  // textures: loader.resources["assets/sprite_sheet.json"].textures
+  constructor(stage, textures) {
     this.view = {
       menu: new MenuView(textures),
       game: new GameView(textures),
       fadeInOut: new FadeInOut()
     };
-    pixiApp.stage.addChild(this.view.menu.container);
-    pixiApp.stage.addChild(this.view.game.container);
-    pixiApp.stage.addChild(this.view.fadeInOut.black);
+    stage.addChild(this.view.menu.container);
+    stage.addChild(this.view.game.container);
+    stage.addChild(this.view.fadeInOut.black);
     this.view.menu.visible = false;
     this.view.game.visible = false;
     this.view.fadeInOut.visible = true;
