@@ -300,20 +300,27 @@ export class PikachuVolleyball {
   }
 
   playSoundEffect() {
-    const sound = this.physics.sound;
     const audio = this.audio;
-    if (sound.pipikachu === true) {
-      audio.pipikachu.play();
-      sound.pipikachu = false;
+    for (let i = 0; i < 2; i++) {
+      const player = this.physics[`player${i + 1}`];
+      const sound = player.sound;
+      //const pan = 0;
+      if (sound.pipikachu === true) {
+        audio.pipikachu.play();
+        sound.pipikachu = false;
+      }
+      if (sound.pika === true) {
+        audio.pika.play();
+        sound.pika = false;
+      }
+      if (sound.chu === true) {
+        audio.chu.play();
+        sound.chu = false;
+      }
     }
-    if (sound.pika === true) {
-      audio.pika.play();
-      sound.pika = false;
-    }
-    if (sound.chu === true) {
-      audio.chu.play();
-      sound.chu = false;
-    }
+    const ball = this.physics.ball;
+    const sound = ball.sound;
+    //const pan = 0;
     if (sound.powerHit === true) {
       audio.powerHit.play();
       sound.powerHit = false;

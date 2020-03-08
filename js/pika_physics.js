@@ -26,7 +26,6 @@ export class PikaPhysics {
     this.player1 = new Player(false, isComputer1);
     this.player2 = new Player(true, isComputer2);
     this.ball = new Ball();
-    this.sound = new Sound();
   }
 
   initializeForNewRound(isPlayer2Serve) {
@@ -40,7 +39,6 @@ export class PikaPhysics {
       this.player1,
       this.player2,
       this.ball,
-      this.sound,
       keyboardArray
     );
     return isBallTouchingGournd;
@@ -65,6 +63,17 @@ class Player {
     // If it is 0, computer player stands by around the middle point of their side.
     // If it is 1, computer player stands by adjecent to the net.
     this.computerWhereToStandBy = 0; // 0xDC
+
+    // this property is not in the player pointers of the original source code.
+    // TODO:
+    // But for sound effect (especially for stereo sound(it is TODO, not implemented)),
+    // it is convinient way to give sound property to a Player.
+    // The original name is stereo sound.
+    this.sound = {
+      pipikachu: false,
+      pika: false,
+      chu: false
+    };
   }
 
   // properties that are initialized per round in here
@@ -114,6 +123,16 @@ class Ball {
     this.previousPreviousX = 0; // 0x5c
     this.previousY = 0; // 0x60
     this.previousPreviousY = 0; // 0x64
+
+    // this property is not in the ball pointer of the original source code.
+    // TODO:
+    // But for sound effect (especially for stereo sound(it is TODO, not implemented)),
+    // it is convinient way to give sound property to a Ball.
+    // The original name is stereo sound.
+    this.sound = {
+      powerHit: false,
+      ballTouchesGround: false
+    };
   }
 
   initializeForNewRound(isPlayer2Serve) {
@@ -129,25 +148,12 @@ class Ball {
   }
 }
 
-class Sound {
-  constructor() {
-    this.pipikachu = false;
-    this.pika = false;
-    this.chu = false;
-    this.pi = false;
-    this.pikachu = false;
-    this.powerHit = false;
-    this.ballTouchesGround = false;
-  }
-}
-
 // This is the Pikachu Volleyball physics engine!
 // This physics engine calculates and set the physics values for the next frame.
 // FUN_00403dd0
-function physicsEngine(player1, player2, ball, sound, keyboardArray) {
+function physicsEngine(player1, player2, ball, keyboardArray) {
   const isBallTouchingGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
-    ball,
-    sound
+    ball
   );
 
   let player, theOtherPlayer;
@@ -169,7 +175,6 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
 
     processPlayerMovementAndSetPlayerPosition(
       player,
-      sound,
       keyboardArray[i],
       theOtherPlayer,
       ball
@@ -198,7 +203,6 @@ function physicsEngine(player1, player2, ball, sound, keyboardArray) {
       if (player.isCollisionWithBallHappened === false) {
         processCollisionBetweenBallAndPlayer(
           ball,
-          sound,
           player.x,
           keyboardArray[i],
           player.state
@@ -230,8 +234,7 @@ function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
 }
 
 // FUN_00402dc0
-// "sound" parameter is not in the original machine (assembly) code
-function processCollisionBetweenBallAndWorldAndSetBallPosition(ball, sound) {
+function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   let futureFineRotation = ball.fineRotation + ball.xVelocity / 2;
   // If futureFineRotation === 50, it skips next if statement finely.
   // Then ball.fineRoation = 50, and then ball.rotation = 5 (which designates hyperball sprite!).
@@ -288,7 +291,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball, sound) {
     // i.e. horizontal displacement from net maybe for stereo sound?
     // code function (ballpointer + 0x28 + 0x10)? omitted
     // the omitted two functions maybe do a part of sound playback role.
-    sound.ballTouchesGround = true;
+    ball.sound.ballTouchesGround = true;
 
     ball.yVelocity = -ball.yVelocity;
     ball.punchEffectX = ball.x;
@@ -316,10 +319,8 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball, sound) {
 // param1_array maybe keyboard (if param_1[1] === -1, up_key downed)
 // param1[0] === -1: left key downed, param1[0] === 1: right key downed.
 // param1[0] === 0: left/right key not downed.
-// "sound" parameter is not in the original machine (assembly) code
 function processPlayerMovementAndSetPlayerPosition(
   player,
-  sound,
   keyboard,
   theOtherPlayer,
   ball
@@ -384,7 +385,7 @@ function processPlayerMovementAndSetPlayerPosition(
     // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
     // refer a detailed comment above about this function
     // maybe-sound code function (playerpointer + 0x90 + 0x10)? ommited
-    sound.chu = true;
+    player.sound.chu = true;
   }
 
   // gravity
@@ -418,7 +419,7 @@ function processPlayerMovementAndSetPlayerPosition(
       // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
       // refer a detailed comment above about this function
       // maybe-sound function (playerpointer + 0x90 + 0x14)? ommited
-      sound.pika = true;
+      player.sound.pika = true;
     } else if (player.state === 0 && keyboard.xDirection !== 0) {
       // then player do diving!
       player.state = 3;
@@ -428,7 +429,7 @@ function processPlayerMovementAndSetPlayerPosition(
       // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
       // refer a detailed comment above about this function
       // maybe-sound code function (playerpointer + 0x90 + 0x10)? ommited
-      sound.chu = true;
+      player.sound.chu = true;
     }
   }
 
@@ -465,7 +466,7 @@ function processPlayerMovementAndSetPlayerPosition(
         // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
         // refer a detailed comment above about this function
         // maybe-sound code function (0x98 + 0x10) ommited
-        sound.pipikachu = true;
+        player.sound.pipikachu = true;
       } else {
         player.state = 6;
       }
@@ -491,12 +492,10 @@ function processGameEndFrameFor(player) {
 }
 
 // FUN_004030a0
-// "sound" parameter is not in the original machine (assembly) code.
 // "playerY" parameter is in the origianl machine (assembly) code
-// but not used in this function.
+// but not used in this function. So omitted it.
 function processCollisionBetweenBallAndPlayer(
   ball,
-  sound,
   playerX,
   keyboard,
   playerState
@@ -540,7 +539,7 @@ function processCollisionBetweenBallAndPlayer(
     // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
     // refer a detailed comment above about this function
     // maybe-soundcode function (ballpointer + 0x24 + 0x10) ommited:
-    sound.powerHit = true;
+    ball.sound.powerHit = true;
 
     ball.isPowerHit = true;
   } else {
