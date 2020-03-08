@@ -43,11 +43,11 @@ function setup() {
   for (const p in audio) {
     audio[p].volume = 0.3;
   }
-
   pikaVolley.state = pikaVolley.menu;
-  renderer.view.addEventListener("click", () => start(pikaVolley), {
-    once: true
-  });
+  // renderer.view.addEventListener("click", () => start(pikaVolley), {
+  //   once: true
+  // });
+  start(pikaVolley);
 }
 
 function start(pikaVolley) {
