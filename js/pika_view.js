@@ -45,9 +45,44 @@ PATH.FIGHT = "messages/ko/fight.png";
 PATH.WITH_COMPUTER = "messages/ko/with_computer.png";
 PATH.WITH_FRIEND = "messages/ko/with_friend.png";
 
-PATH.SACHISOFT = "messages/common/sachisoft.png";
 PATH.MARK = "messages/ko/mark.png";
+PATH.SACHISOFT = "messages/common/sachisoft.png";
 PATH.SITTING_PIKACHU = "pikachu_sitting.png";
+
+export class IntroView {
+  constructor(resources) {
+    const textures = resources[SPRITE_SHEET_PATH].textures;
+
+    this.mark = makeSpriteWithAnchorXY(textures, PATH.MARK, 0.5, 0.5);
+    this.mark.x = 432 / 2;
+    this.mark.y = 304 / 2;
+
+    this.container = new Container();
+    this.container.addChild(this.mark);
+  }
+
+  get visible() {
+    return this.container.visible;
+  }
+
+  set visible(bool) {
+    this.container.visible = bool;
+  }
+
+  showMark(frameCounter) {
+    const mark = this.mark;
+    if (frameCounter === 0) {
+      mark.visible = true;
+      mark.alpha = 0;
+      return;
+    }
+    if (frameCounter < 100) {
+      mark.alpha = Math.min(1, mark.alpha + 1 / 25);
+    } else if (frameCounter >= 100) {
+      mark.alpha = Math.max(0, mark.alpha - 1 / 25);
+    }
+  }
+}
 
 export class MenuView {
   constructor(resources) {

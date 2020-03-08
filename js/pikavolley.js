@@ -1,23 +1,26 @@
 import { PikaKeyboard } from "./pika_keyboard.js";
 import { PikaPhysics } from "./pika_physics.js";
 import { PikaAudio } from "./pika_audio.js";
-import { MenuView, GameView, FadeInOut } from "./pika_view.js";
+import { MenuView, GameView, FadeInOut, IntroView } from "./pika_view.js";
 
 export class PikachuVolleyball {
   // stage: PIXI.Container object which is rendered by PIXI.Renderer or PIXI.CanvasRenderer
   // resources: resources property of the PIXI.Loader object which is used for loading the game resources
   constructor(stage, resources) {
     this.view = {
+      intro: new IntroView(resources),
       menu: new MenuView(resources),
       game: new GameView(resources),
       fadeInOut: new FadeInOut()
     };
+    stage.addChild(this.view.intro.container);
     stage.addChild(this.view.menu.container);
     stage.addChild(this.view.game.container);
     stage.addChild(this.view.fadeInOut.black);
+    this.view.intro.visible = false;
     this.view.menu.visible = false;
     this.view.game.visible = false;
-    this.view.fadeInOut.visible = true;
+    this.view.fadeInOut.visible = false;
 
     //this.sprites = pikaSprites;
     this.audio = new PikaAudio(resources);
@@ -32,7 +35,6 @@ export class PikachuVolleyball {
         "Enter"
       )
     ];
-    this.state = null;
 
     this.normalFPS = 25;
     this.slowMotionFPS = 5;
@@ -52,6 +54,7 @@ export class PikachuVolleyball {
 
     this.frameCounter = 0;
     this.frameTotal = {
+      intro: 165,
       afterMenuSelection: 15,
       beforeStartOfNewGame: 15,
       startOfNewGame: 71,
@@ -59,6 +62,8 @@ export class PikachuVolleyball {
       beforeStartOfNextRound: 30,
       gameEnd: 211
     };
+
+    this.state = this.intro;
   }
 
   gameLoop() {
@@ -78,20 +83,46 @@ export class PikachuVolleyball {
     }
   }
 
+  intro() {
+    if (this.frameCounter === 0) {
+      this.view.intro.visible = true;
+      this.view.fadeInOut.setBlackAlphaTo(0);
+    }
+    this.view.intro.showMark(this.frameCounter);
+    this.frameCounter++;
+
+    const keyboardArray = this.keyboardArray;
+    keyboardArray[0].updateProperties();
+    keyboardArray[1].updateProperties();
+    if (
+      this.keyboardArray[0].powerHit === 1 ||
+      this.keyboardArray[1].powerHit === 1
+    ) {
+      this.frameCounter = 0;
+      this.view.intro.visible = false;
+      this.state = this.menu;
+    }
+
+    if (this.frameCounter >= this.frameTotal.intro) {
+      this.frameCounter = 0;
+      this.view.intro.visible = false;
+      this.state = this.menu;
+    }
+  }
+
   menu() {
-    this.view.menu.visible = true;
-    this.view.fadeInOut.setBlackAlphaTo(0);
+    if (this.frameCounter === 0) {
+      this.view.menu.visible = true;
+      this.view.fadeInOut.setBlackAlphaTo(0);
+      this.selectedWithWho = 0;
+      this.view.menu.selectWithWho(this.selectedWithWho);
+    }
     this.view.menu.showFightMessage(this.frameCounter);
     this.view.menu.showSachisoft(this.frameCounter);
     this.view.menu.showSittingPikachuTiles(this.frameCounter);
     this.view.menu.showPikachuVolleyballMessage(this.frameCounter);
     this.view.menu.showPokemonMessage(this.frameCounter);
     this.view.menu.showWithWhoMessages(this.frameCounter);
-
-    if (this.frameCounter === 0) {
-      this.selectedWithWho = 0;
-      this.view.menu.selectWithWho(this.selectedWithWho);
-    }
     this.frameCounter++;
 
     const keyboardArray = this.keyboardArray;
