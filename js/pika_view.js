@@ -72,7 +72,6 @@ export class IntroView {
   showMark(frameCounter) {
     const mark = this.mark;
     if (frameCounter === 0) {
-      mark.visible = true;
       mark.alpha = 0;
       return;
     }
@@ -125,14 +124,11 @@ export class MenuView {
     this.container.addChild(this.messages.withWho[1]);
     this.container.addChild(this.messages.sachisoft);
     this.container.addChild(this.messages.fight);
+    this.initializeVisibles();
 
     this.sittingPikachuTilesDisplacement = 0;
     this.selectedWithWho = -1; // 0: with computer, 1: with friend, -1: not selected
     this.selectedWithWhoMessageSizeIncrement = 2;
-
-    for (const prop in this.messages) {
-      this.messages[prop].visible = false;
-    }
   }
 
   get visible() {
@@ -141,6 +137,17 @@ export class MenuView {
 
   set visible(bool) {
     this.container.visible = bool;
+
+    // when turn off view
+    if (bool === false) {
+      this.initializeVisibles();
+    }
+  }
+
+  initializeVisibles() {
+    for (const prop in this.messages) {
+      this.messages[prop].visible = false;
+    }
   }
 
   // refered FUN_00405d50
@@ -379,13 +386,7 @@ export class GameView {
     this.shadows.forPlayer2.y = 272;
     this.shadows.forBall.y = 272;
 
-    this.ballHyper.visible = false;
-    this.ballTrail.visible = false;
-    this.punch.visible = false;
-
-    for (const prop in this.messages) {
-      this.messages[prop].visible = false;
-    }
+    this.initializeVisibles();
 
     // clouds and wave model.
     // This model is included in this view object, not on controller object
@@ -403,6 +404,17 @@ export class GameView {
 
   set visible(bool) {
     this.container.visible = bool;
+
+    // when turn off view
+    if (bool === false) {
+      this.initializeVisibles();
+    }
+  }
+
+  initializeVisibles() {
+    for (const prop in this.messages) {
+      this.messages[prop].visible = false;
+    }
   }
 
   // physics: PikaPhysics object
@@ -512,7 +524,7 @@ export class GameView {
   }
 
   // refered FUN_00404070
-  drawGameEndMessageForFrameNo(frameCounter, frameTotal) {
+  drawGameEndMessageForFrameNo(frameCounter) {
     const gameEndMessage = this.messages.gameEnd;
     const w = gameEndMessage.texture.width; // game end message texture width;
     const h = gameEndMessage.texture.height; // game end message texture height;
@@ -534,9 +546,6 @@ export class GameView {
       gameEndMessage.y = 50;
       gameEndMessage.width = w;
       gameEndMessage.height = h;
-    }
-    if (frameCounter >= frameTotal - 1) {
-      gameEndMessage.visible = false;
     }
   }
 

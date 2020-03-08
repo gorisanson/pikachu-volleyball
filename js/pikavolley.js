@@ -46,7 +46,7 @@ export class PikachuVolleyball {
     this.selectedWithWho = 0; // 0: with computer, 1: with friend
 
     this.scores = [0, 0]; // scores[0] for player1, scores[1] for player2
-    this.goalScore = 15;
+    this.goalScore = 1;
 
     this.gameEnded = false;
     this.roundEnded = false;
@@ -258,10 +258,7 @@ export class PikachuVolleyball {
     this.view.game.drawCloudsAndWave();
 
     if (this.gameEnded === true) {
-      this.view.game.drawGameEndMessageForFrameNo(
-        this.frameCounter,
-        this.frameTotal.gameEnd
-      );
+      this.view.game.drawGameEndMessageForFrameNo(this.frameCounter);
       this.frameCounter++;
       if (this.frameCounter >= this.frameTotal.gameEnd) {
         this.frameCounter = 0;
