@@ -52,6 +52,7 @@ export class PikachuVolleyball {
 
     this.frameCounter = 0;
     this.frameTotal = {
+      afterMenuSelection: 15,
       startOfNewGame: 71,
       afterEndOfRound: 5,
       beforeStartOfNextRound: 30,
@@ -147,6 +148,16 @@ export class PikachuVolleyball {
           this.physics.player2.isComputer = false;
         }
       }
+      this.audio.pikachu.play();
+      this.frameCounter = 0;
+      this.state = this.afterMenuSelection;
+    }
+  }
+
+  afterMenuSelection() {
+    this.view.fadeInOut.changeBlackAlphaBy(1 / 16);
+    this.frameCounter++;
+    if (this.frameCounter >= this.frameTotal.afterMenuSelection) {
       this.frameCounter = 0;
       this.view.menu.visible = false;
       this.state = this.startOfNewGame;
@@ -174,7 +185,8 @@ export class PikachuVolleyball {
       this.view.game.drawPlayerAndBall(this.physics);
 
       this.view.fadeInOut.setBlackAlphaTo(1); // set black screen
-
+    }
+    if (this.frameCounter === 1) {
       this.audio.bgm.play();
     }
 
