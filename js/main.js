@@ -2,6 +2,8 @@
 
 //import * as PIXI from "./pixi/pixi.min.js"; // not working..
 import { PikachuVolleyball } from "./pikavolley.js";
+import { SPRITE_SHEET_PATH } from "./pika_view.js";
+import { PATH as AUDIO_PATH } from "./pika_audio.js";
 
 PIXI.settings.RESOLUTION = window.devicePixelRatio;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
@@ -16,20 +18,24 @@ const renderer = new PIXI.autoDetectRenderer({
   transparent: false
 });
 const stage = new PIXI.Container();
-const loader = new PIXI.Loader();
 const ticker = new PIXI.Ticker();
+const loader = new PIXI.Loader();
+
+document.body.appendChild(renderer.view);
 
 ticker.add(() => {
   renderer.render(stage);
 }, PIXI.UPDATE_PRIORITY.LOW);
 ticker.start();
 
-document.body.appendChild(renderer.view);
-loader.add("assets/sprite_sheet.json").load(setup);
+loader.add(SPRITE_SHEET_PATH);
+for (const prop in AUDIO_PATH) {
+  loader.add(AUDIO_PATH[prop]);
+}
+loader.load(setup);
 
 function setup() {
-  const textures = loader.resources["assets/sprite_sheet.json"].textures;
-  const pikaVolley = new PikachuVolleyball(stage, textures);
+  const pikaVolley = new PikachuVolleyball(stage, loader.resources);
 
   // adjust audio setting
   const audio = pikaVolley.audio;

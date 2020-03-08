@@ -2,10 +2,13 @@
 
 import { Cloud, Wave, cloudAndWaveEngine } from "./pika_cloud_and_wave.js";
 
+// Aliases // TODO: use "import {} from PIXI" instead
 const Container = PIXI.Container;
 const Sprite = PIXI.Sprite;
 const AnimatedSprite = PIXI.AnimatedSprite;
 const Graphics = PIXI.Graphics;
+
+export const SPRITE_SHEET_PATH = "assets/sprite_sheet.json";
 
 // TODO: this should be removed.. later..
 const NUM_OF_CLOUDS = 10;
@@ -47,8 +50,9 @@ PATH.MARK = "messages/ko/mark.png";
 PATH.SITTING_PIKACHU = "pikachu_sitting.png";
 
 export class MenuView {
-  constructor(textures) {
-    // this.sittingPikachu = ??
+  constructor(resources) {
+    const textures = resources[SPRITE_SHEET_PATH].textures;
+
     this.messages = {
       pokemon: makeSpriteWithAnchorXY(textures, PATH.POKEMON, 0, 0),
       pikachuVolleyball: makeSpriteWithAnchorXY(
@@ -257,15 +261,8 @@ export class MenuView {
 }
 
 export class GameView {
-  constructor(textures) {
-    // clouds and wave model.
-    // This model is included in this view object, not on controller object
-    // since it is not dependent on user input, and only used for rendering.
-    this.cloudArray = [];
-    for (let i = 0; i < NUM_OF_CLOUDS; i++) {
-      this.cloudArray.push(new Cloud());
-    }
-    this.wave = new Wave();
+  constructor(resources) {
+    const textures = resources[SPRITE_SHEET_PATH].textures;
 
     // Display objects below
     this.bgContainer = makeBGContainer(textures);
@@ -354,6 +351,15 @@ export class GameView {
     for (const prop in this.messages) {
       this.messages[prop].visible = false;
     }
+
+    // clouds and wave model.
+    // This model is included in this view object, not on controller object
+    // since it is not dependent on user input, and only used for rendering.
+    this.cloudArray = [];
+    for (let i = 0; i < NUM_OF_CLOUDS; i++) {
+      this.cloudArray.push(new Cloud());
+    }
+    this.wave = new Wave();
   }
 
   get visible() {

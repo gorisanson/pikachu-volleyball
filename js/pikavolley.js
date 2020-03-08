@@ -5,11 +5,11 @@ import { MenuView, GameView, FadeInOut } from "./pika_view.js";
 
 export class PikachuVolleyball {
   // stage: PIXI.Container object which is rendered by PIXI.Renderer or PIXI.CanvasRenderer
-  // textures: loader.resources["assets/sprite_sheet.json"].textures
-  constructor(stage, textures) {
+  // resources: resources property of the PIXI.Loader object which is used for loading the game resources
+  constructor(stage, resources) {
     this.view = {
-      menu: new MenuView(textures),
-      game: new GameView(textures),
+      menu: new MenuView(resources),
+      game: new GameView(resources),
       fadeInOut: new FadeInOut()
     };
     stage.addChild(this.view.menu.container);
@@ -20,7 +20,7 @@ export class PikachuVolleyball {
     this.view.fadeInOut.visible = true;
 
     //this.sprites = pikaSprites;
-    this.audio = new PikaAudio();
+    this.audio = new PikaAudio(resources);
     this.physics = new PikaPhysics(true, false);
     this.keyboardArray = [
       new PikaKeyboard("d", "g", "r", "f", "z"), // for player1
@@ -114,12 +114,12 @@ export class PikachuVolleyball {
     ) {
       this.selectedWithWho = 0;
       this.view.menu.selectWithWho(this.selectedWithWho);
-      // this.audio.pi.play();
+      this.audio.pi.play();
       // If I use the normal code above...
       // When I fastly alternate between up arrow and down arrow key,
       // the "pi" sound does not respond to it. But the original game does it.
       // So I use this below code since I love the "pipipipi~" sound.
-      new Audio("assets/WAVE143_1.wav").play();
+      //new Audio("assets/WAVE143_1.wav").play();
     } else if (
       (keyboardArray[0].yDirection === 1 ||
         keyboardArray[1].yDirection === 1) &&
@@ -127,10 +127,9 @@ export class PikachuVolleyball {
     ) {
       this.selectedWithWho = 1;
       this.view.menu.selectWithWho(this.selectedWithWho);
-      this.audio.pi.pause();
-      // this.audio.pi.play();
+      this.audio.pi.play();
       // refer the comment above
-      new Audio("assets/WAVE143_1.wav").play();
+      //new Audio("assets/WAVE143_1.wav").play();
     }
     if (
       this.keyboardArray[0].powerHit === 1 ||
