@@ -2,8 +2,8 @@
  *  X width: 432 = 0x1B0
  *  Y width: 304 = 0x130
  *
- *  X position coord right-direction increasing
- *  Y position coord down-direction increasing
+ *  X position coord: [0, 432], right-direction increasing
+ *  Y position coord: [0, 304], down-direction increasing
  *
  *  Ball radius: 20 = 0x14
  *  Ball diameter: 40 = 0x28
