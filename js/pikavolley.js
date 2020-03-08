@@ -261,7 +261,12 @@ export class PikachuVolleyball {
     if (this.gameEnded === true) {
       this.view.game.drawGameEndMessageForFrameNo(this.frameCounter);
       this.frameCounter++;
-      if (this.frameCounter >= this.frameTotal.gameEnd) {
+      if (
+        this.frameCounter >= this.frameTotal.gameEnd ||
+        (this.frameCounter >= 70 &&
+          (this.keyboardArray[0].powerHit === 1 ||
+            this.keyboardArray[1].powerHit === 1))
+      ) {
         this.frameCounter = 0;
         this.view.game.visible = false;
         this.state = this.intro;
