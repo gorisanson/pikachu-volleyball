@@ -46,7 +46,7 @@ export class PikachuVolleyball {
     this.selectedWithWho = 0; // 0: with computer, 1: with friend
 
     this.scores = [0, 0]; // scores[0] for player1, scores[1] for player2
-    this.goalScore = 1;
+    this.goalScore = 15;
 
     this.gameEnded = false;
     this.roundEnded = false;
@@ -87,6 +87,7 @@ export class PikachuVolleyball {
     if (this.frameCounter === 0) {
       this.view.intro.visible = true;
       this.view.fadeInOut.setBlackAlphaTo(0);
+      this.audio.bgm.stop();
     }
     this.view.intro.showMark(this.frameCounter);
     this.frameCounter++;
@@ -263,7 +264,7 @@ export class PikachuVolleyball {
       if (this.frameCounter >= this.frameTotal.gameEnd) {
         this.frameCounter = 0;
         this.view.game.visible = false;
-        this.state = this.menu;
+        this.state = this.intro;
       }
       return;
     }
