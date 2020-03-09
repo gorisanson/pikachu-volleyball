@@ -1,13 +1,6 @@
 "use strict";
-import * as PIXI from "pixi.js";
-
+import { Container, Sprite, AnimatedSprite, Graphics } from "pixi.js";
 import { Cloud, Wave, cloudAndWaveEngine } from "./pika_cloud_and_wave.js";
-
-// Aliases // TODO: use "import {} from PIXI" instead
-const Container = PIXI.Container;
-const Sprite = PIXI.Sprite;
-const AnimatedSprite = PIXI.AnimatedSprite;
-const Graphics = PIXI.Graphics;
 
 export const SPRITE_SHEET_PATH = "assets/sprite_sheet.json";
 
