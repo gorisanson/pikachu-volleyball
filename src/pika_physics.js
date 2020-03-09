@@ -21,19 +21,40 @@
 "use strict";
 import { rand } from "./rand.js";
 
+/** @typedef {import("./pika_keyboard")} PikaKeyboard */
+
+/**
+ * Class representing a pack of physical objects i.e. players and ball
+ * whose physical values are calculated and set by {@link physicsEngine} function
+ */
 export class PikaPhysics {
+  /**
+   * Create a physics pack
+   * @param {boolean} isComputer1 Is player on the left (player 1) controlled by computer?
+   * @param {boolean} isComputer2 Is player on the right (player 2) controlled by computer?
+   */
   constructor(isComputer1, isComputer2) {
     this.player1 = new Player(false, isComputer1);
     this.player2 = new Player(true, isComputer2);
     this.ball = new Ball();
   }
 
+  /**
+   * Initialize players and ball for new round
+   * @param {boolean} isPlayer2Serve Will player on the right side serve on this new round?
+   */
   initializeForNewRound(isPlayer2Serve) {
     this.player1.initializeForNewRound();
     this.player2.initializeForNewRound();
     this.ball.initializeForNewRound(isPlayer2Serve);
   }
 
+  /**
+   * run {@link physicsEngine} function with this physics object and keyboard input
+   *
+   * @param {PikaKeyboard[]} keyboardArray keyboardArray[0]: PikaKeyboard object for player 1, keyboardArray[1]: PikaKeyboard object for player 2
+   * @returns {boolean} Is ball touching ground?
+   */
   runEngineForNextFrame(keyboardArray) {
     const isBallTouchingGournd = physicsEngine(
       this.player1,
@@ -45,9 +66,16 @@ export class PikaPhysics {
   }
 }
 
-// Initial Values: refer FUN_000403a90 && FUN_00401f40
+/**
+ * Class representing a player
+ * For initial values: refer FUN_000403a90 && FUN_00401f40
+ */
 class Player {
-  // isPlayer2: boolean, isComputer: boolean
+  /**
+   * create a player
+   * @param {boolean} isPlayer2 Is this player on the right side?
+   * @param {boolean} isComputer Is this player controlled by computer?
+   */
   constructor(isPlayer2, isComputer) {
     this.isPlayer2 = isPlayer2; // 0xA0 // Assumes that player1 play on the left side
     this.isComputer = isComputer; // 0xA4
@@ -76,7 +104,9 @@ class Player {
     };
   }
 
-  // properties that are initialized per round in here
+  /**
+   * initialize for new round
+   */
   initializeForNewRound() {
     this.x = 36; // 0xA8 // initialized to 36 (player1) or 396 (player2)
     if (this.isPlayer2) {
@@ -109,7 +139,10 @@ class Player {
   }
 }
 
-// Initial Values: refer FUN_000403a90 && FUN_00402d60
+/**
+ * Class representing a ball
+ * For initial Values: refer FUN_000403a90 && FUN_00402d60
+ */
 class Ball {
   constructor(isPlayer2Serve) {
     this.initializeForNewRound(isPlayer2Serve);
@@ -135,6 +168,10 @@ class Ball {
     };
   }
 
+  /**
+   * Initialize for new round
+   * @param {boolean} isPlayer2Serve will player on the right side serve on this new round?
+   */
   initializeForNewRound(isPlayer2Serve) {
     this.x = 56; // 0x30    // initialized to 56 or 376
     if (isPlayer2Serve === true) {
@@ -148,9 +185,17 @@ class Ball {
   }
 }
 
-// This is the Pikachu Volleyball physics engine!
-// This physics engine calculates and set the physics values for the next frame.
-// FUN_00403dd0
+/**
+ * FUN_00403dd0
+ * This is the Pikachu Volleyball physics engine!
+ * This physics engine calculates and set the physics values for the next frame.
+ *
+ * @param {Player} player1 player on the left side
+ * @param {Player} player2 player on the right side
+ * @param {Ball} ball ball
+ * @param {PikaKeyboard[]} keyboardArray keyboardArray[0]: PikaKeyboard object for player 1, keyboardArray[1]: PikaKeyboard object for player 2
+ * @returns {boolean} Is ball tounching ground?
+ */
 function physicsEngine(player1, player2, ball, keyboardArray) {
   const isBallTouchingGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
     ball
@@ -221,7 +266,14 @@ function physicsEngine(player1, player2, ball, keyboardArray) {
   return isBallTouchingGround;
 }
 
-//FUN_00403070
+/**
+ * FUN_00403070
+ * Is collision between ball and player happend?
+ * @param {Ball} ball
+ * @param {Player["x"]} playerX player.x
+ * @param {Player["y"]} playerY player.y
+ * @returns {boolean}
+ */
 function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
   let diff = ball.x - playerX;
   if (Math.abs(diff) < 33) {
@@ -233,7 +285,12 @@ function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
   return false;
 }
 
-// FUN_00402dc0
+/**
+ * FUN_00402dc0
+ * Process collision between ball and world and set ball position
+ * @param {Ball} ball
+ * @returns {boolean} Is ball touching ground?
+ */
 function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   let futureFineRotation = ball.fineRotation + ball.xVelocity / 2;
   // If futureFineRotation === 50, it skips next if statement finely.
@@ -298,7 +355,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
     ball.y = 252;
     ball.punchEffectRadius = 20;
     ball.punchEffectY = 272;
-    return 1;
+    return true;
   }
   ball.y = futureBallY;
   ball.x = ball.x + ball.xVelocity;
@@ -312,13 +369,17 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   ball.previousX = ball.x;
   ball.previousY = ball.y;
 
-  return 0;
+  return false;
 }
 
-// FUN_00401fc0
-// param1_array maybe keyboard (if param_1[1] === -1, up_key downed)
-// param1[0] === -1: left key downed, param1[0] === 1: right key downed.
-// param1[0] === 0: left/right key not downed.
+/**
+ * FUN_00401fc0
+ * Process player movement according to keyboard inpu and set player position
+ * @param {Player} player
+ * @param {PikaKeyboard} keyboard
+ * @param {Player} theOtherPlayer
+ * @param {Ball} ball
+ */
 function processPlayerMovementAndSetPlayerPosition(
   player,
   keyboard,
@@ -333,7 +394,7 @@ function processPlayerMovementAndSetPlayerPosition(
     letComputerDecideKeyboardPress(player, ball, theOtherPlayer, keyboard);
   }
 
-  // if player is lying down..
+  // if player is lying down.. don't move
   if (player.state === 4) {
     player.lyingDownDurationLeft += -1;
     if (player.lyingDownDurationLeft < -1) {
@@ -478,7 +539,11 @@ function processPlayerMovementAndSetPlayerPosition(
   return 1;
 }
 
-// FUN_004025e0
+/**
+ * FUN_004025e0
+ * Process game end frame (for winner and loser motions) for the given player
+ * @param {Player} player
+ */
 function processGameEndFrameFor(player) {
   if (player.gameEnded === true && player.frameNumber < 4) {
     player.delayBeforeNextFrame += 1;
@@ -491,9 +556,18 @@ function processGameEndFrameFor(player) {
   return 0;
 }
 
-// FUN_004030a0
-// "playerY" parameter is in the origianl machine (assembly) code
-// but not used in this function. So omitted it.
+/**
+ * FUN_004030a0
+ * Process collision between ball and player.
+ * This function only sets velocity of ball and expected landing point x of ball.
+ * This function does not set position of ball.
+ * The ball position is set by {@link processCollisionBetweenBallAndWorldAndSetBallPosition} function
+ *
+ * @param {Ball} ball
+ * @param {Player["x"]} playerX
+ * @param {PikaKeyboard} keyboard
+ * @param {Player["state"]} playerState
+ */
 function processCollisionBetweenBallAndPlayer(
   ball,
   playerX,
@@ -551,7 +625,11 @@ function processCollisionBetweenBallAndPlayer(
   return 1;
 }
 
-// FUN_004031b0
+/**
+ * FUN_004031b0
+ * Calculate x coordinate of expected landing point of the ball
+ * @param {Ball} ball
+ */
 function caculate_expected_landing_point_x_for(ball) {
   const copyBall = {
     x: ball.x,
@@ -600,6 +678,19 @@ function caculate_expected_landing_point_x_for(ball) {
 // TODO: Math.abs(ball.x - player.x) appears too many.. refactor!
 // FUN_00402360
 // the AI function
+/**
+ * FUN_00402360
+ * Computer control player by this function.
+ * Computer decides which keys (of the given keyboard) to press
+ * according to the game situation it figure out
+ * by the given player, ball and theOtherplayer parameter,
+ * and reflects this to the given keyboard object.
+ *
+ * @param {Player} player The player whom computer contorls
+ * @param {Ball} ball ball
+ * @param {Player} theOtherPlayer The other player
+ * @param {PikaKeyboard} keyboard keyboard of the player whom computer controls
+ */
 function letComputerDecideKeyboardPress(
   player,
   ball,
@@ -616,10 +707,10 @@ function letComputerDecideKeyboardPress(
     Math.abs(ball.x - player.x) > 100 &&
     Math.abs(ball.xVelocity) < player.computerBoldness + 5
   ) {
-    let leftBoundary = player.isPlayer2 * 216;
+    let leftBoundary = Number(player.isPlayer2) * 216;
     if (
       (ball.expectedLandingPointX <= leftBoundary ||
-        ball.expectedLandingPointX >= player.isPlayer2 * 432 + 216) &&
+        ball.expectedLandingPointX >= Number(player.isPlayer2) * 432 + 216) &&
       player.computerWhereToStandBy === 0
     ) {
       virtualExpectedLandingPointX = leftBoundary + 216 / 2;
@@ -650,8 +741,8 @@ function letComputerDecideKeyboardPress(
       keyboard.yDirection = -1;
     }
 
-    const leftBoundary = player.isPlayer2 * 216;
-    const rightBoundary = (player.isPlayer2 + 1) * 216;
+    const leftBoundary = Number(player.isPlayer2) * 216;
+    const rightBoundary = (Number(player.isPlayer2) + 1) * 216;
     if (
       ball.expectedLandingPointX > leftBoundary &&
       ball.expectedLandingPointX < rightBoundary &&
@@ -695,11 +786,16 @@ function letComputerDecideKeyboardPress(
   }
 }
 
-// FUN_00402630
-// return 1 : do power hit
-// return 0 : don't do power hit
-// this function also do keyboard key setting,
-// so that decide also the direction of power hit
+/**
+ * FUN_00402630
+ * This function is called by {@link letComputerDecideKeyboardPress},
+ * and also sets keyboard key press so that it participate in
+ * the decision of the direction of power hit.
+ * @param {Player} player the player whom computer controls
+ * @param {Ball} ball ball
+ * @param {Player} theOtherPlayer The other player
+ * @param {PikaKeyboard} keyboard keyboard of the player whom computer controls
+ */
 function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
   if (rand() % 2 === 0) {
     for (let xDirection = 1; xDirection > -1; xDirection--) {
@@ -710,8 +806,8 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
           ball
         );
         if (
-          (expectedLandingPointX <= player.isPlayer2 * 216 ||
-            expectedLandingPointX >= player.isPlayer2 * 432 + 216) &&
+          (expectedLandingPointX <= Number(player.isPlayer2) * 216 ||
+            expectedLandingPointX >= Number(player.isPlayer2) * 432 + 216) &&
           Math.abs(expectedLandingPointX - theOtherPlayer.x) > 64
         ) {
           keyboard.xDirection = xDirection;
@@ -729,8 +825,8 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
           ball
         );
         if (
-          (expectedLandingPointX <= player.isPlayer2 * 216 ||
-            expectedLandingPointX >= player.isPlayer2 * 432 + 216) &&
+          (expectedLandingPointX <= Number(player.isPlayer2) * 216 ||
+            expectedLandingPointX >= Number(player.isPlayer2) * 432 + 216) &&
           Math.abs(expectedLandingPointX - theOtherPlayer.x) > 64
         ) {
           keyboard.xDirection = xDirection;
@@ -744,6 +840,14 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
 }
 
 // FUN_00402870
+/**
+ * This function is called by {@link decideWhetherPressPowerHitKey},
+ * and calculates the expected x coordinate of the landing point of the ball
+ * when power hit
+ * @param {PikaKeyboard["xDirection"]} keyboardXDirection
+ * @param {PikaKeyboard["yDirection"]} keyboardYDirection
+ * @param {Ball} ball
+ */
 function expectedLandingPointXWhenPowerHit(
   keyboardXDirection,
   keyboardYDirection,
