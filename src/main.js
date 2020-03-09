@@ -1,6 +1,6 @@
 "use strict";
-
-//import * as PIXI from "./pixi/pixi.min.js"; // not working..
+import * as PIXI from "pixi.js"; // not working..
+import "pixi-sound";
 import { PikachuVolleyball } from "./pikavolley.js";
 import { SPRITE_SHEET_PATH } from "./pika_view.js";
 import { PATH as AUDIO_PATH } from "./pika_audio.js";
