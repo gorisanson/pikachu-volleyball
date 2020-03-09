@@ -5,11 +5,12 @@ import { PikachuVolleyball } from "./pikavolley.js";
 import { SPRITE_SHEET_PATH } from "./pika_view.js";
 import { PATH as AUDIO_PATH } from "./pika_audio.js";
 
-PIXI.settings.RESOLUTION = window.devicePixelRatio;
-PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-PIXI.settings.ROUND_PIXELS = true;
+const settings = PIXI.settings;
+settings.RESOLUTION = window.devicePixelRatio;
+settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+settings.ROUND_PIXELS = true;
 
-const renderer = new PIXI.autoDetectRenderer({
+const renderer = PIXI.autoDetectRenderer({
   width: 432,
   height: 304,
   autoDensity: true,
