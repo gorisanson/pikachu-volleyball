@@ -1,5 +1,6 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "development",
@@ -7,10 +8,16 @@ module.exports = {
   devServer: {
     contentBase: "./dist"
   },
-  entry: "./src/main.js",
+  entry: { main: "./src/main.js" },
   output: {
-    filename: "bundle.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist")
   },
-  plugins: [new CopyPlugin([{ from: "src/assets", to: "dist/assets" }])]
+  plugins: [
+    new CopyPlugin([{ from: "src/assets", to: "dist/assets" }]),
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+      hash: true
+    })
+  ]
 };
