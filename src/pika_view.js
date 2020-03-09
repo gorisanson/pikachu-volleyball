@@ -1,4 +1,5 @@
 "use strict";
+import * as PIXI from "pixi.js";
 
 import { Cloud, Wave, cloudAndWaveEngine } from "./pika_cloud_and_wave.js";
 

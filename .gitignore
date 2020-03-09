@@ -1,1 +1,4 @@
 resource/
+
+dist/
+node_modules/
