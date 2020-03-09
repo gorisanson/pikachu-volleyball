@@ -31,7 +31,7 @@ class Key {
   // Detach event listeners
   unsubscribe() {
     window.removeEventListener("keydown", this.downListener);
-    window.removeEventListener("keyup", this.upListener);
+    window.removeEventListener("keyup", this.upListner);
   }
 }
 
