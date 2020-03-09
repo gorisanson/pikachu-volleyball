@@ -1,5 +1,5 @@
 "use strict";
-import * as PIXI from "pixi.js"; // not working..
+import * as PIXI from "pixi.js";
 import "pixi-sound";
 import { PikachuVolleyball } from "./pikavolley.js";
 import { SPRITE_SHEET_PATH } from "./pika_view.js";
@@ -37,16 +37,6 @@ loader.load(setup);
 
 function setup() {
   const pikaVolley = new PikachuVolleyball(stage, loader.resources);
-
-  // adjust audio setting
-  const audio = pikaVolley.audio;
-  audio.bgm.loop = true;
-  for (const p in audio) {
-    audio[p].volume = 0.3;
-  }
-  // renderer.view.addEventListener("click", () => start(pikaVolley), {
-  //   once: true
-  // });
   start(pikaVolley);
 }
 
