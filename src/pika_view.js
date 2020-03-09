@@ -309,7 +309,9 @@ export class GameView {
 
     // Display objects below
     this.bgContainer = makeBGContainer(textures);
-    [this.player1, this.player2] = makePlayerAnimatedSprites(textures);
+    const playerSprites = makePlayerAnimatedSprites(textures);
+    this.player1 = playerSprites[0];
+    this.player2 = playerSprites[1];
     this.ball = makeBallAnimatedSprites(textures);
     this.ballHyper = makeSpriteWithAnchorXY(
       textures,
