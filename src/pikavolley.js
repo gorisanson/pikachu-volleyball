@@ -4,9 +4,17 @@ import { PikaPhysics } from './pika_physics.js';
 import { PikaAudio } from './pika_audio.js';
 import { MenuView, GameView, FadeInOut, IntroView } from './pika_view.js';
 
+/** @typedef GameState @type {function():void} */
+
+/**
+ * Class representing Pikachu Volleyball game
+ */
 export class PikachuVolleyball {
-  // stage: PIXI.Container object which is rendered by PIXI.Renderer or PIXI.CanvasRenderer
-  // resources: resources property of the PIXI.Loader object which is used for loading the game resources
+  /**
+   * Create a Pikachu Volleyball game which includes physics, view, audio
+   * @param {PIXI.Container} stage container which is rendered by PIXI.Renderer or PIXI.CanvasRenderer
+   * @param {Object.<string,PIXI.LoaderResource>} resources resources property of the PIXI.Loader object which is used for loading the game resources
+   */
   constructor(stage, resources) {
     this.view = {
       intro: new IntroView(resources),
@@ -36,23 +44,36 @@ export class PikachuVolleyball {
       )
     ];
 
+    /** @type {number} game fps */
     this.normalFPS = 25;
+    /** @type {number} fps for slow motion */
     this.slowMotionFPS = 5;
 
+    /** @private @constant @type {number} number of frames for slow motion */
     this.SLOW_MOTION_FRAMES_NUM = 6;
+    /** @private @type {number} number of frames left for slow motion */
     this.slowMotionFramesLeft = 0;
+    /** @private @type {number} number of elapsed normal fps frames for rendering slow motion */
     this.slowMotionNumOfSkippedFrames = 0;
 
-    this.selectedWithWho = 0; // 0: with computer, 1: with friend
+    /** @private @type {number} 0: with computer, 1: with friend */
+    this.selectedWithWho = 0;
 
-    this.scores = [0, 0]; // scores[0] for player1, scores[1] for player2
+    /** @private @type {number[]} [0] for player 1 score, [1] for player 2 score */
+    this.scores = [0, 0];
+    /** @type {number} goal score: if one of the players reach this score, game ends */
     this.goalScore = 15;
 
+    /** @private @type {boolean} Is the game ended? */
     this.gameEnded = false;
+    /** @private @type {boolean} Is the round ended? */
     this.roundEnded = false;
+    /** @private @type {boolean} Will player 2 serve? */
     this.isPlayer2Serve = false;
 
+    /** @private @type {number} frame counter */
     this.frameCounter = 0;
+    /** @private @type {Object.<string,number>} number of frames for each scene */
     this.frameTotal = {
       intro: 165,
       afterMenuSelection: 15,
@@ -63,9 +84,17 @@ export class PikachuVolleyball {
       gameEnd: 211
     };
 
+    /**
+     * The game state which is being rendered now
+     * @private @type {GameState}
+     */
     this.state = this.intro;
   }
 
+  /**
+   * Game loop
+   * This function should be called at regular intervals ( interval = (1 / FPS) second )
+   */
   gameLoop() {
     if (this.slowMotionFramesLeft > 0) {
       this.slowMotionNumOfSkippedFrames++;
@@ -83,6 +112,10 @@ export class PikachuVolleyball {
     }
   }
 
+  /**
+   * Intro: a man with a brief case
+   * @type {GameState}
+   */
   intro() {
     if (this.frameCounter === 0) {
       this.view.intro.visible = true;
@@ -111,6 +144,10 @@ export class PikachuVolleyball {
     }
   }
 
+  /**
+   * Menu: select who do you want to play. With computer? With friend?
+   * @type {GameState}
+   */
   menu() {
     if (this.frameCounter === 0) {
       this.view.menu.visible = true;
@@ -180,6 +217,10 @@ export class PikachuVolleyball {
     }
   }
 
+  /**
+   * Fade out after menu selection
+   * @type {GameState}
+   */
   afterMenuSelection() {
     this.view.fadeInOut.changeBlackAlphaBy(1 / 16);
     this.frameCounter++;
@@ -189,7 +230,10 @@ export class PikachuVolleyball {
     }
   }
 
-  // for delay before start of the original game
+  /**
+   * Delay before start of new game (This is for the dalay that exist in the original game)
+   * @type {GameState}
+   */
   beforeStartOfNewGame() {
     this.frameCounter++;
     if (this.frameCounter >= this.frameTotal.beforeStartOfNewGame) {
@@ -199,16 +243,20 @@ export class PikachuVolleyball {
     }
   }
 
+  /**
+   * Start of new game: Initialize ball and players and print game start message
+   * @type {GameState}
+   */
   startOfNewGame() {
     if (this.frameCounter === 0) {
       this.view.game.visible = true;
       this.gameEnded = false;
       this.roundEnded = false;
+      this.isPlayer2Serve = false;
       this.physics.player1.gameEnded = false;
       this.physics.player1.isWinner = false;
       this.physics.player2.gameEnded = false;
       this.physics.player2.isWinner = false;
-      this.isPlayer2Serve = false;
 
       this.scores[0] = 0;
       this.scores[1] = 0;
@@ -238,6 +286,10 @@ export class PikachuVolleyball {
     }
   }
 
+  /**
+   * Round: the players play volleyball in this game state
+   * @type {GameState}
+   */
   round() {
     // catch keyboard input and freeze it
     this.keyboardArray[0].updateProperties();
@@ -309,6 +361,10 @@ export class PikachuVolleyball {
     }
   }
 
+  /**
+   * Fade out after end of round
+   * @type {GameState}
+   */
   afterEndOfRound() {
     this.view.fadeInOut.changeBlackAlphaBy(1 / 16);
     this.frameCounter++;
@@ -318,6 +374,10 @@ export class PikachuVolleyball {
     }
   }
 
+  /**
+   * Before start of next round, initialize ball and players, and print ready message
+   * @type {GameState}
+   */
   beforeStartOfNextRound() {
     if (this.frameCounter === 0) {
       this.view.fadeInOut.setBlackAlphaTo(1);
@@ -346,6 +406,9 @@ export class PikachuVolleyball {
     }
   }
 
+  /**
+   * Play sound effect on {@link round}
+   */
   playSoundEffect() {
     const audio = this.audio;
     for (let i = 0; i < 2; i++) {
