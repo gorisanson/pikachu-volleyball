@@ -1,8 +1,8 @@
-"use strict";
-import { Container, Sprite, AnimatedSprite, Graphics } from "pixi.js";
-import { Cloud, Wave, cloudAndWaveEngine } from "./pika_cloud_and_wave.js";
+'use strict';
+import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js';
+import { Cloud, Wave, cloudAndWaveEngine } from './pika_cloud_and_wave.js';
 
-export const SPRITE_SHEET_PATH = "assets/sprite_sheet.json";
+export const SPRITE_SHEET_PATH = 'assets/sprite_sheet.json';
 
 // TODO: this should be removed.. later..
 const NUM_OF_CLOUDS = 10;
@@ -13,37 +13,44 @@ PATH.PIKACHU = (i, j) => `pikachu/pikachu_${i}_${j}.png`;
 PATH.BALL = s => `ball/ball_${s}.png`;
 PATH.NUMBER = n => `number/number_${n}.png`;
 
-PATH.SKY_BLUE = "objects/sky_blue.png";
-PATH.MOUNTAIN = "objects/mountain.png";
-PATH.GROUND_RED = "objects/ground_red.png";
-PATH.GROUND_LINE = "objects/ground_line.png";
-PATH.GROUND_LINE_LEFT_MOST = "objects/ground_line_leftmost.png";
-PATH.GROUND_LINE_RIGHT_MOST = "objects/ground_line_rightmost.png";
-PATH.GROUND_YELLOW = "objects/ground_yellow.png";
-PATH.NET_PILLAR_TOP = "objects/net_pillar_top.png";
-PATH.NET_PILLAR = "objects/net_pillar.png";
-PATH.SHADOW = "objects/shadow.png";
-PATH.BALL_HYPER = "ball/ball_hyper.png";
-PATH.BALL_TRAIL = "ball/ball_trail.png";
-PATH.BALL_PUNCH = "ball/ball_punch.png";
-PATH.CLOUD = "objects/cloud.png";
-PATH.WAVE = "objects/wave.png";
+PATH.SKY_BLUE = 'objects/sky_blue.png';
+PATH.MOUNTAIN = 'objects/mountain.png';
+PATH.GROUND_RED = 'objects/ground_red.png';
+PATH.GROUND_LINE = 'objects/ground_line.png';
+PATH.GROUND_LINE_LEFT_MOST = 'objects/ground_line_leftmost.png';
+PATH.GROUND_LINE_RIGHT_MOST = 'objects/ground_line_rightmost.png';
+PATH.GROUND_YELLOW = 'objects/ground_yellow.png';
+PATH.NET_PILLAR_TOP = 'objects/net_pillar_top.png';
+PATH.NET_PILLAR = 'objects/net_pillar.png';
+PATH.SHADOW = 'objects/shadow.png';
+PATH.BALL_HYPER = 'ball/ball_hyper.png';
+PATH.BALL_TRAIL = 'ball/ball_trail.png';
+PATH.BALL_PUNCH = 'ball/ball_punch.png';
+PATH.CLOUD = 'objects/cloud.png';
+PATH.WAVE = 'objects/wave.png';
 
-PATH.GAME_START = "messages/ko/game_start.png";
-PATH.READY = "messages/common/ready.png";
-PATH.GAME_END = "messages/common/game_end.png";
+PATH.GAME_START = 'messages/ko/game_start.png';
+PATH.READY = 'messages/common/ready.png';
+PATH.GAME_END = 'messages/common/game_end.png';
 
-PATH.POKEMON = "messages/ko/pokemon.png";
-PATH.PIKACHU_VOLLEYBALL = "messages/ko/pikachu_volleyball.png";
-PATH.FIGHT = "messages/ko/fight.png";
-PATH.WITH_COMPUTER = "messages/ko/with_computer.png";
-PATH.WITH_FRIEND = "messages/ko/with_friend.png";
+PATH.POKEMON = 'messages/ko/pokemon.png';
+PATH.PIKACHU_VOLLEYBALL = 'messages/ko/pikachu_volleyball.png';
+PATH.FIGHT = 'messages/ko/fight.png';
+PATH.WITH_COMPUTER = 'messages/ko/with_computer.png';
+PATH.WITH_FRIEND = 'messages/ko/with_friend.png';
 
-PATH.MARK = "messages/ko/mark.png";
-PATH.SACHISOFT = "messages/common/sachisoft.png";
-PATH.SITTING_PIKACHU = "pikachu_sitting.png";
+PATH.MARK = 'messages/ko/mark.png';
+PATH.SACHISOFT = 'messages/common/sachisoft.png';
+PATH.SITTING_PIKACHU = 'pikachu_sitting.png';
 
+/**
+ * Class representing intro view where the man with a briefcase mark appers
+ */
 export class IntroView {
+  /**
+   *
+   * @param {Object.<string,PIXI.LoaderResource>} resources
+   */
   constructor(resources) {
     const textures = resources[SPRITE_SHEET_PATH].textures;
 
@@ -78,6 +85,10 @@ export class IntroView {
 }
 
 export class MenuView {
+  /**
+   *
+   * @param {Object.<string,PIXI.LoaderResource>} resources
+   */
   constructor(resources) {
     const textures = resources[SPRITE_SHEET_PATH].textures;
 
@@ -199,6 +210,7 @@ export class MenuView {
     }
 
     // movement
+    // @ts-ignore
     const h = this.sittingPikachuTilesContainer.getChildAt(0).texture.height;
     this.sittingPikachuTilesDisplacement =
       (this.sittingPikachuTilesDisplacement + 2) % h;
@@ -476,7 +488,9 @@ export class GameView {
       const score = scores[i];
       const unitsAnimatedSprite = scoreBoard.getChildAt(0);
       const tensAnimatedSprite = scoreBoard.getChildAt(1);
+      // @ts-ignore
       unitsAnimatedSprite.gotoAndStop(score % 10);
+      // @ts-ignore
       tensAnimatedSprite.gotoAndStop(Math.floor(score / 10) % 10);
       if (score >= 10) {
         tensAnimatedSprite.visible = true;
@@ -498,7 +512,9 @@ export class GameView {
       const cloudSprite = this.cloudContainer.getChildAt(i);
       cloudSprite.x = cloud.spriteTopLeftPointX;
       cloudSprite.y = cloud.spriteTopLeftPointY;
+      // @ts-ignore
       cloudSprite.width = cloud.spriteWidth;
+      // @ts-ignore
       cloudSprite.height = cloud.spriteHeight;
     }
 
@@ -607,7 +623,11 @@ export class FadeInOut {
   }
 }
 
-// make sitting pikachu tiles for menu
+/**
+ * Make sitting pikachu tiles for menu
+ * @param {Object.<string,PIXI.Texture>} textures
+ * @return {PIXI.Container}
+ */
 function makeSittingPikachuTilesContainer(textures) {
   const container = new Container();
   const texture = textures[PATH.SITTING_PIKACHU];
@@ -701,6 +721,11 @@ function makeBGContainer(textures) {
   return bgContainer;
 }
 
+/**
+ * Make animated sprites for both players
+ * @param {Object.<string,PIXI.Texture>} textures
+ * @return {PIXI.AnimatedSprite[]} [0] for player 1, [1] for player2
+ */
 function makePlayerAnimatedSprites(textures) {
   const getPlayerTexture = (i, j) => textures[PATH.PIKACHU(i, j)];
   const playerTextureArray = [];
@@ -736,7 +761,7 @@ function makeBallAnimatedSprites(textures) {
     getBallTexture(2),
     getBallTexture(3),
     getBallTexture(4),
-    getBallTexture("hyper")
+    getBallTexture('hyper')
   ];
   const ballAnimatedSprite = new AnimatedSprite(ballTextureArray, false);
 
@@ -753,6 +778,11 @@ function makeSpriteWithAnchorXY(textures, path, anchorX, anchorY) {
   return sprite;
 }
 
+/**
+ * Make score board sprites for both sidess
+ * @param {Object.<string,PIXI.Texture>} textures
+ * @return {PIXI.Container} child with index 0 for player 1 score, child with index 1 for player2 score
+ */
 function makeScoreBoardSprite(textures) {
   const getNumberTexture = n => textures[PATH.NUMBER(n)];
   const numberTextureArray = [];
