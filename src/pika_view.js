@@ -703,15 +703,6 @@ function makeSittingPikachuTilesContainer(textures) {
 function makeBGContainer(textures) {
   const bgContainer = new Container();
 
-  // green background
-  const green = new Graphics();
-  green.beginFill(0x00ff00);
-  green.drawRect(0, 0, 432, 304);
-  green.endFill();
-  green.x = 0;
-  green.y = 0;
-  bgContainer.addChild(green);
-
   // sky
   let tile;
   let texture = textures[TEXURES.SKY_BLUE];
