@@ -1,4 +1,3 @@
-'use strict';
 /*
  *  X width: 432 = 0x1B0
  *  Y width: 304 = 0x130
@@ -19,9 +18,8 @@
  *    medium: 1 frame per 40ms = 25Hz
  *    fast: 1 frame per 50ms = 20Hz
  */
-
+'use strict';
 import { rand } from './rand.js';
-
 /** @typedef {import("./pika_keyboard").PikaKeyboard} PikaKeyboard */
 
 /**

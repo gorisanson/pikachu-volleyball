@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Return random integer in [0, 32767]
  *

@@ -1,5 +1,4 @@
 'use strict';
-
 import { rand } from './rand.js';
 
 /**

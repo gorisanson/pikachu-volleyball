@@ -1,3 +1,4 @@
+'ues strics';
 import { PikaKeyboard } from './pika_keyboard.js';
 import { PikaPhysics } from './pika_physics.js';
 import { PikaAudio } from './pika_audio.js';
