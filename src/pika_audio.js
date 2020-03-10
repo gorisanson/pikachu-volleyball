@@ -13,31 +13,29 @@ PATH.BALLTOUCHESGROUND = 'assets/WAVE146_1.wav';
  */
 export class PikaAudio {
   constructor(resources) {
-    this.bgm = resources[PATH.BGM].sound;
-    this.pipikachu = resources[PATH.PIPIKACHU].sound;
-    this.pika = resources[PATH.PIKA].sound;
-    this.chu = resources[PATH.CHU].sound;
-    this.pi = resources[PATH.PI].sound;
-    this.pikachu = resources[PATH.PIKACHU].sound;
-    this.powerHit = resources[PATH.POWERHIT].sound;
-    this.ballTouchesGround = resources[PATH.BALLTOUCHESGROUND].sound;
+    /** @type {Object.<string,PIXI.sound.Sound>} sounds pack */
+    this.sounds = {
+      bgm: resources[PATH.BGM].sound,
+      pipikachu: resources[PATH.PIPIKACHU].sound,
+      pika: resources[PATH.PIKA].sound,
+      chu: resources[PATH.CHU].sound,
+      pi: resources[PATH.PI].sound,
+      pikachu: resources[PATH.PIKACHU].sound,
+      powerHit: resources[PATH.POWERHIT].sound,
+      ballTouchesGround: resources[PATH.BALLTOUCHESGROUND].sound
+    };
 
-    this.bgm.loop = true;
+    this.sounds.bgm.loop = true;
     this.adjustVolume(0.3);
-    // this.bgm = new Audio("assets/bgm.mp3");
-    // this.pipikachu = new Audio("assets/WAVE140_1.wav");
-    // this.pika = new Audio("assets/WAVE141_1.wav");
-    // this.chu = new Audio("assets/WAVE142_1.wav");
-    // this.pi = new Audio("assets/WAVE143_1.wav");
-    // this.pikachu = new Audio("assets/WAVE144_1.wav");
-    // this.powerHit = new Audio("assets/WAVE145_1.wav");
-    // this.ballTouchesGround = new Audio("assets/WAVE146_1.wav");
   }
 
-  // volume: number from 0 to 1
+  /**
+   * Adjust audio volume
+   * @param {number} volume number in [0, 1]
+   */
   adjustVolume(volume) {
-    for (const prop in this) {
-      this[prop].volume = volume;
+    for (const prop in this.sounds) {
+      this.sounds[prop].volume = volume;
     }
   }
 }

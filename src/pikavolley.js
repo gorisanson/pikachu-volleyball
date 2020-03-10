@@ -86,7 +86,7 @@ export class PikachuVolleyball {
     if (this.frameCounter === 0) {
       this.view.intro.visible = true;
       this.view.fadeInOut.setBlackAlphaTo(0);
-      this.audio.bgm.stop();
+      this.audio.sounds.bgm.stop();
     }
     this.view.intro.drawMark(this.frameCounter);
     this.frameCounter++;
@@ -147,12 +147,7 @@ export class PikachuVolleyball {
     ) {
       this.selectedWithWho = 0;
       this.view.menu.selectWithWho(this.selectedWithWho);
-      this.audio.pi.play();
-      // If I use the normal code above...
-      // When I fastly alternate between up arrow and down arrow key,
-      // the "pi" sound does not respond to it. But the original game does it.
-      // So I use this below code since I love the "pipipipi~" sound.
-      // new Audio("assets/WAVE143_1.wav").play();
+      this.audio.sounds.pi.play();
     } else if (
       (keyboardArray[0].yDirection === 1 ||
         keyboardArray[1].yDirection === 1) &&
@@ -160,9 +155,7 @@ export class PikachuVolleyball {
     ) {
       this.selectedWithWho = 1;
       this.view.menu.selectWithWho(this.selectedWithWho);
-      this.audio.pi.play();
-      // refer the comment above
-      // new Audio("assets/WAVE143_1.wav").play();
+      this.audio.sounds.pi.play();
     }
     if (
       this.keyboardArray[0].powerHit === 1 ||
@@ -180,7 +173,7 @@ export class PikachuVolleyball {
           this.physics.player2.isComputer = false;
         }
       }
-      this.audio.pikachu.play();
+      this.audio.sounds.pikachu.play();
       this.frameCounter = 0;
       this.state = this.afterMenuSelection;
     }
@@ -226,7 +219,7 @@ export class PikachuVolleyball {
       this.view.game.drawPlayerAndBall(this.physics);
 
       this.view.fadeInOut.setBlackAlphaTo(1); // set black screen
-      this.audio.bgm.play();
+      this.audio.sounds.bgm.play();
     }
 
     this.view.game.drawGameStartMessage(
@@ -359,15 +352,15 @@ export class PikachuVolleyball {
       const sound = player.sound;
       // const pan = 0;
       if (sound.pipikachu === true) {
-        audio.pipikachu.play();
+        audio.sounds.pipikachu.play();
         sound.pipikachu = false;
       }
       if (sound.pika === true) {
-        audio.pika.play();
+        audio.sounds.pika.play();
         sound.pika = false;
       }
       if (sound.chu === true) {
-        audio.chu.play();
+        audio.sounds.chu.play();
         sound.chu = false;
       }
     }
@@ -375,11 +368,11 @@ export class PikachuVolleyball {
     const sound = ball.sound;
     // const pan = 0;
     if (sound.powerHit === true) {
-      audio.powerHit.play();
+      audio.sounds.powerHit.play();
       sound.powerHit = false;
     }
     if (sound.ballTouchesGround === true) {
-      audio.ballTouchesGround.play();
+      audio.sounds.ballTouchesGround.play();
       sound.ballTouchesGround = false;
     }
   }
