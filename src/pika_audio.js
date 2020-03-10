@@ -1,12 +1,12 @@
 export const PATH = {};
-PATH.BGM = "assets/bgm.mp3";
-PATH.PIPIKACHU = "assets/WAVE140_1.wav";
-PATH.PIKA = "assets/WAVE141_1.wav";
-PATH.CHU = "assets/WAVE142_1.wav";
-PATH.PI = "assets/WAVE143_1.wav";
-PATH.PIKACHU = "assets/WAVE144_1.wav";
-PATH.POWERHIT = "assets/WAVE145_1.wav";
-PATH.BALLTOUCHESGROUND = "assets/WAVE146_1.wav";
+PATH.BGM = 'assets/bgm.mp3';
+PATH.PIPIKACHU = 'assets/WAVE140_1.wav';
+PATH.PIKA = 'assets/WAVE141_1.wav';
+PATH.CHU = 'assets/WAVE142_1.wav';
+PATH.PI = 'assets/WAVE143_1.wav';
+PATH.PIKACHU = 'assets/WAVE144_1.wav';
+PATH.POWERHIT = 'assets/WAVE145_1.wav';
+PATH.BALLTOUCHESGROUND = 'assets/WAVE146_1.wav';
 
 export class PikaAudio {
   constructor(resources) {

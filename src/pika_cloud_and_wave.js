@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-import { rand } from "./rand.js";
+import { rand } from './rand.js';
 
 export class Cloud {
   constructor() {
