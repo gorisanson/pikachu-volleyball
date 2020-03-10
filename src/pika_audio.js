@@ -1,3 +1,5 @@
+'use strict';
+
 export const PATH = {};
 PATH.BGM = 'assets/bgm.mp3';
 PATH.PIPIKACHU = 'assets/WAVE140_1.wav';
