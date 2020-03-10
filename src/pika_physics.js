@@ -422,10 +422,6 @@ function processPlayerMovementAndSetPlayerPosition(
   theOtherPlayer,
   ball
 ) {
-  if (player === null || ball === null) {
-    return 0;
-  }
-
   if (player.isComputer === true) {
     letComputerDecideKeyboardPress(player, ball, theOtherPlayer, keyboard);
   }
@@ -436,7 +432,7 @@ function processPlayerMovementAndSetPlayerPosition(
     if (player.lyingDownDurationLeft < -1) {
       player.state = 0;
     }
-    return 1;
+    return;
   }
 
   // process x-direction movement
@@ -572,7 +568,6 @@ function processPlayerMovementAndSetPlayerPosition(
     }
     processGameEndFrameFor(player);
   }
-  return 1;
 }
 
 /**
@@ -587,9 +582,7 @@ function processGameEndFrameFor(player) {
       player.delayBeforeNextFrame = 0;
       player.frameNumber += 1;
     }
-    return 1;
   }
-  return 0;
 }
 
 /**
@@ -657,8 +650,6 @@ function processCollisionBetweenBallAndPlayer(
   }
 
   caculate_expected_landing_point_x_for(ball);
-
-  return 1;
 }
 
 /**
@@ -708,7 +699,6 @@ function caculate_expected_landing_point_x_for(ball) {
     copyBall.yVelocity += 1;
   }
   ball.expectedLandingPointX = copyBall.x;
-  return 1;
 }
 
 // TODO: Math.abs(ball.x - player.x) appears too many.. refactor!
@@ -734,7 +724,6 @@ function letComputerDecideKeyboardPress(
   keyboard.xDirection = 0;
   keyboard.yDirection = 0;
   keyboard.powerHit = 0;
-  // TODO what is 4th property?? of keyboard??
 
   let virtualExpectedLandingPointX = ball.expectedLandingPointX;
   if (
@@ -807,7 +796,7 @@ function letComputerDecideKeyboardPress(
         theOtherPlayer,
         keyboard
       );
-      if (willPressPowerHitKey === 1) {
+      if (willPressPowerHitKey === true) {
         keyboard.powerHit = 1;
         if (
           Math.abs(theOtherPlayer.x - player.x) < 80 &&
@@ -829,6 +818,7 @@ function letComputerDecideKeyboardPress(
  * @param {Ball} ball ball
  * @param {Player} theOtherPlayer The other player
  * @param {PikaKeyboard} keyboard keyboard of the player whom computer controls
+ * @return {boolean} Will press power hit key?
  */
 function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
   if (rand() % 2 === 0) {
@@ -846,7 +836,7 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
         ) {
           keyboard.xDirection = xDirection;
           keyboard.yDirection = yDirection;
-          return 1;
+          return true;
         }
       }
     }
@@ -865,12 +855,12 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
         ) {
           keyboard.xDirection = xDirection;
           keyboard.yDirection = yDirection;
-          return 1;
+          return true;
         }
       }
     }
   }
-  return 0;
+  return false;
 }
 
 // FUN_00402870
@@ -881,6 +871,7 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
  * @param {PikaKeyboard["xDirection"]} keyboardXDirection
  * @param {PikaKeyboard["yDirection"]} keyboardYDirection
  * @param {Ball} ball
+ * @return {number} x coord of expected landing point when power hit the ball
  */
 function expectedLandingPointXWhenPowerHit(
   keyboardXDirection,
