@@ -1,61 +1,7 @@
-"use strict";
-
-/**
- * Class respresenting a key on a keyboard
- */
-class Key {
-  /**
-   * Create a key
-   * Refer {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values}
-   * @param {string} value KeyboardEvent.key value of this key
-   */
-  constructor(value) {
-    this.value = value;
-    this.isDown = false;
-    this.isUp = true;
-
-    this.downListener = this.downHandler.bind(this);
-    this.upListner = this.upHandler.bind(this);
-    window.addEventListener("keydown", this.downListener, false);
-    window.addEventListener("keyup", this.upListner, false);
-  }
-
-  /**
-   * When key downed
-   * @param {KeyboardEvent} event
-   */
-  downHandler(event) {
-    if (event.key === this.value) {
-      this.isDown = true;
-      this.isUp = false;
-      event.preventDefault();
-    }
-  }
-
-  /**
-   * When key upped
-   * @param {KeyboardEvent} event
-   */
-  upHandler(event) {
-    if (event.key === this.value) {
-      this.isDown = false;
-      this.isUp = true;
-      event.preventDefault();
-    }
-  }
-
-  /**
-   * Unsubscribe event listeners
-   */
-  unsubscribe() {
-    window.removeEventListener("keydown", this.downListener);
-    window.removeEventListener("keyup", this.upListner);
-  }
-}
+'use strict';
 
 /**
  * Class representing a keyboard used to contorl a player
- * @property {number} xDirection
  */
 export class PikaKeyboard {
   /**
@@ -69,15 +15,25 @@ export class PikaKeyboard {
    * @param {string} powerHit KeyboardEvent.key value of the key to use for power hit or selection
    */
   constructor(left, right, up, down, powerHit) {
-    this.xDirection = 0; // 0: not pressed, -1: left-direction pressed, 1: right-direction pressed
-    this.yDirection = 0; // 0: not pressed, -1: up-direction pressed, 1: down-direction pressed
-    this.powerHit = 0; // 0: auto-repeated or not pressed, 1: newly pressed
+    /** @type {number} 0: not pressed, -1: left-direction pressed, 1: right-direction pressed */
+    this.xDirection = 0;
+    /** @type {number} 0: not pressed, -1: up-direction pressed, 1: down-direction pressed */
+    this.yDirection = 0;
+    /** @type {number} 0: auto-repeated or not pressed, 1: newly pressed*/
+    this.powerHit = 0;
+
+    /** @private @type {boolean} */
     this.powerHitKeyIsDownPrevious = false;
 
+    /** @private @type {Key} */
     this.leftKey = new Key(left);
+    /** @private @type {Key} */
     this.rightKey = new Key(right);
+    /** @private @type {Key} */
     this.upKey = new Key(up);
+    /** @private @type {Key} */
     this.downKey = new Key(down);
+    /** @private @type {Key} */
     this.powerHitKey = new Key(powerHit);
   }
 
@@ -120,5 +76,58 @@ export class PikaKeyboard {
     this.upKey.unsubscribe();
     this.downKey.unsubscribe();
     this.powerHitKey.unsubscribe();
+  }
+}
+
+/**
+ * Class respresenting a key on a keyboard
+ */
+class Key {
+  /**
+   * Create a key
+   * Refer {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values}
+   * @param {string} value KeyboardEvent.key value of this key
+   */
+  constructor(value) {
+    this.value = value;
+    this.isDown = false;
+    this.isUp = true;
+
+    this.downListener = this.downHandler.bind(this);
+    this.upListner = this.upHandler.bind(this);
+    window.addEventListener('keydown', this.downListener, false);
+    window.addEventListener('keyup', this.upListner, false);
+  }
+
+  /**
+   * When key downed
+   * @param {KeyboardEvent} event
+   */
+  downHandler(event) {
+    if (event.key === this.value) {
+      this.isDown = true;
+      this.isUp = false;
+      event.preventDefault();
+    }
+  }
+
+  /**
+   * When key upped
+   * @param {KeyboardEvent} event
+   */
+  upHandler(event) {
+    if (event.key === this.value) {
+      this.isDown = false;
+      this.isUp = true;
+      event.preventDefault();
+    }
+  }
+
+  /**
+   * Unsubscribe event listeners
+   */
+  unsubscribe() {
+    window.removeEventListener('keydown', this.downListener);
+    window.removeEventListener('keyup', this.upListner);
   }
 }
