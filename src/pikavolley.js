@@ -22,7 +22,6 @@ export class PikachuVolleyball {
     this.view.game.visible = false;
     this.view.fadeInOut.visible = false;
 
-    //this.sprites = pikaSprites;
     this.audio = new PikaAudio(resources);
     this.physics = new PikaPhysics(true, false);
     this.keyboardArray = [
@@ -153,7 +152,7 @@ export class PikachuVolleyball {
       // When I fastly alternate between up arrow and down arrow key,
       // the "pi" sound does not respond to it. But the original game does it.
       // So I use this below code since I love the "pipipipi~" sound.
-      //new Audio("assets/WAVE143_1.wav").play();
+      // new Audio("assets/WAVE143_1.wav").play();
     } else if (
       (keyboardArray[0].yDirection === 1 ||
         keyboardArray[1].yDirection === 1) &&
@@ -163,7 +162,7 @@ export class PikachuVolleyball {
       this.view.menu.selectWithWho(this.selectedWithWho);
       this.audio.pi.play();
       // refer the comment above
-      //new Audio("assets/WAVE143_1.wav").play();
+      // new Audio("assets/WAVE143_1.wav").play();
     }
     if (
       this.keyboardArray[0].powerHit === 1 ||
@@ -358,7 +357,7 @@ export class PikachuVolleyball {
     for (let i = 0; i < 2; i++) {
       const player = this.physics[`player${i + 1}`];
       const sound = player.sound;
-      //const pan = 0;
+      // const pan = 0;
       if (sound.pipikachu === true) {
         audio.pipikachu.play();
         sound.pipikachu = false;
@@ -374,7 +373,7 @@ export class PikachuVolleyball {
     }
     const ball = this.physics.ball;
     const sound = ball.sound;
-    //const pan = 0;
+    // const pan = 0;
     if (sound.powerHit === true) {
       audio.powerHit.play();
       sound.powerHit = false;
