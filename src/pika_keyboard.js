@@ -19,7 +19,7 @@ export class PikaKeyboard {
     this.xDirection = 0;
     /** @type {number} 0: not pressed, -1: up-direction pressed, 1: down-direction pressed */
     this.yDirection = 0;
-    /** @type {number} 0: auto-repeated or not pressed, 1: newly pressed*/
+    /** @type {number} 0: auto-repeated or not pressed, 1: newly pressed */
     this.powerHit = 0;
 
     /** @private @type {boolean} */
