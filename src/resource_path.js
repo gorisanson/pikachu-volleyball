@@ -37,7 +37,7 @@ TEXTURES.WITH_FRIEND = 'messages/ko/with_friend.png';
 
 TEXTURES.MARK = 'messages/ko/mark.png';
 TEXTURES.SACHISOFT = 'messages/common/sachisoft.png';
-TEXTURES.SITTING_PIKACHU = 'pikachu_sitting.png';
+TEXTURES.SITTING_PIKACHU = 'sitting_pikachu.png';
 
 const SOUNDS = RESOURCE_PATH.SOUNDS;
 SOUNDS.BGM = 'assets/bgm.mp3';
