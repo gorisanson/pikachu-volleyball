@@ -22,6 +22,7 @@
         "destructuring": "any",
         "ignoreReadBeforeAssign": false
       }
-    ]
+    ],
+    "spaced-comment": ["error", "always", { "block": { "balanced": true } }]
   }
 }
