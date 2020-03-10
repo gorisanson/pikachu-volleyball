@@ -32,7 +32,7 @@ export class PikachuVolleyball {
     this.view.fadeInOut.visible = false;
 
     this.audio = new PikaAudio(resources);
-    this.physics = new PikaPhysics(true, false);
+    this.physics = new PikaPhysics(true, true);
     this.keyboardArray = [
       new PikaKeyboard('d', 'g', 'r', 'f', 'z'), // for player1
       new PikaKeyboard( // for player2
@@ -73,7 +73,7 @@ export class PikachuVolleyball {
 
     /** @private @type {number} frame counter */
     this.frameCounter = 0;
-    /** @private @type {Object.<string,number>} number of frames for each scene */
+    /** @private @type {Object.<string,number>} total number of frames for each game state */
     this.frameTotal = {
       intro: 165,
       afterMenuSelection: 15,
@@ -82,6 +82,13 @@ export class PikachuVolleyball {
       afterEndOfRound: 5,
       beforeStartOfNextRound: 30,
       gameEnd: 211
+    };
+
+    /** @private @type {number} counter for frames while there is no input from keyboard */
+    this.noInputFrameCounter = 0;
+    /** @private @type {Object.<string,number>} total number of frames to be rendered while there is no input */
+    this.noInputFrameTotal = {
+      menu: 225
     };
 
     /**
@@ -183,6 +190,7 @@ export class PikachuVolleyball {
         keyboardArray[1].yDirection === -1) &&
       this.selectedWithWho === 1
     ) {
+      this.noInputFrameCounter = 0;
       this.selectedWithWho = 0;
       this.view.menu.selectWithWho(this.selectedWithWho);
       this.audio.sounds.pi.play();
@@ -191,10 +199,14 @@ export class PikachuVolleyball {
         keyboardArray[1].yDirection === 1) &&
       this.selectedWithWho === 0
     ) {
+      this.noInputFrameCounter = 0;
       this.selectedWithWho = 1;
       this.view.menu.selectWithWho(this.selectedWithWho);
       this.audio.sounds.pi.play();
+    } else {
+      this.noInputFrameCounter++;
     }
+
     if (
       this.keyboardArray[0].powerHit === 1 ||
       this.keyboardArray[1].powerHit === 1
@@ -213,6 +225,16 @@ export class PikachuVolleyball {
       }
       this.audio.sounds.pikachu.play();
       this.frameCounter = 0;
+      this.noInputFrameCounter = 0;
+      this.state = this.afterMenuSelection;
+      return;
+    }
+
+    if (this.noInputFrameCounter >= this.noInputFrameTotal.menu) {
+      this.physics.player1.isComputer = true;
+      this.physics.player1.isComputer = true;
+      this.frameCounter = 0;
+      this.noInputFrameCounter = 0;
       this.state = this.afterMenuSelection;
     }
   }
@@ -294,6 +316,18 @@ export class PikachuVolleyball {
     // catch keyboard input and freeze it
     this.keyboardArray[0].updateProperties();
     this.keyboardArray[1].updateProperties();
+
+    if (
+      this.physics.player1.isComputer === true &&
+      this.physics.player2.isComputer === true &&
+      (this.keyboardArray[0].powerHit === 1 ||
+        this.keyboardArray[1].powerHit === 1)
+    ) {
+      this.frameCounter = 0;
+      this.view.game.visible = false;
+      this.state = this.intro;
+      return;
+    }
 
     const isBallTouchingGround = this.physics.runEngineForNextFrame(
       this.keyboardArray
