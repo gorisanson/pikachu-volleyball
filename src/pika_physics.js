@@ -77,26 +77,38 @@ class Player {
    * @param {boolean} isComputer Is this player controlled by computer?
    */
   constructor(isPlayer2, isComputer) {
-    this.isPlayer2 = isPlayer2; // 0xA0 // Assumes that player1 play on the left side
+    /** @type {boolean} Is this player on the right side? */
+    this.isPlayer2 = isPlayer2; // 0xA0
+    /** @type {boolean} Is controlled by computer? */
     this.isComputer = isComputer; // 0xA4
     this.initializeForNewRound();
 
+    /** @type {number} -1: left, 0: no diving, 1: right */
     this.divingDirection = 0; // 0xB4
+    /** @type {number} */
     this.lyingDownDurationLeft = -1; // 0xB8
+    /** @type {boolean} */
     this.isWinner = false; // 0xD0
+    /** @type {boolean} */
     this.gameEnded = false; // 0xD4
 
-    // 0 or 1: it flips randomly by the ai function (FUN_00402360)
-    // When ball is hanging around on the other player's side:
-    // If it is 0, computer player stands by around the middle point of their side.
-    // If it is 1, computer player stands by adjecent to the net.
+    /**
+     * It flips randomly to 0 or 1 by the {@link letComputerDecideKeyboardPress} function (FUN_00402360)
+     * when ball is hanging around on the other player's side.
+     * If it is 0, computer player stands by around the middle point of their side.
+     * If it is 1, computer player stands by adjecent to the net.
+     * @type {number} 0 or 1
+     */
     this.computerWhereToStandBy = 0; // 0xDC
 
-    // this property is not in the player pointers of the original source code.
-    // TODO:
-    // But for sound effect (especially for stereo sound(it is TODO, not implemented)),
-    // it is convinient way to give sound property to a Player.
-    // The original name is stereo sound.
+    // TODO: stereo sound
+    /**
+     * This property is not in the player pointers of the original source code.
+     * But for sound effect (especially for stereo sound(it is TODO, not implemented)),
+     * it is convinient way to give sound property to a Player.
+     * The original name is stereo sound.
+     * @type {Object.<string, boolean>}
+     */
     this.sound = {
       pipikachu: false,
       pika: false,
@@ -108,33 +120,46 @@ class Player {
    * initialize for new round
    */
   initializeForNewRound() {
+    /** @type {number} x coord */
     this.x = 36; // 0xA8 // initialized to 36 (player1) or 396 (player2)
     if (this.isPlayer2) {
       this.x = 396;
     }
+    /** @type {number} y coord */
     this.y = 244; // 0xAC   // initialized to 244
+    /** @type {number} y direction velocity */
     this.yVelocity = 0; // 0xB0  // initialized to 0
+    /** @type {boolean} */
     this.isCollisionWithBallHappened = false; // 0xBC   // initizlized to 0 i.e false
 
-    // state
-    // 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
-    // 4: lying_down_after_diving
-    // 5: win!, 6: lost..
+    /**
+     * Player's state
+     * 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
+     * 4: lying_down_after_diving
+     * 5: win!, 6: lost..
+     * @type {number} 0, 1, 2, 3, 4 or 5
+     */
     this.state = 0; // 0xC0   // initialized to 0
+    /** @type {number} */
     this.frameNumber = 0; // 0xC4   // initialized to 0
+    /** @type {number} */
     this.normalStatusArmSwingDirection = 1; // 0xC8  // initialized to 1
+    /** @type {number} */
     this.delayBeforeNextFrame = 0; // 0xCC  // initizlized to 0
 
-    // 0, 1, 2, 3, or 4:
-    // it is initialized to (_rand() % 5) before the start of every round.
-    // the greater the number, the bolder the computer player.
-    //
-    // If computer has higher boldness,
-    // judges more the ball is haing around the other player's side,
-    // has greater distance to the expected landing point of the ball,
-    // jumps more,
-    // dives less.
-    // See the source code of the ai function (FUN_00402360).
+    /**
+     * This value is initialized to (_rand() % 5) before the start of every round.
+     * The greater the number, the bolder the computer player.
+     *
+     * If computer has higher boldness,
+     * judges more the ball is haing around the other player's side,
+     * has greater distance to the expected landing point of the ball,
+     * jumps more,
+     * dives less.
+     * See the source code of the {@link letComputerDecideKeyboardPress} function (FUN_00402360).
+     *
+     * @type {number} 0, 1, 2, 3 or 4
+     */
     this.computerBoldness = rand() % 5; // 0xD8  // initialized to (_rand() % 5)
   }
 }
@@ -146,22 +171,37 @@ class Player {
 class Ball {
   constructor(isPlayer2Serve) {
     this.initializeForNewRound(isPlayer2Serve);
+    /** @type {number} x coord of expected lang point */
     this.expectedLandingPointX = 0; // 0x40
-    this.rotation = 0; // 0x44 // ball rotation frame selector // one of 0, 1, 2, 3, 4 // if it is other value, hyper ball glitch occur?
+    /**
+     * ball rotation frame number selector
+     * During the period where it continues to be 5, hyper ball glitch occur.
+     * @type {number} 0, 1, 2, 3, 4 or 5
+     * */
+    this.rotation = 0; // 0x44
+    /** @type {number} */
     this.fineRotation = 0; // 0x48
-    this.punchEffectX = 0; // 0x50 // coordinate X for punch effect
-    this.punchEffectY = 0; // 0x54 // coordinate Y for punch effect
-    // previous values are for trailing effect for power hit
+    /** @type {number} x coord for punch effect */
+    this.punchEffectX = 0; // 0x50
+    /** @type {number} y coord for punch effect */
+    this.punchEffectY = 0; // 0x54
+
+    /**
+     * Following previous values are for trailing effect for power hit
+     * @type {number}
+     */
     this.previousX = 0; // 0x58
     this.previousPreviousX = 0; // 0x5c
     this.previousY = 0; // 0x60
     this.previousPreviousY = 0; // 0x64
 
-    // this property is not in the ball pointer of the original source code.
-    // TODO:
-    // But for sound effect (especially for stereo sound(it is TODO, not implemented)),
-    // it is convinient way to give sound property to a Ball.
-    // The original name is stereo sound.
+    // TODO: stereo sound
+    /**
+     * this property is not in the ball pointer of the original source code.
+     * But for sound effect (especially for stereo sound(it is TODO, not implemented)),
+     * it is convinient way to give sound property to a Ball.
+     * The original name is stereo sound.
+     */
     this.sound = {
       powerHit: false,
       ballTouchesGround: false
@@ -173,14 +213,20 @@ class Ball {
    * @param {boolean} isPlayer2Serve will player on the right side serve on this new round?
    */
   initializeForNewRound(isPlayer2Serve) {
+    /** @type {number} x coord */
     this.x = 56; // 0x30    // initialized to 56 or 376
     if (isPlayer2Serve === true) {
       this.x = 376;
     }
+    /** @type {number} y coord */
     this.y = 0; // 0x34   // initialized to 0
+    /** @type {number} x direction velocity */
     this.xVelocity = 0; // 0x38  // initialized to 0
+    /** @type {number} y directin velicity */
     this.yVelocity = 1; // 0x3C  // initialized to 1
+    /** @type {number} punch effect radius */
     this.punchEffectRadius = 0; // 0x4c // initialized to 0
+    /** @type {boolean} is power hit */
     this.isPowerHit = false; // 0x68  // initialized to 0 i.e. false
   }
 }
@@ -677,8 +723,6 @@ function caculate_expected_landing_point_x_for(ball) {
 }
 
 // TODO: Math.abs(ball.x - player.x) appears too many.. refactor!
-// FUN_00402360
-// the AI function
 /**
  * FUN_00402360
  * Computer control player by this function.

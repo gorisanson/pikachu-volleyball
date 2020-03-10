@@ -48,8 +48,8 @@ PATH.SITTING_PIKACHU = 'pikachu_sitting.png';
  */
 export class IntroView {
   /**
-   *
-   * @param {Object.<string,PIXI.LoaderResource>} resources
+   * Create an IntroView object
+   * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
    */
   constructor(resources) {
     const textures = resources[SPRITE_SHEET_PATH].textures;
@@ -62,15 +62,21 @@ export class IntroView {
     this.container.addChild(this.mark);
   }
 
+  /** @return {boolean} Is visible? */
   get visible() {
     return this.container.visible;
   }
 
+  /** @param {boolean} bool Is visible? */
   set visible(bool) {
     this.container.visible = bool;
   }
 
-  showMark(frameCounter) {
+  /**
+   * draw "a man with a briefcase" mark
+   * @param {number} frameCounter
+   */
+  drawMark(frameCounter) {
     const mark = this.mark;
     if (frameCounter === 0) {
       mark.alpha = 0;
@@ -84,10 +90,13 @@ export class IntroView {
   }
 }
 
+/**
+ * Class representing menu view where you can select "play with computer" or "play with friend"
+ */
 export class MenuView {
   /**
-   *
-   * @param {Object.<string,PIXI.LoaderResource>} resources
+   * Create a MenuView object
+   * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
    */
   constructor(resources) {
     const textures = resources[SPRITE_SHEET_PATH].textures;
@@ -136,14 +145,16 @@ export class MenuView {
     this.selectedWithWhoMessageSizeIncrement = 2;
   }
 
+  /** @return {boolean} Is visible? */
   get visible() {
     return this.container.visible;
   }
 
+  /** @param {boolean} bool Is visible? */
   set visible(bool) {
     this.container.visible = bool;
 
-    // when turn off view
+    // when turn off view, initialize visibilities of sprites in this view
     if (bool === false) {
       this.initializeVisibles();
     }
@@ -155,8 +166,12 @@ export class MenuView {
     }
   }
 
-  // refered FUN_00405d50
-  showFightMessage(frameCounter) {
+  /**
+   * refered FUN_00405d50
+   * Draw "fight!" message which get bigger and smaller as frame goes
+   * @param {number} frameCounter
+   */
+  drawFightMessage(frameCounter) {
     const sizeArray = [20, 22, 25, 27, 30, 27, 25, 22, 20];
     const fightMessage = this.messages.fight;
     const w = fightMessage.texture.width;
@@ -187,7 +202,11 @@ export class MenuView {
     }
   }
 
-  showSachisoft(frameCounter) {
+  /**
+   * Draw sachisoft message as frame goes
+   * @param {number} frameCounter
+   */
+  drawSachisoft(frameCounter) {
     if (frameCounter === 0) {
       this.messages.sachisoft.visible = true;
       this.messages.sachisoft.alpha = 0;
@@ -202,8 +221,12 @@ export class MenuView {
     }
   }
 
-  // refered FUN_00405ca0
-  showSittingPikachuTiles(frameCounter) {
+  /**
+   * refered FUN_00405ca0
+   * Draw sitting pikachu tiles as frame goes
+   * @param {number} frameCounter
+   */
+  drawSittingPikachuTiles(frameCounter) {
     if (frameCounter === 0) {
       this.sittingPikachuTilesContainer.visible = true;
       this.sittingPikachuTilesContainer.alpha = 0;
@@ -230,8 +253,12 @@ export class MenuView {
     }
   }
 
-  // refered FUN_00405b70
-  showPikachuVolleyballMessage(frameCounter) {
+  /**
+   * refered FUN_00405b70
+   * Draw pikachu volleyball message as frame goes
+   * @param {number} frameCounter
+   */
+  drawPikachuVolleyballMessage(frameCounter) {
     if (frameCounter === 0) {
       this.messages.pikachuVolleyball.visible = false;
       return;
@@ -256,8 +283,12 @@ export class MenuView {
     }
   }
 
-  // refered FUN_00405b70
-  showPokemonMessage(frameCounter) {
+  /**
+   * refered FUN_00405b70
+   * Draw pokemon message as frame goes
+   * @param {number} frameCounter
+   */
+  drawPokemonMessage(frameCounter) {
     if (frameCounter === 0) {
       this.messages.pokemon.visible = false;
       return;
@@ -268,8 +299,12 @@ export class MenuView {
     }
   }
 
-  // refered FUN_00405ec0
-  showWithWhoMessages(frameCounter) {
+  /**
+   * refered FUN_00405ec0
+   * Draw with who messages (with computer or with friend) as frame goes
+   * @param {number} frameCounter
+   */
+  drawWithWhoMessages(frameCounter) {
     const withWho = this.messages.withWho;
     const w = withWho[0].texture.width;
     const h = withWho[0].texture.height;
@@ -301,14 +336,24 @@ export class MenuView {
     }
   }
 
-  // i: Number (0: withComputer, 1: withFriend)
+  /**
+   * Select with who for the effect that selected option gets bigger
+   * @param {number} i 0: with computer, 1: with friend
+   */
   selectWithWho(i) {
     this.selectedWithWho = i;
     this.selectedWithWhoMessageSizeIncrement = 2;
   }
 }
 
+/**
+ * Class represent a game view where pikachus, ball, clouds, waves, and backgrounds are
+ */
 export class GameView {
+  /**
+   * Create a GameView object
+   * @param {Object.<string,PIXI.LoaderResource>} resources
+   */
   constructor(resources) {
     const textures = resources[SPRITE_SHEET_PATH].textures;
 
@@ -406,10 +451,12 @@ export class GameView {
     this.wave = new Wave();
   }
 
+  /** @return {boolean} Is visible? */
   get visible() {
     return this.container.visible;
   }
 
+  /** @param {boolean} bool Is visible? */
   set visible(bool) {
     this.container.visible = bool;
 
@@ -425,7 +472,11 @@ export class GameView {
     }
   }
 
-  // physics: PikaPhysics object
+  /** @typedef {import("./pika_physics").PikaPhysics} PikaPhysics */
+  /**
+   * Draw players and ball in the given physics object
+   * @param {PikaPhysics} physics PikaPhysics object to draw
+   */
   drawPlayerAndBall(physics) {
     const player1 = physics.player1;
     const player2 = physics.player2;
@@ -480,9 +531,11 @@ export class GameView {
     }
   }
 
-  // scores: array with length 2
-  // scores[0] for player1 score, scores[1] for player2 score
-  showScoreToScoreBoard(scores) {
+  /**
+   * Draw scores to each score board
+   * @param {number[]} scores [0] for player1 score, [1] for player2 score
+   */
+  drawScoresToScoreBoards(scores) {
     for (let i = 0; i < 2; i++) {
       const scoreBoard = this.scoreBoards[i];
       const score = scores[i];
@@ -500,7 +553,9 @@ export class GameView {
     }
   }
 
-  // this funtion corresponds to FUN_00404770 in origianl machine (assembly) code
+  /**
+   * Draw clouds and wave
+   */
   drawCloudsAndWave() {
     const cloudArray = this.cloudArray;
     const wave = this.wave;
@@ -524,8 +579,13 @@ export class GameView {
     }
   }
 
-  // refered FUN_00403f20
-  drawGameStartMessageForFrameNo(frameCounter, frameTotal) {
+  /**
+   * refered FUN_00403f20
+   * Draw game start message as frame goes
+   * @param {number} frameCounter current frame number
+   * @param {number} frameTotal total frame number for game start message
+   */
+  drawGameStartMessage(frameCounter, frameTotal) {
     if (frameCounter === 0) {
       this.messages.gameStart.visible = true;
     } else if (frameCounter >= frameTotal - 1) {
@@ -545,16 +605,28 @@ export class GameView {
     gameStartMessage.height = 2 * halfHeight;
   }
 
-  showReadyMessage(bool) {
+  /**
+   * Draw ready message
+   * @param {boolean} bool turn on?
+   */
+  drawReadyMessage(bool) {
     this.messages.ready.visible = bool;
   }
 
+  /**
+   * Togle ready message.
+   * Turn off if it's on, turn on if it's off.
+   */
   toggleReadyMessage() {
     this.messages.ready.visible = !this.messages.ready.visible;
   }
 
-  // refered FUN_00404070
-  drawGameEndMessageForFrameNo(frameCounter) {
+  /**
+   * refered FUN_00404070
+   * Draw game end message as frame goes
+   * @param {number} frameCounter
+   */
+  drawGameEndMessage(frameCounter) {
     const gameEndMessage = this.messages.gameEnd;
     const w = gameEndMessage.texture.width; // game end message texture width;
     const h = gameEndMessage.texture.height; // game end message texture height;
@@ -580,6 +652,9 @@ export class GameView {
   }
 }
 
+/**
+ * Class representing fade in out effect
+ */
 export class FadeInOut {
   constructor() {
     this.black = new Graphics();
@@ -591,14 +666,20 @@ export class FadeInOut {
     this.black.alpha = 1;
   }
 
+  /** @return {boolean} Is visible? */
   get visible() {
     return this.black.visible;
   }
 
+  /** @param {boolean} bool Is visible? */
   set visible(bool) {
     this.black.visible = bool;
   }
 
+  /**
+   * Set black alpha for fade in out
+   * @param {number} alpha number in [0, 1]
+   */
   setBlackAlphaTo(alpha) {
     this.black.alpha = alpha;
     if (this.black.alpha === 0) {
@@ -608,7 +689,10 @@ export class FadeInOut {
     }
   }
 
-  // if alphaIncrement > 0: fade out, else fade in
+  /**
+   * Increase black alpha for fade in out
+   * @param {number} alphaIncrement if alphaIncrement > 0: fade out, else fade in
+   */
   changeBlackAlphaBy(alphaIncrement) {
     if (alphaIncrement >= 0) {
       this.black.alpha = Math.min(1, this.black.alpha + alphaIncrement);
@@ -624,7 +708,7 @@ export class FadeInOut {
 }
 
 /**
- * Make sitting pikachu tiles for menu
+ * Make sitting pikachu tiles
  * @param {Object.<string,PIXI.Texture>} textures
  * @return {PIXI.Container}
  */
@@ -645,8 +729,11 @@ function makeSittingPikachuTilesContainer(textures) {
   return container;
 }
 
-// make background
-// return: Container object that has objects in the backgournd as children
+/**
+ * Make background
+ * @param {Object.<string,PIXI.Texture>} textures
+ * @return {PIXI.Container}
+ */
 function makeBGContainer(textures) {
   const bgContainer = new Container();
 
@@ -753,6 +840,11 @@ function makePlayerAnimatedSprites(textures) {
   return [player1AnimatedSprite, player2AnimatedSprite];
 }
 
+/**
+ * Make animated sprite of ball
+ * @param {Object.<string,PIXI.Texture>} textures
+ * @return {PIXI.AnimatedSprite}
+ */
 function makeBallAnimatedSprites(textures) {
   const getBallTexture = s => textures[PATH.BALL(s)];
   const ballTextureArray = [
@@ -771,6 +863,14 @@ function makeBallAnimatedSprites(textures) {
   return ballAnimatedSprite;
 }
 
+/**
+ * Make sprite with the texture on the path and with the given anchor x, y
+ * @param {Object.<string,PIXI.Texture>} textures
+ * @param {string} path
+ * @param {number} anchorX anchor.x, number in [0, 1]
+ * @param {number} anchorY anchor.y, number in [0, 1]
+ * @return {PIXI.Sprite}
+ */
 function makeSpriteWithAnchorXY(textures, path, anchorX, anchorY) {
   const sprite = new Sprite(textures[path]);
   sprite.anchor.x = anchorX;
@@ -779,9 +879,9 @@ function makeSpriteWithAnchorXY(textures, path, anchorX, anchorY) {
 }
 
 /**
- * Make score board sprites for both sidess
+ * Make score boards
  * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.Container} child with index 0 for player 1 score, child with index 1 for player2 score
+ * @return {PIXI.Container} child with index 0 for player 1 score board, child with index 1 for player2 score board
  */
 function makeScoreBoardSprite(textures) {
   const getNumberTexture = n => textures[PATH.NUMBER(n)];
@@ -813,6 +913,11 @@ function makeScoreBoardSprite(textures) {
   return scoreBoard;
 }
 
+/**
+ * Make a container with cloud sprites
+ * @param {Object.<string,PIXI.Texture>} textures
+ * @return {PIXI.Container}
+ */
 function makeCloudContainer(textures) {
   const cloudContainer = new Container();
   const texture = textures[PATH.CLOUD];
@@ -826,6 +931,11 @@ function makeCloudContainer(textures) {
   return cloudContainer;
 }
 
+/**
+ * Make a container with wave sprites
+ * @param {Object.<string,PIXI.Texture>} textures
+ * @return {PIXI.Container}
+ */
 function makeWaveContainer(textures) {
   const waveContainer = new Container();
   const texture = textures[PATH.WAVE];
@@ -837,6 +947,13 @@ function makeWaveContainer(textures) {
   return waveContainer;
 }
 
+/**
+ * Add child to parent and set local position
+ * @param {PIXI.Container} parent
+ * @param {PIXI.Sprite} child
+ * @param {number} x local x
+ * @param {number} y local y
+ */
 function addChildToParentAndSetLocalPosition(parent, child, x, y) {
   parent.addChild(child);
   child.anchor.x = 0;
@@ -845,10 +962,16 @@ function addChildToParentAndSetLocalPosition(parent, child, x, y) {
   child.y = y;
 }
 
-// number of frames for state 0, state 1 and state 2 is 5 for each.
-// number of frames for state 3 is 2.
-// number of frames for state 4 is 1.
-// number of frames for state 5, state 6 is 5 for each.
+/**
+ * Get frame number for player animated sprite corresponds to the player state
+ *
+ * number of frames for state 0, state 1 and state 2 is 5 for each.
+ * number of frames for state 3 is 2.
+ * number of frames for state 4 is 1.
+ * number of frames for state 5, state 6 is 5 for each.
+ * @param {number} state player state
+ * @param {number} frameNumber
+ */
 function getFrameNumberForPlayerAnimatedSprite(state, frameNumber) {
   if (state < 4) {
     return 5 * state + frameNumber;

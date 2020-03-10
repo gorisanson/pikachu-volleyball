@@ -89,7 +89,7 @@ export class PikachuVolleyball {
       this.view.fadeInOut.setBlackAlphaTo(0);
       this.audio.bgm.stop();
     }
-    this.view.intro.showMark(this.frameCounter);
+    this.view.intro.drawMark(this.frameCounter);
     this.frameCounter++;
 
     const keyboardArray = this.keyboardArray;
@@ -118,12 +118,12 @@ export class PikachuVolleyball {
       this.selectedWithWho = 0;
       this.view.menu.selectWithWho(this.selectedWithWho);
     }
-    this.view.menu.showFightMessage(this.frameCounter);
-    this.view.menu.showSachisoft(this.frameCounter);
-    this.view.menu.showSittingPikachuTiles(this.frameCounter);
-    this.view.menu.showPikachuVolleyballMessage(this.frameCounter);
-    this.view.menu.showPokemonMessage(this.frameCounter);
-    this.view.menu.showWithWhoMessages(this.frameCounter);
+    this.view.menu.drawFightMessage(this.frameCounter);
+    this.view.menu.drawSachisoft(this.frameCounter);
+    this.view.menu.drawSittingPikachuTiles(this.frameCounter);
+    this.view.menu.drawPikachuVolleyballMessage(this.frameCounter);
+    this.view.menu.drawPokemonMessage(this.frameCounter);
+    this.view.menu.drawWithWhoMessages(this.frameCounter);
     this.frameCounter++;
 
     const keyboardArray = this.keyboardArray;
@@ -219,7 +219,7 @@ export class PikachuVolleyball {
 
       this.scores[0] = 0;
       this.scores[1] = 0;
-      this.view.game.showScoreToScoreBoard(this.scores);
+      this.view.game.drawScoresToScoreBoards(this.scores);
 
       this.physics.player1.initializeForNewRound();
       this.physics.player2.initializeForNewRound();
@@ -230,7 +230,7 @@ export class PikachuVolleyball {
       this.audio.bgm.play();
     }
 
-    this.view.game.drawGameStartMessageForFrameNo(
+    this.view.game.drawGameStartMessage(
       this.frameCounter,
       this.frameTotal.startOfNewGame
     );
@@ -259,7 +259,7 @@ export class PikachuVolleyball {
     this.view.game.drawCloudsAndWave();
 
     if (this.gameEnded === true) {
-      this.view.game.drawGameEndMessageForFrameNo(this.frameCounter);
+      this.view.game.drawGameEndMessage(this.frameCounter);
       this.frameCounter++;
       if (
         this.frameCounter >= this.frameTotal.gameEnd ||
@@ -300,7 +300,7 @@ export class PikachuVolleyball {
           this.physics.player2.gameEnded = true;
         }
       }
-      this.view.game.showScoreToScoreBoard(this.scores);
+      this.view.game.drawScoresToScoreBoards(this.scores);
       if (this.roundEnded === false && this.gameEnded === false) {
         this.slowMotionFramesLeft = this.SLOW_MOTION_FRAMES_NUM;
       }
@@ -328,7 +328,7 @@ export class PikachuVolleyball {
   beforeStartOfNextRound() {
     if (this.frameCounter === 0) {
       this.view.fadeInOut.setBlackAlphaTo(1);
-      this.view.game.showReadyMessage(false);
+      this.view.game.drawReadyMessage(false);
 
       this.physics.player1.initializeForNewRound();
       this.physics.player2.initializeForNewRound();
@@ -346,7 +346,7 @@ export class PikachuVolleyball {
 
     if (this.frameCounter >= this.frameTotal.beforeStartOfNextRound) {
       this.frameCounter = 0;
-      this.view.game.showReadyMessage(false);
+      this.view.game.drawReadyMessage(false);
       this.view.fadeInOut.setBlackAlphaTo(0);
       this.roundEnded = false;
       this.state = this.round;
