@@ -8,6 +8,9 @@ PATH.PIKACHU = 'assets/WAVE144_1.wav';
 PATH.POWERHIT = 'assets/WAVE145_1.wav';
 PATH.BALLTOUCHESGROUND = 'assets/WAVE146_1.wav';
 
+/**
+ * Class represeting audio
+ */
 export class PikaAudio {
   constructor(resources) {
     this.bgm = resources[PATH.BGM].sound;
