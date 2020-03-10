@@ -6,7 +6,7 @@ import { RESOURCE_PATH } from './resource_path.js';
 const SPRITE_SHEET = RESOURCE_PATH.SPRITE_SHEET;
 const TEXURES = RESOURCE_PATH.TEXTURES;
 
-// TODO: this should be removed.. later..
+/** @constant @type {number} number of clouds to be rendered */
 const NUM_OF_CLOUDS = 10;
 
 /**
