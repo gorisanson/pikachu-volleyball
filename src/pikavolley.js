@@ -1,7 +1,7 @@
-import { PikaKeyboard } from "./pika_keyboard.js";
-import { PikaPhysics } from "./pika_physics.js";
-import { PikaAudio } from "./pika_audio.js";
-import { MenuView, GameView, FadeInOut, IntroView } from "./pika_view.js";
+import { PikaKeyboard } from './pika_keyboard.js';
+import { PikaPhysics } from './pika_physics.js';
+import { PikaAudio } from './pika_audio.js';
+import { MenuView, GameView, FadeInOut, IntroView } from './pika_view.js';
 
 export class PikachuVolleyball {
   // stage: PIXI.Container object which is rendered by PIXI.Renderer or PIXI.CanvasRenderer
@@ -26,13 +26,13 @@ export class PikachuVolleyball {
     this.audio = new PikaAudio(resources);
     this.physics = new PikaPhysics(true, false);
     this.keyboardArray = [
-      new PikaKeyboard("d", "g", "r", "f", "z"), // for player1
+      new PikaKeyboard('d', 'g', 'r', 'f', 'z'), // for player1
       new PikaKeyboard( // for player2
-        "ArrowLeft",
-        "ArrowRight",
-        "ArrowUp",
-        "ArrowDown",
-        "Enter"
+        'ArrowLeft',
+        'ArrowRight',
+        'ArrowUp',
+        'ArrowDown',
+        'Enter'
       )
     ];
 
