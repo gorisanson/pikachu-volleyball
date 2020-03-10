@@ -29,12 +29,12 @@ import { rand } from './rand.js';
 export class PikaPhysics {
   /**
    * Create a physics pack
-   * @param {boolean} isComputer1 Is player on the left (player 1) controlled by computer?
-   * @param {boolean} isComputer2 Is player on the right (player 2) controlled by computer?
+   * @param {boolean} isPlayer1Computer Is player on the left (player 1) controlled by computer?
+   * @param {boolean} isPlayer2Computer Is player on the right (player 2) controlled by computer?
    */
-  constructor(isComputer1, isComputer2) {
-    this.player1 = new Player(false, isComputer1);
-    this.player2 = new Player(true, isComputer2);
+  constructor(isPlayer1Computer, isPlayer2Computer) {
+    this.player1 = new Player(false, isPlayer1Computer);
+    this.player2 = new Player(true, isPlayer2Computer);
     this.ball = new Ball();
   }
 
