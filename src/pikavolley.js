@@ -232,7 +232,7 @@ export class PikachuVolleyball {
 
     if (this.noInputFrameCounter >= this.noInputFrameTotal.menu) {
       this.physics.player1.isComputer = true;
-      this.physics.player1.isComputer = true;
+      this.physics.player2.isComputer = true;
       this.frameCounter = 0;
       this.noInputFrameCounter = 0;
       this.state = this.afterMenuSelection;
