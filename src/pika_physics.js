@@ -18,10 +18,10 @@
  *    medium: 1 frame per 40ms = 25Hz
  *    fast: 1 frame per 50ms = 20Hz
  */
-"use strict";
-import { rand } from "./rand.js";
+'use strict';
+import { rand } from './rand.js';
 
-/** @typedef {import("./pika_keyboard")} PikaKeyboard */
+/** @typedef {import("./pika_keyboard").PikaKeyboard} PikaKeyboard */
 
 /**
  * Class representing a pack of physical objects i.e. players and ball
@@ -53,7 +53,7 @@ export class PikaPhysics {
    * run {@link physicsEngine} function with this physics object and keyboard input
    *
    * @param {PikaKeyboard[]} keyboardArray keyboardArray[0]: PikaKeyboard object for player 1, keyboardArray[1]: PikaKeyboard object for player 2
-   * @returns {boolean} Is ball touching ground?
+   * @return {boolean} Is ball touching ground?
    */
   runEngineForNextFrame(keyboardArray) {
     const isBallTouchingGournd = physicsEngine(
@@ -193,15 +193,16 @@ class Ball {
  * @param {Player} player1 player on the left side
  * @param {Player} player2 player on the right side
  * @param {Ball} ball ball
- * @param {PikaKeyboard[]} keyboardArray keyboardArray[0]: PikaKeyboard object for player 1, keyboardArray[1]: PikaKeyboard object for player 2
- * @returns {boolean} Is ball tounching ground?
+ * @param {PikaKeyboard[]} keyboardArray keyboardArray[0]: keyboard for player 1, keyboardArray[1]: keyboard for player 2
+ * @return {boolean} Is ball tounching ground?
  */
 function physicsEngine(player1, player2, ball, keyboardArray) {
   const isBallTouchingGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
     ball
   );
 
-  let player, theOtherPlayer;
+  let player;
+  let theOtherPlayer;
   for (let i = 0; i < 2; i++) {
     if (i == 0) {
       player = player1;
@@ -272,7 +273,7 @@ function physicsEngine(player1, player2, ball, keyboardArray) {
  * @param {Ball} ball
  * @param {Player["x"]} playerX player.x
  * @param {Player["y"]} playerY player.y
- * @returns {boolean}
+ * @return {boolean}
  */
 function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
   let diff = ball.x - playerX;
@@ -289,7 +290,7 @@ function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
  * FUN_00402dc0
  * Process collision between ball and world and set ball position
  * @param {Ball} ball
- * @returns {boolean} Is ball touching ground?
+ * @return {boolean} Is ball touching ground?
  */
 function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   let futureFineRotation = ball.fineRotation + ball.xVelocity / 2;
@@ -414,7 +415,7 @@ function processPlayerMovementAndSetPlayerPosition(
     }
   }
 
-  let futurePlayerX = player.x + playerVelocityX;
+  const futurePlayerX = player.x + playerVelocityX;
   player.x = futurePlayerX;
 
   // process player's x-direction world boundary
@@ -450,7 +451,7 @@ function processPlayerMovementAndSetPlayerPosition(
   }
 
   // gravity
-  let futurePlayerY = player.y + player.yVelocity;
+  const futurePlayerY = player.y + player.yVelocity;
   player.y = futurePlayerY;
   if (futurePlayerY < 244) {
     player.yVelocity += 1;
@@ -707,7 +708,7 @@ function letComputerDecideKeyboardPress(
     Math.abs(ball.x - player.x) > 100 &&
     Math.abs(ball.xVelocity) < player.computerBoldness + 5
   ) {
-    let leftBoundary = Number(player.isPlayer2) * 216;
+    const leftBoundary = Number(player.isPlayer2) * 216;
     if (
       (ball.expectedLandingPointX <= leftBoundary ||
         ball.expectedLandingPointX >= Number(player.isPlayer2) * 432 + 216) &&
@@ -878,11 +879,11 @@ function expectedLandingPointXWhenPowerHit(
       /*
         TODO: is it real??
         it's just same as
-        
+
         if (copyBall.yVelocity > 0) {
           copyBall.yVelocity = -copyBall.yVelocity;
         }
-        
+
         maybe this is mistake of the original author....
 
         Or is it for making AI doing mistakes??
