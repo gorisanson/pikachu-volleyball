@@ -1,5 +1,5 @@
 :root {
-  --side-length: 100vmin;
+  --side-length: 96vmin;
   /* Pikachu Volleyball's original width: 432px, original height: 304px */
   --aspect-ratio: calc(432 / 304);
   --inverse-aspect-ratio: calc(304 / 432);
@@ -25,13 +25,13 @@ canvas {
 }
 @media only screen and (min-aspect-ratio: 432/304) {
   canvas {
-    width: calc(100vh * var(--aspect-ratio));
-    height: 100vh;
+    width: calc(96vh * var(--aspect-ratio));
+    height: 96vh;
   }
 }
 @media only screen and (max-aspect-ratio: 432/304) {
   canvas {
-    width: 100vw;
-    height: calc(100vw * var(--inverse-aspect-ratio));
+    width: 96vw;
+    height: calc(96vw * var(--inverse-aspect-ratio));
   }
 }
