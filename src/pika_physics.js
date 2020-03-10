@@ -39,16 +39,6 @@ export class PikaPhysics {
   }
 
   /**
-   * Initialize players and ball for new round
-   * @param {boolean} isPlayer2Serve Will player on the right side serve on this new round?
-   */
-  initializeForNewRound(isPlayer2Serve) {
-    this.player1.initializeForNewRound();
-    this.player2.initializeForNewRound();
-    this.ball.initializeForNewRound(isPlayer2Serve);
-  }
-
-  /**
    * run {@link physicsEngine} function with this physics object and keyboard input
    *
    * @param {PikaKeyboard[]} keyboardArray keyboardArray[0]: PikaKeyboard object for player 1, keyboardArray[1]: PikaKeyboard object for player 2
