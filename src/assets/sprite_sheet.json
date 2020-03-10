@@ -600,7 +600,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 	"sourceSize": {"w":64,"h":64}
 },
-"pikachu_sitting.png":
+"sitting_pikachu.png":
 {
 	"frame": {"x":280,"y":611,"w":104,"h":104},
 	"rotated": false,
@@ -625,6 +625,6 @@
 	"format": "RGBA8888",
 	"size": {"w":476,"h":885},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:7054b72206178c6ff5d56f8b2cd7c0ed:84d2beeb8c998b39b5a04828dd1be6d8:6cc8953523e0367402f95f3c9a630665$"
+	"smartupdate": "$TexturePacker:SmartUpdate:78ce02e948fab797ed1a8e76b90a9248:05248f354d7463b1eac75b9b0d492716:6cc8953523e0367402f95f3c9a630665$"
 }
 }
