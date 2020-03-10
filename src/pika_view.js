@@ -1,47 +1,13 @@
 'use strict';
 import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js';
 import { Cloud, Wave, cloudAndWaveEngine } from './pika_cloud_and_wave.js';
+import { RESOURCE_PATH } from './resource_path.js';
 
-export const SPRITE_SHEET_PATH = 'assets/sprite_sheet.json';
+const SPRITE_SHEET = RESOURCE_PATH.SPRITE_SHEET;
+const TEXURES = RESOURCE_PATH.TEXTURES;
 
 // TODO: this should be removed.. later..
 const NUM_OF_CLOUDS = 10;
-
-const PATH = {};
-
-PATH.PIKACHU = (i, j) => `pikachu/pikachu_${i}_${j}.png`;
-PATH.BALL = s => `ball/ball_${s}.png`;
-PATH.NUMBER = n => `number/number_${n}.png`;
-
-PATH.SKY_BLUE = 'objects/sky_blue.png';
-PATH.MOUNTAIN = 'objects/mountain.png';
-PATH.GROUND_RED = 'objects/ground_red.png';
-PATH.GROUND_LINE = 'objects/ground_line.png';
-PATH.GROUND_LINE_LEFT_MOST = 'objects/ground_line_leftmost.png';
-PATH.GROUND_LINE_RIGHT_MOST = 'objects/ground_line_rightmost.png';
-PATH.GROUND_YELLOW = 'objects/ground_yellow.png';
-PATH.NET_PILLAR_TOP = 'objects/net_pillar_top.png';
-PATH.NET_PILLAR = 'objects/net_pillar.png';
-PATH.SHADOW = 'objects/shadow.png';
-PATH.BALL_HYPER = 'ball/ball_hyper.png';
-PATH.BALL_TRAIL = 'ball/ball_trail.png';
-PATH.BALL_PUNCH = 'ball/ball_punch.png';
-PATH.CLOUD = 'objects/cloud.png';
-PATH.WAVE = 'objects/wave.png';
-
-PATH.GAME_START = 'messages/ko/game_start.png';
-PATH.READY = 'messages/common/ready.png';
-PATH.GAME_END = 'messages/common/game_end.png';
-
-PATH.POKEMON = 'messages/ko/pokemon.png';
-PATH.PIKACHU_VOLLEYBALL = 'messages/ko/pikachu_volleyball.png';
-PATH.FIGHT = 'messages/ko/fight.png';
-PATH.WITH_COMPUTER = 'messages/ko/with_computer.png';
-PATH.WITH_FRIEND = 'messages/ko/with_friend.png';
-
-PATH.MARK = 'messages/ko/mark.png';
-PATH.SACHISOFT = 'messages/common/sachisoft.png';
-PATH.SITTING_PIKACHU = 'pikachu_sitting.png';
 
 /**
  * Class representing intro view where the man with a briefcase mark appers
@@ -52,9 +18,9 @@ export class IntroView {
    * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
    */
   constructor(resources) {
-    const textures = resources[SPRITE_SHEET_PATH].textures;
+    const textures = resources[SPRITE_SHEET].textures;
 
-    this.mark = makeSpriteWithAnchorXY(textures, PATH.MARK, 0.5, 0.5);
+    this.mark = makeSpriteWithAnchorXY(textures, TEXURES.MARK, 0.5, 0.5);
     this.mark.x = 432 / 2;
     this.mark.y = 304 / 2;
 
@@ -99,22 +65,22 @@ export class MenuView {
    * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
    */
   constructor(resources) {
-    const textures = resources[SPRITE_SHEET_PATH].textures;
+    const textures = resources[SPRITE_SHEET].textures;
 
     this.messages = {
-      pokemon: makeSpriteWithAnchorXY(textures, PATH.POKEMON, 0, 0),
+      pokemon: makeSpriteWithAnchorXY(textures, TEXURES.POKEMON, 0, 0),
       pikachuVolleyball: makeSpriteWithAnchorXY(
         textures,
-        PATH.PIKACHU_VOLLEYBALL,
+        TEXURES.PIKACHU_VOLLEYBALL,
         0,
         0
       ),
       withWho: [
-        makeSpriteWithAnchorXY(textures, PATH.WITH_COMPUTER, 0, 0),
-        makeSpriteWithAnchorXY(textures, PATH.WITH_FRIEND, 0, 0)
+        makeSpriteWithAnchorXY(textures, TEXURES.WITH_COMPUTER, 0, 0),
+        makeSpriteWithAnchorXY(textures, TEXURES.WITH_FRIEND, 0, 0)
       ],
-      sachisoft: makeSpriteWithAnchorXY(textures, PATH.SACHISOFT, 0, 0),
-      fight: makeSpriteWithAnchorXY(textures, PATH.FIGHT, 0, 0)
+      sachisoft: makeSpriteWithAnchorXY(textures, TEXURES.SACHISOFT, 0, 0),
+      fight: makeSpriteWithAnchorXY(textures, TEXURES.FIGHT, 0, 0)
     };
     this.sittingPikachuTilesContainer = makeSittingPikachuTilesContainer(
       textures
@@ -355,7 +321,7 @@ export class GameView {
    * @param {Object.<string,PIXI.LoaderResource>} resources
    */
   constructor(resources) {
-    const textures = resources[SPRITE_SHEET_PATH].textures;
+    const textures = resources[SPRITE_SHEET].textures;
 
     // Display objects below
     this.bgContainer = makeBGContainer(textures);
@@ -365,17 +331,17 @@ export class GameView {
     this.ball = makeBallAnimatedSprites(textures);
     this.ballHyper = makeSpriteWithAnchorXY(
       textures,
-      PATH.BALL_HYPER,
+      TEXURES.BALL_HYPER,
       0.5,
       0.5
     );
     this.ballTrail = makeSpriteWithAnchorXY(
       textures,
-      PATH.BALL_TRAIL,
+      TEXURES.BALL_TRAIL,
       0.5,
       0.5
     );
-    this.punch = makeSpriteWithAnchorXY(textures, PATH.BALL_PUNCH, 0.5, 0.5);
+    this.punch = makeSpriteWithAnchorXY(textures, TEXURES.BALL_PUNCH, 0.5, 0.5);
 
     // this.scoreBoards[0] for player1, this.scoreBoards[1] for player2
     this.scoreBoards = [
@@ -384,15 +350,15 @@ export class GameView {
     ];
 
     this.shadows = {
-      forPlayer1: makeSpriteWithAnchorXY(textures, PATH.SHADOW, 0.5, 0.5),
-      forPlayer2: makeSpriteWithAnchorXY(textures, PATH.SHADOW, 0.5, 0.5),
-      forBall: makeSpriteWithAnchorXY(textures, PATH.SHADOW, 0.5, 0.5)
+      forPlayer1: makeSpriteWithAnchorXY(textures, TEXURES.SHADOW, 0.5, 0.5),
+      forPlayer2: makeSpriteWithAnchorXY(textures, TEXURES.SHADOW, 0.5, 0.5),
+      forBall: makeSpriteWithAnchorXY(textures, TEXURES.SHADOW, 0.5, 0.5)
     };
 
     this.messages = {
-      gameStart: makeSpriteWithAnchorXY(textures, PATH.GAME_START, 0, 0),
-      ready: makeSpriteWithAnchorXY(textures, PATH.READY, 0, 0),
-      gameEnd: makeSpriteWithAnchorXY(textures, PATH.GAME_END, 0, 0)
+      gameStart: makeSpriteWithAnchorXY(textures, TEXURES.GAME_START, 0, 0),
+      ready: makeSpriteWithAnchorXY(textures, TEXURES.READY, 0, 0),
+      gameEnd: makeSpriteWithAnchorXY(textures, TEXURES.GAME_END, 0, 0)
     };
 
     this.cloudContainer = makeCloudContainer(textures);
@@ -714,7 +680,7 @@ export class FadeInOut {
  */
 function makeSittingPikachuTilesContainer(textures) {
   const container = new Container();
-  const texture = textures[PATH.SITTING_PIKACHU];
+  const texture = textures[TEXURES.SITTING_PIKACHU];
   const w = texture.width;
   const h = texture.height;
 
@@ -748,7 +714,7 @@ function makeBGContainer(textures) {
 
   // sky
   let tile;
-  let texture = textures[PATH.SKY_BLUE];
+  let texture = textures[TEXURES.SKY_BLUE];
   for (let j = 0; j < 12; j++) {
     for (let i = 0; i < 432 / 16; i++) {
       tile = new Sprite(texture);
@@ -757,32 +723,32 @@ function makeBGContainer(textures) {
   }
 
   // mountain
-  texture = textures[PATH.MOUNTAIN];
+  texture = textures[TEXURES.MOUNTAIN];
   tile = new Sprite(texture);
   addChildToParentAndSetLocalPosition(bgContainer, tile, 0, 188);
 
   // ground_red
-  texture = textures[PATH.GROUND_RED];
+  texture = textures[TEXURES.GROUND_RED];
   for (let i = 0; i < 432 / 16; i++) {
     tile = new Sprite(texture);
     addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 248);
   }
 
   // ground_line
-  texture = textures[PATH.GROUND_LINE];
+  texture = textures[TEXURES.GROUND_LINE];
   for (let i = 1; i < 432 / 16 - 1; i++) {
     tile = new Sprite(texture);
     addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 264);
   }
-  texture = textures[PATH.GROUND_LINE_LEFT_MOST];
+  texture = textures[TEXURES.GROUND_LINE_LEFT_MOST];
   tile = new Sprite(texture);
   addChildToParentAndSetLocalPosition(bgContainer, tile, 0, 264);
-  texture = textures[PATH.GROUND_LINE_RIGHT_MOST];
+  texture = textures[TEXURES.GROUND_LINE_RIGHT_MOST];
   tile = new Sprite(texture);
   addChildToParentAndSetLocalPosition(bgContainer, tile, 432 - 16, 264);
 
   // ground_yellow
-  texture = textures[PATH.GROUND_YELLOW];
+  texture = textures[TEXURES.GROUND_YELLOW];
   for (let j = 0; j < 2; j++) {
     for (let i = 0; i < 432 / 16; i++) {
       tile = new Sprite(texture);
@@ -796,10 +762,10 @@ function makeBGContainer(textures) {
   }
 
   // net pillar
-  texture = textures[PATH.NET_PILLAR_TOP];
+  texture = textures[TEXURES.NET_PILLAR_TOP];
   tile = new Sprite(texture);
   addChildToParentAndSetLocalPosition(bgContainer, tile, 213, 176);
-  texture = textures[PATH.NET_PILLAR];
+  texture = textures[TEXURES.NET_PILLAR];
   for (let j = 0; j < 12; j++) {
     tile = new Sprite(texture);
     addChildToParentAndSetLocalPosition(bgContainer, tile, 213, 184 + 8 * j);
@@ -814,7 +780,7 @@ function makeBGContainer(textures) {
  * @return {PIXI.AnimatedSprite[]} [0] for player 1, [1] for player2
  */
 function makePlayerAnimatedSprites(textures) {
-  const getPlayerTexture = (i, j) => textures[PATH.PIKACHU(i, j)];
+  const getPlayerTexture = (i, j) => textures[TEXURES.PIKACHU(i, j)];
   const playerTextureArray = [];
   for (let i = 0; i < 7; i++) {
     if (i === 3) {
@@ -846,7 +812,7 @@ function makePlayerAnimatedSprites(textures) {
  * @return {PIXI.AnimatedSprite}
  */
 function makeBallAnimatedSprites(textures) {
-  const getBallTexture = s => textures[PATH.BALL(s)];
+  const getBallTexture = s => textures[TEXURES.BALL(s)];
   const ballTextureArray = [
     getBallTexture(0),
     getBallTexture(1),
@@ -884,7 +850,7 @@ function makeSpriteWithAnchorXY(textures, path, anchorX, anchorY) {
  * @return {PIXI.Container} child with index 0 for player 1 score board, child with index 1 for player2 score board
  */
 function makeScoreBoardSprite(textures) {
-  const getNumberTexture = n => textures[PATH.NUMBER(n)];
+  const getNumberTexture = n => textures[TEXURES.NUMBER(n)];
   const numberTextureArray = [];
   for (let i = 0; i < 10; i++) {
     numberTextureArray.push(getNumberTexture(i));
@@ -920,7 +886,7 @@ function makeScoreBoardSprite(textures) {
  */
 function makeCloudContainer(textures) {
   const cloudContainer = new Container();
-  const texture = textures[PATH.CLOUD];
+  const texture = textures[TEXURES.CLOUD];
   for (let i = 0; i < NUM_OF_CLOUDS; i++) {
     const cloud = new Sprite(texture);
     cloud.anchor.x = 0;
@@ -938,7 +904,7 @@ function makeCloudContainer(textures) {
  */
 function makeWaveContainer(textures) {
   const waveContainer = new Container();
-  const texture = textures[PATH.WAVE];
+  const texture = textures[TEXURES.WAVE];
   for (let i = 0; i < 432 / 16; i++) {
     const tile = new Sprite(texture);
     addChildToParentAndSetLocalPosition(waveContainer, tile, 16 * i, 0);
