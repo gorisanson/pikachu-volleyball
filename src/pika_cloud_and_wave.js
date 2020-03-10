@@ -2,6 +2,9 @@
 
 import { rand } from './rand.js';
 
+/**
+ * Class represents a cloud
+ */
 export class Cloud {
   constructor() {
     this.topLeftPointX = -68 + (rand() % (432 + 68));
@@ -32,6 +35,9 @@ export class Cloud {
   }
 }
 
+/**
+ * Class representing wave
+ */
 export class Wave {
   constructor() {
     this.verticalCoord = 0;
@@ -43,19 +49,13 @@ export class Wave {
   }
 }
 
-// FUN_00404770
+/**
+ * FUN_00404770
+ * Move clouds and wave
+ * @param {Cloud[]} cloudArray
+ * @param {Wave} wave
+ */
 export function cloudAndWaveEngine(cloudArray, wave) {
-  // local_2c = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
-
-  // code funtion what is it??
-  // FUN_00406080 what is it?
-
-  // ppiVar7 = param_1 + 0x2f
-  // *pipiVar7 or pipiVar7[0] : cloud size array index
-  // pipiVar7[-0x1e] : cloud topLeftPointX poisition
-  // pipiVar7[-10] : cloud topLeftPointX velocity
-  // pipiVar7[-0x14]: cloud topLeftPointY position
-
   for (let i = 0; i < 10; i++) {
     cloudArray[i].topLeftPointX += cloudArray[i].topLeftPointXVelocity;
     if (cloudArray[i].topLeftPointX > 432) {
@@ -65,13 +65,7 @@ export function cloudAndWaveEngine(cloudArray, wave) {
     }
     cloudArray[i].sizeDiffTurnNumber =
       (cloudArray[i].sizeDiffTurnNumber + 1) % 11;
-    // SetRect(cloudArray[i].topLeftPointX - sizeDiff, cloudArray[i].topLeftPointY - sizeDiff, 48 + 2*sizeDiff, 24 + 2*sizeDiff);
-    // FUN_00406020 maybe graphic function
-    // FUN_0049690 what is it?? pixel pisition check?
   }
-
-  // param_1[0x39]: wave.verticalCoord
-  // param_1[0x3a]: wave.verticalCoordVelocity
 
   wave.verticalCoord += wave.verticalCoordVelocity;
   if (wave.verticalCoord > 32) {
@@ -84,8 +78,5 @@ export function cloudAndWaveEngine(cloudArray, wave) {
 
   for (let i = 0; i < 432 / 16; i++) {
     wave.yCoords[i] = 314 - wave.verticalCoord + (rand() % 3);
-    // FUN_00406020 maybe grphic function
-    // FUN_00409480 what is this function?? pixel pisition check, too??
   }
-  return 1;
 }
