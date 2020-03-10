@@ -12,10 +12,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyPlugin([
-      { from: 'src/assets', to: 'assets' },
-      { from: 'src/index.html' }
-    ]),
+    new CopyPlugin([{ from: 'src/assets', to: 'assets' }]),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       hash: true
