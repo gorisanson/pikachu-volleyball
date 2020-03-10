@@ -14,7 +14,10 @@ module.exports = {
     path: path.resolve(__dirname, 'dist')
   },
   plugins: [
-    new CopyPlugin([{ from: 'src/assets', to: 'dist/assets' }]),
+    new CopyPlugin([
+      { from: 'src/assets', to: 'dist/assets' },
+      { from: 'src/style.css' }
+    ]),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       hash: true

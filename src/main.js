@@ -12,7 +12,6 @@ settings.ROUND_PIXELS = true;
 const renderer = PIXI.autoDetectRenderer({
   width: 432,
   height: 304,
-  autoDensity: true,
   antialias: false,
   backgroundColor: 0x000000,
   transparent: false

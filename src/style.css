@@ -1,0 +1,37 @@
+:root {
+  --side-length: 100vmin;
+  /* Pikachu Volleyball's original width: 432px, original height: 304px */
+  --aspect-ratio: calc(432 / 304);
+  --inverse-aspect-ratio: calc(304 / 432);
+  --font-size: 18px;
+}
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+canvas {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: var(--side-length);
+  height: calc(var(--side-length) * var(--inverse-aspect-ratio));
+}
+@media only screen and (min-aspect-ratio: 432/304) {
+  canvas {
+    width: calc(100vh * var(--aspect-ratio));
+    height: 100vh;
+  }
+}
+@media only screen and (max-aspect-ratio: 432/304) {
+  canvas {
+    width: 100vw;
+    height: calc(100vw * var(--inverse-aspect-ratio));
+  }
+}
