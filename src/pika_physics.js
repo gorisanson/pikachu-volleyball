@@ -26,9 +26,9 @@ import { rand } from './rand.js';
  * It's for to limit the looping number of the infinite loops in the original assembly code.
  * This constant is not in the original assembly code.
  * In the original ball x coord range setting (ball x coord in [20, 432]), the infinite loops in
- * {@link caculate_expected_landing_point_x_for} function and {@link expectedLandingPointXWhenPowerHit} function seems to be always break soon.
+ * {@link caculate_expected_landing_point_x_for} function and {@link expectedLandingPointXWhenPowerHit} function seems to be always terminated soon.
  * But if the ball x coord range is edited, for example, to [20, 432 - 20] for symmetry,
- * it is observed that the infinite loop in {@link expectedLandingPointXWhenPowerHit} does not break.
+ * it is observed that the infinite loop in {@link expectedLandingPointXWhenPowerHit} does not terminate.
  * So for safety, this infinite loop limit is included for the infinite loops mentioned above.
  * @constant @type {number}
  */
@@ -360,16 +360,16 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   ball.rotation = (ball.fineRotation / 10) >> 0; // integer division
 
   const futureBallX = ball.x + ball.xVelocity;
-  // If the center of ball would get out of left world bound or right world bound
-  //
-  // TODO:
-  // futureBallX > 432 should be changed to futureBallX > (432 - 20)
-  // [maybe upper one is more possible when seeing pikachu player's x-direction boundary]
-  // or, futureBallX < 20 should be changed to futureBallX < 0
-  // I think this is a mistake of the author of the original game.
-  // Or, to resolve inifite loop problem by going around?
-  // If apply (futureBallX > (432 - 20)), if the maximum number of loop is not limited,
-  // it is observed that inifinite loop in expectedLandingPointXWhenPowerHit function does not break.
+  /*
+    If the center of ball would get out of left world bound or right world bound, bounce back.
+    In this if statement, "futureBallX > 432" should be changed to "futureBallX > (432 - 20)"
+    or, "futureBallX < 20" should be changed to "futureBallX < 0".
+    Maybe the former one is more proper when seeing pikachu player's x-direction boundary.
+    Is this a mistake of the author of the original game?
+    Or, is it set to this value to resolve inifite loop problem? (See comments on the constant INFINITE_LOOP_LIMIT.)
+    If apply (futureBallX > (432 - 20)), and if the maximum number of loop is not limited,
+    it is observed that inifinite loop in the function expectedLandingPointXWhenPowerHit does not terminate.
+  */
   if (futureBallX < 20 || futureBallX > 432) {
     ball.xVelocity = -ball.xVelocity;
   }
@@ -697,7 +697,7 @@ function caculate_expected_landing_point_x_for(ball) {
 
     // If copy ball touches net
     if (Math.abs(copyBall.x - 216) < 25 && copyBall.y > 176) {
-      // TODO: It maybe should be 193 as in FUN_00402dc0, is it the original game author's mistake?
+      // It maybe should be 193 as in FUN_00402dc0, is it the original game author's mistake?
       if (copyBall.y < 192) {
         if (copyBall.yVelocity > 0) {
           copyBall.yVelocity = -copyBall.yVelocity;
@@ -927,38 +927,28 @@ function expectedLandingPointXWhenPowerHit(
     }
     if (Math.abs(copyBall.x - 216) < 25 && copyBall.y > 176) {
       /*
-        TODO: is it real??
-        it's just same as
-
-        if (copyBall.yVelocity > 0) {
-          copyBall.yVelocity = -copyBall.yVelocity;
-        }
-
-        maybe this is mistake of the original author....
-
-        Or is it for making AI doing mistakes??
+        The code below maybe is intended to make computer do mistakes.
+        The player controlled by computer occasionally power hit ball that is bounced back by the net pillar,
+        since code below do not anticipate the bounce back.
       */
+      if (copyBall.yVelocity > 0) {
+        copyBall.yVelocity = -copyBall.yVelocity;
+      }
+      /*
+      An alternative code for making the computer not do those mistakes is as below.
+
       if (copyBall.y < 193) {
         if (copyBall.yVelocity > 0) {
           copyBall.yVelocity = -copyBall.yVelocity;
         }
-      } else if (copyBall.yVelocity > 0) {
-        copyBall.yVelocity = -copyBall.yVelocity;
+      } else {
+        if (copyBall.x < 216) {
+          copyBall.xVelocity = -Math.abs(copyBall.xVelocity);
+        } else {
+          copyBall.xVelocity = Math.abs(copyBall.xVelocity);
+        }
       }
-
-      // The one for AI not doing those mistakes is as below.
-
-      // if (copyBall.y < 193) {
-      //   if (copyBall.yVelocity > 0) {
-      //     copyBall.yVelocity = -copyBall.yVelocity;
-      //   }
-      // } else {
-      //   if (copyBall.x < 216) {
-      //     copyBall.xVelocity = -Math.abs(copyBall.xVelocity);
-      //   } else {
-      //     copyBall.xVelocity = Math.abs(copyBall.xVelocity);
-      //   }
-      // }
+      */
     }
     copyBall.y = copyBall.y + copyBall.yVelocity;
     if (copyBall.y > 252 || loopCounter >= INFINITE_LOOP_LIMIT) {
