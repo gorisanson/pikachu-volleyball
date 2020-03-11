@@ -722,7 +722,6 @@ function caculate_expected_landing_point_x_for(ball) {
   ball.expectedLandingPointX = copyBall.x;
 }
 
-// TODO: Math.abs(ball.x - player.x) appears too many.. refactor!
 /**
  * FUN_00402360
  * Computer control player by this function.
