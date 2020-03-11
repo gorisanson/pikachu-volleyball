@@ -138,7 +138,7 @@ class Player {
      * 0: normal, 1: jumping, 2: jumping_and_power_hitting, 3: diving
      * 4: lying_down_after_diving
      * 5: win!, 6: lost..
-     * @type {number} 0, 1, 2, 3, 4 or 5
+     * @type {number} 0, 1, 2, 3, 4, 5 or 6
      */
     this.state = 0; // 0xC0   // initialized to 0
     /** @type {number} */
@@ -460,7 +460,7 @@ function processPlayerMovementAndSetPlayerPosition(
     if (player.state < 3) {
       playerVelocityX = keyboard.xDirection * 6;
     } else {
-      // if player is diving..
+      // player.state === 3 i.e. player is diving..
       playerVelocityX = player.divingDirection * 8;
     }
   }
@@ -697,8 +697,7 @@ function caculate_expected_landing_point_x_for(ball) {
 
     // If copy ball touches net
     if (Math.abs(copyBall.x - 216) < 25 && copyBall.y > 176) {
-      // TODO: it maybe should be 193 as in process_collision_with_ball_and_world function
-      // original author's mistake?
+      // TODO: It maybe should be 193 as in FUN_00402dc0, is it the original game author's mistake?
       if (copyBall.y < 192) {
         if (copyBall.yVelocity > 0) {
           copyBall.yVelocity = -copyBall.yVelocity;
@@ -758,6 +757,7 @@ function letComputerDecideKeyboardPress(
         ball.expectedLandingPointX >= Number(player.isPlayer2) * 432 + 216) &&
       player.computerWhereToStandBy === 0
     ) {
+      // If conditions above met, the computer estimates the proper location to stay as the middle point of their side
       virtualExpectedLandingPointX = leftBoundary + 216 / 2;
     }
   }
@@ -796,6 +796,7 @@ function letComputerDecideKeyboardPress(
       ball.x < rightBoundary &&
       ball.y > 174
     ) {
+      // If conditions above met, the computer press keys to dive!
       keyboard.powerHit = 1;
       if (player.x < ball.x) {
         keyboard.xDirection = 1;
@@ -834,7 +835,7 @@ function letComputerDecideKeyboardPress(
 /**
  * FUN_00402630
  * This function is called by {@link letComputerDecideKeyboardPress},
- * and also sets keyboard key press so that it participate in
+ * and also sets x and y direction keyboard key press so that it participate in
  * the decision of the direction of power hit.
  * @param {Player} player the player whom computer controls
  * @param {Ball} ball ball
