@@ -24,6 +24,7 @@
         "ignoreReadBeforeAssign": false
       }
     ],
-    "spaced-comment": ["error", "always", { "block": { "balanced": true } }]
+    "spaced-comment": ["error", "always", { "block": { "balanced": true } }],
+    "eqeqeq": ["error", "always"]
   }
 }
