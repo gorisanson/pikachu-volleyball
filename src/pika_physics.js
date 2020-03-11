@@ -23,6 +23,18 @@ import { rand } from './rand.js';
 /** @typedef {import("./pika_keyboard").PikaKeyboard} PikaKeyboard */
 
 /**
+ * It's for to limit the looping number of the infinite loops in the original assembly code.
+ * This constant is not in the original assembly code.
+ * In the original ball x coord range setting (ball x coord in [20, 432]), the infinite loops in
+ * {@link caculate_expected_landing_point_x_for} function and {@link expectedLandingPointXWhenPowerHit} function seems to be always break soon.
+ * But if the ball x coord range is edited, for example, to [20, 432 - 20] for symmetry,
+ * it is observed that the infinite loop in {@link expectedLandingPointXWhenPowerHit} does not break.
+ * So for safety, this infinite loop limit is included for the infinite loops mentioned above.
+ * @constant @type {number}
+ */
+const INFINITE_LOOP_LIMIT = 1000;
+
+/**
  * Class representing a pack of physical objects i.e. players and ball
  * whose physical values are calculated and set by {@link physicsEngine} function
  */
@@ -355,6 +367,9 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   // [maybe upper one is more possible when seeing pikachu player's x-direction boundary]
   // or, futureBallX < 20 should be changed to futureBallX < 0
   // I think this is a mistake of the author of the original game.
+  // Or, to resolve inifite loop problem by going around?
+  // If apply (futureBallX > (432 - 20)), if the maximum number of loop is not limited,
+  // it is observed that inifinite loop in expectedLandingPointXWhenPowerHit function does not break.
   if (futureBallX < 20 || futureBallX > 432) {
     ball.xVelocity = -ball.xVelocity;
   }
@@ -668,7 +683,10 @@ function caculate_expected_landing_point_x_for(ball) {
     xVelocity: ball.xVelocity,
     yVelocity: ball.yVelocity
   };
+  let loopCounter = 0;
   while (true) {
+    loopCounter++;
+
     const futureCopyBallX = copyBall.xVelocity + copyBall.x;
     if (futureCopyBallX < 20 || futureCopyBallX > 432) {
       copyBall.xVelocity = -copyBall.xVelocity;
@@ -696,7 +714,7 @@ function caculate_expected_landing_point_x_for(ball) {
 
     copyBall.y = copyBall.y + copyBall.yVelocity;
     // if copyBall would touch ground
-    if (copyBall.y > 252) {
+    if (copyBall.y > 252 || loopCounter >= INFINITE_LOOP_LIMIT) {
       break;
     }
     copyBall.x = copyBall.x + copyBall.xVelocity;
@@ -867,8 +885,8 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
   return false;
 }
 
-// FUN_00402870
 /**
+ * FUN_00402870
  * This function is called by {@link decideWhetherPressPowerHitKey},
  * and calculates the expected x coordinate of the landing point of the ball
  * when power hit
@@ -895,7 +913,10 @@ function expectedLandingPointXWhenPowerHit(
   }
   copyBall.yVelocity = Math.abs(copyBall.yVelocity) * keyboardYDirection * 2;
 
+  let loopCounter = 0;
   while (true) {
+    loopCounter++;
+
     const futureCopyBallX = copyBall.x + copyBall.xVelocity;
     if (futureCopyBallX < 20 || futureCopyBallX > 432) {
       copyBall.xVelocity = -copyBall.xVelocity;
@@ -939,7 +960,7 @@ function expectedLandingPointXWhenPowerHit(
       // }
     }
     copyBall.y = copyBall.y + copyBall.yVelocity;
-    if (copyBall.y > 252) {
+    if (copyBall.y > 252 || loopCounter >= INFINITE_LOOP_LIMIT) {
       return copyBall.x;
     }
     copyBall.x = copyBall.x + copyBall.xVelocity;
