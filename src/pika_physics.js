@@ -362,6 +362,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   const futureBallX = ball.x + ball.xVelocity;
   /*
     If the center of ball would get out of left world bound or right world bound, bounce back.
+    
     In this if statement, "futureBallX > 432" should be changed to "futureBallX > (432 - 20)"
     or, "futureBallX < 20" should be changed to "futureBallX < 0".
     Maybe the former one is more proper when seeing pikachu player's x-direction boundary.
