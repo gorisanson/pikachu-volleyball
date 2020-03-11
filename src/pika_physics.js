@@ -243,7 +243,7 @@ function physicsEngine(player1, player2, ball, keyboardArray) {
   let player;
   let theOtherPlayer;
   for (let i = 0; i < 2; i++) {
-    if (i == 0) {
+    if (i === 0) {
       player = player1;
       theOtherPlayer = player2;
     } else {
@@ -271,7 +271,7 @@ function physicsEngine(player1, player2, ball, keyboardArray) {
   }
 
   for (let i = 0; i < 2; i++) {
-    if (i == 0) {
+    if (i === 0) {
       player = player1;
     } else {
       player = player2;
