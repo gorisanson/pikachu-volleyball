@@ -35,7 +35,7 @@ export class PikaPhysics {
   constructor(isPlayer1Computer, isPlayer2Computer) {
     this.player1 = new Player(false, isPlayer1Computer);
     this.player2 = new Player(true, isPlayer2Computer);
-    this.ball = new Ball();
+    this.ball = new Ball(false);
   }
 
   /**
@@ -158,6 +158,10 @@ class Player {
  * For initial Values: refer FUN_000403a90 && FUN_00402d60
  */
 class Ball {
+  /**
+   * Create a ball
+   * @param {boolean} isPlayer2Serve Will player 2 serve on this new round?
+   */
   constructor(isPlayer2Serve) {
     this.initializeForNewRound(isPlayer2Serve);
     /** @type {number} x coord of expected lang point */
