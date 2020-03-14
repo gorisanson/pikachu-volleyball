@@ -133,8 +133,8 @@ export class PikachuVolleyball {
     this.frameCounter++;
 
     const keyboardArray = this.keyboardArray;
-    keyboardArray[0].updateProperties();
-    keyboardArray[1].updateProperties();
+    keyboardArray[0].getInput();
+    keyboardArray[1].getInput();
     if (
       this.keyboardArray[0].powerHit === 1 ||
       this.keyboardArray[1].powerHit === 1
@@ -171,8 +171,8 @@ export class PikachuVolleyball {
     this.frameCounter++;
 
     const keyboardArray = this.keyboardArray;
-    keyboardArray[0].updateProperties();
-    keyboardArray[1].updateProperties();
+    keyboardArray[0].getInput();
+    keyboardArray[1].getInput();
     if (
       this.frameCounter < 71 &&
       (keyboardArray[0].powerHit === 1 || keyboardArray[1].powerHit === 1)
@@ -314,8 +314,8 @@ export class PikachuVolleyball {
    */
   round() {
     // catch keyboard input and freeze it
-    this.keyboardArray[0].updateProperties();
-    this.keyboardArray[1].updateProperties();
+    this.keyboardArray[0].getInput();
+    this.keyboardArray[1].getInput();
 
     if (
       this.physics.player1.isComputer === true &&
