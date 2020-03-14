@@ -18,18 +18,18 @@ export class PikaKeyboard extends PikaUserInput {
   constructor(left, right, up, down, powerHit) {
     super();
 
-    /** @private @type {boolean} */
+    /** @type {boolean} */
     this.powerHitKeyIsDownPrevious = false;
 
-    /** @private @type {Key} */
+    /** @type {Key} */
     this.leftKey = new Key(left);
-    /** @private @type {Key} */
+    /** @type {Key} */
     this.rightKey = new Key(right);
-    /** @private @type {Key} */
+    /** @type {Key} */
     this.upKey = new Key(up);
-    /** @private @type {Key} */
+    /** @type {Key} */
     this.downKey = new Key(down);
-    /** @private @type {Key} */
+    /** @type {Key} */
     this.powerHitKey = new Key(powerHit);
   }
 

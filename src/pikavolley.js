@@ -49,31 +49,31 @@ export class PikachuVolleyball {
     /** @type {number} fps for slow motion */
     this.slowMotionFPS = 5;
 
-    /** @private @constant @type {number} number of frames for slow motion */
+    /** @constant @type {number} number of frames for slow motion */
     this.SLOW_MOTION_FRAMES_NUM = 6;
-    /** @private @type {number} number of frames left for slow motion */
+    /** @type {number} number of frames left for slow motion */
     this.slowMotionFramesLeft = 0;
-    /** @private @type {number} number of elapsed normal fps frames for rendering slow motion */
+    /** @type {number} number of elapsed normal fps frames for rendering slow motion */
     this.slowMotionNumOfSkippedFrames = 0;
 
-    /** @private @type {number} 0: with computer, 1: with friend */
+    /** @type {number} 0: with computer, 1: with friend */
     this.selectedWithWho = 0;
 
-    /** @private @type {number[]} [0] for player 1 score, [1] for player 2 score */
+    /** @type {number[]} [0] for player 1 score, [1] for player 2 score */
     this.scores = [0, 0];
     /** @type {number} goal score: if one of the players reach this score, game ends */
     this.goalScore = 15;
 
-    /** @private @type {boolean} Is the game ended? */
+    /** @type {boolean} Is the game ended? */
     this.gameEnded = false;
-    /** @private @type {boolean} Is the round ended? */
+    /** @type {boolean} Is the round ended? */
     this.roundEnded = false;
-    /** @private @type {boolean} Will player 2 serve? */
+    /** @type {boolean} Will player 2 serve? */
     this.isPlayer2Serve = false;
 
-    /** @private @type {number} frame counter */
+    /** @type {number} frame counter */
     this.frameCounter = 0;
-    /** @private @type {Object.<string,number>} total number of frames for each game state */
+    /** @type {Object.<string,number>} total number of frames for each game state */
     this.frameTotal = {
       intro: 165,
       afterMenuSelection: 15,
@@ -84,16 +84,16 @@ export class PikachuVolleyball {
       gameEnd: 211
     };
 
-    /** @private @type {number} counter for frames while there is no input from keyboard */
+    /** @type {number} counter for frames while there is no input from keyboard */
     this.noInputFrameCounter = 0;
-    /** @private @type {Object.<string,number>} total number of frames to be rendered while there is no input */
+    /** @type {Object.<string,number>} total number of frames to be rendered while there is no input */
     this.noInputFrameTotal = {
       menu: 225
     };
 
     /**
      * The game state which is being rendered now
-     * @private @type {GameState}
+     * @type {GameState}
      */
     this.state = this.intro;
   }
