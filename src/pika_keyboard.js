@@ -34,10 +34,10 @@ export class PikaKeyboard extends PikaUserInput {
   }
 
   /**
-   * Update xDirection, yDirection, powerHit property of the keyboard.
+   * Get xDirection, yDirection, powerHit input from the keyboard.
    * This method is for freezing the keyboard input during the process of one game frame.
    */
-  updateProperties() {
+  getInput() {
     if (this.leftKey.isDown) {
       this.xDirection = -1;
     } else if (this.rightKey.isDown) {
