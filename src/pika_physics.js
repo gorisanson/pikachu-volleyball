@@ -20,7 +20,6 @@
  */
 'use strict';
 import { rand } from './rand.js';
-/** @typedef {import("./pika_keyboard").PikaKeyboard} PikaKeyboard */
 
 /**
  * It's for to limit the looping number of the infinite loops in the original assembly code.
@@ -51,19 +50,33 @@ export class PikaPhysics {
   }
 
   /**
-   * run {@link physicsEngine} function with this physics object and keyboard input
+   * run {@link physicsEngine} function with this physics object and user input
    *
-   * @param {PikaKeyboard[]} keyboardArray keyboardArray[0]: PikaKeyboard object for player 1, keyboardArray[1]: PikaKeyboard object for player 2
+   * @param {PikaUserInput[]} userInputArray userInputArray[0]: PikaUserInput object for player 1, userInputArray[1]: PikaUserInput object for player 2
    * @return {boolean} Is ball touching ground?
    */
-  runEngineForNextFrame(keyboardArray) {
+  runEngineForNextFrame(userInputArray) {
     const isBallTouchingGournd = physicsEngine(
       this.player1,
       this.player2,
       this.ball,
-      keyboardArray
+      userInputArray
     );
     return isBallTouchingGournd;
+  }
+}
+
+/**
+ * Class (or precisely, Interface) representing user input (from keyboard or joystick, whatever)
+ */
+export class PikaUserInput {
+  constructor() {
+    /** @type {number} 0: no horizontal-direction input, -1: left-direction input, 1: right-direction input */
+    this.xDirection = 0;
+    /** @type {number} 0: no vertical-direction input, -1: up-direction input, 1: down-direction input */
+    this.yDirection = 0;
+    /** @type {number} 0: auto-repeated or no power hit input, 1: not auto-repeated power hit input */
+    this.powerHit = 0;
   }
 }
 
@@ -94,7 +107,7 @@ class Player {
     this.gameEnded = false; // 0xD4
 
     /**
-     * It flips randomly to 0 or 1 by the {@link letComputerDecideKeyboardPress} function (FUN_00402360)
+     * It flips randomly to 0 or 1 by the {@link letComputerDecideUserInput} function (FUN_00402360)
      * when ball is hanging around on the other player's side.
      * If it is 0, computer player stands by around the middle point of their side.
      * If it is 1, computer player stands by adjecent to the net.
@@ -157,7 +170,7 @@ class Player {
      * has greater distance to the expected landing point of the ball,
      * jumps more,
      * dives less.
-     * See the source code of the {@link letComputerDecideKeyboardPress} function (FUN_00402360).
+     * See the source code of the {@link letComputerDecideUserInput} function (FUN_00402360).
      *
      * @type {number} 0, 1, 2, 3 or 4
      */
@@ -244,10 +257,10 @@ class Ball {
  * @param {Player} player1 player on the left side
  * @param {Player} player2 player on the right side
  * @param {Ball} ball ball
- * @param {PikaKeyboard[]} keyboardArray keyboardArray[0]: keyboard for player 1, keyboardArray[1]: keyboard for player 2
+ * @param {PikaUserInput[]} userInputArray userInputArray[0]: user input for player 1, userInputArray[1]: user input for player 2
  * @return {boolean} Is ball tounching ground?
  */
-function physicsEngine(player1, player2, ball, keyboardArray) {
+function physicsEngine(player1, player2, ball, userInputArray) {
   const isBallTouchingGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
     ball
   );
@@ -272,7 +285,7 @@ function physicsEngine(player1, player2, ball, keyboardArray) {
 
     processPlayerMovementAndSetPlayerPosition(
       player,
-      keyboardArray[i],
+      userInputArray[i],
       theOtherPlayer,
       ball
     );
@@ -301,7 +314,7 @@ function physicsEngine(player1, player2, ball, keyboardArray) {
         processCollisionBetweenBallAndPlayer(
           ball,
           player.x,
-          keyboardArray[i],
+          userInputArray[i],
           player.state
         );
         player.isCollisionWithBallHappened = true;
@@ -430,20 +443,20 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
 
 /**
  * FUN_00401fc0
- * Process player movement according to keyboard inpu and set player position
+ * Process player movement according to user input and set player position
  * @param {Player} player
- * @param {PikaKeyboard} keyboard
+ * @param {PikaUserInput} userInput
  * @param {Player} theOtherPlayer
  * @param {Ball} ball
  */
 function processPlayerMovementAndSetPlayerPosition(
   player,
-  keyboard,
+  userInput,
   theOtherPlayer,
   ball
 ) {
   if (player.isComputer === true) {
-    letComputerDecideKeyboardPress(player, ball, theOtherPlayer, keyboard);
+    letComputerDecideUserInput(player, ball, theOtherPlayer, userInput);
   }
 
   // if player is lying down.. don't move
@@ -459,7 +472,7 @@ function processPlayerMovementAndSetPlayerPosition(
   let playerVelocityX = 0;
   if (player.state < 5) {
     if (player.state < 3) {
-      playerVelocityX = keyboard.xDirection * 6;
+      playerVelocityX = userInput.xDirection * 6;
     } else {
       // player.state === 3 i.e. player is diving..
       playerVelocityX = player.divingDirection * 8;
@@ -489,7 +502,7 @@ function processPlayerMovementAndSetPlayerPosition(
   // jump
   if (
     player.state < 3 &&
-    keyboard.yDirection === -1 && // up-key downed
+    userInput.yDirection === -1 && // up-direction input
     player.y === 244 // player is touching on the ground
   ) {
     player.yVelocity = -16;
@@ -521,7 +534,7 @@ function processPlayerMovementAndSetPlayerPosition(
     }
   }
 
-  if (keyboard.powerHit === 1) {
+  if (userInput.powerHit === 1) {
     if (player.state === 1) {
       // if player is jumping..
       // then player do power hit!
@@ -533,11 +546,11 @@ function processPlayerMovementAndSetPlayerPosition(
       // refer a detailed comment above about this function
       // maybe-sound function (playerpointer + 0x90 + 0x14)? ommited
       player.sound.pika = true;
-    } else if (player.state === 0 && keyboard.xDirection !== 0) {
+    } else if (player.state === 0 && userInput.xDirection !== 0) {
       // then player do diving!
       player.state = 3;
       player.frameNumber = 0;
-      player.divingDirection = keyboard.xDirection;
+      player.divingDirection = userInput.xDirection;
       player.yVelocity = -5;
       // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
       // refer a detailed comment above about this function
@@ -614,13 +627,13 @@ function processGameEndFrameFor(player) {
  *
  * @param {Ball} ball
  * @param {Player["x"]} playerX
- * @param {PikaKeyboard} keyboard
+ * @param {PikaUserInput} userInput
  * @param {Player["state"]} playerState
  */
 function processCollisionBetweenBallAndPlayer(
   ball,
   playerX,
-  keyboard,
+  userInput,
   playerState
 ) {
   // playerX is maybe pika's x position
@@ -650,14 +663,14 @@ function processCollisionBetweenBallAndPlayer(
   // player is jumping and power hitting
   if (playerState === 2) {
     if (ball.x < 216) {
-      ball.xVelocity = (Math.abs(keyboard.xDirection) + 1) * 10;
+      ball.xVelocity = (Math.abs(userInput.xDirection) + 1) * 10;
     } else {
-      ball.xVelocity = -(Math.abs(keyboard.xDirection) + 1) * 10;
+      ball.xVelocity = -(Math.abs(userInput.xDirection) + 1) * 10;
     }
     ball.punchEffectX = ball.x;
     ball.punchEffectY = ball.y;
 
-    ball.yVelocity = Math.abs(ball.yVelocity) * keyboard.yDirection * 2;
+    ball.yVelocity = Math.abs(ball.yVelocity) * userInput.yDirection * 2;
     ball.punchEffectRadius = 20;
     // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
     // refer a detailed comment above about this function
@@ -725,26 +738,21 @@ function caculate_expected_landing_point_x_for(ball) {
 
 /**
  * FUN_00402360
- * Computer control player by this function.
- * Computer decides which keys (of the given keyboard) to press
- * according to the game situation it figure out
- * by the given player, ball and theOtherplayer parameter,
- * and reflects this to the given keyboard object.
+ * Computer controls its player by this function.
+ * Computer decides the user input for the player it controls,
+ * according to the game situation it figures out
+ * by the given parameters (player, ball and theOtherplayer),
+ * and reflects these to the given user input object.
  *
  * @param {Player} player The player whom computer contorls
  * @param {Ball} ball ball
  * @param {Player} theOtherPlayer The other player
- * @param {PikaKeyboard} keyboard keyboard of the player whom computer controls
+ * @param {PikaUserInput} userInput user input of the player whom computer controls
  */
-function letComputerDecideKeyboardPress(
-  player,
-  ball,
-  theOtherPlayer,
-  keyboard
-) {
-  keyboard.xDirection = 0;
-  keyboard.yDirection = 0;
-  keyboard.powerHit = 0;
+function letComputerDecideUserInput(player, ball, theOtherPlayer, userInput) {
+  userInput.xDirection = 0;
+  userInput.yDirection = 0;
+  userInput.powerHit = 0;
 
   let virtualExpectedLandingPointX = ball.expectedLandingPointX;
   if (
@@ -767,9 +775,9 @@ function letComputerDecideKeyboardPress(
     player.computerBoldness + 8
   ) {
     if (player.x < virtualExpectedLandingPointX) {
-      keyboard.xDirection = 1;
+      userInput.xDirection = 1;
     } else {
-      keyboard.xDirection = -1;
+      userInput.xDirection = -1;
     }
   } else if (rand() % 20 === 0) {
     player.computerWhereToStandBy = rand() % 2;
@@ -783,7 +791,7 @@ function letComputerDecideKeyboardPress(
       ball.y < 10 * player.computerBoldness + 84 &&
       ball.yVelocity > 0
     ) {
-      keyboard.yDirection = -1;
+      userInput.yDirection = -1;
     }
 
     const leftBoundary = Number(player.isPlayer2) * 216;
@@ -796,36 +804,36 @@ function letComputerDecideKeyboardPress(
       ball.x < rightBoundary &&
       ball.y > 174
     ) {
-      // If conditions above met, the computer press keys to dive!
-      keyboard.powerHit = 1;
+      // If conditions above met, the computer decides to dive!
+      userInput.powerHit = 1;
       if (player.x < ball.x) {
-        keyboard.xDirection = 1;
+        userInput.xDirection = 1;
       } else {
-        keyboard.xDirection = -1;
+        userInput.xDirection = -1;
       }
     }
   } else if (player.state === 1 || player.state === 2) {
     if (Math.abs(ball.x - player.x) > 8) {
       if (player.x < ball.x) {
-        keyboard.xDirection = 1;
+        userInput.xDirection = 1;
       } else {
-        keyboard.xDirection = -1;
+        userInput.xDirection = -1;
       }
     }
     if (Math.abs(ball.x - player.x) < 48 && Math.abs(ball.y - player.y) < 48) {
-      const willPressPowerHitKey = decideWhetherPressPowerHitKey(
+      const willInputPowerHit = decideWhetherInputPowerHit(
         player,
         ball,
         theOtherPlayer,
-        keyboard
+        userInput
       );
-      if (willPressPowerHitKey === true) {
-        keyboard.powerHit = 1;
+      if (willInputPowerHit === true) {
+        userInput.powerHit = 1;
         if (
           Math.abs(theOtherPlayer.x - player.x) < 80 &&
-          keyboard.yDirection !== -1
+          userInput.yDirection !== -1
         ) {
-          keyboard.yDirection = -1;
+          userInput.yDirection = -1;
         }
       }
     }
@@ -834,16 +842,16 @@ function letComputerDecideKeyboardPress(
 
 /**
  * FUN_00402630
- * This function is called by {@link letComputerDecideKeyboardPress},
- * and also sets x and y direction keyboard key press so that it participate in
+ * This function is called by {@link letComputerDecideUserInput},
+ * and also sets x and y direction user input so that it participate in
  * the decision of the direction of power hit.
  * @param {Player} player the player whom computer controls
  * @param {Ball} ball ball
  * @param {Player} theOtherPlayer The other player
- * @param {PikaKeyboard} keyboard keyboard of the player whom computer controls
- * @return {boolean} Will press power hit key?
+ * @param {PikaUserInput} userInput user input for the player whom computer controls
+ * @return {boolean} Will input power hit?
  */
-function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
+function decideWhetherInputPowerHit(player, ball, theOtherPlayer, userInput) {
   if (rand() % 2 === 0) {
     for (let xDirection = 1; xDirection > -1; xDirection--) {
       for (let yDirection = -1; yDirection < 2; yDirection++) {
@@ -857,8 +865,8 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
             expectedLandingPointX >= Number(player.isPlayer2) * 432 + 216) &&
           Math.abs(expectedLandingPointX - theOtherPlayer.x) > 64
         ) {
-          keyboard.xDirection = xDirection;
-          keyboard.yDirection = yDirection;
+          userInput.xDirection = xDirection;
+          userInput.yDirection = yDirection;
           return true;
         }
       }
@@ -876,8 +884,8 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
             expectedLandingPointX >= Number(player.isPlayer2) * 432 + 216) &&
           Math.abs(expectedLandingPointX - theOtherPlayer.x) > 64
         ) {
-          keyboard.xDirection = xDirection;
-          keyboard.yDirection = yDirection;
+          userInput.xDirection = xDirection;
+          userInput.yDirection = yDirection;
           return true;
         }
       }
@@ -888,17 +896,17 @@ function decideWhetherPressPowerHitKey(player, ball, theOtherPlayer, keyboard) {
 
 /**
  * FUN_00402870
- * This function is called by {@link decideWhetherPressPowerHitKey},
+ * This function is called by {@link decideWhetherInputPowerHit},
  * and calculates the expected x coordinate of the landing point of the ball
  * when power hit
- * @param {PikaKeyboard["xDirection"]} keyboardXDirection
- * @param {PikaKeyboard["yDirection"]} keyboardYDirection
+ * @param {PikaUserInput["xDirection"]} userInputXDirection
+ * @param {PikaUserInput["yDirection"]} userInputYDirection
  * @param {Ball} ball
  * @return {number} x coord of expected landing point when power hit the ball
  */
 function expectedLandingPointXWhenPowerHit(
-  keyboardXDirection,
-  keyboardYDirection,
+  userInputXDirection,
+  userInputYDirection,
   ball
 ) {
   const copyBall = {
@@ -908,11 +916,11 @@ function expectedLandingPointXWhenPowerHit(
     yVelocity: ball.yVelocity
   };
   if (copyBall.x < 216) {
-    copyBall.xVelocity = (Math.abs(keyboardXDirection) + 1) * 10;
+    copyBall.xVelocity = (Math.abs(userInputXDirection) + 1) * 10;
   } else {
-    copyBall.xVelocity = -(Math.abs(keyboardXDirection) + 1) * 10;
+    copyBall.xVelocity = -(Math.abs(userInputXDirection) + 1) * 10;
   }
-  copyBall.yVelocity = Math.abs(copyBall.yVelocity) * keyboardYDirection * 2;
+  copyBall.yVelocity = Math.abs(copyBall.yVelocity) * userInputYDirection * 2;
 
   let loopCounter = 0;
   while (true) {

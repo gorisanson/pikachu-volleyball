@@ -1,9 +1,10 @@
 'use strict';
+import { PikaUserInput } from './pika_physics.js';
 
 /**
  * Class representing a keyboard used to contorl a player
  */
-export class PikaKeyboard {
+export class PikaKeyboard extends PikaUserInput {
   /**
    * Create a keyboard used for game controller
    * left, right, up, down, powerHit: KeyboardEvent.key value for each
@@ -15,12 +16,7 @@ export class PikaKeyboard {
    * @param {string} powerHit KeyboardEvent.key value of the key to use for power hit or selection
    */
   constructor(left, right, up, down, powerHit) {
-    /** @type {number} 0: not pressed, -1: left-direction pressed, 1: right-direction pressed */
-    this.xDirection = 0;
-    /** @type {number} 0: not pressed, -1: up-direction pressed, 1: down-direction pressed */
-    this.yDirection = 0;
-    /** @type {number} 0: auto-repeated or not pressed, 1: newly pressed */
-    this.powerHit = 0;
+    super();
 
     /** @private @type {boolean} */
     this.powerHitKeyIsDownPrevious = false;
