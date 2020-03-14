@@ -107,16 +107,18 @@ export class PikachuVolleyball {
       this.slowMotionNumOfSkippedFrames++;
       if (
         this.slowMotionNumOfSkippedFrames %
-          Math.round(this.normalFPS / this.slowMotionFPS) ===
+          Math.round(this.normalFPS / this.slowMotionFPS) !==
         0
       ) {
-        this.slowMotionFramesLeft--;
-        this.slowMotionNumOfSkippedFrames = 0;
-        this.state();
+        return;
       }
-    } else {
-      this.state();
+      this.slowMotionFramesLeft--;
+      this.slowMotionNumOfSkippedFrames = 0;
     }
+    // catch keyboard input and freeze it
+    this.keyboardArray[0].getInput();
+    this.keyboardArray[1].getInput();
+    this.state();
   }
 
   /**
@@ -132,9 +134,6 @@ export class PikachuVolleyball {
     this.view.intro.drawMark(this.frameCounter);
     this.frameCounter++;
 
-    const keyboardArray = this.keyboardArray;
-    keyboardArray[0].getInput();
-    keyboardArray[1].getInput();
     if (
       this.keyboardArray[0].powerHit === 1 ||
       this.keyboardArray[1].powerHit === 1
@@ -170,12 +169,10 @@ export class PikachuVolleyball {
     this.view.menu.drawWithWhoMessages(this.frameCounter);
     this.frameCounter++;
 
-    const keyboardArray = this.keyboardArray;
-    keyboardArray[0].getInput();
-    keyboardArray[1].getInput();
     if (
       this.frameCounter < 71 &&
-      (keyboardArray[0].powerHit === 1 || keyboardArray[1].powerHit === 1)
+      (this.keyboardArray[0].powerHit === 1 ||
+        this.keyboardArray[1].powerHit === 1)
     ) {
       this.frameCounter = 71;
       return;
@@ -186,8 +183,8 @@ export class PikachuVolleyball {
     }
 
     if (
-      (keyboardArray[0].yDirection === -1 ||
-        keyboardArray[1].yDirection === -1) &&
+      (this.keyboardArray[0].yDirection === -1 ||
+        this.keyboardArray[1].yDirection === -1) &&
       this.selectedWithWho === 1
     ) {
       this.noInputFrameCounter = 0;
@@ -195,8 +192,8 @@ export class PikachuVolleyball {
       this.view.menu.selectWithWho(this.selectedWithWho);
       this.audio.sounds.pi.play();
     } else if (
-      (keyboardArray[0].yDirection === 1 ||
-        keyboardArray[1].yDirection === 1) &&
+      (this.keyboardArray[0].yDirection === 1 ||
+        this.keyboardArray[1].yDirection === 1) &&
       this.selectedWithWho === 0
     ) {
       this.noInputFrameCounter = 0;
@@ -313,10 +310,6 @@ export class PikachuVolleyball {
    * @type {GameState}
    */
   round() {
-    // catch keyboard input and freeze it
-    this.keyboardArray[0].getInput();
-    this.keyboardArray[1].getInput();
-
     if (
       this.physics.player1.isComputer === true &&
       this.physics.player2.isComputer === true &&
