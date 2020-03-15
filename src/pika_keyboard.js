@@ -77,6 +77,7 @@ export class PikaKeyboard extends PikaUserInput {
 
 /**
  * Class respresenting a key on a keyboard
+ * refered: https://github.com/kittykatattack/learningPixi
  */
 class Key {
   /**
