@@ -23,36 +23,40 @@
 
   <body>
     <div id="grid-container0">
-      <div class="button-container">
-        <button class="button">Pause</button>
-        <button class="button">Restart</button>
-        <div class="relative-container">
-          <button
-            class="button dropdown-btn"
-            onclick="toggleDropdown('speed-list')"
-          >
-            Speed &#9660;
-          </button>
-          <div id="speed-list" class="dropdown">
-            <button class="button">Slow</button>
-            <button class="button selected">Medium</button>
-            <button class="button">Fast</button>
+      <div id="grid-container1">
+        <div class="btn-container left">
+          <button class="btn">Pause</button>
+          <button class="btn">Restart</button>
+          <div class="relative-container">
+            <button
+              class="btn dropdown-btn"
+              onclick="toggleDropdown('speed-list')"
+            >
+              Speed &#9660;
+            </button>
+            <div id="speed-list" class="dropdown">
+              <button class="btn">Slow</button>
+              <button class="btn selected">Medium</button>
+              <button class="btn">Fast</button>
+            </div>
+          </div>
+          <div class="relative-container">
+            <button
+              class="btn dropdown-btn"
+              onclick="toggleDropdown('winning-score-list')"
+            >
+              Winning score &#9660;
+            </button>
+            <div id="winning-score-list" class="dropdown">
+              <button class="btn">5 points</button>
+              <button class="btn selected">10 points</button>
+              <button class="btn">15 poinsts</button>
+            </div>
           </div>
         </div>
-        <div class="relative-container">
-          <button
-            class="button dropdown-btn"
-            onclick="toggleDropdown('winning-score-list')"
-          >
-            Winning score &#9660;
-          </button>
-          <div id="winning-score-list" class="dropdown">
-            <button class="button">5 points</button>
-            <button class="button selected">10 points</button>
-            <button class="button">15 poinsts</button>
-          </div>
+        <div class="btn-container right">
+          <button class="btn">About</button>
         </div>
-        <button class="button">About</button>
       </div>
     </div>
     <script>

@@ -5,6 +5,8 @@
   --width: 96vmin;
   --height: calc(96vmin * var(--inverse-aspect-ratio));
   --font-size: 18px;
+  --btn-width: calc(5 * var(--font-size));
+  --btn-height: calc(3 * var(--font-size));
 }
 @media only screen and (min-aspect-ratio: 432/304) {
   :root {
@@ -36,28 +38,31 @@ body {
   justify-content: center;
   align-content: center;
   grid-template-rows: calc(3 * var(--font-size)) var(--height);
-  /* grid-template-columns: var(--width); */
   grid-gap: 10px;
 }
-#game-screen {
-  display: block;
-  grid-row-start: 2;
-  margin-left: auto;
-  margin-right: auto;
-  width: var(--width);
-  height: var(--height);
-}
-.button-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+#grid-container1 {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 4fr 1fr;
 }
 
-button.button {
+.btn-container {
+  display: flex;
+  align-items: center;
+}
+.btn-container.left {
+  grid-column-start: 1;
+  justify-content: flex-start;
+}
+.btn-container.right {
+  grid-column-start: 2;
+  justify-content: flex-end;
+}
+button.btn {
   display: inline-block;
   grid-row-start: 1;
-  height: calc(3 * var(--font-size));
-  width: calc(5 * var(--font-size));
+  width: var(--btn-width);
+  height: var(--btn-height);
   border: none;
   border-radius: 10px;
   padding: 0;
@@ -79,7 +84,7 @@ button.button {
   display: none;
 }
 
-.dropdown > .button {
+.dropdown > .btn {
   display: block;
   background-color: rgb(200, 200, 200);
 }
@@ -90,4 +95,13 @@ button.button {
 
 .show {
   display: block;
+}
+
+#game-screen {
+  display: block;
+  grid-row-start: 2;
+  margin-left: auto;
+  margin-right: auto;
+  width: var(--width);
+  height: var(--height);
 }
