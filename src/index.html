@@ -24,11 +24,55 @@
   <body>
     <div id="grid-container">
       <div class="button-container">
-        <button class="button">test1</button>
-        <button class="button">test2</button>
-        <button class="button">test3</button>
-        <button class="button">test4</button>
+        <button class="button">Pause</button>
+        <button class="button">Restart</button>
+        <div class="relative-container">
+          <button
+            class="button dropdown-btn"
+            onclick="toggleDropdown('speed-list')"
+          >
+            Speed
+          </button>
+          <div id="speed-list" class="dropdown">
+            <button class="button">Slow</button>
+            <button class="button selected">Medium</button>
+            <button class="button">Fast</button>
+          </div>
+        </div>
+        <div class="relative-container">
+          <button
+            class="button dropdown-btn"
+            onclick="toggleDropdown('winning-score-list')"
+          >
+            Winning score
+          </button>
+          <div id="winning-score-list" class="dropdown">
+            <button class="button">5 points</button>
+            <button class="button selected">10 points</button>
+            <button class="button">15 poinsts</button>
+          </div>
+        </div>
+        <button class="button">About</button>
       </div>
     </div>
+    <script>
+      function toggleDropdown(dropdownID) {
+        const dropdowns = document.getElementsByClassName('dropdown');
+        for (let i = 0; i < dropdowns.length; i++) {
+          if (dropdowns[i].id !== dropdownID) {
+            dropdowns[i].classList.remove('show');
+          }
+        }
+        document.getElementById(dropdownID).classList.toggle('show');
+      }
+      window.addEventListener('click', event => {
+        if (!event.target.matches('.dropdown-btn')) {
+          const dropdowns = document.getElementsByClassName('dropdown');
+          for (let i = 0; i < dropdowns.length; i++) {
+            dropdowns[i].classList.remove('show');
+          }
+        }
+      });
+    </script>
   </body>
 </html>

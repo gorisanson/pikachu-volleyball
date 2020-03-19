@@ -52,11 +52,12 @@ body {
   align-items: center;
   justify-content: flex-end;
 }
+
 button.button {
   display: inline-block;
   grid-row-start: 1;
   height: calc(3 * var(--font-size));
-  width: 100%;
+  width: calc(5 * var(--font-size));
   border: none;
   border-radius: 10px;
   padding: 0;
@@ -67,4 +68,26 @@ button.button {
   text-decoration: none;
   margin-left: 5px;
   margin-right: 5px;
+}
+
+.relative-container {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  display: none;
+}
+
+.dropdown > .button {
+  display: block;
+  background-color: rgb(200, 200, 200);
+}
+
+.dropdown > .selected {
+  background-color: rgb(100, 100, 100);
+}
+
+.show {
+  display: block;
 }
