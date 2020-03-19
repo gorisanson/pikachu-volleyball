@@ -61,8 +61,8 @@ export class PikachuVolleyball {
 
     /** @type {number[]} [0] for player 1 score, [1] for player 2 score */
     this.scores = [0, 0];
-    /** @type {number} goal score: if one of the players reach this score, game ends */
-    this.goalScore = 15;
+    /** @type {number} winning score: if either one of the players reaches this score, game ends */
+    this.winningScore = 15;
 
     /** @type {boolean} Is the game ended? */
     this.gameEnded = false;
@@ -354,7 +354,7 @@ export class PikachuVolleyball {
       if (this.physics.ball.punchEffectX < 216) {
         this.isPlayer2Serve = true;
         this.scores[1] += 1;
-        if (this.scores[1] >= this.goalScore) {
+        if (this.scores[1] >= this.winningScore) {
           this.gameEnded = true;
           this.physics.player1.isWinner = false;
           this.physics.player2.isWinner = true;
@@ -364,7 +364,7 @@ export class PikachuVolleyball {
       } else {
         this.isPlayer2Serve = false;
         this.scores[0] += 1;
-        if (this.scores[0] >= this.goalScore) {
+        if (this.scores[0] >= this.winningScore) {
           this.gameEnded = true;
           this.physics.player1.isWinner = true;
           this.physics.player2.isWinner = false;
