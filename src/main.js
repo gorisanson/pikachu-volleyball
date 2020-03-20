@@ -43,6 +43,9 @@ function setup() {
   const stereoBtn = document.getElementById('stereo-btn');
   const monoBtn = document.getElementById('mono-btn');
   const sfxOffBtn = document.getElementById('sfx-off-btn');
+  const slowSpeedBtn = document.getElementById('slow-speed-btn');
+  const mediumSpeedBtn = document.getElementById('medium-speed-btn');
+  const fastSpeedBtn = document.getElementById('fast-speed-btn');
 
   pauseBtn.addEventListener('click', () => {
     pikaVolley.paused = !pikaVolley.paused;
@@ -89,6 +92,33 @@ function setup() {
     monoBtn.classList.remove('selected');
     sfxOffBtn.classList.add('selected');
     pikaVolley.audio.turnSFXVolume(false);
+  });
+
+  fastSpeedBtn.addEventListener('click', () => {
+    mediumSpeedBtn.classList.remove('selected');
+    slowSpeedBtn.classList.remove('selected');
+    fastSpeedBtn.classList.add('selected');
+
+    pikaVolley.normalFPS = 30;
+    ticker.maxFPS = pikaVolley.normalFPS;
+  });
+
+  mediumSpeedBtn.addEventListener('click', () => {
+    slowSpeedBtn.classList.remove('selected');
+    fastSpeedBtn.classList.remove('selected');
+    mediumSpeedBtn.classList.add('selected');
+
+    pikaVolley.normalFPS = 25;
+    ticker.maxFPS = pikaVolley.normalFPS;
+  });
+
+  slowSpeedBtn.addEventListener('click', () => {
+    fastSpeedBtn.classList.remove('selected');
+    mediumSpeedBtn.classList.remove('selected');
+    slowSpeedBtn.classList.add('selected');
+
+    pikaVolley.normalFPS = 20;
+    ticker.maxFPS = pikaVolley.normalFPS;
   });
 
   start(pikaVolley);
