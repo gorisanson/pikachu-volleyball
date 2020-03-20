@@ -138,7 +138,7 @@ span.check {
   height: var(--canvas-height);
 }
 
-.fade_box {
+.fade-box {
   position: absolute;
   display: flex;
   flex-wrap: wrap;
@@ -157,14 +157,14 @@ span.check {
   visibility: hidden;
   opacity: 0;
 }
-.fade_box.in {
+.fade-box.in {
   z-index: 10;
   visibility: visible;
   opacity: 1;
   animation-name: fade_in;
   animation-duration: 1s;
 }
-.fade_box.in.about {
+.fade-box.in.about {
   justify-content: flex-start;
   top: 0;
   height: calc(3 * var(--canvas-height));
@@ -180,15 +180,12 @@ span.check {
   }
 }
 
-#about_box {
+#about-box {
   grid-row-start: 2;
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-button.update,
-button.ai_level,
-button.close,
-button.restart_yes_no {
+button.close {
   display: inline-block;
   height: calc(2 * var(--btn-font-size));
   width: calc(4 * var(--btn-font-size));
