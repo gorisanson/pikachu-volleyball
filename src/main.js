@@ -36,19 +36,61 @@ loader.load(setup);
 
 function setup() {
   const pikaVolley = new PikachuVolleyball(stage, loader.resources);
-  document.getElementById('pause-btn').addEventListener('click', event => {
+  const pauseBtn = document.getElementById('pause-btn');
+  const restartBtn = document.getElementById('restart-btn');
+  const bgmOnBtn = document.getElementById('bgm-on-btn');
+  const bgmOffBtn = document.getElementById('bgm-off-btn');
+  const stereoBtn = document.getElementById('stereo-btn');
+  const monoBtn = document.getElementById('mono-btn');
+  const sfxOffBtn = document.getElementById('sfx-off-btn');
+
+  pauseBtn.addEventListener('click', () => {
     pikaVolley.paused = !pikaVolley.paused;
     if (pikaVolley.paused === true) {
-      // @ts-ignore
-      event.currentTarget.classList.add('selected');
+      pauseBtn.classList.add('selected');
     } else {
-      // @ts-ignore
-      event.currentTarget.classList.remove('selected');
+      pauseBtn.classList.remove('selected');
     }
   });
-  document.getElementById('restart-btn').addEventListener('click', () => {
+
+  restartBtn.addEventListener('click', () => {
     pikaVolley.restart();
   });
+
+  bgmOnBtn.addEventListener('click', () => {
+    bgmOffBtn.classList.remove('selected');
+    bgmOnBtn.classList.add('selected');
+    pikaVolley.audio.turnBGMVolume(true);
+  });
+
+  bgmOffBtn.addEventListener('click', () => {
+    bgmOnBtn.classList.remove('selected');
+    bgmOffBtn.classList.add('selected');
+    pikaVolley.audio.turnBGMVolume(false);
+  });
+
+  // TODO: stereo sound
+  stereoBtn.addEventListener('click', () => {
+    monoBtn.classList.remove('selected');
+    sfxOffBtn.classList.remove('selected');
+    stereoBtn.classList.add('selected');
+    pikaVolley.audio.turnSFXVolume(true);
+  });
+
+  monoBtn.addEventListener('click', () => {
+    sfxOffBtn.classList.remove('selected');
+    stereoBtn.classList.remove('selected');
+    monoBtn.classList.add('selected');
+    pikaVolley.audio.turnSFXVolume(true);
+  });
+
+  sfxOffBtn.addEventListener('click', () => {
+    stereoBtn.classList.remove('selected');
+    monoBtn.classList.remove('selected');
+    sfxOffBtn.classList.add('selected');
+    pikaVolley.audio.turnSFXVolume(false);
+  });
+
   start(pikaVolley);
 }
 
