@@ -19,9 +19,10 @@ export class PikaAudio {
       powerHit: resources[SOUNDS.POWERHIT].sound,
       ballTouchesGround: resources[SOUNDS.BALLTOUCHESGROUND].sound
     };
-
     this.sounds.bgm.loop = true;
-    this.adjustVolume(0.3);
+    /** @type {number} number in [0, 1] */
+    this.properVolume = 0.3;
+    this.adjustVolume(this.properVolume);
   }
 
   /**
@@ -31,6 +32,38 @@ export class PikaAudio {
   adjustVolume(volume) {
     for (const prop in this.sounds) {
       this.sounds[prop].volume = volume;
+    }
+  }
+
+  /**
+   * turn BGM volume
+   * @param {boolean} turnOn turnOn? turnOff
+   */
+  turnBGMVolume(turnOn) {
+    let volume;
+    if (turnOn) {
+      volume = this.properVolume;
+    } else {
+      volume = 0;
+    }
+    this.sounds.bgm.volume = volume;
+  }
+
+  /**
+   * turn SFX volume
+   * @param {boolean} turnOn turnOn? turnOff
+   */
+  turnSFXVolume(turnOn) {
+    let volume;
+    if (turnOn) {
+      volume = this.properVolume;
+    } else {
+      volume = 0;
+    }
+    for (const prop in this.sounds) {
+      if (prop !== 'bgm') {
+        this.sounds[prop].volume = volume;
+      }
     }
   }
 }
