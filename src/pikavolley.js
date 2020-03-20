@@ -94,6 +94,9 @@ export class PikachuVolleyball {
     /** @type {boolean} true: paused, false: not paused */
     this.paused = false;
 
+    /** @type {boolean} true: practice mode on, false: practice mode off */
+    this._isPracticeMode = false;
+
     /**
      * The game state which is being rendered now
      * @type {GameState}
@@ -354,6 +357,7 @@ export class PikachuVolleyball {
 
     if (
       isBallTouchingGround &&
+      this._isPracticeMode === false &&
       this.roundEnded === false &&
       this.gameEnded === false
     ) {
@@ -485,5 +489,19 @@ export class PikachuVolleyball {
     this.view.menu.visible = false;
     this.view.game.visible = false;
     this.state = this.intro;
+  }
+
+  /** @return {boolean} */
+  get isPracticeMode() {
+    return this._isPracticeMode;
+  }
+
+  /**
+   * @param {boolean} bool true: turn on practice mode, false: turn off practice mode
+   */
+  set isPracticeMode(bool) {
+    this._isPracticeMode = bool;
+    this.view.game.scoreBoards[0].visible = !bool;
+    this.view.game.scoreBoards[1].visible = !bool;
   }
 }
