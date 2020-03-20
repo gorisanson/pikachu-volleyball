@@ -83,6 +83,12 @@ body {
   margin-left: 5px;
   margin-right: 5px;
 }
+#game-btn {
+  margin-left: 0;
+}
+#about-btn {
+  margin-right: 0;
+}
 
 .relative-container {
   position: relative;
@@ -104,13 +110,13 @@ body {
 }
 
 .dropdown .btn {
-  margin-right: 0px;
+  margin-right: 0;
   background-color: rgba(100, 100, 100, 0.9);
 }
 
 .submenu > .btn {
   width: calc(1.4 * var(--btn-width));
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .dropdown .btn:hover,
@@ -217,8 +223,8 @@ p.last-updated {
 }
 p.release-date,
 p.last-updated {
-  margin-block-start: 0px;
-  margin-block-end: 0px;
+  margin-block-start: 0;
+  margin-block-end: 0;
 }
 
 h1 {
