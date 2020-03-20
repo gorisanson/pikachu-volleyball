@@ -50,7 +50,7 @@
               <div class="relative-container">
                 <button
                   class="btn submenu-btn"
-                  onmouseover="toggleSubmenu('bgm-on-off')"
+                  onmouseover="toggleSubmenu(this, 'bgm-on-off')"
                 >
                   BGM &#9654;
                 </button>
@@ -66,7 +66,7 @@
               <div class="relative-container">
                 <button
                   class="btn submenu-btn"
-                  onmouseover="toggleSubmenu('stereo-mono')"
+                  onmouseover="toggleSubmenu(this, 'stereo-mono')"
                 >
                   SFX &#9654;
                 </button>
@@ -85,7 +85,7 @@
               <div class="relative-container">
                 <button
                   class="btn submenu-btn"
-                  onmouseover="toggleSubmenu('speed-list')"
+                  onmouseover="toggleSubmenu(this, 'speed-list')"
                 >
                   Speed &#9654;
                 </button>
@@ -104,7 +104,7 @@
               <div class="relative-container">
                 <button
                   class="btn submenu-btn"
-                  onmouseover="toggleSubmenu('winning-score-list')"
+                  onmouseover="toggleSubmenu(this, 'winning-score-list')"
                 >
                   Winning score &#9654;
                 </button>
@@ -123,7 +123,7 @@
               <div class="relative-container">
                 <button
                   class="btn submenu-btn"
-                  onmouseover="toggleSubmenu('practice-mode-on-off')"
+                  onmouseover="toggleSubmenu(this, 'practice-mode-on-off')"
                 >
                   Practice mode &#9654;
                 </button>
@@ -154,16 +154,17 @@
         }
         document.getElementById(dropdownID).classList.toggle('show-block');
       }
-      function toggleSubmenu(subMenuID) {
+      function toggleSubmenu(elem, subMenuID) {
+        const submenuBtns = document.getElementsByClassName('submenu-btn');
+        for (let i = 0; i < submenuBtns.length; i++) {
+          submenuBtns[i].classList.remove('open');
+        }
         const submenus = document.getElementsByClassName('submenu');
         for (let i = 0; i < submenus.length; i++) {
-          if (submenus[i].id !== subMenuID) {
-            submenus[i].classList.remove('show-inline-block');
-          }
+          submenus[i].classList.remove('show-inline-block');
         }
-        document
-          .getElementById(subMenuID)
-          .classList.toggle('show-inline-block');
+        elem.classList.add('open');
+        document.getElementById(subMenuID).classList.add('show-inline-block');
       }
       window.addEventListener('click', event => {
         if (!event.target.matches('.dropdown-btn, .submenu-btn')) {
