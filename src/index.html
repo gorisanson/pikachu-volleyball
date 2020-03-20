@@ -25,8 +25,20 @@
     <div id="grid-container0">
       <div id="grid-container1">
         <div class="btn-container left">
-          <button class="btn">Pause</button>
-          <button class="btn">Restart</button>
+          <div class="relative-container">
+            <button
+              class="btn dropdown-btn"
+              onclick="toggleDropdown('pause-restart-list')"
+            >
+              Game
+            </button>
+            <div id="pause-restart-list" class="dropdown">
+              <button class="btn">
+                <span class="check">&check; </span>Pause
+              </button>
+              <button class="btn">Restart</button>
+            </div>
+          </div>
           <div class="relative-container">
             <button
               class="btn dropdown-btn"
@@ -43,8 +55,12 @@
                   BGM &#9654;
                 </button>
                 <div id="bgm-on-off" class="submenu">
-                  <button class="btn selected">on</button>
-                  <button class="btn">off</button>
+                  <button class="btn selected">
+                    <span class="check">&check; </span>on
+                  </button>
+                  <button class="btn">
+                    <span class="check">&check; </span>off
+                  </button>
                 </div>
               </div>
               <div class="relative-container">
@@ -52,12 +68,18 @@
                   class="btn submenu-btn"
                   onmouseover="toggleSubmenu('stereo-mono')"
                 >
-                  Sound effect &#9654;
+                  SFX &#9654;
                 </button>
                 <div id="stereo-mono" class="submenu">
-                  <button class="btn selected">stereo</button>
-                  <button class="btn">mono</button>
-                  <button class="btn">off</button>
+                  <button class="btn selected">
+                    <span class="check">&check; </span>stereo
+                  </button>
+                  <button class="btn">
+                    <span class="check">&check; </span>mono
+                  </button>
+                  <button class="btn">
+                    <span class="check">&check; </span>off
+                  </button>
                 </div>
               </div>
               <div class="relative-container">
@@ -68,9 +90,15 @@
                   Speed &#9654;
                 </button>
                 <div id="speed-list" class="submenu">
-                  <button class="btn">Slow</button>
-                  <button class="btn selected">Medium</button>
-                  <button class="btn">Fast</button>
+                  <button class="btn">
+                    <span class="check">&check; </span>slow
+                  </button>
+                  <button class="btn selected">
+                    <span class="check">&check; </span>medium
+                  </button>
+                  <button class="btn">
+                    <span class="check">&check; </span>fast
+                  </button>
                 </div>
               </div>
               <div class="relative-container">
@@ -81,9 +109,15 @@
                   Winning score &#9654;
                 </button>
                 <div id="winning-score-list" class="submenu">
-                  <button class="btn">5 points</button>
-                  <button class="btn">10 points</button>
-                  <button class="btn selected">15 poinsts</button>
+                  <button class="btn">
+                    <span class="check">&check; </span>5 pts
+                  </button>
+                  <button class="btn">
+                    <span class="check">&check; </span>10 pts
+                  </button>
+                  <button class="btn selected">
+                    <span class="check">&check; </span>15 pts
+                  </button>
                 </div>
               </div>
               <div class="relative-container">
@@ -94,8 +128,12 @@
                   Practice mode &#9654;
                 </button>
                 <div id="practice-mode-on-off" class="submenu">
-                  <button class="btn">on</button>
-                  <button class="btn selected">off</button>
+                  <button class="btn">
+                    <span class="check">&check; </span>on
+                  </button>
+                  <button class="btn selected">
+                    <span class="check">&check; </span>off
+                  </button>
                 </div>
               </div>
             </div>
