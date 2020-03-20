@@ -177,6 +177,18 @@ function setup() {
     }
   });
 
+  window.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      const menuBar = document.getElementById('menu-bar');
+      if (menuBar.classList.contains('hidden')) {
+        menuBar.classList.remove('hidden');
+      } else {
+        menuBar.classList.add('hidden');
+      }
+      event.preventDefault();
+    }
+  });
+
   start(pikaVolley);
 }
 
