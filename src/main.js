@@ -46,6 +46,9 @@ function setup() {
   const slowSpeedBtn = document.getElementById('slow-speed-btn');
   const mediumSpeedBtn = document.getElementById('medium-speed-btn');
   const fastSpeedBtn = document.getElementById('fast-speed-btn');
+  const winningScore5Btn = document.getElementById('winning-score-5-btn');
+  const winningScore10Btn = document.getElementById('winning-score-10-btn');
+  const winningScore15Btn = document.getElementById('winning-score-15-btn');
   const practiceModeOnBtn = document.getElementById('practice-mode-on-btn');
   const practiceModeOffBtn = document.getElementById('practice-mode-off-btn');
 
@@ -121,6 +124,28 @@ function setup() {
 
     pikaVolley.normalFPS = 20;
     ticker.maxFPS = pikaVolley.normalFPS;
+  });
+
+  // TODO: if current score is already over....
+  winningScore5Btn.addEventListener('click', () => {
+    winningScore10Btn.classList.remove('selected');
+    winningScore15Btn.classList.remove('selected');
+    winningScore5Btn.classList.add('selected');
+    pikaVolley.winningScore = 5;
+  });
+
+  winningScore10Btn.addEventListener('click', () => {
+    winningScore15Btn.classList.remove('selected');
+    winningScore5Btn.classList.remove('selected');
+    winningScore10Btn.classList.add('selected');
+    pikaVolley.winningScore = 10;
+  });
+
+  winningScore15Btn.addEventListener('click', () => {
+    winningScore5Btn.classList.remove('selected');
+    winningScore10Btn.classList.remove('selected');
+    winningScore15Btn.classList.add('selected');
+    pikaVolley.winningScore = 15;
   });
 
   practiceModeOnBtn.addEventListener('click', () => {
