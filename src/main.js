@@ -54,6 +54,8 @@ function setup() {
   const aboutBtn = document.getElementById('about-btn');
   const closeAboutBtn = document.getElementById('close-about-btn');
   const aboutBox = document.getElementById('about-box');
+  const gameBtn = document.getElementById('game-btn');
+  const optionsBtn = document.getElementById('options-btn');
 
   pauseBtn.addEventListener('click', () => {
     pikaVolley.paused = !pikaVolley.paused;
@@ -166,14 +168,26 @@ function setup() {
   aboutBtn.addEventListener('click', () => {
     if (aboutBox.classList.contains('hidden')) {
       aboutBox.classList.remove('hidden');
+      // @ts-ignore
+      gameBtn.disabled = true;
+      // @ts-ignore
+      optionsBtn.disabled = true;
     } else {
       aboutBox.classList.add('hidden');
+      // @ts-ignore
+      gameBtn.disabled = false;
+      // @ts-ignore
+      optionsBtn.disabled = false;
     }
   });
 
   closeAboutBtn.addEventListener('click', () => {
     if (!aboutBox.classList.contains('hidden')) {
       aboutBox.classList.add('hidden');
+      // @ts-ignore
+      gameBtn.disabled = false;
+      // @ts-ignore
+      optionsBtn.disabled = false;
     }
   });
 
@@ -188,6 +202,11 @@ function setup() {
       event.preventDefault();
     }
   });
+
+  // @ts-ignore
+  gameBtn.disabled = true;
+  // @ts-ignore
+  optionsBtn.disabled = true;
 
   start(pikaVolley);
 }
