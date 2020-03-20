@@ -46,6 +46,8 @@ function setup() {
   const slowSpeedBtn = document.getElementById('slow-speed-btn');
   const mediumSpeedBtn = document.getElementById('medium-speed-btn');
   const fastSpeedBtn = document.getElementById('fast-speed-btn');
+  const practiceModeOnBtn = document.getElementById('practice-mode-on-btn');
+  const practiceModeOffBtn = document.getElementById('practice-mode-off-btn');
 
   pauseBtn.addEventListener('click', () => {
     pikaVolley.paused = !pikaVolley.paused;
@@ -119,6 +121,18 @@ function setup() {
 
     pikaVolley.normalFPS = 20;
     ticker.maxFPS = pikaVolley.normalFPS;
+  });
+
+  practiceModeOnBtn.addEventListener('click', () => {
+    practiceModeOffBtn.classList.remove('selected');
+    practiceModeOnBtn.classList.add('selected');
+    pikaVolley.isPracticeMode = true;
+  });
+
+  practiceModeOffBtn.addEventListener('click', () => {
+    practiceModeOnBtn.classList.remove('selected');
+    practiceModeOffBtn.classList.add('selected');
+    pikaVolley.isPracticeMode = false;
   });
 
   start(pikaVolley);
