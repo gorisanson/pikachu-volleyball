@@ -50,7 +50,7 @@
               <div class="relative-container">
                 <button
                   class="btn submenu-btn"
-                  onmouseover="toggleSubmenu(this, 'bgm-on-off')"
+                  onmouseover="showSubmenu(this, 'bgm-on-off')"
                 >
                   BGM &#9654;
                 </button>
@@ -66,7 +66,7 @@
               <div class="relative-container">
                 <button
                   class="btn submenu-btn"
-                  onmouseover="toggleSubmenu(this, 'stereo-mono')"
+                  onmouseover="showSubmenu(this, 'stereo-mono')"
                 >
                   SFX &#9654;
                 </button>
@@ -85,7 +85,7 @@
               <div class="relative-container">
                 <button
                   class="btn submenu-btn"
-                  onmouseover="toggleSubmenu(this, 'speed-list')"
+                  onmouseover="showSubmenu(this, 'speed-list')"
                 >
                   Speed &#9654;
                 </button>
@@ -104,7 +104,7 @@
               <div class="relative-container">
                 <button
                   class="btn submenu-btn"
-                  onmouseover="toggleSubmenu(this, 'winning-score-list')"
+                  onmouseover="showSubmenu(this, 'winning-score-list')"
                 >
                   Winning score &#9654;
                 </button>
@@ -123,7 +123,7 @@
               <div class="relative-container">
                 <button
                   class="btn submenu-btn"
-                  onmouseover="toggleSubmenu(this, 'practice-mode-on-off')"
+                  onmouseover="showSubmenu(this, 'practice-mode-on-off')"
                 >
                   Practice mode &#9654;
                 </button>
@@ -145,27 +145,38 @@
       </div>
     </div>
     <script>
-      function toggleDropdown(dropdownID) {
+      function hideDropdownsExcept(dropdownID) {
         const dropdowns = document.getElementsByClassName('dropdown');
         for (let i = 0; i < dropdowns.length; i++) {
           if (dropdowns[i].id !== dropdownID) {
             dropdowns[i].classList.remove('show-block');
           }
         }
-        document.getElementById(dropdownID).classList.toggle('show-block');
       }
-      function toggleSubmenu(elem, subMenuID) {
-        const submenuBtns = document.getElementsByClassName('submenu-btn');
-        for (let i = 0; i < submenuBtns.length; i++) {
-          submenuBtns[i].classList.remove('open');
-        }
+
+      function hideSubmenus() {
         const submenus = document.getElementsByClassName('submenu');
         for (let i = 0; i < submenus.length; i++) {
           submenus[i].classList.remove('show-inline-block');
         }
+        const submenuBtns = document.getElementsByClassName('submenu-btn');
+        for (let i = 0; i < submenuBtns.length; i++) {
+          submenuBtns[i].classList.remove('open');
+        }
+      }
+
+      function toggleDropdown(dropdownID) {
+        hideSubmenus();
+        hideDropdownsExcept(dropdownID);
+        document.getElementById(dropdownID).classList.toggle('show-block');
+      }
+
+      function showSubmenu(elem, subMenuID) {
+        hideSubmenus();
         elem.classList.add('open');
         document.getElementById(subMenuID).classList.add('show-inline-block');
       }
+
       window.addEventListener('click', event => {
         if (!event.target.matches('.dropdown-btn, .submenu-btn')) {
           const dropdowns = document.getElementsByClassName('dropdown');
