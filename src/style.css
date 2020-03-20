@@ -2,22 +2,22 @@
   /* Pikachu Volleyball's original width: 432px, original height: 304px */
   --aspect-ratio: calc(432 / 304);
   --inverse-aspect-ratio: calc(304 / 432);
-  --width: 96vmin;
-  --height: calc(96vmin * var(--inverse-aspect-ratio));
+  --canvas-width: 96vmin;
+  --canvas-height: calc(96vmin * var(--inverse-aspect-ratio));
   --font-size: 18px;
   --btn-width: calc(5 * var(--font-size));
   --btn-height: calc(3 * var(--font-size));
 }
 @media only screen and (min-aspect-ratio: 432/304) {
   :root {
-    --width: calc(96vh * var(--aspect-ratio));
-    --height: 96vh;
+    --canvas-width: calc(96vh * var(--aspect-ratio));
+    --canvas-height: 96vh;
   }
 }
 @media only screen and (max-aspect-ratio: 432/304) {
   :root {
-    --width: 96vw;
-    --height: calc(96vw * var(--inverse-aspect-ratio));
+    --canvas-width: 96vw;
+    --canvas-height: calc(96vw * var(--inverse-aspect-ratio));
   }
 }
 html {
@@ -37,7 +37,7 @@ body {
   height: 100vh;
   justify-content: center;
   align-content: center;
-  grid-template-rows: calc(3 * var(--font-size)) var(--height);
+  grid-template-rows: calc(3 * var(--font-size)) var(--canvas-height);
   grid-gap: 10px;
 }
 #grid-container1 {
@@ -85,8 +85,15 @@ body {
   display: none;
 }
 
-.dropdown .btn {
+.dropdown.show {
+  display: block;
+}
+
+.submenu.show {
   display: inline-block;
+}
+
+.dropdown .btn {
   margin-right: 0px;
   background-color: rgba(100, 100, 100, 0.9);
 }
@@ -109,19 +116,11 @@ span.check {
   display: inline;
 }
 
-.show-block {
-  display: block;
-}
-
-.show-inline-block {
-  display: inline-block;
-}
-
-#game-screen {
+#game-canvas {
   display: block;
   grid-row-start: 2;
   margin-left: auto;
   margin-right: auto;
-  width: var(--width);
-  height: var(--height);
+  width: var(--canvas-width);
+  height: var(--canvas-height);
 }

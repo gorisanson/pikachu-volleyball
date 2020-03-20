@@ -149,7 +149,7 @@
         const dropdowns = document.getElementsByClassName('dropdown');
         for (let i = 0; i < dropdowns.length; i++) {
           if (dropdowns[i].id !== dropdownID) {
-            dropdowns[i].classList.remove('show-block');
+            dropdowns[i].classList.remove('show');
           }
         }
       }
@@ -157,7 +157,7 @@
       function hideSubmenus() {
         const submenus = document.getElementsByClassName('submenu');
         for (let i = 0; i < submenus.length; i++) {
-          submenus[i].classList.remove('show-inline-block');
+          submenus[i].classList.remove('show');
         }
         const submenuBtns = document.getElementsByClassName('submenu-btn');
         for (let i = 0; i < submenuBtns.length; i++) {
@@ -168,24 +168,24 @@
       function toggleDropdown(dropdownID) {
         hideSubmenus();
         hideDropdownsExcept(dropdownID);
-        document.getElementById(dropdownID).classList.toggle('show-block');
+        document.getElementById(dropdownID).classList.toggle('show');
       }
 
       function showSubmenu(elem, subMenuID) {
         hideSubmenus();
         elem.classList.add('open');
-        document.getElementById(subMenuID).classList.add('show-inline-block');
+        document.getElementById(subMenuID).classList.add('show');
       }
 
       window.addEventListener('click', event => {
         if (!event.target.matches('.dropdown-btn, .submenu-btn')) {
           const dropdowns = document.getElementsByClassName('dropdown');
           for (let i = 0; i < dropdowns.length; i++) {
-            dropdowns[i].classList.remove('show-block');
+            dropdowns[i].classList.remove('show');
           }
           const submenus = document.getElementsByClassName('submenu');
           for (let i = 0; i < submenus.length; i++) {
-            submenus[i].classList.remove('show-inline-block');
+            submenus[i].classList.remove('show');
           }
         }
       });
