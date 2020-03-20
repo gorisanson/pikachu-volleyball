@@ -22,76 +22,8 @@
   </head>
 
   <body>
-    <div id="grid-container0">
-      <div id="game-canvas-container">
-        <div class="fade-box in about" id="about-box">
-          <div>
-            <h1>Pikachu Volleyball</h1>
-            <p class="original-by">
-              The original game developed by<br />
-              <span class="no-wrap"
-                >1997 (C) SACHI SOFT / SAWAYAKAN Programmers</span
-              ><br />
-              <span class="no-wrap">1997 (C) Satoshi Takenouchi</span>
-            </p>
-            <p class="reverse-engineered-by">
-              Reverse engineered & implemented into JavaScript by
-              <span class="no-wrap"
-                ><a
-                  href="https://github.com/gorisanson"
-                  target="_blank"
-                  rel="noopener"
-                  >Lee, Kyutae</a
-                ></span
-              >
-            </p>
-            <p class="release-date">
-              Release Date: 2020-03-20
-            </p>
-            <p class="last-updated">
-              Last Updated: 2020-03-20
-            </p>
-            <p>
-              Pikachu Volleyball is a classic game which was developed in Japan
-              in 1997. The game was popular in Korea when I was young. I had
-              played it with my friends often. The game could be executed only
-              in Windows environment.
-            </p>
-            <p>
-              This web version is created by reverse engineering the machine
-              code of the original game and implementing it to JavaScript. It is
-              executed directly on the web browser so you can play it not only
-              in Windows, but also in macOS, Linux, etc. — only if you have
-              keyboard:) You can view the source code on
-              <a
-                href="https://github.com/gorisanson/pikachu-volleyball"
-                target="_blank"
-                rel="noopener"
-                >GitHub</a
-              >.
-            </p>
-            <p><span class="thick">Controls:</span><br /></p>
-
-            <p>
-              <img
-                class="controls"
-                src="assets/controls.png"
-                alt="game controls"
-              />
-            </p>
-
-            <p>
-              <span class="thick">Tip:</span><br />
-              When you select <span class="no_wrap">"1人でぴかちゅ~"</span> to
-              play against the computer, you would play as player 1 if you
-              select by pressing "z" key, or you would play as player 2 if you
-              select by pressing "enter" key.
-            </p>
-            <button id="close-about-btn" class="close">close</button>
-          </div>
-        </div>
-      </div>
-      <div id="grid-container1">
+    <div id="flex-container">
+      <div id="menu-bar">
         <div class="btn-container left">
           <div class="relative-container">
             <button
@@ -209,6 +141,77 @@
         </div>
         <div class="btn-container right">
           <button id="about-btn" class="btn">About</button>
+        </div>
+      </div>
+      <div id="game-canvas-container">
+        <div class="fade-box in about" id="about-box">
+          <div>
+            <h1>Pikachu Volleyball</h1>
+            <p class="original-by">
+              The original game developed by<br />
+              <span class="no-wrap"
+                >1997 (C) SACHI SOFT / SAWAYAKAN Programmers</span
+              ><br />
+              <span class="no-wrap">1997 (C) Satoshi Takenouchi</span>
+            </p>
+            <p class="reverse-engineered-by">
+              Reverse engineered & implemented into JavaScript by
+              <span class="no-wrap"
+                ><a
+                  href="https://github.com/gorisanson"
+                  target="_blank"
+                  rel="noopener"
+                  >Lee, Kyutae</a
+                ></span
+              >
+            </p>
+            <p class="release-date">
+              Release Date: 2020-03-20
+            </p>
+            <p class="last-updated">
+              Last Updated: 2020-03-20
+            </p>
+            <p>
+              Pikachu Volleyball is a classic game which was developed in Japan
+              in 1997. The game was popular in Korea when I was young. I had
+              played it with my friends often. The game could be executed only
+              in Windows environment.
+            </p>
+            <p>
+              This web version is created by reverse engineering the machine
+              code of the original game and implementing it to JavaScript. It is
+              executed directly on the web browser so you can play it not only
+              in Windows, but also in macOS, Linux, etc. — only if you have
+              keyboard:) You can view the source code on
+              <a
+                href="https://github.com/gorisanson/pikachu-volleyball"
+                target="_blank"
+                rel="noopener"
+                >GitHub</a
+              >.
+            </p>
+            <p><span class="thick">Controls:</span><br /></p>
+
+            <p>
+              <img
+                class="controls"
+                src="assets/controls.png"
+                alt="game controls"
+              />
+            </p>
+            <p>
+              <span class="thick">Tip 1:</span><br />
+              When you select <span class="no_wrap">"1人でぴかちゅ~"</span> to
+              play against the computer, you would play as player 1 if you
+              select by pressing "z" key, or you would play as player 2 if you
+              select by pressing "enter" key.
+            </p>
+            <p>
+              <span class="thick">Tip 2:</span><br />
+              If you want to hide/show the game menu bar, press "esc" key:)
+            </p>
+            <button id="close-about-btn" class="close">close</button>
+          </div>
         </div>
       </div>
     </div>
