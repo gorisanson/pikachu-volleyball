@@ -21,7 +21,7 @@ const ticker = new PIXI.Ticker();
 const loader = new PIXI.Loader();
 
 renderer.view.setAttribute('id', 'game-canvas');
-document.getElementById('grid-container0').appendChild(renderer.view);
+document.getElementById('game-canvas-container').appendChild(renderer.view);
 
 ticker.add(() => {
   renderer.render(stage);
