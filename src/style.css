@@ -67,7 +67,7 @@ body {
   border-radius: 10px;
   padding: 0;
   color: white;
-  background-color: rgb(50, 50, 50);
+  background-color: rgba(50, 50, 50, 1);
   font-size: calc(var(--font-size) * 1.2);
   text-align: center;
   text-decoration: none;
@@ -88,21 +88,17 @@ body {
 .dropdown .btn {
   display: inline-block;
   margin-right: 0px;
-  background-color: rgb(100, 100, 100);
+  background-color: rgba(100, 100, 100, 0.9);
 }
 
 .submenu > .btn {
-  background-color: rgb(200, 200, 200);
   width: calc(1.4 * var(--btn-width));
   margin-left: 0px;
 }
 
-.submenu .btn:hover {
-  background-color: rgb(100, 100, 100);
-}
-
-.submenu .selected {
-  background-color: rgb(125, 125, 125);
+.dropdown .btn:hover,
+.submenu-btn.open {
+  background-color: rgba(50, 50, 50, 0.9);
 }
 
 span.check {
