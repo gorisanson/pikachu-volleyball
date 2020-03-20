@@ -91,6 +91,9 @@ export class PikachuVolleyball {
       menu: 225
     };
 
+    /** @type {boolean} true: paused, false: not paused */
+    this.paused = false;
+
     /**
      * The game state which is being rendered now
      * @type {GameState}
@@ -103,6 +106,9 @@ export class PikachuVolleyball {
    * This function should be called at regular intervals ( interval = (1 / FPS) second )
    */
   gameLoop() {
+    if (this.paused === true) {
+      return;
+    }
     if (this.slowMotionFramesLeft > 0) {
       this.slowMotionNumOfSkippedFrames++;
       if (
@@ -466,5 +472,18 @@ export class PikachuVolleyball {
       audio.sounds.ballTouchesGround.play();
       sound.ballTouchesGround = false;
     }
+  }
+
+  /**
+   * Called if restart button clicked
+   */
+  restart() {
+    this.frameCounter = 0;
+    this.noInputFrameCounter = 0;
+    this.slowMotionFramesLeft = 0;
+    this.slowMotionNumOfSkippedFrames = 0;
+    this.view.menu.visible = false;
+    this.view.game.visible = false;
+    this.state = this.intro;
   }
 }

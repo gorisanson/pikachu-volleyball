@@ -36,6 +36,19 @@ loader.load(setup);
 
 function setup() {
   const pikaVolley = new PikachuVolleyball(stage, loader.resources);
+  document.getElementById('pause-btn').addEventListener('click', event => {
+    pikaVolley.paused = !pikaVolley.paused;
+    if (pikaVolley.paused === true) {
+      // @ts-ignore
+      event.currentTarget.classList.add('selected');
+    } else {
+      // @ts-ignore
+      event.currentTarget.classList.remove('selected');
+    }
+  });
+  document.getElementById('restart-btn').addEventListener('click', () => {
+    pikaVolley.restart();
+  });
   start(pikaVolley);
 }
 
