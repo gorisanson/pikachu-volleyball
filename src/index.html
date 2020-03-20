@@ -30,27 +30,74 @@
           <div class="relative-container">
             <button
               class="btn dropdown-btn"
-              onclick="toggleDropdown('speed-list')"
+              onclick="toggleDropdown('option-list')"
             >
-              Speed &#9660;
+              Options
             </button>
-            <div id="speed-list" class="dropdown">
-              <button class="btn">Slow</button>
-              <button class="btn selected">Medium</button>
-              <button class="btn">Fast</button>
-            </div>
-          </div>
-          <div class="relative-container">
-            <button
-              class="btn dropdown-btn"
-              onclick="toggleDropdown('winning-score-list')"
-            >
-              Winning score &#9660;
-            </button>
-            <div id="winning-score-list" class="dropdown">
-              <button class="btn">5 points</button>
-              <button class="btn selected">10 points</button>
-              <button class="btn">15 poinsts</button>
+            <div id="option-list" class="dropdown">
+              <div class="relative-container">
+                <button
+                  class="btn submenu-btn"
+                  onmouseover="toggleSubmenu('bgm-on-off')"
+                >
+                  BGM &#9654;
+                </button>
+                <div id="bgm-on-off" class="submenu">
+                  <button class="btn selected">on</button>
+                  <button class="btn">off</button>
+                </div>
+              </div>
+              <div class="relative-container">
+                <button
+                  class="btn submenu-btn"
+                  onmouseover="toggleSubmenu('stereo-mono')"
+                >
+                  Sound effect &#9654;
+                </button>
+                <div id="stereo-mono" class="submenu">
+                  <button class="btn selected">stereo</button>
+                  <button class="btn">mono</button>
+                  <button class="btn">off</button>
+                </div>
+              </div>
+              <div class="relative-container">
+                <button
+                  class="btn submenu-btn"
+                  onmouseover="toggleSubmenu('speed-list')"
+                >
+                  Speed &#9654;
+                </button>
+                <div id="speed-list" class="submenu">
+                  <button class="btn">Slow</button>
+                  <button class="btn selected">Medium</button>
+                  <button class="btn">Fast</button>
+                </div>
+              </div>
+              <div class="relative-container">
+                <button
+                  class="btn submenu-btn"
+                  onmouseover="toggleSubmenu('winning-score-list')"
+                >
+                  Winning score &#9654;
+                </button>
+                <div id="winning-score-list" class="submenu">
+                  <button class="btn">5 points</button>
+                  <button class="btn">10 points</button>
+                  <button class="btn selected">15 poinsts</button>
+                </div>
+              </div>
+              <div class="relative-container">
+                <button
+                  class="btn submenu-btn"
+                  onmouseover="toggleSubmenu('practice-mode-on-off')"
+                >
+                  Practice mode &#9654;
+                </button>
+                <div id="practice-mode-on-off" class="submenu">
+                  <button class="btn">on</button>
+                  <button class="btn selected">off</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -64,16 +111,31 @@
         const dropdowns = document.getElementsByClassName('dropdown');
         for (let i = 0; i < dropdowns.length; i++) {
           if (dropdowns[i].id !== dropdownID) {
-            dropdowns[i].classList.remove('show');
+            dropdowns[i].classList.remove('show-block');
           }
         }
-        document.getElementById(dropdownID).classList.toggle('show');
+        document.getElementById(dropdownID).classList.toggle('show-block');
+      }
+      function toggleSubmenu(subMenuID) {
+        const submenus = document.getElementsByClassName('submenu');
+        for (let i = 0; i < submenus.length; i++) {
+          if (submenus[i].id !== subMenuID) {
+            submenus[i].classList.remove('show-inline-block');
+          }
+        }
+        document
+          .getElementById(subMenuID)
+          .classList.toggle('show-inline-block');
       }
       window.addEventListener('click', event => {
-        if (!event.target.matches('.dropdown-btn')) {
+        if (!event.target.matches('.dropdown-btn, .submenu-btn')) {
           const dropdowns = document.getElementsByClassName('dropdown');
           for (let i = 0; i < dropdowns.length; i++) {
-            dropdowns[i].classList.remove('show');
+            dropdowns[i].classList.remove('show-block');
+          }
+          const submenus = document.getElementsByClassName('submenu');
+          for (let i = 0; i < submenus.length; i++) {
+            submenus[i].classList.remove('show-inline-block');
           }
         }
       });
