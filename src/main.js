@@ -51,6 +51,9 @@ function setup() {
   const winningScore15Btn = document.getElementById('winning-score-15-btn');
   const practiceModeOnBtn = document.getElementById('practice-mode-on-btn');
   const practiceModeOffBtn = document.getElementById('practice-mode-off-btn');
+  const aboutBtn = document.getElementById('about-btn');
+  const closeAboutBtn = document.getElementById('close-about-btn');
+  const aboutBox = document.getElementById('about-box');
 
   pauseBtn.addEventListener('click', () => {
     pikaVolley.paused = !pikaVolley.paused;
@@ -158,6 +161,20 @@ function setup() {
     practiceModeOnBtn.classList.remove('selected');
     practiceModeOffBtn.classList.add('selected');
     pikaVolley.isPracticeMode = false;
+  });
+
+  aboutBtn.addEventListener('click', () => {
+    if (aboutBox.classList.contains('hidden')) {
+      aboutBox.classList.remove('hidden');
+    } else {
+      aboutBox.classList.add('hidden');
+    }
+  });
+
+  closeAboutBtn.addEventListener('click', () => {
+    if (!aboutBox.classList.contains('hidden')) {
+      aboutBox.classList.add('hidden');
+    }
   });
 
   start(pikaVolley);
