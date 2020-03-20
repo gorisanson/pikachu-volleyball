@@ -20,7 +20,7 @@ const stage = new PIXI.Container();
 const ticker = new PIXI.Ticker();
 const loader = new PIXI.Loader();
 
-renderer.view.setAttribute('id', 'game-screen');
+renderer.view.setAttribute('id', 'game-canvas');
 document.getElementById('grid-container0').appendChild(renderer.view);
 
 ticker.add(() => {
