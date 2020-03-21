@@ -49,6 +49,26 @@ function setup() {
   const winningScore5Btn = document.getElementById('winning-score-5-btn');
   const winningScore10Btn = document.getElementById('winning-score-10-btn');
   const winningScore15Btn = document.getElementById('winning-score-15-btn');
+  const noticeBox = document.getElementById('notice-box');
+  const winningScoreInNoticeBox = document.getElementById(
+    'winning-score-in-notice-box'
+  );
+  const isWinningScoreAlreadyReached = winningScore => {
+    const isGamePlaying =
+      pikaVolley.state === pikaVolley.round ||
+      pikaVolley.state === pikaVolley.afterEndOfRound ||
+      pikaVolley.state === pikaVolley.beforeStartOfNextRound;
+    if (
+      isGamePlaying &&
+      (pikaVolley.scores[0] >= winningScore ||
+        pikaVolley.scores[1] >= winningScore)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const noticeOKBtn = document.getElementById('notice-ok-btn');
   const practiceModeOnBtn = document.getElementById('practice-mode-on-btn');
   const practiceModeOffBtn = document.getElementById('practice-mode-off-btn');
   const aboutBtn = document.getElementById('about-btn');
@@ -133,6 +153,17 @@ function setup() {
 
   // TODO: if current score is already over....
   winningScore5Btn.addEventListener('click', () => {
+    if (isWinningScoreAlreadyReached(5)) {
+      winningScoreInNoticeBox.textContent = '5';
+      noticeBox.classList.remove('hidden');
+      // @ts-ignore
+      gameBtn.disabled = true;
+      // @ts-ignore
+      optionsBtn.disabled = true;
+      // @ts-ignore
+      aboutBtn.disabled = true;
+      return;
+    }
     winningScore10Btn.classList.remove('selected');
     winningScore15Btn.classList.remove('selected');
     winningScore5Btn.classList.add('selected');
@@ -140,6 +171,17 @@ function setup() {
   });
 
   winningScore10Btn.addEventListener('click', () => {
+    if (isWinningScoreAlreadyReached(10)) {
+      winningScoreInNoticeBox.textContent = '10';
+      noticeBox.classList.remove('hidden');
+      // @ts-ignore
+      gameBtn.disabled = true;
+      // @ts-ignore
+      optionsBtn.disabled = true;
+      // @ts-ignore
+      aboutBtn.disabled = true;
+      return;
+    }
     winningScore15Btn.classList.remove('selected');
     winningScore5Btn.classList.remove('selected');
     winningScore10Btn.classList.add('selected');
@@ -147,10 +189,33 @@ function setup() {
   });
 
   winningScore15Btn.addEventListener('click', () => {
+    if (isWinningScoreAlreadyReached(15)) {
+      winningScoreInNoticeBox.textContent = '15';
+      noticeBox.classList.remove('hidden');
+      // @ts-ignore
+      gameBtn.disabled = true;
+      // @ts-ignore
+      optionsBtn.disabled = true;
+      // @ts-ignore
+      aboutBtn.disabled = true;
+      return;
+    }
     winningScore5Btn.classList.remove('selected');
     winningScore10Btn.classList.remove('selected');
     winningScore15Btn.classList.add('selected');
     pikaVolley.winningScore = 15;
+  });
+
+  noticeOKBtn.addEventListener('click', () => {
+    if (!noticeBox.classList.contains('hidden')) {
+      noticeBox.classList.add('hidden');
+      // @ts-ignore
+      gameBtn.disabled = false;
+      // @ts-ignore
+      optionsBtn.disabled = false;
+      // @ts-ignore
+      aboutBtn.disabled = false;
+    }
   });
 
   practiceModeOnBtn.addEventListener('click', () => {

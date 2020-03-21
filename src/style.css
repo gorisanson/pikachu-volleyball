@@ -163,6 +163,7 @@ span.check {
   z-index: -1;
   visibility: hidden;
   opacity: 0;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 .fade-box.in {
   z-index: 10;
@@ -187,31 +188,19 @@ span.check {
   }
 }
 
-#about-box {
-  grid-row-start: 2;
-  background-color: rgba(255, 255, 255, 0.8);
-}
-
-button.close {
-  display: inline-block;
+button.btn-in-box {
+  display: block;
   height: calc(2 * var(--btn-font-size));
   width: calc(4 * var(--btn-font-size));
   border: none;
-  margin: 2px;
+  margin: 0 auto;
   padding: 0;
-  background-color: white;
-  color: black;
+  background-color: rgb(50, 50, 50);
+  color: white;
   font-size: var(--btn-font-size);
   text-align: center;
   text-decoration: none;
   border-radius: 10px;
-}
-
-button.close {
-  background-color: rgb(50, 50, 50);
-  color: white;
-  display: block;
-  margin: 0 auto;
 }
 
 p.original-by,
