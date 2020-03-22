@@ -2,7 +2,7 @@
  * This module takes charge of the game audio or sounds
  */
 'use strict';
-import { RESOURCE_PATH } from './resource_path.js';
+import { RESOURCE_PATH } from './assets_path.js';
 
 const SOUNDS = RESOURCE_PATH.SOUNDS;
 
