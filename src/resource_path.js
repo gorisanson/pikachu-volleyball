@@ -1,5 +1,5 @@
 export const RESOURCE_PATH = {
-  SPRITE_SHEET: 'assets/sprite_sheet.json',
+  SPRITE_SHEET: 'assets/images/sprite_sheet.json',
   TEXTURES: {},
   SOUNDS: {}
 };
@@ -40,11 +40,11 @@ TEXTURES.SACHISOFT = 'messages/common/sachisoft.png';
 TEXTURES.SITTING_PIKACHU = 'sitting_pikachu.png';
 
 const SOUNDS = RESOURCE_PATH.SOUNDS;
-SOUNDS.BGM = 'assets/bgm.mp3';
-SOUNDS.PIPIKACHU = 'assets/WAVE140_1.wav';
-SOUNDS.PIKA = 'assets/WAVE141_1.wav';
-SOUNDS.CHU = 'assets/WAVE142_1.wav';
-SOUNDS.PI = 'assets/WAVE143_1.wav';
-SOUNDS.PIKACHU = 'assets/WAVE144_1.wav';
-SOUNDS.POWERHIT = 'assets/WAVE145_1.wav';
-SOUNDS.BALLTOUCHESGROUND = 'assets/WAVE146_1.wav';
+SOUNDS.BGM = 'assets/sounds/bgm.mp3';
+SOUNDS.PIPIKACHU = 'assets/sounds/WAVE140_1.wav';
+SOUNDS.PIKA = 'assets/sounds/WAVE141_1.wav';
+SOUNDS.CHU = 'assets/sounds/WAVE142_1.wav';
+SOUNDS.PI = 'assets/sounds/WAVE143_1.wav';
+SOUNDS.PIKACHU = 'assets/sounds/WAVE144_1.wav';
+SOUNDS.POWERHIT = 'assets/sounds/WAVE145_1.wav';
+SOUNDS.BALLTOUCHESGROUND = 'assets/sounds/WAVE146_1.wav';
