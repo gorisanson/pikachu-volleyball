@@ -1,3 +1,6 @@
+/*
+ * The Controller part in MVC pattern
+ */
 'ues strics';
 import { PikaPhysics } from './physics.js';
 import { MenuView, GameView, FadeInOut, IntroView } from './view.js';

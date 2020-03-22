@@ -1,3 +1,6 @@
+/*
+ * This module takes charge of the clouds (on the sky) and wave (on the bottom of game screen) motion in the game.
+ */
 'use strict';
 import { rand } from './rand.js';
 
