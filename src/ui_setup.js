@@ -155,10 +155,10 @@ function setUpBtns(pikaVolley, ticker) {
   const winningScore5Btn = document.getElementById('winning-score-5-btn');
   const winningScore10Btn = document.getElementById('winning-score-10-btn');
   const winningScore15Btn = document.getElementById('winning-score-15-btn');
-  const noticeBox = document.getElementById('notice-box');
-  const noticeOKBtn = document.getElementById('notice-ok-btn');
-  const winningScoreInNoticeBox = document.getElementById(
-    'winning-score-in-notice-box'
+  const noticeBox1 = document.getElementById('notice-box-1');
+  const noticeOKBtn1 = document.getElementById('notice-ok-btn-1');
+  const winningScoreInNoticeBox1 = document.getElementById(
+    'winning-score-in-notice-box-1'
   );
   function isWinningScoreAlreadyReached(winningScore) {
     const isGamePlaying =
@@ -174,10 +174,26 @@ function setUpBtns(pikaVolley, ticker) {
     }
     return false;
   }
+  const noticeBox2 = document.getElementById('notice-box-2');
+  const noticeOKBtn2 = document.getElementById('notice-ok-btn-2');
   winningScore5Btn.addEventListener('click', () => {
+    if (winningScore5Btn.classList.contains('selected')) {
+      return;
+    }
+    if (pikaVolley.isPracticeMode === true) {
+      noticeBox2.classList.remove('hidden');
+      // @ts-ignore
+      gameDropdownBtn.disabled = true;
+      // @ts-ignore
+      optionsDropdownBtn.disabled = true;
+      // @ts-ignore
+      aboutBtn.disabled = true;
+      pauseResumeManager.pause(pikaVolley, PauseResumePrecedence.messageBox);
+      return;
+    }
     if (isWinningScoreAlreadyReached(5)) {
-      winningScoreInNoticeBox.textContent = '5';
-      noticeBox.classList.remove('hidden');
+      winningScoreInNoticeBox1.textContent = '5';
+      noticeBox1.classList.remove('hidden');
       // @ts-ignore
       gameDropdownBtn.disabled = true;
       // @ts-ignore
@@ -193,9 +209,23 @@ function setUpBtns(pikaVolley, ticker) {
     pikaVolley.winningScore = 5;
   });
   winningScore10Btn.addEventListener('click', () => {
+    if (winningScore10Btn.classList.contains('selected')) {
+      return;
+    }
+    if (pikaVolley.isPracticeMode === true) {
+      noticeBox2.classList.remove('hidden');
+      // @ts-ignore
+      gameDropdownBtn.disabled = true;
+      // @ts-ignore
+      optionsDropdownBtn.disabled = true;
+      // @ts-ignore
+      aboutBtn.disabled = true;
+      pauseResumeManager.pause(pikaVolley, PauseResumePrecedence.messageBox);
+      return;
+    }
     if (isWinningScoreAlreadyReached(10)) {
-      winningScoreInNoticeBox.textContent = '10';
-      noticeBox.classList.remove('hidden');
+      winningScoreInNoticeBox1.textContent = '10';
+      noticeBox1.classList.remove('hidden');
       // @ts-ignore
       gameDropdownBtn.disabled = true;
       // @ts-ignore
@@ -211,9 +241,23 @@ function setUpBtns(pikaVolley, ticker) {
     pikaVolley.winningScore = 10;
   });
   winningScore15Btn.addEventListener('click', () => {
+    if (winningScore15Btn.classList.contains('selected')) {
+      return;
+    }
+    if (pikaVolley.isPracticeMode === true) {
+      noticeBox2.classList.remove('hidden');
+      // @ts-ignore
+      gameDropdownBtn.disabled = true;
+      // @ts-ignore
+      optionsDropdownBtn.disabled = true;
+      // @ts-ignore
+      aboutBtn.disabled = true;
+      pauseResumeManager.pause(pikaVolley, PauseResumePrecedence.messageBox);
+      return;
+    }
     if (isWinningScoreAlreadyReached(15)) {
-      winningScoreInNoticeBox.textContent = '15';
-      noticeBox.classList.remove('hidden');
+      winningScoreInNoticeBox1.textContent = '15';
+      noticeBox1.classList.remove('hidden');
       // @ts-ignore
       gameDropdownBtn.disabled = true;
       // @ts-ignore
@@ -228,9 +272,21 @@ function setUpBtns(pikaVolley, ticker) {
     winningScore15Btn.classList.add('selected');
     pikaVolley.winningScore = 15;
   });
-  noticeOKBtn.addEventListener('click', () => {
-    if (!noticeBox.classList.contains('hidden')) {
-      noticeBox.classList.add('hidden');
+  noticeOKBtn1.addEventListener('click', () => {
+    if (!noticeBox1.classList.contains('hidden')) {
+      noticeBox1.classList.add('hidden');
+      // @ts-ignore
+      gameDropdownBtn.disabled = false;
+      // @ts-ignore
+      optionsDropdownBtn.disabled = false;
+      // @ts-ignore
+      aboutBtn.disabled = false;
+      pauseResumeManager.resume(pikaVolley, PauseResumePrecedence.messageBox);
+    }
+  });
+  noticeOKBtn2.addEventListener('click', () => {
+    if (!noticeBox2.classList.contains('hidden')) {
+      noticeBox2.classList.add('hidden');
       // @ts-ignore
       gameDropdownBtn.disabled = false;
       // @ts-ignore
