@@ -1,6 +1,6 @@
 'use strict';
 import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js';
-import { Cloud, Wave, cloudAndWaveEngine } from './pika_cloud_and_wave.js';
+import { Cloud, Wave, cloudAndWaveEngine } from './cloud_and_wave.js';
 import { RESOURCE_PATH } from './resource_path.js';
 
 const SPRITE_SHEET = RESOURCE_PATH.SPRITE_SHEET;
@@ -438,7 +438,7 @@ export class GameView {
     }
   }
 
-  /** @typedef {import("./pika_physics").PikaPhysics} PikaPhysics */
+  /** @typedef {import("./physics").PikaPhysics} PikaPhysics */
   /**
    * Draw players and ball in the given physics object
    * @param {PikaPhysics} physics PikaPhysics object to draw

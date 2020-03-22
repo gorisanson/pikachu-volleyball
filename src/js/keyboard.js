@@ -1,5 +1,5 @@
 'use strict';
-import { PikaUserInput } from './pika_physics.js';
+import { PikaUserInput } from './physics.js';
 
 /**
  * Class representing a keyboard used to contorl a player
