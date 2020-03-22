@@ -1,8 +1,8 @@
 'ues strics';
-import { PikaKeyboard } from './pika_keyboard.js';
-import { PikaPhysics } from './pika_physics.js';
-import { PikaAudio } from './pika_audio.js';
-import { MenuView, GameView, FadeInOut, IntroView } from './pika_view.js';
+import { PikaPhysics } from './physics.js';
+import { MenuView, GameView, FadeInOut, IntroView } from './view.js';
+import { PikaKeyboard } from './keyboard.js';
+import { PikaAudio } from './audio.js';
 
 /** @typedef GameState @type {function():void} */
 
