@@ -30,18 +30,18 @@ TEXTURES.BALL_PUNCH = 'ball/ball_punch.png';
 TEXTURES.CLOUD = 'objects/cloud.png';
 TEXTURES.WAVE = 'objects/wave.png';
 
-TEXTURES.GAME_START = 'messages/ko/game_start.png';
+TEXTURES.SACHISOFT = 'messages/common/sachisoft.png';
 TEXTURES.READY = 'messages/common/ready.png';
 TEXTURES.GAME_END = 'messages/common/game_end.png';
 
+TEXTURES.MARK = 'messages/ko/mark.png';
 TEXTURES.POKEMON = 'messages/ko/pokemon.png';
 TEXTURES.PIKACHU_VOLLEYBALL = 'messages/ko/pikachu_volleyball.png';
 TEXTURES.FIGHT = 'messages/ko/fight.png';
 TEXTURES.WITH_COMPUTER = 'messages/ko/with_computer.png';
 TEXTURES.WITH_FRIEND = 'messages/ko/with_friend.png';
+TEXTURES.GAME_START = 'messages/ko/game_start.png';
 
-TEXTURES.MARK = 'messages/ko/mark.png';
-TEXTURES.SACHISOFT = 'messages/common/sachisoft.png';
 TEXTURES.SITTING_PIKACHU = 'sitting_pikachu.png';
 
 const SOUNDS = ASSETS_PATH.SOUNDS;
