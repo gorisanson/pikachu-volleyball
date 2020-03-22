@@ -1,5 +1,5 @@
 /*
- * This module takes charge of the game audio or sounds
+ * This module takes charge of the game audio (or sounds)
  */
 'use strict';
 import { RESOURCE_PATH } from './assets_path.js';
