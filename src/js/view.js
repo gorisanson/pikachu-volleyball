@@ -1,3 +1,6 @@
+/*
+ * The View part in the MVC pattern
+ */
 'use strict';
 import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js';
 import { Cloud, Wave, cloudAndWaveEngine } from './cloud_and_wave.js';

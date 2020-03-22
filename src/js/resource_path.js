@@ -1,3 +1,8 @@
+/*
+ * This module takes charge of the paths (file locations) of the game assets.
+ */
+'use strict';
+
 export const RESOURCE_PATH = {
   SPRITE_SHEET: 'assets/images/sprite_sheet.json',
   TEXTURES: {},

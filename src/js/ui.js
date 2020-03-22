@@ -1,3 +1,7 @@
+/*
+ * This module takes charge of the UI (menu bar, buttons, etc.) of the web page
+ */
+'use strict';
 /** @typedef {import('./pikavolley.js').PikachuVolleyball} PikachuVolleyball */
 /** @typedef {import('pixi.js').Ticker} Ticker */
 

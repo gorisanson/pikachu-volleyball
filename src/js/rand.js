@@ -2,7 +2,7 @@
 /**
  * Return random integer in [0, 32767]
  *
- * The machine (assembly) code of the original game use "_rand()" function in Visual Studio 1988 Library.
+ * The machine code of the original game use "_rand()" function in Visual Studio 1988 Library.
  * I could't find out how this function works exactly.
  * But, anyhow, it should be a funtion that generate a random number.
  * I decided to use custom rand function which generates random integer in [0, 32767]

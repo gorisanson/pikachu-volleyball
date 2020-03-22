@@ -1,9 +1,19 @@
 /*
+ * The Model part in the MVC pattern
+ *
+ * It is the core module which acts as a physics engine.
+ * And it is the core of the reverse engineering the original game.
+ * The address of each function in the original machine code is specified at the comment above each function.
+ * ex) FUN_00403dd0 means the original function at the address 00403dd0
+ *
+ *
+ * ** Some useful infos below **
+ *
  *  Ground width: 432 = 0x1B0
  *  Ground height: 304 = 0x130
  *
- *  X position coord: [0, 432], right-direction increasing
- *  Y position coord: [0, 304], down-direction increasing
+ *  X position coordinate: [0, 432], right-direction increasing
+ *  Y position coordinate: [0, 304], down-direction increasing
  *
  *  Ball radius: 20 = 0x14
  *  Ball diameter: 40 = 0x28
@@ -12,6 +22,7 @@
  *  Player half-height: 32 = 0x20
  *  Player width: 64 = 0x40
  *  Player height: 64 = 0x40
+ *
  */
 'use strict';
 import { rand } from './rand.js';
@@ -38,11 +49,12 @@ const NET_PILLAR_TOP_TOP_Y_COORD = 176;
 const NET_PILLAR_TOP_BOTTOM_Y_COORD = 192;
 
 /**
- * It's for to limit the looping number of the infinite loops in the original assembly code.
- * This constant is not in the original assembly code.
+ * It's for to limit the looping number of the infinite loops.
+ * This constant is not in the original machine code. (The original machine code does not limit the looping number.)
+ *
  * In the original ball x coord range setting (ball x coord in [20, 432]), the infinite loops in
  * {@link caculate_expected_landing_point_x_for} function and {@link expectedLandingPointXWhenPowerHit} function seems to be always terminated soon.
- * But if the ball x coord range is edited, for example, to [20, 432 - 20] for symmetry,
+ * But if the ball x coord range is edited, for example, to [20, 432 - 20] for left-right symmetry,
  * it is observed that the infinite loop in {@link expectedLandingPointXWhenPowerHit} does not terminate.
  * So for safety, this infinite loop limit is included for the infinite loops mentioned above.
  * @constant @type {number}

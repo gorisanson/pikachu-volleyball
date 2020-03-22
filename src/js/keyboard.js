@@ -1,3 +1,6 @@
+/*
+ * This module takes charge of the user input via keyboard
+ */
 'use strict';
 import { PikaUserInput } from './physics.js';
 
