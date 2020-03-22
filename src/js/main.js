@@ -30,7 +30,7 @@
 import * as PIXI from 'pixi.js';
 import 'pixi-sound';
 import { PikachuVolleyball } from './pikavolley.js';
-import { RESOURCE_PATH } from './assets_path.js';
+import { ASSETS_PATH } from './assets_path.js';
 import { setUpUI } from './ui.js';
 
 const settings = PIXI.settings;
@@ -57,9 +57,9 @@ ticker.add(() => {
 }, PIXI.UPDATE_PRIORITY.LOW);
 ticker.start();
 
-loader.add(RESOURCE_PATH.SPRITE_SHEET);
-for (const prop in RESOURCE_PATH.SOUNDS) {
-  loader.add(RESOURCE_PATH.SOUNDS[prop]);
+loader.add(ASSETS_PATH.SPRITE_SHEET);
+for (const prop in ASSETS_PATH.SOUNDS) {
+  loader.add(ASSETS_PATH.SOUNDS[prop]);
 }
 loader.load(setup);
 

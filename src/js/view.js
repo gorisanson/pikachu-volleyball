@@ -8,10 +8,10 @@
 'use strict';
 import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js';
 import { Cloud, Wave, cloudAndWaveEngine } from './cloud_and_wave.js';
-import { RESOURCE_PATH } from './assets_path.js';
+import { ASSETS_PATH } from './assets_path.js';
 
-const SPRITE_SHEET = RESOURCE_PATH.SPRITE_SHEET;
-const TEXURES = RESOURCE_PATH.TEXTURES;
+const SPRITE_SHEET = ASSETS_PATH.SPRITE_SHEET;
+const TEXURES = ASSETS_PATH.TEXTURES;
 
 /** @constant @type {number} number of clouds to be rendered */
 const NUM_OF_CLOUDS = 10;

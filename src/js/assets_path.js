@@ -3,13 +3,13 @@
  */
 'use strict';
 
-export const RESOURCE_PATH = {
+export const ASSETS_PATH = {
   SPRITE_SHEET: 'assets/images/sprite_sheet.json',
   TEXTURES: {},
   SOUNDS: {}
 };
 
-const TEXTURES = RESOURCE_PATH.TEXTURES;
+const TEXTURES = ASSETS_PATH.TEXTURES;
 TEXTURES.PIKACHU = (i, j) => `pikachu/pikachu_${i}_${j}.png`;
 TEXTURES.BALL = s => `ball/ball_${s}.png`;
 TEXTURES.NUMBER = n => `number/number_${n}.png`;
@@ -44,7 +44,7 @@ TEXTURES.MARK = 'messages/ko/mark.png';
 TEXTURES.SACHISOFT = 'messages/common/sachisoft.png';
 TEXTURES.SITTING_PIKACHU = 'sitting_pikachu.png';
 
-const SOUNDS = RESOURCE_PATH.SOUNDS;
+const SOUNDS = ASSETS_PATH.SOUNDS;
 SOUNDS.BGM = 'assets/sounds/bgm.mp3';
 SOUNDS.PIPIKACHU = 'assets/sounds/WAVE140_1.wav';
 SOUNDS.PIKA = 'assets/sounds/WAVE141_1.wav';
