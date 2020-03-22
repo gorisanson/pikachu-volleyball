@@ -123,6 +123,12 @@ function setUpBtns(pikaVolley, ticker) {
     pikaVolley.audio.turnSFXVolume(false);
   });
 
+  /*
+   *  Game speed:
+   *    slow: 1 frame per 50ms = 20 FPS
+   *    medium: 1 frame per 40ms = 25 FPS
+   *    fast: 1 frame per 33ms = 30.303030... FPS
+   */
   const slowSpeedBtn = document.getElementById('slow-speed-btn');
   const mediumSpeedBtn = document.getElementById('medium-speed-btn');
   const fastSpeedBtn = document.getElementById('fast-speed-btn');
