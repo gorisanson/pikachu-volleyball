@@ -26,14 +26,10 @@
       <div id="menu-bar">
         <div class="btn-container left">
           <div class="relative-container">
-            <button
-              id="game-btn"
-              class="btn dropdown-btn"
-              onclick="toggleDropdown('pause-restart-list')"
-            >
+            <button id="game-dropdown-btn" class="btn dropdown-btn">
               Game
             </button>
-            <div id="pause-restart-list" class="dropdown">
+            <div id="game-dropdown" class="dropdown">
               <button id="pause-btn" class="btn">
                 <span class="check">&check; </span>Pause
               </button>
@@ -41,22 +37,15 @@
             </div>
           </div>
           <div class="relative-container">
-            <button
-              id="options-btn"
-              class="btn dropdown-btn"
-              onclick="toggleDropdown('option-list')"
-            >
+            <button id="options-dropdown-btn" class="btn dropdown-btn">
               Options
             </button>
-            <div id="option-list" class="dropdown">
+            <div id="options-dropdown" class="dropdown">
               <div class="relative-container">
-                <button
-                  class="btn submenu-btn"
-                  onmouseover="showSubmenu(this, 'bgm-on-off')"
-                >
+                <button id="bgm-submenu-btn" class="btn submenu-btn">
                   BGM &#9654;
                 </button>
-                <div id="bgm-on-off" class="submenu">
+                <div id="bgm-submenu" class="submenu">
                   <button id="bgm-on-btn" class="btn selected">
                     <span class="check">&check; </span>on
                   </button>
@@ -66,13 +55,10 @@
                 </div>
               </div>
               <div class="relative-container">
-                <button
-                  class="btn submenu-btn"
-                  onmouseover="showSubmenu(this, 'stereo-mono')"
-                >
+                <button id="sfx-submenu-btn" class="btn submenu-btn">
                   SFX &#9654;
                 </button>
-                <div id="stereo-mono" class="submenu">
+                <div id="sfx-submenu" class="submenu">
                   <button id="stereo-btn" class="btn selected">
                     <span class="check">&check; </span>stereo
                   </button>
@@ -85,13 +71,10 @@
                 </div>
               </div>
               <div class="relative-container">
-                <button
-                  class="btn submenu-btn"
-                  onmouseover="showSubmenu(this, 'speed-list')"
-                >
+                <button id="speed-submenu-btn" class="btn submenu-btn">
                   Speed &#9654;
                 </button>
-                <div id="speed-list" class="submenu">
+                <div id="speed-submenu" class="submenu">
                   <button id="slow-speed-btn" class="btn">
                     <span class="check">&check; </span>slow
                   </button>
@@ -104,13 +87,10 @@
                 </div>
               </div>
               <div class="relative-container">
-                <button
-                  class="btn submenu-btn"
-                  onmouseover="showSubmenu(this, 'winning-score-list')"
-                >
+                <button id="winning-score-submenu-btn" class="btn submenu-btn">
                   Winning score &#9654;
                 </button>
-                <div id="winning-score-list" class="submenu">
+                <div id="winning-score-submenu" class="submenu">
                   <button id="winning-score-5-btn" class="btn">
                     <span class="check">&check; </span>5 pts
                   </button>
@@ -123,13 +103,10 @@
                 </div>
               </div>
               <div class="relative-container">
-                <button
-                  class="btn submenu-btn"
-                  onmouseover="showSubmenu(this, 'practice-mode-on-off')"
-                >
+                <button id="practice-mode-submenu-btn" class="btn submenu-btn">
                   Practice mode &#9654;
                 </button>
-                <div id="practice-mode-on-off" class="submenu">
+                <div id="practice-mode-submenu" class="submenu">
                   <button id="practice-mode-on-btn" class="btn">
                     <span class="check">&check; </span>on
                   </button>
@@ -224,51 +201,5 @@
         </div>
       </div>
     </div>
-    <script>
-      function hideDropdownsExcept(dropdownID) {
-        const dropdowns = document.getElementsByClassName('dropdown');
-        for (let i = 0; i < dropdowns.length; i++) {
-          if (dropdowns[i].id !== dropdownID) {
-            dropdowns[i].classList.remove('show');
-          }
-        }
-      }
-
-      function hideSubmenus() {
-        const submenus = document.getElementsByClassName('submenu');
-        for (let i = 0; i < submenus.length; i++) {
-          submenus[i].classList.remove('show');
-        }
-        const submenuBtns = document.getElementsByClassName('submenu-btn');
-        for (let i = 0; i < submenuBtns.length; i++) {
-          submenuBtns[i].classList.remove('open');
-        }
-      }
-
-      function toggleDropdown(dropdownID) {
-        hideSubmenus();
-        hideDropdownsExcept(dropdownID);
-        document.getElementById(dropdownID).classList.toggle('show');
-      }
-
-      function showSubmenu(elem, subMenuID) {
-        hideSubmenus();
-        elem.classList.add('open');
-        document.getElementById(subMenuID).classList.add('show');
-      }
-
-      window.addEventListener('click', event => {
-        if (!event.target.matches('.dropdown-btn, .submenu-btn')) {
-          const dropdowns = document.getElementsByClassName('dropdown');
-          for (let i = 0; i < dropdowns.length; i++) {
-            dropdowns[i].classList.remove('show');
-          }
-          const submenus = document.getElementsByClassName('submenu');
-          for (let i = 0; i < submenus.length; i++) {
-            submenus[i].classList.remove('show');
-          }
-        }
-      });
-    </script>
   </body>
 </html>
