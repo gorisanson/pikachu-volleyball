@@ -1,5 +1,9 @@
 /*
  * This module takes charge of the clouds (on the sky) and wave (on the bottom of game screen) motion in the game.
+ *
+ * It is gained by reverse engineering the original game.
+ * The address of the original function is in the comment.
+ * ex) FUN_00404770 means the function at the address 00404770 in the machine code.
  */
 'use strict';
 import { rand } from './rand.js';

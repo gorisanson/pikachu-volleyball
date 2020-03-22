@@ -2,9 +2,11 @@
  * The Model part in the MVC pattern
  *
  * It is the core module which acts as a physics engine.
- * And it is the core of the reverse engineering the original game.
+ * This physics engine calculates the movements of the ball and the players (Pikachus).
+ *
+ * It is gained by reverse engineering the original game.
  * The address of each function in the original machine code is specified at the comment above each function.
- * ex) FUN_00403dd0 means the original function at the address 00403dd0
+ * ex) FUN_00403dd0 means the original function at the address 00403dd0.
  *
  *
  * ** Some useful infos below **
