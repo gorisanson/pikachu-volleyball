@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js';
 import 'pixi-sound';
 import { PikachuVolleyball } from './pikavolley.js';
 import { RESOURCE_PATH } from './resource_path.js';
-import { setUpUI } from './ui_setup.js';
+import { setUpUI } from './ui.js';
 
 const settings = PIXI.settings;
 settings.RESOLUTION = window.devicePixelRatio;
