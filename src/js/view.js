@@ -1,5 +1,9 @@
 /*
  * The View part in the MVC pattern
+ *
+ * Some codes in this module are gaind by reverse engineering the original machine code.
+ * The codes gain by reverse engineering are commented by the refered funcion address in the machine code.
+ * ex) FUN_00405d50 means the function at the address 00405d50 in the machine code.
  */
 'use strict';
 import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js';
