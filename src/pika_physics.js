@@ -1,6 +1,6 @@
 /*
- *  X width: 432 = 0x1B0
- *  Y width: 304 = 0x130
+ *  Ground width: 432 = 0x1B0
+ *  Ground height: 304 = 0x130
  *
  *  X position coord: [0, 432], right-direction increasing
  *  Y position coord: [0, 304], down-direction increasing
@@ -12,11 +12,6 @@
  *  Player half-height: 32 = 0x20
  *  Player width: 64 = 0x40
  *  Player height: 64 = 0x40
- *
- *  Game speed:
- *    slow: 1 frame per 33ms = 30.303030...Hz
- *    medium: 1 frame per 40ms = 25Hz
- *    fast: 1 frame per 50ms = 20Hz
  */
 'use strict';
 import { rand } from './rand.js';
