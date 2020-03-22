@@ -21,7 +21,7 @@ export class PikaAudio {
     };
     this.sounds.bgm.loop = true;
     /** @type {number} number in [0, 1] */
-    this.properVolume = 0.3;
+    this.properVolume = 0.2;
     this.adjustVolume(this.properVolume);
   }
 
