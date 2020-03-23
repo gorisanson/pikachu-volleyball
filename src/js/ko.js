@@ -1,5 +1,5 @@
 /*
- * Execute this script to use message sprites translated to Korean.
+ * If want to use message sprites translated to Korean, execute this script before create PikachuVolleyball object.
  */
 
 import { ASSETS_PATH } from './assets_path.js';
