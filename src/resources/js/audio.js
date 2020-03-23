@@ -2,6 +2,7 @@
  * This module takes charge of the game audio (or sounds)
  */
 'use strict';
+import PIXIsound from 'pixi-sound';
 import { ASSETS_PATH } from './assets_path.js';
 
 const SOUNDS = ASSETS_PATH.SOUNDS;
@@ -10,18 +11,25 @@ const SOUNDS = ASSETS_PATH.SOUNDS;
  * Class represeting audio
  */
 export class PikaAudio {
+  /**
+   * Create a PikaAudio object
+   * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
+   */
   constructor(resources) {
-    /** @type {Object.<string,PIXI.sound.Sound>} sounds pack */
+    /** @type {Object.<string,PikaStereoSound>} sounds pack */
     this.sounds = {
-      bgm: resources[SOUNDS.BGM].sound,
-      pipikachu: resources[SOUNDS.PIPIKACHU].sound,
-      pika: resources[SOUNDS.PIKA].sound,
-      chu: resources[SOUNDS.CHU].sound,
-      pi: resources[SOUNDS.PI].sound,
-      pikachu: resources[SOUNDS.PIKACHU].sound,
-      powerHit: resources[SOUNDS.POWERHIT].sound,
-      ballTouchesGround: resources[SOUNDS.BALLTOUCHESGROUND].sound
+      bgm: new PikaStereoSound(resources[SOUNDS.BGM].sound),
+      pipikachu: new PikaStereoSound(resources[SOUNDS.PIPIKACHU].sound),
+      pika: new PikaStereoSound(resources[SOUNDS.PIKA].sound),
+      chu: new PikaStereoSound(resources[SOUNDS.CHU].sound),
+      pi: new PikaStereoSound(resources[SOUNDS.PI].sound),
+      pikachu: new PikaStereoSound(resources[SOUNDS.PIKACHU].sound),
+      powerHit: new PikaStereoSound(resources[SOUNDS.POWERHIT].sound),
+      ballTouchesGround: new PikaStereoSound(
+        resources[SOUNDS.BALLTOUCHESGROUND].sound
+      )
     };
+
     this.sounds.bgm.loop = true;
     /** @type {number} number in [0, 1] */
     this.properVolume = 0.2;
@@ -68,5 +76,68 @@ export class PikaAudio {
         this.sounds[prop].volume = volume;
       }
     }
+  }
+}
+
+/**
+ * Class representing a stereo sound
+ */
+class PikaStereoSound {
+  /**
+   * create a PikaStereoSound object
+   * @param {PIXI.sound.Sound} sound
+   */
+  constructor(sound) {
+    this.center = sound;
+    this.left = PIXIsound.Sound.from(sound.url);
+    this.right = PIXIsound.Sound.from(sound.url);
+
+    const centerPanning = new PIXIsound.filters.StereoFilter(0);
+    const leftPanning = new PIXIsound.filters.StereoFilter(-0.5);
+    const rightPanning = new PIXIsound.filters.StereoFilter(0.5);
+    this.center.filters = [centerPanning];
+    this.left.filters = [leftPanning];
+    this.right.filters = [rightPanning];
+  }
+
+  /**
+   * @param {number} v volume: number in [0, 1]
+   */
+  set volume(v) {
+    this.center.volume = v;
+    this.left.volume = v;
+    this.right.volume = v;
+  }
+
+  /**
+   * @param {boolean} bool
+   */
+  set loop(bool) {
+    this.center.loop = bool;
+    this.left.loop = bool;
+    this.right.loop = bool;
+  }
+
+  /**
+   * play this stereo sound
+   * @param {number} leftOrCenterOrRight -1: left, 0: center, 1: right
+   */
+  play(leftOrCenterOrRight = 0) {
+    if (leftOrCenterOrRight === 0) {
+      this.center.play();
+    } else if (leftOrCenterOrRight === -1) {
+      this.left.play();
+    } else if (leftOrCenterOrRight === 1) {
+      this.right.play();
+    }
+  }
+
+  /**
+   * stop this stereo sound
+   */
+  stop() {
+    this.center.stop();
+    this.left.stop();
+    this.right.stop();
   }
 }

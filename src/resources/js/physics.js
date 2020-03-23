@@ -145,10 +145,9 @@ class Player {
      */
     this.computerWhereToStandBy = 0; // 0xDC
 
-    // TODO: stereo sound
     /**
      * This property is not in the player pointers of the original source code.
-     * But for sound effect (especially for stereo sound(it is TODO, not implemented)),
+     * But for sound effect (especially for stereo sound),
      * it is convinient way to give sound property to a Player.
      * The original name is stereo sound.
      * @type {Object.<string, boolean>}
@@ -243,10 +242,9 @@ class Ball {
     this.previousY = 0; // 0x60
     this.previousPreviousY = 0; // 0x64
 
-    // TODO: stereo sound
     /**
      * this property is not in the ball pointer of the original source code.
-     * But for sound effect (especially for stereo sound(it is TODO, not implemented)),
+     * But for sound effect (especially for stereo sound),
      * it is convinient way to give sound property to a Ball.
      * The original name is stereo sound.
      */

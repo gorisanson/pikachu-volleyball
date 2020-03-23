@@ -97,6 +97,9 @@ export class PikachuVolleyball {
     /** @type {boolean} true: paused, false: not paused */
     this.paused = false;
 
+    /** @type {boolean} true: stereo, false: mono */
+    this.isStereoSound = true;
+
     /** @type {boolean} true: practice mode on, false: practice mode off */
     this._isPracticeMode = false;
 
@@ -454,29 +457,39 @@ export class PikachuVolleyball {
     for (let i = 0; i < 2; i++) {
       const player = this.physics[`player${i + 1}`];
       const sound = player.sound;
-      // const pan = 0;
+      let leftOrCenterOrRight = 0;
+      if (this.isStereoSound) {
+        leftOrCenterOrRight = i === 0 ? -1 : 1;
+      }
       if (sound.pipikachu === true) {
-        audio.sounds.pipikachu.play();
+        audio.sounds.pipikachu.play(leftOrCenterOrRight);
         sound.pipikachu = false;
       }
       if (sound.pika === true) {
-        audio.sounds.pika.play();
+        audio.sounds.pika.play(leftOrCenterOrRight);
         sound.pika = false;
       }
       if (sound.chu === true) {
-        audio.sounds.chu.play();
+        audio.sounds.chu.play(leftOrCenterOrRight);
         sound.chu = false;
       }
     }
     const ball = this.physics.ball;
     const sound = ball.sound;
-    // const pan = 0;
+    let leftOrCenterOrRight = 0;
+    if (this.isStereoSound) {
+      if (ball.punchEffectX < 216) {
+        leftOrCenterOrRight = -1;
+      } else if (ball.punchEffectX > 216) {
+        leftOrCenterOrRight = 1;
+      }
+    }
     if (sound.powerHit === true) {
-      audio.sounds.powerHit.play();
+      audio.sounds.powerHit.play(leftOrCenterOrRight);
       sound.powerHit = false;
     }
     if (sound.ballTouchesGround === true) {
-      audio.sounds.ballTouchesGround.play();
+      audio.sounds.ballTouchesGround.play(leftOrCenterOrRight);
       sound.ballTouchesGround = false;
     }
   }
