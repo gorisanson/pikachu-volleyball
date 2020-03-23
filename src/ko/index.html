@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>피카츄 배구</title>
+
+    <meta name="description" content="피카츄 배구 게임" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../resources/assets/images/IDI_PIKAICON-0.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../resources/assets/images/IDI_PIKAICON-0_16x16.png"
+    />
+    <link rel="stylesheet" href="../resources/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: 'Nanum Gothic', sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="flex-container">
+      <div id="menu-bar">
+        <div class="btn-container left">
+          <div class="relative-container">
+            <button id="game-dropdown-btn" class="btn dropdown-btn">
+              게임
+            </button>
+            <div id="game-dropdown" class="dropdown">
+              <button id="pause-btn" class="btn">
+                <span class="check">&check; </span>일시정지
+              </button>
+              <button id="restart-btn" class="btn">다시시작</button>
+            </div>
+          </div>
+          <div class="relative-container">
+            <button id="options-dropdown-btn" class="btn dropdown-btn">
+              설정
+            </button>
+            <div id="options-dropdown" class="dropdown">
+              <div class="relative-container">
+                <button id="bgm-submenu-btn" class="btn submenu-btn">
+                  배경음악 &#9654;
+                </button>
+                <div id="bgm-submenu" class="submenu">
+                  <button id="bgm-on-btn" class="btn selected">
+                    <span class="check">&check; </span>켜기
+                  </button>
+                  <button id="bgm-off-btn" class="btn">
+                    <span class="check">&check; </span>끄기
+                  </button>
+                </div>
+              </div>
+              <div class="relative-container">
+                <button id="sfx-submenu-btn" class="btn submenu-btn">
+                  효과음 &#9654;
+                </button>
+                <div id="sfx-submenu" class="submenu">
+                  <button id="stereo-btn" class="btn selected">
+                    <span class="check">&check; </span>스테레오
+                  </button>
+                  <button id="mono-btn" class="btn">
+                    <span class="check">&check; </span>모노
+                  </button>
+                  <button id="sfx-off-btn" class="btn">
+                    <span class="check">&check; </span>끄기
+                  </button>
+                </div>
+              </div>
+              <div class="relative-container">
+                <button id="speed-submenu-btn" class="btn submenu-btn">
+                  속도 &#9654;
+                </button>
+                <div id="speed-submenu" class="submenu">
+                  <button id="slow-speed-btn" class="btn">
+                    <span class="check">&check; </span>느리게
+                  </button>
+                  <button id="medium-speed-btn" class="btn selected">
+                    <span class="check">&check; </span>보통
+                  </button>
+                  <button id="fast-speed-btn" class="btn">
+                    <span class="check">&check; </span>빠르게
+                  </button>
+                </div>
+              </div>
+              <div class="relative-container">
+                <button id="winning-score-submenu-btn" class="btn submenu-btn">
+                  승리점수 &#9654;
+                </button>
+                <div id="winning-score-submenu" class="submenu">
+                  <button id="winning-score-5-btn" class="btn">
+                    <span class="check">&check; </span>5점
+                  </button>
+                  <button id="winning-score-10-btn" class="btn">
+                    <span class="check">&check; </span>10점
+                  </button>
+                  <button id="winning-score-15-btn" class="btn selected">
+                    <span class="check">&check; </span>15점
+                  </button>
+                </div>
+              </div>
+              <div class="relative-container">
+                <button id="practice-mode-submenu-btn" class="btn submenu-btn">
+                  연습모드 &#9654;
+                </button>
+                <div id="practice-mode-submenu" class="submenu">
+                  <button id="practice-mode-on-btn" class="btn">
+                    <span class="check">&check; </span>켜기
+                  </button>
+                  <button id="practice-mode-off-btn" class="btn selected">
+                    <span class="check">&check; </span>끄기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-container right">
+          <button id="about-btn" class="btn">게임 소개</button>
+        </div>
+      </div>
+      <div id="game-canvas-container">
+        <div class="fade-box in about" id="about-box">
+          <div>
+            <h1>피카츄 배구</h1>
+            <p class="original-by">
+              피카츄 배구 (対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編) 게임은 원래 다음 분들이
+              만들었습니다.<br />
+              <span class="no-wrap"
+                >1997 (C) SACHI SOFT / SAWAYAKAN Programmers</span
+              ><br />
+              <span class="no-wrap">1997 (C) Satoshi Takenouchi</span>
+            </p>
+            <p class="reverse-engineered-by">
+              이 웹 버전은 피카츄 배구 게임의 주요 부분을 리버스 엔지니어링하여
+              머신 코드를 자바스크립트 코드로 변환하여 만들었습니다.<br />
+              이 웹 버전을 만든 사람:
+              <span class="no-wrap"
+                ><a
+                  href="https://github.com/gorisanson"
+                  target="_blank"
+                  rel="noopener"
+                  >이규태</a
+                ></span
+              >
+            </p>
+            <p class="release-date">
+              출시한 날: 2020-03-20
+            </p>
+            <p class="last-updated">
+              마지막으로 업데이트한 날: 2020-03-20
+            </p>
+            <p>
+              피카츄 배구는 일본에서 1997년에 만들어진 윈도우용 게임입니다. 아마
+              이 게임을 처음 접한 건 초등학교 컴퓨터실에서였던 것으로
+              기억합니다. 친구들과 같이하면 정말 재미있지요. 어떤 분이 일본어
+              스프라이트를 한국어로 번역한 '피카츄 버전 한글판'이 나오기도
+              했습니다. (이 '피카츄 버전 한글판'의 한국어 스프라이트를 이 한국어
+              웹 버전에서도 사용했습니다.)
+            </p>
+            <p>
+              이 웹 버전은 원조 피카츄 배구 게임을 리버스 엔지니어링하여 머신
+              코드의 주요 부분을 자바스크립트 코드로 변환하여 만들었습니다. 이
+              웹 버전 게임은 웹 브라우저 상에서 돌아가기 때문에 윈도우에서만이
+              아니라 맥이나 리눅스에서도 잘 돌아갑니다. 키보드만 있으면
+              스마트폰이나 태블릿에서도 잘 돌아갑니다. 소스 코드를
+              <a
+                href="https://github.com/gorisanson/pikachu-volleyball"
+                target="_blank"
+                rel="noopener"
+                >GitHub</a
+              >에 올려 놓았습니다.
+            </p>
+            <p><span class="thick">조작키:</span><br /></p>
+
+            <p>
+              <img
+                class="controls"
+                src="../resources/assets/images/controls_ko.png"
+                alt="game controls"
+              />
+            </p>
+            <p>
+              <span class="thick">팁 1:</span><br />
+              <span class="no_wrap">"혼자서재미있게~"</span>를 선택할 때 "z"키를
+              눌러서 선택하면, 왼쪽 피카츄(1P)를 선택하여 컴퓨터와 플레이할 수
+              있습니다. (저는 이번에 이걸 만들면서 원조 피카츄 배구 게임을
+              이렇게 저렇게 조작해보면서야 알게 됐습니다.. 그동안은 주구장창
+              엔터키만 눌러서 컴퓨터랑 할때는 오른쪽 피카츄(2P)로만 했지요..
+              저만 그런 거였나요?<span class="no_wrap">ㅠㅠ</span>)
+            </p>
+            <p>
+              <span class="thick">팁 2:</span><br />
+              메뉴 바를 숨기려면 (또는 다시 보이게 하려면) "esc"키를 누르면
+              됩니다.
+            </p>
+            <p>
+              <span class="thick">팁 3:</span><br />
+              원조 피카츄 배구에는 없는 "연습모드"라는 것을 추가했습니다.
+              <span class="no_wrap">"설정 &rarr; 연습모드 &rarr; 켜기"</span>를
+              누르면 활성화가 됩니다. 이 모드를 좋아하는 분이 있었으면 좋겠네요.
+            </p>
+            <button id="close-about-btn" class="btn-in-box">닫기</button>
+          </div>
+        </div>
+        <div class="fade-box in notice hidden" id="notice-box-1">
+          <p>
+            승리점수를
+            <span id="winning-score-in-notice-box-1"></span>점으로 바꿀 수
+            없습니다. 이미 이 점수가 됐거나 넘어버렸습니다.
+          </p>
+          <button id="notice-ok-btn-1" class="btn-in-box">알겠어요</button>
+        </div>
+        <div class="fade-box in notice hidden" id="notice-box-2">
+          <p>
+            연습모드에서 승리점수를 바꾸는 건... 의미가 없습니다. ^^
+          </p>
+          <button id="notice-ok-btn-2" class="btn-in-box">알겠어요</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
