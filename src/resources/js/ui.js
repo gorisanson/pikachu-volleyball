@@ -104,7 +104,6 @@ function setUpBtns(pikaVolley, ticker) {
     pikaVolley.audio.turnBGMVolume(false);
   });
 
-  // TODO: stereo sound
   const stereoBtn = document.getElementById('stereo-btn');
   const monoBtn = document.getElementById('mono-btn');
   const sfxOffBtn = document.getElementById('sfx-off-btn');
@@ -113,12 +112,14 @@ function setUpBtns(pikaVolley, ticker) {
     sfxOffBtn.classList.remove('selected');
     stereoBtn.classList.add('selected');
     pikaVolley.audio.turnSFXVolume(true);
+    pikaVolley.isStereoSound = true;
   });
   monoBtn.addEventListener('click', () => {
     sfxOffBtn.classList.remove('selected');
     stereoBtn.classList.remove('selected');
     monoBtn.classList.add('selected');
     pikaVolley.audio.turnSFXVolume(true);
+    pikaVolley.isStereoSound = false;
   });
   sfxOffBtn.addEventListener('click', () => {
     stereoBtn.classList.remove('selected');
@@ -161,7 +162,6 @@ function setUpBtns(pikaVolley, ticker) {
     ticker.maxFPS = pikaVolley.normalFPS;
   });
 
-  // TODO: if current score is already over....
   const winningScore5Btn = document.getElementById('winning-score-5-btn');
   const winningScore10Btn = document.getElementById('winning-score-10-btn');
   const winningScore15Btn = document.getElementById('winning-score-15-btn');
