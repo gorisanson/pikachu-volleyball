@@ -190,7 +190,7 @@ button.btn-in-box {
   border-radius: 10px;
 }
 h1 {
-  font-size: calc(1.2 * var(--font-size));
+  font-size: calc(1.5 * var(--font-size));
 }
 p.original-by,
 p.reverse-engineered-by,
