@@ -88,6 +88,10 @@ function setUpBtns(pikaVolley, ticker) {
 
   const restartBtn = document.getElementById('restart-btn');
   restartBtn.addEventListener('click', () => {
+    if (pauseBtn.classList.contains('selected')) {
+      pauseBtn.classList.remove('selected');
+      pauseResumeManager.resume(pikaVolley, PauseResumePrecedence.pauseBtn);
+    }
     pikaVolley.restart();
   });
 
