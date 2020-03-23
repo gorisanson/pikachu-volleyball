@@ -5,22 +5,20 @@
   --canvas-width: 96vmin;
   --canvas-height: calc(96vmin * var(--inverse-aspect-ratio));
   --font-size: 18px;
-  --btn-font-size: 18px;
-  --btn-width: calc(5 * var(--btn-font-size));
-  --btn-height: calc(3 * var(--btn-font-size));
+  --btn-width: calc(5 * var(--font-size));
+  --btn-height: calc(3 * var(--font-size));
 }
 /* size of iPad screen is 768px x 1024px in portrait mode */
 @media only screen and (min-width: 768px) and (min-height: 768px) {
   :root {
     --font-size: 22px;
-    --btn-font-size: 22px;
-    --btn-width: calc(6 * var(--btn-font-size));
+    --btn-width: calc(6 * var(--font-size));
   }
 }
 @media only screen and (min-aspect-ratio: 432/304) {
   :root {
-    --canvas-width: calc(96vh * var(--aspect-ratio));
-    --canvas-height: 96vh;
+    --canvas-height: calc(96vh - var(--btn-height) - 10px);
+    --canvas-width: calc(var(--canvas-height) * var(--aspect-ratio));
   }
 }
 @media only screen and (max-aspect-ratio: 432/304) {
@@ -29,7 +27,6 @@
     --canvas-height: calc(96vw * var(--inverse-aspect-ratio));
   }
 }
-
 html {
   box-sizing: border-box;
 }
@@ -38,7 +35,7 @@ html {
 *:after {
   box-sizing: inherit;
 }
-body {
+* {
   font-family: Arial, Helvetica, sans-serif;
 }
 #flex-container {
@@ -56,7 +53,8 @@ body {
 #menu-bar {
   display: grid;
   width: var(--canvas-width);
-  grid-template-columns: 4fr 1fr;
+  height: var(--btn-height);
+  grid-template-columns: 2fr 1fr;
   margin-bottom: 10px;
 }
 .btn-container {
@@ -81,7 +79,7 @@ body {
   padding: 0;
   color: white;
   background-color: rgba(50, 50, 50, 1);
-  font-size: var(--btn-font-size);
+  font-size: var(--font-size);
   text-align: center;
   text-decoration: none;
   margin-left: 5px;
@@ -93,53 +91,42 @@ body {
 #about-btn {
   margin-right: 0;
 }
-
 .relative-container {
   position: relative;
 }
-
 .dropdown,
 .submenu {
   position: absolute;
   display: none;
   z-index: 1;
 }
-
 .dropdown.show {
   display: block;
 }
-
 .submenu.show {
   display: inline-block;
 }
-
 .dropdown .btn {
   margin-right: 0;
   background-color: rgba(100, 100, 100, 0.9);
 }
-
 .submenu > .btn {
   width: calc(1.4 * var(--btn-width));
   margin-left: 0;
 }
-
 .dropdown .btn:hover,
 .submenu-btn.open {
   background-color: rgba(50, 50, 50, 0.9);
 }
-
 span.check {
   display: none;
 }
-
 .selected > span.check {
   display: inline;
 }
-
 #game-canvas-container {
   position: relative;
 }
-
 #game-canvas {
   display: block;
   margin-left: auto;
@@ -147,8 +134,7 @@ span.check {
   width: var(--canvas-width);
   height: var(--canvas-height);
 }
-
-.fade-box {
+.fade-in-box {
   position: absolute;
   display: flex;
   flex-wrap: wrap;
@@ -163,21 +149,15 @@ span.check {
   padding-left: var(--font-size);
   padding-right: var(--font-size);
   text-align: center;
-  z-index: -1;
-  visibility: hidden;
-  opacity: 0;
-  background-color: rgba(255, 255, 255, 0.8);
-}
-.fade-box.in {
   z-index: 10;
   visibility: visible;
   opacity: 1;
+  background-color: rgba(255, 255, 255, 0.8);
   animation-name: fade_in;
   animation-duration: 1s;
 }
-.fade-box.in.about {
+.fade-in-box.about {
   justify-content: flex-start;
-  top: 0;
   height: auto;
   overflow: visible;
   text-align: left;
@@ -191,22 +171,27 @@ span.check {
     opacity: 1;
   }
 }
-
+.fade-in-box.hidden,
+#menu-bar.hidden {
+  display: none;
+}
 button.btn-in-box {
   display: block;
-  height: calc(2 * var(--btn-font-size));
-  width: calc(5 * var(--btn-font-size));
+  height: calc(2 * var(--font-size));
+  width: calc(5 * var(--font-size));
   border: none;
   margin: 0 auto;
   padding: 0;
   background-color: rgb(50, 50, 50);
   color: white;
-  font-size: var(--btn-font-size);
+  font-size: var(--font-size);
   text-align: center;
   text-decoration: none;
   border-radius: 10px;
 }
-
+h1 {
+  font-size: calc(1.2 * var(--font-size));
+}
 p.original-by,
 p.reverse-engineered-by,
 p.release-date,
@@ -219,23 +204,12 @@ p.last-updated {
   margin-block-start: 0;
   margin-block-end: 0;
 }
-
-h1 {
-  font-size: calc(1.2 * var(--font-size));
-}
-
-.hidden,
-#menu-bar.hidden {
-  display: none;
-}
-
 span.no-wrap {
   white-space: nowrap;
 }
 span.thick {
   font-weight: 900;
 }
-
 img.controls {
   max-width: 100%;
 }
