@@ -31,18 +31,23 @@ export class PikaAudio {
     };
 
     this.sounds.bgm.loop = true;
-    /** @type {number} number in [0, 1] */
-    this.properVolume = 0.2;
-    this.adjustVolume(this.properVolume);
+    /** @constant @type {number} proper bgm volume */
+    this.properBGMVolume = 0.2;
+    /** @constant @type {number} proper sfx volume */
+    this.properSFXVolume = 0.3;
+    this.adjustVolume();
   }
 
   /**
    * Adjust audio volume
-   * @param {number} volume number in [0, 1]
    */
-  adjustVolume(volume) {
+  adjustVolume() {
     for (const prop in this.sounds) {
-      this.sounds[prop].volume = volume;
+      if (prop === 'bgm') {
+        this.sounds[prop].volume = this.properBGMVolume;
+      } else {
+        this.sounds[prop].volume = this.properSFXVolume;
+      }
     }
   }
 
@@ -53,7 +58,7 @@ export class PikaAudio {
   turnBGMVolume(turnOn) {
     let volume;
     if (turnOn) {
-      volume = this.properVolume;
+      volume = this.properBGMVolume;
     } else {
       volume = 0;
     }
@@ -67,7 +72,7 @@ export class PikaAudio {
   turnSFXVolume(turnOn) {
     let volume;
     if (turnOn) {
-      volume = this.properVolume;
+      volume = this.properSFXVolume;
     } else {
       volume = 0;
     }
@@ -93,8 +98,8 @@ class PikaStereoSound {
     this.right = PIXIsound.Sound.from(sound.url);
 
     const centerPanning = new PIXIsound.filters.StereoFilter(0);
-    const leftPanning = new PIXIsound.filters.StereoFilter(-0.5);
-    const rightPanning = new PIXIsound.filters.StereoFilter(0.5);
+    const leftPanning = new PIXIsound.filters.StereoFilter(-0.75);
+    const rightPanning = new PIXIsound.filters.StereoFilter(0.75);
     this.center.filters = [centerPanning];
     this.left.filters = [leftPanning];
     this.right.filters = [rightPanning];
