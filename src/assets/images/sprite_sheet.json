@@ -88,7 +88,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":360,"h":20},
 	"sourceSize": {"w":360,"h":20}
 },
-"messages/jp/fight.png":
+"messages/ja/fight.png":
 {
 	"frame": {"x":92,"y":723,"w":160,"h":160},
 	"rotated": false,
@@ -96,7 +96,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":160,"h":160},
 	"sourceSize": {"w":160,"h":160}
 },
-"messages/jp/game_start.png":
+"messages/ja/game_start.png":
 {
 	"frame": {"x":304,"y":64,"w":96,"h":24},
 	"rotated": false,
@@ -104,7 +104,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":24},
 	"sourceSize": {"w":96,"h":24}
 },
-"messages/jp/mark.png":
+"messages/ja/mark.png":
 {
 	"frame": {"x":386,"y":611,"w":88,"h":110},
 	"rotated": false,
@@ -112,7 +112,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":88,"h":110},
 	"sourceSize": {"w":88,"h":110}
 },
-"messages/jp/pikachu_volleyball.png":
+"messages/ja/pikachu_volleyball.png":
 {
 	"frame": {"x":2,"y":530,"w":276,"h":79},
 	"rotated": false,
@@ -120,7 +120,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":276,"h":79},
 	"sourceSize": {"w":276,"h":79}
 },
-"messages/jp/pokemon.png":
+"messages/ja/pokemon.png":
 {
 	"frame": {"x":150,"y":90,"w":200,"h":32},
 	"rotated": false,
@@ -128,7 +128,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":32},
 	"sourceSize": {"w":200,"h":32}
 },
-"messages/jp/with_computer.png":
+"messages/ja/with_computer.png":
 {
 	"frame": {"x":2,"y":42,"w":120,"h":20},
 	"rotated": false,
@@ -136,7 +136,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":120,"h":20},
 	"sourceSize": {"w":120,"h":20}
 },
-"messages/jp/with_friend.png":
+"messages/ja/with_friend.png":
 {
 	"frame": {"x":124,"y":42,"w":120,"h":20},
 	"rotated": false,
@@ -625,6 +625,6 @@
 	"format": "RGBA8888",
 	"size": {"w":476,"h":885},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:78ce02e948fab797ed1a8e76b90a9248:05248f354d7463b1eac75b9b0d492716:6cc8953523e0367402f95f3c9a630665$"
+	"smartupdate": "$TexturePacker:SmartUpdate:bc39cfe4c7bb2b217373dc21b633e35b:05248f354d7463b1eac75b9b0d492716:6cc8953523e0367402f95f3c9a630665$"
 }
 }

@@ -34,13 +34,13 @@ TEXTURES.SACHISOFT = 'messages/common/sachisoft.png';
 TEXTURES.READY = 'messages/common/ready.png';
 TEXTURES.GAME_END = 'messages/common/game_end.png';
 
-TEXTURES.MARK = 'messages/jp/mark.png';
-TEXTURES.POKEMON = 'messages/jp/pokemon.png';
-TEXTURES.PIKACHU_VOLLEYBALL = 'messages/jp/pikachu_volleyball.png';
-TEXTURES.FIGHT = 'messages/jp/fight.png';
-TEXTURES.WITH_COMPUTER = 'messages/jp/with_computer.png';
-TEXTURES.WITH_FRIEND = 'messages/jp/with_friend.png';
-TEXTURES.GAME_START = 'messages/jp/game_start.png';
+TEXTURES.MARK = 'messages/ja/mark.png';
+TEXTURES.POKEMON = 'messages/ja/pokemon.png';
+TEXTURES.PIKACHU_VOLLEYBALL = 'messages/ja/pikachu_volleyball.png';
+TEXTURES.FIGHT = 'messages/ja/fight.png';
+TEXTURES.WITH_COMPUTER = 'messages/ja/with_computer.png';
+TEXTURES.WITH_FRIEND = 'messages/ja/with_friend.png';
+TEXTURES.GAME_START = 'messages/ja/game_start.png';
 
 TEXTURES.SITTING_PIKACHU = 'sitting_pikachu.png';
 
