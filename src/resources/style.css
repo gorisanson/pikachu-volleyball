@@ -48,8 +48,10 @@ body {
   flex-wrap: nowrap;
   justify-content: center;
   align-items: flex-start;
-  width: 100%;
+  width: var(--canvas-width);
   height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
 }
 #menu-bar {
   display: grid;
@@ -176,9 +178,10 @@ span.check {
 .fade-box.in.about {
   justify-content: flex-start;
   top: 0;
-  height: calc(3 * var(--canvas-height));
+  height: auto;
   overflow: visible;
   text-align: left;
+  margin-bottom: 50vh;
 }
 @keyframes fade_in {
   0% {
