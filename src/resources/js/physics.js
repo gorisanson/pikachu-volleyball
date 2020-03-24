@@ -1,4 +1,4 @@
-/*
+/**
  * The Model part in the MVC pattern
  *
  * It is the core module which acts as a physics engine.

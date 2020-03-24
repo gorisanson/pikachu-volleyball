@@ -1,5 +1,6 @@
-/*
+/**
  * This is the main script which executes the game.
+ * General explanations for the all source code files of the game are following.
  *
  ********************************************************************************************************************
  * This web version of the Pikachu Volleyball is made by

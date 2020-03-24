@@ -1,5 +1,6 @@
-/*
- * This module takes charge of the clouds (on the sky) and wave (on the bottom of game screen) motion in the game.
+/**
+ * This module takes charge of the physical motion of clouds (on the sky) and wave (on the bottom of game screen) in the game.
+ * It is also a Model in MVC pattern and also rendered by "view.js".
  *
  * It is gained by reverse engineering the original game.
  * The address of the original function is in the comment.

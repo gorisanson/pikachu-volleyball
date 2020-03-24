@@ -1,5 +1,5 @@
-/*
- * This module takes charge of the paths (file locations) of the game assets.
+/**
+ * Manages the paths (file locations) of the game assets.
  */
 'use strict';
 

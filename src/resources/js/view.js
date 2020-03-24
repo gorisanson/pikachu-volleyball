@@ -1,4 +1,4 @@
-/*
+/**
  * The View part in the MVC pattern
  *
  * Some codes in this module are gaind by reverse engineering the original machine code.
