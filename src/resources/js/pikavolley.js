@@ -1,4 +1,4 @@
-/*
+/**
  * The Controller part in MVC pattern
  */
 'ues strics';

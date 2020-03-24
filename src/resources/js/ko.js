@@ -1,4 +1,4 @@
-/*
+/**
  * If want to use message sprites translated to Korean, execute this script before create PikachuVolleyball object.
  */
 
