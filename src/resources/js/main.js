@@ -52,11 +52,6 @@ const loader = new PIXI.Loader();
 renderer.view.setAttribute('id', 'game-canvas');
 document.getElementById('game-canvas-container').appendChild(renderer.view);
 
-ticker.add(() => {
-  renderer.render(stage);
-}, PIXI.UPDATE_PRIORITY.LOW);
-ticker.start();
-
 loader.add(ASSETS_PATH.SPRITE_SHEET);
 for (const prop in ASSETS_PATH.SOUNDS) {
   loader.add(ASSETS_PATH.SOUNDS[prop]);
@@ -71,5 +66,9 @@ function setup() {
 
 function start(pikaVolley) {
   ticker.maxFPS = pikaVolley.normalFPS;
-  ticker.add(delta => pikaVolley.gameLoop(delta));
+  ticker.add(() => {
+    pikaVolley.gameLoop();
+    renderer.render(stage);
+  });
+  ticker.start();
 }
