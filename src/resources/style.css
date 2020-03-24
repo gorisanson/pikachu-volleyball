@@ -192,6 +192,7 @@ button.btn-in-box {
 h1 {
   font-size: calc(1.5 * var(--font-size));
 }
+p.languages,
 p.original-by,
 p.reverse-engineered-by,
 p.release-date,
