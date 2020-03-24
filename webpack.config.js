@@ -24,14 +24,14 @@ module.exports = {
       template: 'src/en/index.html',
       filename: 'en/index.html',
       hash: true,
-      chunks: ['main', 'runtime'],
+      chunks: ['runtime', 'main'],
       chunksSortMode: 'manual'
     }),
     new HtmlWebpackPlugin({
       template: 'src/ko/index.html',
       filename: 'ko/index.html',
       hash: true,
-      chunks: ['ko', 'main', 'runtime'],
+      chunks: ['runtime', 'ko', 'main'],
       chunksSortMode: 'manual'
     })
   ]
