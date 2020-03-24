@@ -33,7 +33,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "pixi-sound": "^3.0.4",
-    "pixi.js": "^5.2.1"
+    "pixi-sound": "3.0.4",
+    "pixi.js": "5.2.1"
   }
 }
