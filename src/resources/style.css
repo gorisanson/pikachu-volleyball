@@ -163,6 +163,11 @@ span.check {
   text-align: left;
   margin-bottom: 50vh;
 }
+.fade-in-box.loading {
+  background-color: transparent;
+  color: white;
+  animation-duration: 0.5s;
+}
 @keyframes fade_in {
   0% {
     opacity: 0;
@@ -213,4 +218,19 @@ span.thick {
 }
 img.controls {
   max-width: 100%;
+}
+#progress-bar-border {
+  position: relative;
+  border: solid;
+  border-color: white;
+  height: var(--btn-height);
+  width: calc(var(--canvas-width) / 2);
+}
+#progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /*width: width is set on style property of progress-bar element;*/
+  height: 100%;
+  background-color: white;
 }
