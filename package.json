@@ -1,6 +1,6 @@
 {
-  "name": "pikachu-volleyball-js",
-  "version": "0.0.1",
+  "name": "pikachu-volleyball",
+  "version": "1.0.0",
   "description": "Pikachu Volleyball implemented into JavaScript by reverse engineering the original game",
   "private": true,
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gorisanson/pikachu-volleyball-js.git"
+    "url": "git+https://github.com/gorisanson/pikachu-volleyball.git"
   },
   "keywords": [
     "game"
@@ -18,9 +18,9 @@
   "author": "Lee, Kyutae",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/gorisanson/pikachu-volleyball-js/issues"
+    "url": "https://github.com/gorisanson/pikachu-volleyball/issues"
   },
-  "homepage": "https://github.com/gorisanson/pikachu-volleyball-js#readme",
+  "homepage": "https://github.com/gorisanson/pikachu-volleyball#readme",
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.1.1",
