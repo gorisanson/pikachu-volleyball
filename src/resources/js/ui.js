@@ -54,15 +54,6 @@ export function setUpUI(pikaVolley, ticker) {
       event.preventDefault();
     }
   });
-
-  const gameDropdownBtn = document.getElementById('game-dropdown-btn');
-  const optionsDropdownBtn = document.getElementById('options-dropdown-btn');
-  // @ts-ignore
-  gameDropdownBtn.disabled = true;
-  // @ts-ignore
-  optionsDropdownBtn.disabled = true;
-
-  pauseResumeManager.pause(pikaVolley, PauseResumePrecedence.messageBox);
 }
 
 /**

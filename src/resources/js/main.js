@@ -57,7 +57,55 @@ loader.add(ASSETS_PATH.SPRITE_SHEET);
 for (const prop in ASSETS_PATH.SOUNDS) {
   loader.add(ASSETS_PATH.SOUNDS[prop]);
 }
-loader.load(setup);
+
+const loadingBox = document.getElementById('loading-box');
+const progressBar = document.getElementById('progress-bar');
+loader.on('progress', () => {
+  progressBar.style.width = `${loader.progress}%`;
+});
+loader.on('complete', () => {
+  if (!loadingBox.classList.contains('hidden')) {
+    loadingBox.classList.add('hidden');
+  }
+});
+
+const aboutBtn = document.getElementById('about-btn');
+const aboutBox = document.getElementById('about-box');
+const closeAboutBtn = document.getElementById('close-about-btn');
+const gameDropdownBtn = document.getElementById('game-dropdown-btn');
+const optionsDropdownBtn = document.getElementById('options-dropdown-btn');
+// @ts-ignore
+gameDropdownBtn.disabled = true;
+// @ts-ignore
+optionsDropdownBtn.disabled = true;
+function clickAboutBtn() {
+  if (!aboutBox.classList.contains('hidden')) {
+    aboutBox.classList.add('hidden');
+    // @ts-ignore
+    gameDropdownBtn.disabled = false;
+    // @ts-ignore
+    optionsDropdownBtn.disabled = false;
+  }
+  loader.load(setup);
+  loadingBox.classList.remove('hidden');
+  aboutBtn.removeEventListener('click', clickAboutBtn);
+  closeAboutBtn.removeEventListener('click', clickCloseAboutBtn);
+}
+function clickCloseAboutBtn() {
+  if (!aboutBox.classList.contains('hidden')) {
+    aboutBox.classList.add('hidden');
+    // @ts-ignore
+    gameDropdownBtn.disabled = false;
+    // @ts-ignore
+    optionsDropdownBtn.disabled = false;
+  }
+  loader.load(setup);
+  loadingBox.classList.remove('hidden');
+  aboutBtn.removeEventListener('click', clickAboutBtn);
+  closeAboutBtn.removeEventListener('click', clickCloseAboutBtn);
+}
+aboutBtn.addEventListener('click', clickAboutBtn);
+closeAboutBtn.addEventListener('click', clickCloseAboutBtn);
 
 function setup() {
   const pikaVolley = new PikachuVolleyball(stage, loader.resources);
