@@ -1,0 +1,15 @@
+{
+  "name": "피카츄 배구",
+  "icons": [
+    {
+      "src": "../resources/assets/images/IDI_PIKAICON-1_gap_filled.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    }
+  ],
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "white",
+  "theme_color": "white"
+}
