@@ -58,61 +58,62 @@ for (const prop in ASSETS_PATH.SOUNDS) {
   loader.add(ASSETS_PATH.SOUNDS[prop]);
 }
 
-const loadingBox = document.getElementById('loading-box');
-const progressBar = document.getElementById('progress-bar');
-loader.on('progress', () => {
-  progressBar.style.width = `${loader.progress}%`;
-});
-loader.on('complete', () => {
-  if (!loadingBox.classList.contains('hidden')) {
-    loadingBox.classList.add('hidden');
-  }
-});
+setUpInitialUI();
 
-const aboutBtn = document.getElementById('about-btn');
-const aboutBox = document.getElementById('about-box');
-const closeAboutBtn = document.getElementById('close-about-btn');
-const gameDropdownBtn = document.getElementById('game-dropdown-btn');
-const optionsDropdownBtn = document.getElementById('options-dropdown-btn');
-// @ts-ignore
-gameDropdownBtn.disabled = true;
-// @ts-ignore
-optionsDropdownBtn.disabled = true;
-function clickAboutBtn() {
-  if (!aboutBox.classList.contains('hidden')) {
-    aboutBox.classList.add('hidden');
-    // @ts-ignore
-    gameDropdownBtn.disabled = false;
-    // @ts-ignore
-    optionsDropdownBtn.disabled = false;
-  }
-  loader.load(setup);
-  loadingBox.classList.remove('hidden');
-  aboutBtn.removeEventListener('click', clickAboutBtn);
-  closeAboutBtn.removeEventListener('click', clickCloseAboutBtn);
-}
-function clickCloseAboutBtn() {
-  if (!aboutBox.classList.contains('hidden')) {
-    aboutBox.classList.add('hidden');
-    // @ts-ignore
-    gameDropdownBtn.disabled = false;
-    // @ts-ignore
-    optionsDropdownBtn.disabled = false;
-  }
-  loader.load(setup);
-  loadingBox.classList.remove('hidden');
-  aboutBtn.removeEventListener('click', clickAboutBtn);
-  closeAboutBtn.removeEventListener('click', clickCloseAboutBtn);
-}
-aboutBtn.addEventListener('click', clickAboutBtn);
-closeAboutBtn.addEventListener('click', clickCloseAboutBtn);
+/**
+ * Set up the initial UI.
+ */
+function setUpInitialUI() {
+  const loadingBox = document.getElementById('loading-box');
+  const progressBar = document.getElementById('progress-bar');
+  loader.on('progress', () => {
+    progressBar.style.width = `${loader.progress}%`;
+  });
+  loader.on('complete', () => {
+    if (!loadingBox.classList.contains('hidden')) {
+      loadingBox.classList.add('hidden');
+    }
+  });
 
+  const aboutBox = document.getElementById('about-box');
+  const aboutBtn = document.getElementById('about-btn');
+  const closeAboutBtn = document.getElementById('close-about-btn');
+  const gameDropdownBtn = document.getElementById('game-dropdown-btn');
+  const optionsDropdownBtn = document.getElementById('options-dropdown-btn');
+  // @ts-ignore
+  gameDropdownBtn.disabled = true;
+  // @ts-ignore
+  optionsDropdownBtn.disabled = true;
+  const closeAboutBox = () => {
+    if (!aboutBox.classList.contains('hidden')) {
+      aboutBox.classList.add('hidden');
+      // @ts-ignore
+      gameDropdownBtn.disabled = false;
+      // @ts-ignore
+      optionsDropdownBtn.disabled = false;
+    }
+    loader.load(setup); // setup is called after loader finishes loading
+    loadingBox.classList.remove('hidden');
+    aboutBtn.removeEventListener('click', closeAboutBox);
+    closeAboutBtn.removeEventListener('click', closeAboutBox);
+  };
+  aboutBtn.addEventListener('click', closeAboutBox);
+  closeAboutBtn.addEventListener('click', closeAboutBox);
+}
+
+/**
+ * Set up the game and the full UI, and start the game.
+ */
 function setup() {
   const pikaVolley = new PikachuVolleyball(stage, loader.resources);
   setUpUI(pikaVolley, ticker);
   start(pikaVolley);
 }
 
+/**
+ * Start the game.
+ * @param {PikachuVolleyball} pikaVolley
+ */
 function start(pikaVolley) {
   ticker.maxFPS = pikaVolley.normalFPS;
   ticker.add(() => {
