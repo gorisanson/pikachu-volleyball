@@ -5,14 +5,17 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: { main: './src/resources/js/main.js', ko: './src/resources/js/ko.js' },
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
   optimization: {
-    runtimeChunk: { name: 'runtime' } // this is for code-sharing between "main.js and "ko.js"
+    runtimeChunk: { name: 'runtime' }, // this is for code-sharing between "main.js and "ko.js"
+    splitChunks: {
+      chunks: 'all'
+    }
   },
   plugins: [
     new CleanWebpackPlugin(),
