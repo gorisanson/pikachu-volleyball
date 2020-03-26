@@ -5,8 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Pikachu Volleyball</title>
-
     <meta name="description" content="Play the game Pikachu Volleyball" />
+    <meta name="author" content="Lee, Kyutae" />
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#FFFFFF" />
+
+    <meta name="apple-mobile-web-app-title" content="Pikachu Volleyball" />
+    <link rel="apple-touch-icon" href="../resources/assets/images/IDI_PIKAICON-1_gap_filled.png" />
+    <link rel="apple-touch-startup-image" href="../resources/assets/images/IDI_PIKAICON-1_gap_filled.png" />
+    <link rel="manifest" href="./manifest.json" />
+
     <link
       rel="icon"
       type="image/png"
@@ -20,7 +31,6 @@
       href="../resources/assets/images/IDI_PIKAICON-0_16x16.png"
     />
     <link rel="stylesheet" href="../resources/style.css" />
-    <link rel="manifest" href="./manifest.json" />
   </head>
   <body>
     <div id="flex-container">
@@ -218,7 +228,11 @@
         </div>
         <div class="fade-in-box notice hidden" id="notice-box-2">
           <p>
-            There's no point adjusting the winning score in practice mode:)
+            There's no point adjusting the winning score in practice mode.<br />
+            You can turn off practice mode at
+            <span class="no_wrap"
+              >"Options &rarr; Practice mode &rarr; off"</span
+            >.
           </p>
           <button id="notice-ok-btn-2" class="btn-in-box">OK</button>
         </div>
@@ -230,7 +244,73 @@
             </div>
           </div>
         </div>
+        <div
+          class="fade-in-box update hidden"
+          id="update-notification-message-box"
+        >
+          New version is available. Update now?
+          <div>
+            <button class="update" id="update-now">
+              Update Now (current game state will be lost)
+            </button>
+            <button class="update" id="later">
+              Later (automatically at relaunching the browser)
+            </button>
+          </div>
+        </div>
       </div>
     </div>
+    <script type="module">
+      /*
+       * Register service worker with some configuration for service worker update notice.
+       * Major parts of the code below are copied from: https://developers.google.com/web/tools/workbox/guides/advanced-recipes
+       */
+      import { Workbox } from 'https://storage.googleapis.com/workbox-cdn/releases/5.0.0/workbox-window.prod.mjs';
+
+      function createUpdateUIPrompt(callback) {
+        const notificationBox = document.getElementById(
+          'update-notification-message-box'
+        );
+        const elementList = document.getElementsByClassName('fade-in-box');
+        const updateNowButton = document.getElementById('update-now');
+        const laterButton = document.getElementById('later');
+
+        updateNowButton.addEventListener('click', function() {
+          notificationBox.classList.add('hidden');
+          callback.onAccept();
+        });
+        laterButton.addEventListener('click', function() {
+          notificationBox.classList.add('hidden');
+        });
+
+        for (const element of elementList) {
+          element.classList.add('hidden');
+        }
+        notificationBox.classList.remove('hidden');
+      }
+
+      if ('serviceWorker' in navigator) {
+        const wb = new Workbox('../sw.js');
+        // Add an event listener to detect when the registered
+        // service worker has installed but is waiting to activate.
+        wb.addEventListener('waiting', event => {
+          const prompt = createUpdateUIPrompt({
+            onAccept: async () => {
+              // Assuming the user accepted the update, set up a listener
+              // that will reload the page as soon as the previously waiting
+              // service worker has taken control.
+              wb.addEventListener('controlling', event => {
+                window.location.reload();
+              });
+              // Send a message telling the service worker to skip waiting.
+              // This will trigger the `controlling` event handler above.
+              wb.messageSW({ type: 'SKIP_WAITING' });
+            }
+          });
+        });
+
+        wb.register();
+      }
+    </script>
   </body>
 </html>
