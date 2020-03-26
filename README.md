@@ -2,9 +2,11 @@
 
 _&check;_ _English_ | [_Korean(한국어)_](README.ko.md)
 
-Pikachu Volleyball is a classic game which was developed in Japan in 1997. This JavaScript implementation is gained by reverse engineering the core part of the machine code of the original game.
+Pikachu Volleyball (対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編) is a classic game which was developed by "(C) SACHI SOFT / SAWAYAKAN Programmers" and "(C) Satoshi Takenouchi" in 1997. The source code on this repository is gained by reverse engineering the core part of the machine code of the original game and implementing it into JavaScript.
 
-You can play the game on the website https://gorisanson.github.io/pikachu-volleyball/en/.
+You can play this game on the website https://gorisanson.github.io/pikachu-volleyball/en/.
+
+![](pikachu_volleyball.gif)
 
 ## Game structure
 
