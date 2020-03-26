@@ -8,7 +8,7 @@ You can play the game on the website https://gorisanson.github.io/pikachu-volley
 
 ## Game structure
 
-- Physics Engine: The core physics engine is contained in the file [`src/resources/js/physcis.js`](src/resources/js/physcis.js). It is gained by reverse engineering the function at the address 00403dd0 of the machine code of the original game. It calculates the position of the ball and the players (Pikachus).
+- Physics Engine: The core physics engine is contained in the file [`src/resources/js/physics.js`](src/resources/js/physics.js). It is gained by reverse engineering the function at the address 00403dd0 of the machine code of the original game. It calculates the position of the ball and the players (Pikachus).
 
 - Rendering: [PixiJS](https://github.com/pixijs/pixi.js) library is used for rendering the game.
 
