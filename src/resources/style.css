@@ -153,7 +153,7 @@ span.check {
   visibility: visible;
   opacity: 1;
   background-color: rgba(255, 255, 255, 0.8);
-  animation-name: fade_in;
+  animation-name: fade-in;
   animation-duration: 1s;
 }
 .fade-in-box.about {
@@ -168,7 +168,10 @@ span.check {
   color: white;
   animation-duration: 0.5s;
 }
-@keyframes fade_in {
+.fade-in-box.update {
+  background-color: rgba(226, 230, 36, 0.85);
+}
+@keyframes fade-in {
   0% {
     opacity: 0;
   }
@@ -233,4 +236,26 @@ img.controls {
   /*width: width is set on style property of progress-bar element;*/
   height: 100%;
   background-color: white;
+}
+button.update {
+  display: inline-block;
+  height: calc(3 * var(--font-size));
+  width: 100%;
+  border: none;
+  margin: 2px;
+  padding: 0;
+  background-color: white;
+  color: black;
+  font-size: var(--font-size);
+  text-align: center;
+  text-decoration: none;
+  border-radius: 10px;
+}
+@media (hover: hover) {
+  button.update {
+    opacity: 0.9;
+  }
+  button.update:hover {
+    opacity: 1;
+  }
 }
