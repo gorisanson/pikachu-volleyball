@@ -35,13 +35,21 @@ module.exports = {
       template: 'src/en/index.html',
       filename: 'en/index.html',
       chunks: ['runtime', 'main'],
-      chunksSortMode: 'manual'
+      chunksSortMode: 'manual',
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true
+      }
     }),
     new HtmlWebpackPlugin({
       template: 'src/ko/index.html',
       filename: 'ko/index.html',
       chunks: ['runtime', 'ko', 'main'],
-      chunksSortMode: 'manual'
+      chunksSortMode: 'manual',
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true
+      }
     }),
     new WorkboxPlugin.GenerateSW({
       swDest: 'sw.js',
