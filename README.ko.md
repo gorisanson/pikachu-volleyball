@@ -2,7 +2,7 @@
 
 [_English_](README.md) | _&check;_ _Korean(한국어)_
 
-피카츄 배구(対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編)는 "(C) SACHI SOFT / SAWAYAKAN Programmers"와 "(C) Satoshi Takenouchi"가 1997년에 만든 게임입니다. 여기에 있는 소스 코드는 이 원조 피카츄 배구 게임을 리버스 엔지니어링하여 머신 코드의 주요 부분을 자바스크립트로 구현한 것입니다.
+피카츄 배구(対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編)는 "(C) SACHI SOFT / SAWAYAKAN Programmers"와 "(C) Satoshi Takenouchi"가 1997년에 만든 윈도우용 게임입니다. 여기에 있는 소스 코드는 이 원조 피카츄 배구 게임을 리버스 엔지니어링하여 머신 코드의 주요 부분을 자바스크립트로 구현한 것입니다.
 
 https://gorisanson.github.io/pikachu-volleyball/ko/ 에서 이 피카츄 배구를 플레이할 수 있습니다.
 
