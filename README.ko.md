@@ -10,7 +10,7 @@ https://gorisanson.github.io/pikachu-volleyball/ko/ 에서 이 피카츄 배구�
 
 ## 게임 구조
 
-- 물리 엔진: 핵심 물리 엔진은 [`src/resources/js/physics.js`](src/resources/js/physics.js) 파일에 있습니다. 이 소스 코드는 원조 게임의 00403dd0 주소에 위치한 함수를 리버스 엔지니어링하여 작성한 것입니다. 공과 플레이어(피카츄)의 위치를 계산합니다.
+- 물리 엔진: 공과 플레이어(피카츄)의 위치를 계산하는 물리 엔진은 [`src/resources/js/physics.js`](src/resources/js/physics.js) 파일에 담겨 있습니다. (플레이어가 컴퓨터와 대전 시 컴퓨터의 키보드 입력을 결정하는 AI도 동일한 파일에 담겨 있습니다.) 이 소스 코드 파일은 원조 게임 머신 코드의 00403dd0 주소에 위치한 함수를 리버스 엔지니어링하여 작성한 것입니다.
 
 - 렌더링: [PixiJS](https://github.com/pixijs/pixi.js) 라이브러리를 사용하였습니다.
 
