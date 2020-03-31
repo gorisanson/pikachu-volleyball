@@ -259,3 +259,6 @@ button.update {
     opacity: 1;
   }
 }
+button:disabled {
+  background-color: #cccccc;
+}
