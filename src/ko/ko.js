@@ -2,7 +2,7 @@
  * If want to use message sprites translated to Korean, execute this script before create PikachuVolleyball object.
  */
 
-import { ASSETS_PATH } from './assets_path.js';
+import { ASSETS_PATH } from '../resources/js/assets_path.js';
 
 const TEXTURES = ASSETS_PATH.TEXTURES;
 

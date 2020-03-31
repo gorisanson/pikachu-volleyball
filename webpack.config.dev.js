@@ -9,7 +9,7 @@ module.exports = {
   devServer: {
     contentBase: './dist'
   },
-  entry: { main: './src/resources/js/main.js', ko: './src/resources/js/ko.js' },
+  entry: { main: './src/resources/js/main.js', ko: './src/ko/ko.js' },
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist')
