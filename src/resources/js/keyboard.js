@@ -67,6 +67,17 @@ export class PikaKeyboard extends PikaUserInput {
   }
 
   /**
+   * Subscribe keydown, keyup event listners for the keys of this keyboard
+   */
+  subscribe() {
+    this.leftKey.subscribe();
+    this.rightKey.subscribe();
+    this.upKey.subscribe();
+    this.downKey.subscribe();
+    this.powerHitKey.subscribe();
+  }
+
+  /**
    * Unsubscribe keydown, keyup event listners for the keys of this keyboard
    */
   unsubscribe() {
@@ -95,8 +106,7 @@ class Key {
 
     this.downListener = this.downHandler.bind(this);
     this.upListner = this.upHandler.bind(this);
-    window.addEventListener('keydown', this.downListener, false);
-    window.addEventListener('keyup', this.upListner, false);
+    this.subscribe();
   }
 
   /**
@@ -121,6 +131,14 @@ class Key {
       this.isUp = true;
       event.preventDefault();
     }
+  }
+
+  /**
+   * Subscribe event listeners
+   */
+  subscribe() {
+    window.addEventListener('keydown', this.downListener);
+    window.addEventListener('keyup', this.upListner);
   }
 
   /**
