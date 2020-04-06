@@ -249,7 +249,7 @@
           <div>
             <p>Loading the game assets...</p>
             <div id="progress-bar-border">
-              <div id="progress-bar" style="width:0%;"></div>
+              <div id="progress-bar" style="width: 0%;"></div>
             </div>
           </div>
         </div>
@@ -284,11 +284,11 @@
         const updateNowButton = document.getElementById('update-now');
         const laterButton = document.getElementById('later');
 
-        updateNowButton.addEventListener('click', function() {
+        updateNowButton.addEventListener('click', function () {
           notificationBox.classList.add('hidden');
           callback.onAccept();
         });
-        laterButton.addEventListener('click', function() {
+        laterButton.addEventListener('click', function () {
           notificationBox.classList.add('hidden');
         });
 
@@ -302,19 +302,19 @@
         const wb = new Workbox('../sw.js');
         // Add an event listener to detect when the registered
         // service worker has installed but is waiting to activate.
-        wb.addEventListener('waiting', event => {
+        wb.addEventListener('waiting', (event) => {
           const prompt = createUpdateUIPrompt({
             onAccept: async () => {
               // Assuming the user accepted the update, set up a listener
               // that will reload the page as soon as the previously waiting
               // service worker has taken control.
-              wb.addEventListener('controlling', event => {
+              wb.addEventListener('controlling', (event) => {
                 window.location.reload();
               });
               // Send a message telling the service worker to skip waiting.
               // This will trigger the `controlling` event handler above.
               wb.messageSW({ type: 'SKIP_WAITING' });
-            }
+            },
           });
         });
 

@@ -23,7 +23,7 @@ export class PikachuVolleyball {
       intro: new IntroView(resources),
       menu: new MenuView(resources),
       game: new GameView(resources),
-      fadeInOut: new FadeInOut()
+      fadeInOut: new FadeInOut(),
     };
     stage.addChild(this.view.intro.container);
     stage.addChild(this.view.menu.container);
@@ -44,7 +44,7 @@ export class PikachuVolleyball {
         'ArrowUp',
         'ArrowDown',
         'Enter'
-      )
+      ),
     ];
 
     /** @type {number} game fps */
@@ -84,14 +84,14 @@ export class PikachuVolleyball {
       startOfNewGame: 71,
       afterEndOfRound: 5,
       beforeStartOfNextRound: 30,
-      gameEnd: Infinity // this value should be about 211 to act like the original game.
+      gameEnd: Infinity, // this value should be about 211 to act like the original game.
     };
 
     /** @type {number} counter for frames while there is no input from keyboard */
     this.noInputFrameCounter = 0;
     /** @type {Object.<string,number>} total number of frames to be rendered while there is no input */
     this.noInputFrameTotal = {
-      menu: 225
+      menu: 225,
     };
 
     /** @type {boolean} true: paused, false: not paused */
