@@ -6,7 +6,7 @@ Pikachu Volleyball (対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編) is an o
 
 You can play this game on the website: https://gorisanson.github.io/pikachu-volleyball/en/
 
-![](pikachu_volleyball.gif)
+<img src="pikachu_volleyball.png" alt="Pikachu Volleyball game image" width="648">
 
 ## Game structure
 
