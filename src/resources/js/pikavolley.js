@@ -37,7 +37,7 @@ export class PikachuVolleyball {
     this.audio = new PikaAudio(resources);
     this.physics = new PikaPhysics(true, true);
     this.keyboardArray = [
-      new PikaKeyboard('d', 'g', 'r', 'f', 'z'), // for player1
+      new PikaKeyboard('KeyD', 'KeyG', 'KeyR', 'KeyF', 'KeyZ'), // for player1
       new PikaKeyboard( // for player2
         'ArrowLeft',
         'ArrowRight',
@@ -325,11 +325,14 @@ export class PikachuVolleyball {
    * @type {GameState}
    */
   round() {
+    const pressedPowerHit =
+      this.keyboardArray[0].powerHit === 1 ||
+      this.keyboardArray[1].powerHit === 1;
+
     if (
       this.physics.player1.isComputer === true &&
       this.physics.player2.isComputer === true &&
-      (this.keyboardArray[0].powerHit === 1 ||
-        this.keyboardArray[1].powerHit === 1)
+      pressedPowerHit
     ) {
       this.frameCounter = 0;
       this.view.game.visible = false;
@@ -350,9 +353,7 @@ export class PikachuVolleyball {
       this.frameCounter++;
       if (
         this.frameCounter >= this.frameTotal.gameEnd ||
-        (this.frameCounter >= 70 &&
-          (this.keyboardArray[0].powerHit === 1 ||
-            this.keyboardArray[1].powerHit === 1))
+        (this.frameCounter >= 70 && pressedPowerHit)
       ) {
         this.frameCounter = 0;
         this.view.game.visible = false;

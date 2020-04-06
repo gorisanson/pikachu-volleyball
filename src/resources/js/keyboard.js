@@ -10,13 +10,13 @@ import { PikaUserInput } from './physics.js';
 export class PikaKeyboard extends PikaUserInput {
   /**
    * Create a keyboard used for game controller
-   * left, right, up, down, powerHit: KeyboardEvent.key value for each
-   * Refer {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values}
-   * @param {string} left KeyboardEvent.key value of the key to use for left
-   * @param {string} right KeyboardEvent.key value of the key to use for right
-   * @param {string} up KeyboardEvent.key value of the key to use for up
-   * @param {string} down KeyboardEvent.key value of the key to use for down
-   * @param {string} powerHit KeyboardEvent.key value of the key to use for power hit or selection
+   * left, right, up, down, powerHit: KeyboardEvent.code value for each
+   * Refer {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code/code_values}
+   * @param {string} left KeyboardEvent.code value of the key to use for left
+   * @param {string} right KeyboardEvent.code value of the key to use for right
+   * @param {string} up KeyboardEvent.code value of the key to use for up
+   * @param {string} down KeyboardEvent.code value of the key to use for down
+   * @param {string} powerHit KeyboardEvent.code value of the key to use for power hit or selection
    */
   constructor(left, right, up, down, powerHit) {
     super();
@@ -67,6 +67,17 @@ export class PikaKeyboard extends PikaUserInput {
   }
 
   /**
+   * Subscribe keydown, keyup event listners for the keys of this keyboard
+   */
+  subscribe() {
+    this.leftKey.subscribe();
+    this.rightKey.subscribe();
+    this.upKey.subscribe();
+    this.downKey.subscribe();
+    this.powerHitKey.subscribe();
+  }
+
+  /**
    * Unsubscribe keydown, keyup event listners for the keys of this keyboard
    */
   unsubscribe() {
@@ -85,8 +96,8 @@ export class PikaKeyboard extends PikaUserInput {
 class Key {
   /**
    * Create a key
-   * Refer {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values}
-   * @param {string} value KeyboardEvent.key value of this key
+   * Refer {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code/code_values}
+   * @param {string} value KeyboardEvent.code value of this key
    */
   constructor(value) {
     this.value = value;
@@ -95,8 +106,7 @@ class Key {
 
     this.downListener = this.downHandler.bind(this);
     this.upListner = this.upHandler.bind(this);
-    window.addEventListener('keydown', this.downListener, false);
-    window.addEventListener('keyup', this.upListner, false);
+    this.subscribe();
   }
 
   /**
@@ -104,7 +114,7 @@ class Key {
    * @param {KeyboardEvent} event
    */
   downHandler(event) {
-    if (event.key === this.value) {
+    if (event.code === this.value) {
       this.isDown = true;
       this.isUp = false;
       event.preventDefault();
@@ -116,11 +126,19 @@ class Key {
    * @param {KeyboardEvent} event
    */
   upHandler(event) {
-    if (event.key === this.value) {
+    if (event.code === this.value) {
       this.isDown = false;
       this.isUp = true;
       event.preventDefault();
     }
+  }
+
+  /**
+   * Subscribe event listeners
+   */
+  subscribe() {
+    window.addEventListener('keydown', this.downListener);
+    window.addEventListener('keyup', this.upListner);
   }
 
   /**
