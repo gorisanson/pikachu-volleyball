@@ -84,10 +84,10 @@ export class MenuView {
       ),
       withWho: [
         makeSpriteWithAnchorXY(textures, TEXURES.WITH_COMPUTER, 0, 0),
-        makeSpriteWithAnchorXY(textures, TEXURES.WITH_FRIEND, 0, 0)
+        makeSpriteWithAnchorXY(textures, TEXURES.WITH_FRIEND, 0, 0),
       ],
       sachisoft: makeSpriteWithAnchorXY(textures, TEXURES.SACHISOFT, 0, 0),
-      fight: makeSpriteWithAnchorXY(textures, TEXURES.FIGHT, 0, 0)
+      fight: makeSpriteWithAnchorXY(textures, TEXURES.FIGHT, 0, 0),
     };
     this.sittingPikachuTilesContainer = makeSittingPikachuTilesContainer(
       textures
@@ -353,19 +353,19 @@ export class GameView {
     // this.scoreBoards[0] for player1, this.scoreBoards[1] for player2
     this.scoreBoards = [
       makeScoreBoardSprite(textures),
-      makeScoreBoardSprite(textures)
+      makeScoreBoardSprite(textures),
     ];
 
     this.shadows = {
       forPlayer1: makeSpriteWithAnchorXY(textures, TEXURES.SHADOW, 0.5, 0.5),
       forPlayer2: makeSpriteWithAnchorXY(textures, TEXURES.SHADOW, 0.5, 0.5),
-      forBall: makeSpriteWithAnchorXY(textures, TEXURES.SHADOW, 0.5, 0.5)
+      forBall: makeSpriteWithAnchorXY(textures, TEXURES.SHADOW, 0.5, 0.5),
     };
 
     this.messages = {
       gameStart: makeSpriteWithAnchorXY(textures, TEXURES.GAME_START, 0, 0),
       ready: makeSpriteWithAnchorXY(textures, TEXURES.READY, 0, 0),
-      gameEnd: makeSpriteWithAnchorXY(textures, TEXURES.GAME_END, 0, 0)
+      gameEnd: makeSpriteWithAnchorXY(textures, TEXURES.GAME_END, 0, 0),
     };
 
     this.cloudContainer = makeCloudContainer(textures);
@@ -810,14 +810,14 @@ function makePlayerAnimatedSprites(textures) {
  * @return {PIXI.AnimatedSprite}
  */
 function makeBallAnimatedSprites(textures) {
-  const getBallTexture = s => textures[TEXURES.BALL(s)];
+  const getBallTexture = (s) => textures[TEXURES.BALL(s)];
   const ballTextureArray = [
     getBallTexture(0),
     getBallTexture(1),
     getBallTexture(2),
     getBallTexture(3),
     getBallTexture(4),
-    getBallTexture('hyper')
+    getBallTexture('hyper'),
   ];
   const ballAnimatedSprite = new AnimatedSprite(ballTextureArray, false);
 
@@ -848,7 +848,7 @@ function makeSpriteWithAnchorXY(textures, path, anchorX, anchorY) {
  * @return {PIXI.Container} child with index 0 for player 1 score board, child with index 1 for player2 score board
  */
 function makeScoreBoardSprite(textures) {
-  const getNumberTexture = n => textures[TEXURES.NUMBER(n)];
+  const getNumberTexture = (n) => textures[TEXURES.NUMBER(n)];
   const numberTextureArray = [];
   for (let i = 0; i < 10; i++) {
     numberTextureArray.push(getNumberTexture(i));

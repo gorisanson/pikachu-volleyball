@@ -44,7 +44,7 @@ const renderer = PIXI.autoDetectRenderer({
   height: 304,
   antialias: false,
   backgroundColor: 0x000000,
-  transparent: false
+  transparent: false,
 });
 const stage = new PIXI.Container();
 const ticker = new PIXI.Ticker();

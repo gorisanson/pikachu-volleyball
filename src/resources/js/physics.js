@@ -155,7 +155,7 @@ class Player {
     this.sound = {
       pipikachu: false,
       pika: false,
-      chu: false
+      chu: false,
     };
   }
 
@@ -250,7 +250,7 @@ class Ball {
      */
     this.sound = {
       powerHit: false,
-      ballTouchesGround: false
+      ballTouchesGround: false,
     };
   }
 
@@ -727,7 +727,7 @@ function caculate_expected_landing_point_x_for(ball) {
     x: ball.x,
     y: ball.y,
     xVelocity: ball.xVelocity,
-    yVelocity: ball.yVelocity
+    yVelocity: ball.yVelocity,
   };
   let loopCounter = 0;
   while (true) {
@@ -957,7 +957,7 @@ function expectedLandingPointXWhenPowerHit(
     x: ball.x,
     y: ball.y,
     xVelocity: ball.xVelocity,
-    yVelocity: ball.yVelocity
+    yVelocity: ball.yVelocity,
   };
   if (copyBall.x < GROUND_HALF_WIDTH) {
     copyBall.xVelocity = (Math.abs(userInputXDirection) + 1) * 10;

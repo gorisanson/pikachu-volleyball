@@ -6,13 +6,13 @@
 export const ASSETS_PATH = {
   SPRITE_SHEET: '../resources/assets/images/sprite_sheet.json',
   TEXTURES: {},
-  SOUNDS: {}
+  SOUNDS: {},
 };
 
 const TEXTURES = ASSETS_PATH.TEXTURES;
 TEXTURES.PIKACHU = (i, j) => `pikachu/pikachu_${i}_${j}.png`;
-TEXTURES.BALL = s => `ball/ball_${s}.png`;
-TEXTURES.NUMBER = n => `number/number_${n}.png`;
+TEXTURES.BALL = (s) => `ball/ball_${s}.png`;
+TEXTURES.NUMBER = (n) => `number/number_${n}.png`;
 
 TEXTURES.SKY_BLUE = 'objects/sky_blue.png';
 TEXTURES.MOUNTAIN = 'objects/mountain.png';

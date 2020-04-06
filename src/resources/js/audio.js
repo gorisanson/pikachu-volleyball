@@ -27,7 +27,7 @@ export class PikaAudio {
       powerHit: new PikaStereoSound(resources[SOUNDS.POWERHIT].sound),
       ballTouchesGround: new PikaStereoSound(
         resources[SOUNDS.BALLTOUCHESGROUND].sound
-      )
+      ),
     };
 
     this.sounds.bgm.loop = true;
