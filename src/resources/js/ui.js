@@ -14,23 +14,23 @@ const PauseResumePrecedence = {
   pauseBtn: 3,
   messageBox: 2,
   dropdown: 1,
-  notPaused: 0
+  notPaused: 0,
 };
 
 const pauseResumeManager = {
   precedence: PauseResumePrecedence.notPaused,
-  pause: function(pikaVolley, precedence) {
+  pause: function (pikaVolley, precedence) {
     if (precedence > this.precedence) {
       pikaVolley.paused = true;
       this.precedence = precedence;
     }
   },
-  resume: function(pikaVolley, precedence) {
+  resume: function (pikaVolley, precedence) {
     if (precedence === this.precedence) {
       pikaVolley.paused = false;
       this.precedence = PauseResumePrecedence.notPaused;
     }
-  }
+  },
 };
 
 /**
@@ -43,7 +43,7 @@ export function setUpUI(pikaVolley, ticker) {
   setUpToShowDropdownsAndSubmenus(pikaVolley);
 
   // hide or show menubar if the user presses the "esc" key
-  window.addEventListener('keydown', event => {
+  window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       const menuBar = document.getElementById('menu-bar');
       if (menuBar.classList.contains('hidden')) {
@@ -352,7 +352,7 @@ function setUpBtns(pikaVolley, ticker) {
  */
 function setUpToShowDropdownsAndSubmenus(pikaVolley) {
   // hide dropdowns and submenus if the user clicks outside of these
-  window.addEventListener('click', event => {
+  window.addEventListener('click', (event) => {
     // @ts-ignore
     if (!event.target.matches('.dropdown-btn, .submenu-btn')) {
       hideSubmenus();
