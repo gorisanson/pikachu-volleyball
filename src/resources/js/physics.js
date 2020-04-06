@@ -385,6 +385,14 @@ function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
  * @return {boolean} Is ball touching ground?
  */
 function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
+  // This is not part of this function in the original assembly code.
+  // In the original assembly code, it is processed in other function (FUN_00402ee0)
+  // But it is proper to process here.
+  ball.previousPreviousX = ball.previousX;
+  ball.previousPreviousY = ball.previousY;
+  ball.previousX = ball.x;
+  ball.previousY = ball.y;
+
   let futureFineRotation = ball.fineRotation + ball.xVelocity / 2;
   // If futureFineRotation === 50, it skips next if statement finely.
   // Then ball.fineRoation = 50, and then ball.rotation = 5 (which designates hyperball sprite!).
@@ -461,14 +469,6 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   ball.y = futureBallY;
   ball.x = ball.x + ball.xVelocity;
   ball.yVelocity += 1;
-
-  // This is not part of this function in the original assembly code.
-  // In the original assembly code, it is processed in other function (FUN_00402ee0)
-  // But it is proper to process here.
-  ball.previousPreviousX = ball.previousX;
-  ball.previousPreviousY = ball.previousY;
-  ball.previousX = ball.x;
-  ball.previousY = ball.y;
 
   return false;
 }
