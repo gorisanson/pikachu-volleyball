@@ -44,7 +44,7 @@ html {
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch;
   width: var(--canvas-width);
   height: 100vh;
   margin-left: auto;
@@ -137,7 +137,7 @@ span.check {
 .fade-in-box {
   position: absolute;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
