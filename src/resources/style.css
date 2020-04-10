@@ -223,6 +223,14 @@ span.no-wrap {
 span.thick {
   font-weight: 900;
 }
+div.screenshot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+img.screenshot {
+  max-width: 60%;
+}
 img.controls {
   max-width: 100%;
 }
