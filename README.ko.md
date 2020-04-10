@@ -6,7 +6,7 @@
 
 https://gorisanson.github.io/pikachu-volleyball/ko/ 에서 이 피카츄 배구를 플레이할 수 있습니다.
 
-![](pikachu_volleyball.gif)
+<img src="pikachu_volleyball.png" alt="피카츄 배구 게임 이미지" width="648">
 
 ## 게임 구조
 
