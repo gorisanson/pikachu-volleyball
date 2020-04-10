@@ -183,6 +183,19 @@ span.check {
 #menu-bar.hidden {
   display: none;
 }
+#about-box-head {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  font-size: var(--font-size);
+  text-align: center;
+  visibility: visible;
+  overflow: visible;
+  margin-bottom: calc(1.5 * var(--font-size));
+}
 button.btn-in-box {
   display: block;
   height: calc(2 * var(--font-size));
@@ -215,7 +228,6 @@ p.release-date {
 }
 p.last-updated {
   margin-block-start: 0;
-  margin-block-end: 0;
 }
 span.no-wrap {
   white-space: nowrap;
@@ -273,17 +285,4 @@ button.update {
 }
 button:disabled {
   background-color: #cccccc;
-}
-#about-box-head {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  width: 100%;
-  font-size: var(--font-size);
-  text-align: center;
-  visibility: visible;
-  overflow: visible;
-  margin-bottom: calc(1.5 * var(--font-size));
 }
