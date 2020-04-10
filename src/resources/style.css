@@ -235,14 +235,12 @@ span.no-wrap {
 span.thick {
   font-weight: 900;
 }
-div.screenshot {
+div.align-center-horizontally {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
-img.screenshot {
-  max-width: 60%;
-}
+img.screenshot,
 img.controls {
   max-width: 100%;
 }
