@@ -161,7 +161,6 @@ span.check {
   height: auto;
   overflow: visible;
   text-align: left;
-  margin-bottom: 50vh;
 }
 .fade-in-box.loading {
   background-color: transparent;
@@ -283,4 +282,8 @@ button.update {
 }
 button:disabled {
   background-color: #cccccc;
+}
+div.for-margin {
+  display: block;
+  height: 50vh;
 }
