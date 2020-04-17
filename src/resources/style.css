@@ -218,14 +218,19 @@ p.original-by,
 p.reverse-engineered-by,
 p.source-code-on,
 p.release-date,
-p.last-updated {
+p.game-last-updated,
+p.page-last-updated {
   font-size: 0.8em;
   line-height: 150%;
 }
 p.release-date {
   margin-block-end: 0;
 }
-p.last-updated {
+p.game-last-updated {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+p.page-last-updated {
   margin-block-start: 0;
 }
 span.no-wrap {
