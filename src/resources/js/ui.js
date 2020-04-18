@@ -3,7 +3,7 @@
  */
 'use strict';
 /** @typedef {import('./pikavolley.js').PikachuVolleyball} PikachuVolleyball */
-/** @typedef {import('pixi.js').Ticker} Ticker */
+/** @typedef {import('pixi.js-legacy').Ticker} Ticker */
 
 /**
  * Enum for game paused by what? The greater the number, the higher the precedence.
