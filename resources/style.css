@@ -292,3 +292,7 @@ div.for-margin {
   display: block;
   height: 50vh;
 }
+div.margin-top,
+p.margin-top {
+  margin-top: calc(2.5 * var(--font-size));
+}
