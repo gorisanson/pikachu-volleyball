@@ -28,7 +28,7 @@
  *  - "ui.js": For the user interface (menu bar, buttons etc.) of the html page.
  */
 'use strict';
-import * as PIXI from 'pixi.js';
+import * as PIXI from 'pixi.js-legacy';
 import 'pixi-sound';
 import { PikachuVolleyball } from './pikavolley.js';
 import { ASSETS_PATH } from './assets_path.js';

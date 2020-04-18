@@ -6,7 +6,7 @@
  * ex) FUN_00405d50 means the function at the address 00405d50 in the machine code.
  */
 'use strict';
-import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js';
+import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js-legacy';
 import { Cloud, Wave, cloudAndWaveEngine } from './cloud_and_wave.js';
 import { ASSETS_PATH } from './assets_path.js';
 
