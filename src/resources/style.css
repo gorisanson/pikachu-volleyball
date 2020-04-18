@@ -193,7 +193,6 @@ span.check {
   text-align: center;
   visibility: visible;
   overflow: visible;
-  margin-bottom: calc(1.5 * var(--font-size));
 }
 button.btn-in-box {
   display: block;
@@ -226,12 +225,10 @@ p.page-last-updated {
 p.release-date {
   margin-block-end: 0;
 }
-p.game-last-updated {
-  margin-block-start: 0;
-  margin-block-end: 0;
-}
+p.game-last-updated,
 p.page-last-updated {
   margin-block-start: 0;
+  margin-block-end: 0;
 }
 span.no-wrap {
   white-space: nowrap;
@@ -294,5 +291,5 @@ div.for-margin {
 }
 div.margin-top,
 p.margin-top {
-  margin-top: calc(2.5 * var(--font-size));
+  margin-top: calc(2.25 * var(--font-size));
 }
