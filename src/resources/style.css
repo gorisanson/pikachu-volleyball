@@ -243,7 +243,13 @@ div.align-center-horizontally {
 }
 img.screenshot,
 img.controls {
-  max-width: 100%;
+  width: 100%;
+}
+img.screenshot {
+  max-width: 864px;
+}
+img.controls {
+  max-width: 960px;
 }
 #progress-bar-border {
   position: relative;
