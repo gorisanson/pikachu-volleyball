@@ -84,7 +84,7 @@ export class PikachuVolleyball {
       startOfNewGame: 71,
       afterEndOfRound: 5,
       beforeStartOfNextRound: 30,
-      gameEnd: Infinity, // this value should be about 211 to act like the original game.
+      gameEnd: 211,
     };
 
     /** @type {number} counter for frames while there is no input from keyboard */
