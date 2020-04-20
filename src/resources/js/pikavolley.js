@@ -299,7 +299,7 @@ export class PikachuVolleyball {
       this.physics.player1.initializeForNewRound();
       this.physics.player2.initializeForNewRound();
       this.physics.ball.initializeForNewRound(this.isPlayer2Serve);
-      this.view.game.drawPlayerAndBall(this.physics);
+      this.view.game.drawPlayersAndBall(this.physics);
 
       this.view.fadeInOut.setBlackAlphaTo(1); // set black screen
       this.audio.sounds.bgm.play();
@@ -345,7 +345,7 @@ export class PikachuVolleyball {
     );
 
     this.playSoundEffect();
-    this.view.game.drawPlayerAndBall(this.physics);
+    this.view.game.drawPlayersAndBall(this.physics);
     this.view.game.drawCloudsAndWave();
 
     if (this.gameEnded === true) {
@@ -430,7 +430,7 @@ export class PikachuVolleyball {
       this.physics.player1.initializeForNewRound();
       this.physics.player2.initializeForNewRound();
       this.physics.ball.initializeForNewRound(this.isPlayer2Serve);
-      this.view.game.drawPlayerAndBall(this.physics);
+      this.view.game.drawPlayersAndBall(this.physics);
     }
 
     this.view.game.drawCloudsAndWave();
