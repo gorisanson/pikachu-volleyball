@@ -15,7 +15,12 @@
   },
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "no-constant-condition": ["error", { "checkLoops": false }],
     "prefer-const": [
       "error",
