@@ -24,16 +24,16 @@ const PauseResumePrecedence = {
  */
 const pauseResumeManager = {
   /** @type {number} PauseResumePrecedence enum */
-  precedence: PauseResumePrecedence.notPaused,
+  _precedence: PauseResumePrecedence.notPaused,
   /**
    * Pause game
    * @param {PikachuVolleyball} pikaVolley
    * @param {number} precedence PauseResumePrecedence enum
    */
   pause: function (pikaVolley, precedence) {
-    if (precedence > this.precedence) {
+    if (precedence > this._precedence) {
       pikaVolley.paused = true;
-      this.precedence = precedence;
+      this._precedence = precedence;
     }
   },
   /**
@@ -42,9 +42,9 @@ const pauseResumeManager = {
    * @param {number} precedence PauseResumePrecedence enum
    */
   resume: function (pikaVolley, precedence) {
-    if (precedence === this.precedence) {
+    if (precedence === this._precedence) {
       pikaVolley.paused = false;
-      this.precedence = PauseResumePrecedence.notPaused;
+      this._precedence = PauseResumePrecedence.notPaused;
     }
   },
 };
