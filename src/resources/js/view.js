@@ -457,9 +457,20 @@ export class GameView {
 
     this.player1.x = player1.x;
     this.player1.y = player1.y;
+    if (player1.state === 3 || player1.state === 4) {
+      this.player1.scale.x = player1.divingDirection === -1 ? -1 : 1;
+    } else {
+      this.player1.scale.x = 1;
+    }
     this.shadows.forPlayer1.x = player1.x;
+
     this.player2.x = player2.x;
     this.player2.y = player2.y;
+    if (player2.state === 3 || player2.state === 4) {
+      this.player2.scale.x = player2.divingDirection === 1 ? 1 : -1;
+    } else {
+      this.player2.scale.x = -1;
+    }
     this.shadows.forPlayer2.x = player2.x;
 
     const frameNumber1 = getFrameNumberForPlayerAnimatedSprite(
@@ -794,7 +805,6 @@ function makePlayerAnimatedSprites(textures) {
   }
   const player1AnimatedSprite = new AnimatedSprite(playerTextureArray, false);
   const player2AnimatedSprite = new AnimatedSprite(playerTextureArray, false);
-  player2AnimatedSprite.scale.x = -1;
 
   player1AnimatedSprite.anchor.x = 0.5;
   player1AnimatedSprite.anchor.y = 0.5;
