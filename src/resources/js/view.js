@@ -450,7 +450,7 @@ export class GameView {
    * Draw players and ball in the given physics object
    * @param {PikaPhysics} physics PikaPhysics object to draw
    */
-  drawPlayerAndBall(physics) {
+  drawPlayersAndBall(physics) {
     const player1 = physics.player1;
     const player2 = physics.player2;
     const ball = physics.ball;

@@ -6,7 +6,9 @@
 /** @typedef {import('pixi.js-legacy').Ticker} Ticker */
 
 /**
- * Enum for game paused by what? The greater the number, the higher the precedence.
+ * Enum for "game paused by what?".
+ * The greater the number, the higher the precedence.
+ *
  * @readonly
  * @enum {number}
  */
@@ -17,18 +19,32 @@ const PauseResumePrecedence = {
   notPaused: 0,
 };
 
+/**
+ * Manages pausing and resuming of the game
+ */
 const pauseResumeManager = {
-  precedence: PauseResumePrecedence.notPaused,
+  /** @type {number} PauseResumePrecedence enum */
+  _precedence: PauseResumePrecedence.notPaused,
+  /**
+   * Pause game
+   * @param {PikachuVolleyball} pikaVolley
+   * @param {number} precedence PauseResumePrecedence enum
+   */
   pause: function (pikaVolley, precedence) {
-    if (precedence > this.precedence) {
+    if (precedence > this._precedence) {
       pikaVolley.paused = true;
-      this.precedence = precedence;
+      this._precedence = precedence;
     }
   },
+  /**
+   * Resume game
+   * @param {PikachuVolleyball} pikaVolley
+   * @param {number} precedence PauseResumePrecedence enum
+   */
   resume: function (pikaVolley, precedence) {
-    if (precedence === this.precedence) {
+    if (precedence === this._precedence) {
       pikaVolley.paused = false;
-      this.precedence = PauseResumePrecedence.notPaused;
+      this._precedence = PauseResumePrecedence.notPaused;
     }
   },
 };
@@ -123,12 +139,10 @@ function setUpBtns(pikaVolley, ticker) {
     pikaVolley.audio.turnSFXVolume(false);
   });
 
-  /*
-   *  Game speed:
-   *    slow: 1 frame per 50ms = 20 FPS
-   *    medium: 1 frame per 40ms = 25 FPS
-   *    fast: 1 frame per 33ms = 30.303030... FPS
-   */
+  // Game speed:
+  //   slow: 1 frame per 50ms = 20 FPS
+  //   medium: 1 frame per 40ms = 25 FPS
+  //   fast: 1 frame per 33ms = 30.303030... FPS
   const slowSpeedBtn = document.getElementById('slow-speed-btn');
   const mediumSpeedBtn = document.getElementById('medium-speed-btn');
   const fastSpeedBtn = document.getElementById('fast-speed-btn');
@@ -421,6 +435,11 @@ function setUpToShowDropdownsAndSubmenus(pikaVolley) {
     });
 }
 
+/**
+ * Toggle (show or hide) the dropdown menu
+ * @param {string} dropdownID html element id of the dropdown to toggle
+ * @param {PikachuVolleyball} pikaVolley
+ */
 function toggleDropdown(dropdownID, pikaVolley) {
   hideSubmenus();
   hideDropdownsExcept(dropdownID);
@@ -432,12 +451,21 @@ function toggleDropdown(dropdownID, pikaVolley) {
   }
 }
 
+/**
+ * Show the submenu
+ * @param {string} submenuBtnID html element id of the submenu button whose submenu to show
+ * @param {string} subMenuID html element id of the submenu to show
+ */
 function showSubmenu(submenuBtnID, subMenuID) {
   hideSubmenus();
   document.getElementById(submenuBtnID).classList.add('open');
   document.getElementById(subMenuID).classList.add('show');
 }
 
+/**
+ * Hide all other dropdowns except the dropdown
+ * @param {string} dropdownID html element id of the dropdown
+ */
 function hideDropdownsExcept(dropdownID) {
   const dropdowns = document.getElementsByClassName('dropdown');
   for (let i = 0; i < dropdowns.length; i++) {
@@ -447,6 +475,9 @@ function hideDropdownsExcept(dropdownID) {
   }
 }
 
+/**
+ * Hide all submenus
+ */
 function hideSubmenus() {
   const submenus = document.getElementsByClassName('submenu');
   for (let i = 0; i < submenus.length; i++) {
