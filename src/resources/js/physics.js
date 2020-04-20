@@ -112,6 +112,13 @@ export class PikaUserInput {
 
 /**
  * Class representing a player
+ *
+ * Player 1 property address: 00411F28 -> +28 -> +10 -> +C -> ...
+ * Player 2 property address: 00411F28 -> +28 -> +10 -> +10 -> ...
+ * The "..." part is written on the line comment at the right side of each property.
+ * e.g. address to player1.isPlayer: 00411F28 -> +28 -> +10 -> +C -> +A0
+ * e.g. address to player2.isComputer: 00411F28 -> +28 -> +10 -> +10 -> +A4
+ *
  * For initial values: refer FUN_000403a90 && FUN_00401f40
  */
 class Player {
@@ -209,6 +216,11 @@ class Player {
 
 /**
  * Class representing a ball
+ *
+ * Ball property address: 00411F28 -> +28 -> +10 -> +14 -> ...
+ * The "..." part is written on the line comment at the right side of each property.
+ * e.g. address to ball.fineRotation: 00411F28 -> +28 -> +10 -> +14 -> +48
+ *
  * For initial Values: refer FUN_000403a90 && FUN_00402d60
  */
 class Ball {
