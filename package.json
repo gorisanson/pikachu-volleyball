@@ -36,6 +36,6 @@
   },
   "dependencies": {
     "pixi-sound": "3.0.4",
-    "pixi.js-legacy": "5.2.1"
+    "pixi.js-legacy": "5.2.3"
   }
 }
