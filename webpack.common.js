@@ -11,7 +11,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   optimization: {
-    runtimeChunk: { name: 'runtime' }, // this is for code-sharing between "main.js and "ko.js"
+    runtimeChunk: { name: 'runtime' }, // this is for code-sharing between "main.js" and "ko.js"
     splitChunks: {
       chunks: 'all',
     },
