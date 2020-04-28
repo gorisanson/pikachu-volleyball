@@ -1,7 +1,7 @@
 /**
  * The Controller part in MVC pattern
  */
-'ues strics';
+'use strict';
 import { PikaPhysics } from './physics.js';
 import { MenuView, GameView, FadeInOut, IntroView } from './view.js';
 import { PikaKeyboard } from './keyboard.js';
