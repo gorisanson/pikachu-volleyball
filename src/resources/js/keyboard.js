@@ -17,8 +17,11 @@ export class PikaKeyboard extends PikaUserInput {
    * @param {string} up KeyboardEvent.code value of the key to use for up
    * @param {string} down KeyboardEvent.code value of the key to use for down
    * @param {string} powerHit KeyboardEvent.code value of the key to use for power hit or selection
+   * @param {string} downRight KeyboardEvent.code value of the key to use for having the same effect
+   *                           when pressing down key and right key at the same time (Only player 1
+   *                           has this key)
    */
-  constructor(left, right, up, down, powerHit) {
+  constructor(left, right, up, down, powerHit, downRight = null) {
     super();
 
     /** @type {boolean} */
@@ -34,6 +37,8 @@ export class PikaKeyboard extends PikaUserInput {
     this.downKey = new Key(down);
     /** @type {Key} */
     this.powerHitKey = new Key(powerHit);
+    /** @type {Key} */
+    this.downRightKey = new Key(downRight);
   }
 
   /**
@@ -43,7 +48,10 @@ export class PikaKeyboard extends PikaUserInput {
   getInput() {
     if (this.leftKey.isDown) {
       this.xDirection = -1;
-    } else if (this.rightKey.isDown) {
+    } else if (
+      this.rightKey.isDown ||
+      (this.downRightKey && this.downRightKey.isDown)
+    ) {
       this.xDirection = 1;
     } else {
       this.xDirection = 0;
@@ -51,7 +59,10 @@ export class PikaKeyboard extends PikaUserInput {
 
     if (this.upKey.isDown) {
       this.yDirection = -1;
-    } else if (this.downKey.isDown) {
+    } else if (
+      this.downKey.isDown ||
+      (this.downRightKey && this.downRightKey.isDown)
+    ) {
       this.yDirection = 1;
     } else {
       this.yDirection = 0;
