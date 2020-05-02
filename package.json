@@ -1,6 +1,6 @@
 {
   "name": "pikachu-volleyball",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Pikachu Volleyball implemented into JavaScript by reverse engineering the original game",
   "private": true,
   "scripts": {
@@ -36,6 +36,6 @@
   },
   "dependencies": {
     "pixi-sound": "3.0.4",
-    "pixi.js-legacy": "5.2.1"
+    "pixi.js-legacy": "5.2.3"
   }
 }
