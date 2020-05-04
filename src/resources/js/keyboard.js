@@ -86,6 +86,7 @@ export class PikaKeyboard extends PikaUserInput {
     this.upKey.subscribe();
     this.downKey.subscribe();
     this.powerHitKey.subscribe();
+    this.downRightKey.subscribe();
   }
 
   /**
@@ -97,6 +98,7 @@ export class PikaKeyboard extends PikaUserInput {
     this.upKey.unsubscribe();
     this.downKey.unsubscribe();
     this.powerHitKey.unsubscribe();
+    this.downRightKey.unsubscribe();
   }
 }
 
