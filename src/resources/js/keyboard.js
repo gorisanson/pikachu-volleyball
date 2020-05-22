@@ -160,5 +160,7 @@ class Key {
   unsubscribe() {
     window.removeEventListener('keydown', this.downListener);
     window.removeEventListener('keyup', this.upListner);
+    this.isDown = false;
+    this.isUp = true;
   }
 }
