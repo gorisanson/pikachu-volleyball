@@ -10,7 +10,6 @@ import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js-legacy';
 import { Cloud, Wave, cloudAndWaveEngine } from './cloud_and_wave.js';
 import { ASSETS_PATH } from './assets_path.js';
 
-const SPRITE_SHEET = ASSETS_PATH.SPRITE_SHEET;
 const TEXURES = ASSETS_PATH.TEXTURES;
 
 /** @constant @type {number} number of clouds to be rendered */
@@ -25,7 +24,7 @@ export class IntroView {
    * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
    */
   constructor(resources) {
-    const textures = resources[SPRITE_SHEET].textures;
+    const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
 
     this.mark = makeSpriteWithAnchorXY(textures, TEXURES.MARK, 0.5, 0.5);
     this.mark.x = 432 / 2;
@@ -72,7 +71,7 @@ export class MenuView {
    * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
    */
   constructor(resources) {
-    const textures = resources[SPRITE_SHEET].textures;
+    const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
 
     this.messages = {
       pokemon: makeSpriteWithAnchorXY(textures, TEXURES.POKEMON, 0, 0),
@@ -328,7 +327,7 @@ export class GameView {
    * @param {Object.<string,PIXI.LoaderResource>} resources
    */
   constructor(resources) {
-    const textures = resources[SPRITE_SHEET].textures;
+    const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
 
     // Display objects below
     this.bgContainer = makeBGContainer(textures);
