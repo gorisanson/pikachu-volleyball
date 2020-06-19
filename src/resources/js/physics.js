@@ -28,6 +28,7 @@
  */
 'use strict';
 import { rand } from './rand.js';
+import { thunder } from './thunder.js';
 
 /** @constant @type {number} ground width */
 const GROUND_WIDTH = 432;
@@ -271,6 +272,9 @@ class Ball {
    * @param {boolean} isPlayer2Serve will player on the right side serve on this new round?
    */
   initializeForNewRound(isPlayer2Serve) {
+    this.counter = 0;
+    this.isPlayer2Serve = isPlayer2Serve;
+
     /** @type {number} x coord */
     this.x = 56; // 0x30    // initialized to 56 or 376
     if (isPlayer2Serve === true) {
@@ -801,6 +805,15 @@ function calculateExpectedLandingPointXFor(ball) {
  * @param {PikaUserInput} userInput user input of the player whom computer controls
  */
 function letComputerDecideUserInput(player, ball, theOtherPlayer, userInput) {
+  // For thunder
+  if (player.isPlayer2 && ball.counter < thunder.length) {
+    userInput.xDirection = thunder[ball.counter][0];
+    userInput.yDirection = thunder[ball.counter][1];
+    userInput.powerHit = thunder[ball.counter][2];
+    ball.counter++;
+    return;
+  }
+
   userInput.xDirection = 0;
   userInput.yDirection = 0;
   userInput.powerHit = 0;
