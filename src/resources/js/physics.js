@@ -29,6 +29,7 @@
 'use strict';
 import { rand } from './rand.js';
 import { thunder } from './thunder.js';
+// import { thunderBlocking } from './thunder_blocking.js';
 
 /** @constant @type {number} ground width */
 const GROUND_WIDTH = 432;
@@ -813,6 +814,12 @@ function letComputerDecideUserInput(player, ball, theOtherPlayer, userInput) {
     ball.counter++;
     return;
   }
+  // else if (!player.isPlayer2 && ball.counter < thunder.length) {
+  //   userInput.xDirection = thunderBlocking[ball.counter][0];
+  //   userInput.yDirection = thunderBlocking[ball.counter][1];
+  //   userInput.powerHit = thunderBlocking[ball.counter][2];
+  //   return;
+  // }
 
   userInput.xDirection = 0;
   userInput.yDirection = 0;
