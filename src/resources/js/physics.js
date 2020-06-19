@@ -807,14 +807,18 @@ function calculateExpectedLandingPointXFor(ball) {
  */
 function letComputerDecideUserInput(player, ball, theOtherPlayer, userInput) {
   // For thunder
-  if (player.isPlayer2 && ball.counter < thunder.length) {
+  if (
+    player.isPlayer2 &&
+    ball.isPlayer2Serve &&
+    ball.counter < thunder.length
+  ) {
     userInput.xDirection = thunder[ball.counter][0];
     userInput.yDirection = thunder[ball.counter][1];
     userInput.powerHit = thunder[ball.counter][2];
     ball.counter++;
     return;
   }
-  // else if (!player.isPlayer2 && ball.counter < thunder.length) {
+  // else if (!player.isPlayer2 && ball.isPlayer2Serve && ball.counter < thunder.length) {
   //   userInput.xDirection = thunderBlocking[ball.counter][0];
   //   userInput.yDirection = thunderBlocking[ball.counter][1];
   //   userInput.powerHit = thunderBlocking[ball.counter][2];
