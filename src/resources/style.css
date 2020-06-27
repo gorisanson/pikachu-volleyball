@@ -38,7 +38,8 @@ html {
 * {
   font-family: Arial, Helvetica, sans-serif;
 }
-#flex-container {
+#flex-container,
+#update-history-container {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -49,6 +50,16 @@ html {
   height: 100vh;
   margin-left: auto;
   margin-right: auto;
+}
+#update-history-container {
+  justify-content: center;
+  align-items: stretch;
+  height: auto;
+  font-size: var(--font-size);
+  padding-left: var(--font-size);
+  padding-right: var(--font-size);
+  overflow: visible;
+  text-align: left;
 }
 #menu-bar {
   display: grid;
@@ -212,26 +223,28 @@ h1 {
   font-size: calc(1.5 * var(--font-size));
 }
 p.languages,
+p.small,
 p.p2p-online-version,
 p.original-by,
 p.reverse-engineered-by,
 p.source-code-on,
 p.release-date,
-p.game-last-updated,
-p.page-last-updated {
+p.update-history-on {
   font-size: 0.8em;
   line-height: 150%;
 }
 p.release-date {
   margin-block-end: 0;
 }
-p.game-last-updated,
-p.page-last-updated {
+p.update-history-on {
   margin-block-start: 0;
   margin-block-end: 0;
 }
 span.no-wrap {
   white-space: nowrap;
+}
+span.bold {
+  font-weight: bold;
 }
 span.thick {
   font-weight: 900;
@@ -298,4 +311,11 @@ div.for-margin {
 div.margin-top,
 p.margin-top {
   margin-top: calc(2.25 * var(--font-size));
+}
+#update-history-container h1 {
+  font-size: calc(1.5 * var(--font-size));
+}
+div.indent-minus {
+  text-indent: calc(-5.4 * var(--font-size));
+  margin-left: calc(5.4 * var(--font-size));
 }
