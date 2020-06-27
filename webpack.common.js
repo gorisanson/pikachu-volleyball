@@ -26,6 +26,7 @@ module.exports = {
         },
         { from: 'src/en/manifest.json', to: 'en/manifest.json' },
         { from: 'src/ko/manifest.json', to: 'ko/manifest.json' },
+        { from: 'src/zh/manifest.json', to: 'zh/manifest.json' },
         { from: 'src/resources/style.css', to: 'resources/style.css' },
         { from: 'src/index.html', to: 'index.html' },
         {
@@ -35,6 +36,10 @@ module.exports = {
         {
           from: 'src/ko/update-history/index.html',
           to: 'ko/update-history/index.html',
+        },
+        {
+          from: 'src/zh/update-history/index.html',
+          to: 'zh/update-history/index.html',
         },
       ],
     }),
@@ -52,6 +57,16 @@ module.exports = {
       template: 'src/ko/index.html',
       filename: 'ko/index.html',
       chunks: ['runtime', 'ko', 'main'],
+      chunksSortMode: 'manual',
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      template: 'src/zh/index.html',
+      filename: 'zh/index.html',
+      chunks: ['runtime', 'main'],
       chunksSortMode: 'manual',
       minify: {
         collapseWhitespace: true,
