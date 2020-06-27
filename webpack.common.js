@@ -18,16 +18,18 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyPlugin([
-      {
-        context: 'src/',
-        from: 'resources/assets/**/*.+(json|png|mp3|wav)',
-      },
-      { from: 'src/en/manifest.json', to: 'en/manifest.json' },
-      { from: 'src/ko/manifest.json', to: 'ko/manifest.json' },
-      { from: 'src/resources/style.css', to: 'resources/style.css' },
-      { from: 'src/index.html', to: 'index.html' },
-    ]),
+    new CopyPlugin({
+      patterns: [
+        {
+          context: 'src/',
+          from: 'resources/assets/**/*.+(json|png|mp3|wav)',
+        },
+        { from: 'src/en/manifest.json', to: 'en/manifest.json' },
+        { from: 'src/ko/manifest.json', to: 'ko/manifest.json' },
+        { from: 'src/resources/style.css', to: 'resources/style.css' },
+        { from: 'src/index.html', to: 'index.html' },
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: 'src/en/index.html',
       filename: 'en/index.html',

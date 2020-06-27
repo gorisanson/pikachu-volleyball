@@ -60,7 +60,7 @@ export function setUpUI(pikaVolley, ticker) {
 
   // hide or show menubar if the user presses the "esc" key
   window.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
+    if (event.code === 'Escape') {
       const menuBar = document.getElementById('menu-bar');
       if (menuBar.classList.contains('hidden')) {
         menuBar.classList.remove('hidden');
