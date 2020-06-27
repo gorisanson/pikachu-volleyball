@@ -229,8 +229,6 @@ p.original-by,
 p.reverse-engineered-by,
 p.source-code-on,
 p.release-date,
-p.game-last-updated,
-p.page-last-updated,
 p.update-history-on {
   font-size: 0.8em;
   line-height: 150%;
@@ -238,8 +236,6 @@ p.update-history-on {
 p.release-date {
   margin-block-end: 0;
 }
-p.game-last-updated,
-p.page-last-updated,
 p.update-history-on {
   margin-block-start: 0;
   margin-block-end: 0;
