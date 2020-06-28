@@ -67,10 +67,10 @@ setUpInitialUI();
 function setUpInitialUI() {
   const loadingBox = document.getElementById('loading-box');
   const progressBar = document.getElementById('progress-bar');
-  loader.on('progress', () => {
+  loader.onProgress.add(() => {
     progressBar.style.width = `${loader.progress}%`;
   });
-  loader.on('complete', () => {
+  loader.onComplete.add(() => {
     if (!loadingBox.classList.contains('hidden')) {
       loadingBox.classList.add('hidden');
     }
