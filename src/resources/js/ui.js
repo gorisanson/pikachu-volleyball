@@ -139,6 +139,29 @@ function setUpBtns(pikaVolley, ticker) {
     pikaVolley.audio.turnSFXVolume(false);
   });
 
+  const fpsInput = document.getElementById('fps-input');
+  fpsInput.addEventListener('change', (e) => {
+    // @ts-ignore
+    let value = e.target.value;
+    if (value < 0) {
+      value = 0;
+    } else if (value > 60) {
+      value = 60;
+    }
+    pikaVolley.normalFPS = value;
+    ticker.maxFPS = pikaVolley.normalFPS;
+    fastSpeedBtn.classList.remove('selected');
+    slowSpeedBtn.classList.remove('selected');
+    mediumSpeedBtn.classList.remove('selected');
+  });
+
+  function adjustFPSInputValue(value) {
+    const fpsInput = document.getElementById('fps-input');
+    // @ts-ignore
+    fpsInput.value = value;
+  }
+  adjustFPSInputValue(pikaVolley.normalFPS);
+
   // Game speed:
   //   slow: 1 frame per 50ms = 20 FPS
   //   medium: 1 frame per 40ms = 25 FPS
@@ -153,6 +176,7 @@ function setUpBtns(pikaVolley, ticker) {
 
     pikaVolley.normalFPS = 20;
     ticker.maxFPS = pikaVolley.normalFPS;
+    adjustFPSInputValue(pikaVolley.normalFPS);
   });
   mediumSpeedBtn.addEventListener('click', () => {
     fastSpeedBtn.classList.remove('selected');
@@ -161,6 +185,7 @@ function setUpBtns(pikaVolley, ticker) {
 
     pikaVolley.normalFPS = 25;
     ticker.maxFPS = pikaVolley.normalFPS;
+    adjustFPSInputValue(pikaVolley.normalFPS);
   });
   fastSpeedBtn.addEventListener('click', () => {
     slowSpeedBtn.classList.remove('selected');
@@ -169,6 +194,7 @@ function setUpBtns(pikaVolley, ticker) {
 
     pikaVolley.normalFPS = 30;
     ticker.maxFPS = pikaVolley.normalFPS;
+    adjustFPSInputValue(pikaVolley.normalFPS);
   });
 
   const winningScore5Btn = document.getElementById('winning-score-5-btn');
