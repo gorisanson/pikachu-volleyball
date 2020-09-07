@@ -314,6 +314,8 @@ p.margin-top {
 }
 div.limit-width {
   max-width: 864px;
+  margin-left: auto;
+  margin-right: auto;
 }
 #update-history-container h1 {
   font-size: calc(1.5 * var(--font-size));
