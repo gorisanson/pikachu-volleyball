@@ -1,4 +1,4 @@
-// Copied from: https://github.com/fraunhoferfokus/JSum/blob/master/README.md
+// Copied from: https://github.com/fraunhoferfokus/JSum/blob/45bc3725f45640cd1a7f8e88240702245d7558be/README.md
 // And just add the "export" keyword on the function definition
 // The license is below the code.
 
