@@ -31,6 +31,7 @@ const pauseResumeManager = {
    * @param {number} precedence PauseResumePrecedence enum
    */
   pause: function (pikaVolley, precedence) {
+    // @ts-ignore
     if (precedence > this._precedence) {
       pikaVolley.paused = true;
       this._precedence = precedence;
