@@ -38,6 +38,9 @@ html {
 * {
   font-family: Arial, Helvetica, sans-serif;
 }
+body {
+  color: #202124;
+}
 #flex-container,
 #update-history-container {
   position: relative;
