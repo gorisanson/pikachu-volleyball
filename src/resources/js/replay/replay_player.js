@@ -42,9 +42,9 @@ class ReplayPlayer {
     settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
     settings.ROUND_PIXELS = true;
 
-    // To show two "with friend" on the menu
-    const TEXTURES = ASSETS_PATH.TEXTURES;
-    TEXTURES.WITH_COMPUTER = TEXTURES.WITH_FRIEND;
+    // // To show two "with friend" on the menu
+    // const TEXTURES = ASSETS_PATH.TEXTURES;
+    // TEXTURES.WITH_COMPUTER = TEXTURES.WITH_FRIEND;
 
     document
       .querySelector('#game-canvas-container')
