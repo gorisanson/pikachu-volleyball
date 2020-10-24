@@ -97,11 +97,21 @@ function setUpBtns(pikaVolley, ticker) {
   bgmOnBtn.addEventListener('click', () => {
     bgmOffBtn.classList.remove('selected');
     bgmOnBtn.classList.add('selected');
+    try {
+      window.localStorage.setItem('bgm', 'on');
+    } catch (err) {
+      console.log(err);
+    }
     pikaVolley.audio.turnBGMVolume(true);
   });
   bgmOffBtn.addEventListener('click', () => {
     bgmOnBtn.classList.remove('selected');
     bgmOffBtn.classList.add('selected');
+    try {
+      window.localStorage.setItem('bgm', 'off');
+    } catch (err) {
+      console.log(err);
+    }
     pikaVolley.audio.turnBGMVolume(false);
   });
 
@@ -112,6 +122,11 @@ function setUpBtns(pikaVolley, ticker) {
     monoBtn.classList.remove('selected');
     sfxOffBtn.classList.remove('selected');
     stereoBtn.classList.add('selected');
+    try {
+      window.localStorage.setItem('sfx', 'stereo');
+    } catch (err) {
+      console.log(err);
+    }
     pikaVolley.audio.turnSFXVolume(true);
     pikaVolley.isStereoSound = true;
   });
@@ -119,6 +134,11 @@ function setUpBtns(pikaVolley, ticker) {
     sfxOffBtn.classList.remove('selected');
     stereoBtn.classList.remove('selected');
     monoBtn.classList.add('selected');
+    try {
+      window.localStorage.setItem('sfx', 'mono');
+    } catch (err) {
+      console.log(err);
+    }
     pikaVolley.audio.turnSFXVolume(true);
     pikaVolley.isStereoSound = false;
   });
@@ -126,8 +146,37 @@ function setUpBtns(pikaVolley, ticker) {
     stereoBtn.classList.remove('selected');
     monoBtn.classList.remove('selected');
     sfxOffBtn.classList.add('selected');
+    try {
+      window.localStorage.setItem('sfx', 'off');
+    } catch (err) {
+      console.log(err);
+    }
     pikaVolley.audio.turnSFXVolume(false);
   });
+
+  let bgmSetting = null;
+  try {
+    bgmSetting = window.localStorage.getItem('bgm');
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (bgmSetting === 'off') {
+    bgmOffBtn.click();
+  }
+
+  let sfxSetting = null;
+  try {
+    sfxSetting = window.localStorage.getItem('sfx');
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (sfxSetting === 'mono') {
+    monoBtn.click();
+  } else if (sfxSetting === 'off') {
+    sfxOffBtn.click();
+  }
 
   // // Game speed:
   // //   slow: 1 frame per 50ms = 20 FPS

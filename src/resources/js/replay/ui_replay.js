@@ -206,43 +206,43 @@ export function setUpUI() {
     }
   });
 
-  const showNicknamesCheckbox = document.getElementById(
-    'show-nicknames-checkbox'
-  );
-  const player1NicknameElem = document.getElementById('player1-nickname');
-  const player2NicknameElem = document.getElementById('player2-nickname');
-  showNicknamesCheckbox.addEventListener('change', () => {
-    // @ts-ignore
-    if (showNicknamesCheckbox.checked) {
-      player1NicknameElem.classList.remove('hidden');
-      player2NicknameElem.classList.remove('hidden');
-    } else {
-      if (!player1NicknameElem.classList.contains('hidden')) {
-        player1NicknameElem.classList.add('hidden');
-      }
-      if (!player2NicknameElem.classList.contains('hidden')) {
-        player2NicknameElem.classList.add('hidden');
-      }
-    }
-  });
+  // const showNicknamesCheckbox = document.getElementById(
+  //   'show-nicknames-checkbox'
+  // );
+  // const player1NicknameElem = document.getElementById('player1-nickname');
+  // const player2NicknameElem = document.getElementById('player2-nickname');
+  // showNicknamesCheckbox.addEventListener('change', () => {
+  //   // @ts-ignore
+  //   if (showNicknamesCheckbox.checked) {
+  //     player1NicknameElem.classList.remove('hidden');
+  //     player2NicknameElem.classList.remove('hidden');
+  //   } else {
+  //     if (!player1NicknameElem.classList.contains('hidden')) {
+  //       player1NicknameElem.classList.add('hidden');
+  //     }
+  //     if (!player2NicknameElem.classList.contains('hidden')) {
+  //       player2NicknameElem.classList.add('hidden');
+  //     }
+  //   }
+  // });
 
-  const showIPsCheckbox = document.getElementById('show-ip-addresses-checkbox');
-  const player1IPElem = document.getElementById('player1-partial-ip');
-  const player2IPElem = document.getElementById('player2-partial-ip');
-  showIPsCheckbox.addEventListener('change', () => {
-    // @ts-ignore
-    if (showIPsCheckbox.checked) {
-      player1IPElem.classList.remove('hidden');
-      player2IPElem.classList.remove('hidden');
-    } else {
-      if (!player1IPElem.classList.contains('hidden')) {
-        player1IPElem.classList.add('hidden');
-      }
-      if (!player2IPElem.classList.contains('hidden')) {
-        player2IPElem.classList.add('hidden');
-      }
-    }
-  });
+  // const showIPsCheckbox = document.getElementById('show-ip-addresses-checkbox');
+  // const player1IPElem = document.getElementById('player1-partial-ip');
+  // const player2IPElem = document.getElementById('player2-partial-ip');
+  // showIPsCheckbox.addEventListener('change', () => {
+  //   // @ts-ignore
+  //   if (showIPsCheckbox.checked) {
+  //     player1IPElem.classList.remove('hidden');
+  //     player2IPElem.classList.remove('hidden');
+  //   } else {
+  //     if (!player1IPElem.classList.contains('hidden')) {
+  //       player1IPElem.classList.add('hidden');
+  //     }
+  //     if (!player2IPElem.classList.contains('hidden')) {
+  //       player2IPElem.classList.add('hidden');
+  //     }
+  //   }
+  // });
 }
 
 export function adjustFPSInputValue() {
