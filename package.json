@@ -24,9 +24,11 @@
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.1.0",
+    "css-loader": "^5.0.0",
     "eslint": "^7.8.1",
     "eslint-plugin-prettier": "^3.1.4",
     "html-webpack-plugin": "^4.4.1",
+    "mini-css-extract-plugin": "^1.1.2",
     "prettier": "^2.1.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
@@ -35,7 +37,9 @@
     "workbox-webpack-plugin": "^5.1.1"
   },
   "dependencies": {
+    "file-saver": "^2.0.2",
     "pixi-sound": "3.0.5",
-    "pixi.js-legacy": "5.3.3"
+    "pixi.js-legacy": "5.3.3",
+    "seedrandom": "^3.0.5"
   }
 }

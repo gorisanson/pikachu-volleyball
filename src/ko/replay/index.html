@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>피카츄 배구 리플레이 재생기</title>
+    <meta name="description" content="피카츄 배구 리플레이 재생기" />
+    <meta name="author" content="이규태" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../../resources/assets/images/IDI_PIKAICON-0.png"
+    />
+  </head>
+  <body>
+    <div id="flex-container">
+      <div id="game-canvas-container">
+        <div id="player1-chat-box" class="chat-box pre-wrap"></div>
+        <div id="player2-chat-box" class="chat-box pre-wrap"></div>
+        <div class="nicknames-container">
+          <div class="nickname-and-partial-ip left">
+            <span id="player1-nickname" class="nickname"></span>
+            <span id="player1-partial-ip" class="partial-ip"></span>
+          </div>
+          <div class="nickname-and-partial-ip right">
+            <span id="player2-nickname" class="nickname"></span>
+            <span id="player2-partial-ip" class="partial-ip"></span>
+          </div>
+        </div>
+        <div class="fade-in-box loading black hidden" id="loading-box">
+          <div>
+            <p>게임 스프라이트/사운드 로드 중...</p>
+            <div id="progress-bar-border">
+              <div id="progress-bar" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+        <div id="dropbox" class="fade-in-box">
+          <label class="custom-file-upload">
+            파일 열기
+            <input id="file-input" type="file" />
+          </label>
+          <p>
+            "파일 열기" 버튼을 누르거나 여기에 리플레이 파일을 끌어다 놓으세요
+          </p>
+        </div>
+        <div class="fade-in-box notice hidden" id="notice-end-of-replay">
+          <p>리플레이가 끝났습니다.</p>
+          <button id="notice-end-of-replay-ok-btn" class="btn-in-box">
+            알겠어요
+          </button>
+        </div>
+        <div class="fade-in-box notice hidden" id="notice-file-open-error">
+          <p>
+            파일을 열 수 없습니다.<br />리플레이 파일이 아니거나, 손상된
+            리플레이 파일입니다.
+          </p>
+          <button id="notice-file-open-error-ok-btn" class="btn-in-box">
+            알겠어요
+          </button>
+        </div>
+      </div>
+      <div id="keyboard-container" class="flex-for-keyboard">
+        <div class="grid-for-keyboard">
+          <div id="z-key" class="keyboard-key">Z</div>
+          <div id="r-key" class="keyboard-key">R</div>
+          <div id="d-key" class="keyboard-key">D</div>
+          <div id="v-key" class="keyboard-key">V</div>
+          <div id="g-key" class="keyboard-key">G</div>
+        </div>
+        <div class="grid-for-keyboard">
+          <div id="enter-key" class="keyboard-key">Enter</div>
+          <div id="up-key" class="keyboard-key">&uarr;</div>
+          <div id="left-key" class="keyboard-key">&larr;</div>
+          <div id="down-key" class="keyboard-key">&darr;</div>
+          <div id="right-key" class="keyboard-key">&rarr;</div>
+        </div>
+      </div>
+      <div>
+        <input
+          id="scrubber-range-input"
+          class="disable-dbl-tap-zoom"
+          type="range"
+          min="0"
+          max="100"
+          value="0"
+        />
+      </div>
+      <div>
+        <button id="play-pause-btn" class="btn-for-replay disable-dbl-tap-zoom">
+          &#x25b6;&#xfe0e;
+        </button>
+        <span class="margin-left-right"
+          ><span id="time-current">0:00</span> /
+          <span id="time-duration">0:00</span></span
+        >
+        <div class="inline">
+          <button
+            id="seek-backward-3"
+            class="btn-for-replay disable-dbl-tap-zoom"
+          >
+            &lt;&lt; 3
+          </button>
+          <button
+            id="seek-backward-1"
+            class="btn-for-replay disable-dbl-tap-zoom"
+          >
+            &lt;&lt; 1
+          </button>
+          <button
+            id="seek-forward-1"
+            class="btn-for-replay disable-dbl-tap-zoom"
+          >
+            1 &gt;&gt;
+          </button>
+          <button
+            id="seek-forward-3"
+            class="btn-for-replay disable-dbl-tap-zoom"
+          >
+            3 &gt;&gt;
+          </button>
+        </div>
+        <div class="margin-top-little">
+          <button
+            id="speed-btn-5-fps"
+            class="btn-for-replay disable-dbl-tap-zoom"
+          >
+            5 fps
+          </button>
+          <button
+            id="speed-btn-half-times"
+            class="btn-for-replay disable-dbl-tap-zoom"
+          >
+            &times;0.5
+          </button>
+          <button
+            id="speed-btn-1-times"
+            class="btn-for-replay disable-dbl-tap-zoom selected"
+          >
+            &times;1
+          </button>
+          <button
+            id="speed-btn-2-times"
+            class="btn-for-replay disable-dbl-tap-zoom"
+          >
+            &times;2
+          </button>
+          <label for="fps-input">FPS:</label>
+          <input
+            id="fps-input"
+            type="number"
+            inputmode="numeric"
+            min="1"
+            max="60"
+          />
+        </div>
+        <div class="margin-top-little show-checkboxes-container">
+          <input id="show-keyboard-checkbox" type="checkbox" checked />
+          <label for="show-keyboard-checkbox">키보드</label>
+          <input id="show-chat-checkbox" type="checkbox" checked />
+          <label for="show-chat-checkbox">채팅</label>
+          <input id="show-nicknames-checkbox" type="checkbox" checked />
+          <label for="show-nicknames-checkbox">닉네임</label>
+          <input id="show-ip-addresses-checkbox" type="checkbox" checked />
+          <label for="show-ip-addresses-checkbox">IP</label>
+        </div>
+      </div>
+      <div id="play-mark" class="hidden">&#x25b6;&#xfe0e;</div>
+      <div id="pause-mark" class="hidden">&#x275a;&#x275a;</div>
+    </div>
+  </body>
+</html>

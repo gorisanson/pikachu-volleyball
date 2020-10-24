@@ -30,9 +30,13 @@
 'use strict';
 import * as PIXI from 'pixi.js-legacy';
 import 'pixi-sound';
+import seedrandom from 'seedrandom';
 import { PikachuVolleyball } from './pikavolley.js';
 import { ASSETS_PATH } from './assets_path.js';
 import { setUpUI } from './ui.js';
+import { generatePushID } from './utils/generate_pushid.js';
+import { setCustomRng } from './rand.js';
+import { replaySaver } from './replay/replay_saver.js';
 
 const settings = PIXI.settings;
 settings.RESOLUTION = window.devicePixelRatio;
@@ -79,7 +83,7 @@ function setUpInitialUI() {
   const aboutBox = document.getElementById('about-box');
   const aboutBtn = document.getElementById('about-btn');
   const closeAboutBtn = document.getElementById('close-about-btn');
-  const gameDropdownBtn = document.getElementById('game-dropdown-btn');
+  const gameDropdownBtn = document.getElementById('save-replay-btn');
   const optionsDropdownBtn = document.getElementById('options-dropdown-btn');
   // @ts-ignore
   gameDropdownBtn.disabled = true;
@@ -106,6 +110,10 @@ function setUpInitialUI() {
  * Set up the game and the full UI, and start the game.
  */
 function setup() {
+  const roomId = generatePushID();
+  const customRng = seedrandom.alea(roomId.slice(10));
+  setCustomRng(customRng);
+  replaySaver.recordRoomID(roomId);
   const pikaVolley = new PikachuVolleyball(stage, loader.resources);
   setUpUI(pikaVolley, ticker);
   start(pikaVolley);

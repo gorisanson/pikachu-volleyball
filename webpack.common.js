@@ -2,10 +2,15 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
 module.exports = {
-  entry: { main: './src/resources/js/main.js', ko: './src/ko/ko.js' },
+  entry: {
+    main: './src/resources/js/main.js',
+    ko: './src/ko/ko.js',
+    main_replay: './src/resources/js/replay/main_replay.js',
+  },
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
@@ -15,6 +20,14 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
     },
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -42,6 +55,9 @@ module.exports = {
           to: 'zh/update-history/index.html',
         },
       ],
+    }),
+    new MiniCssExtractPlugin({
+      chunkFilename: '[name].[contenthash].css',
     }),
     new HtmlWebpackPlugin({
       template: 'src/en/index.html',
@@ -77,6 +93,26 @@ module.exports = {
       swDest: 'sw.js',
       cleanupOutdatedCaches: true,
       skipWaiting: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: 'src/en/replay/index.html',
+      filename: 'en/replay/index.html',
+      chunks: ['runtime', 'main_replay'],
+      chunksSortMode: 'manual',
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      template: 'src/ko/replay/index.html',
+      filename: 'ko/replay/index.html',
+      chunks: ['runtime', 'ko', 'main_replay'],
+      chunksSortMode: 'manual',
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+      },
     }),
   ],
 };

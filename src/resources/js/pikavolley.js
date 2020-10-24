@@ -2,10 +2,12 @@
  * The Controller part in MVC pattern
  */
 'use strict';
-import { PikaPhysics } from './physics.js';
+
+import { PikaPhysics, PikaUserInput } from './physics.js';
 import { MenuView, GameView, FadeInOut, IntroView } from './view.js';
 import { PikaKeyboard } from './keyboard.js';
 import { PikaAudio } from './audio.js';
+import { replaySaver } from './replay/replay_saver.js';
 
 /** @typedef GameState @type {function():void} */
 
@@ -33,6 +35,8 @@ export class PikachuVolleyball {
     this.view.menu.visible = false;
     this.view.game.visible = false;
     this.view.fadeInOut.visible = false;
+    this.willSaveReplay = true;
+    replaySaver.recordOptions({ speed: 'fast', winningScore: 15 });
 
     this.audio = new PikaAudio(resources);
     this.physics = new PikaPhysics(true, true);
@@ -48,7 +52,7 @@ export class PikachuVolleyball {
     ];
 
     /** @type {number} game fps */
-    this.normalFPS = 25;
+    this.normalFPS = 30;
     /** @type {number} fps for slow motion */
     this.slowMotionFPS = 5;
 
@@ -118,6 +122,20 @@ export class PikachuVolleyball {
     if (this.paused === true) {
       return;
     }
+    // catch keyboard input and freeze it
+    this.keyboardArray[0].getInput();
+    this.keyboardArray[1].getInput();
+    if (this.willSaveReplay) {
+      const player1Input = new PikaUserInput();
+      player1Input.xDirection = this.keyboardArray[0].xDirection;
+      player1Input.yDirection = this.keyboardArray[0].yDirection;
+      player1Input.powerHit = this.keyboardArray[0].powerHit;
+      const player2Input = new PikaUserInput();
+      player2Input.xDirection = this.keyboardArray[1].xDirection;
+      player2Input.yDirection = this.keyboardArray[1].yDirection;
+      player2Input.powerHit = this.keyboardArray[1].powerHit;
+      replaySaver.recordInputs(player1Input, player2Input);
+    }
     if (this.slowMotionFramesLeft > 0) {
       this.slowMotionNumOfSkippedFrames++;
       if (
@@ -130,9 +148,7 @@ export class PikachuVolleyball {
       this.slowMotionFramesLeft--;
       this.slowMotionNumOfSkippedFrames = 0;
     }
-    // catch keyboard input and freeze it
-    this.keyboardArray[0].getInput();
-    this.keyboardArray[1].getInput();
+
     this.state();
   }
 
@@ -506,6 +522,11 @@ export class PikachuVolleyball {
     this.view.menu.visible = false;
     this.view.game.visible = false;
     this.state = this.intro;
+    replaySaver.recordOptions({
+      restart: true,
+      speed: 'fast',
+      winningScore: 15,
+    });
   }
 
   /** @return {boolean} */
