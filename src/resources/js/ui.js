@@ -208,9 +208,9 @@ function setUpBtns(pikaVolley, ticker) {
     }
     pikaVolley.normalFPS = value;
     ticker.maxFPS = pikaVolley.normalFPS;
-    fastSpeedBtn.classList.remove('selected');
-    slowSpeedBtn.classList.remove('selected');
-    mediumSpeedBtn.classList.remove('selected');
+    // fastSpeedBtn.classList.remove('selected');
+    // slowSpeedBtn.classList.remove('selected');
+    // mediumSpeedBtn.classList.remove('selected');
   });
 
   function adjustFPSInputValue(value) {
@@ -224,36 +224,36 @@ function setUpBtns(pikaVolley, ticker) {
   //   slow: 1 frame per 50ms = 20 FPS
   //   medium: 1 frame per 40ms = 25 FPS
   //   fast: 1 frame per 33ms = 30.303030... FPS
-  const slowSpeedBtn = document.getElementById('slow-speed-btn');
-  const mediumSpeedBtn = document.getElementById('medium-speed-btn');
-  const fastSpeedBtn = document.getElementById('fast-speed-btn');
-  slowSpeedBtn.addEventListener('click', () => {
-    mediumSpeedBtn.classList.remove('selected');
-    fastSpeedBtn.classList.remove('selected');
-    slowSpeedBtn.classList.add('selected');
+  // const slowSpeedBtn = document.getElementById('slow-speed-btn');
+  // const mediumSpeedBtn = document.getElementById('medium-speed-btn');
+  // const fastSpeedBtn = document.getElementById('fast-speed-btn');
+  // slowSpeedBtn.addEventListener('click', () => {
+  //   mediumSpeedBtn.classList.remove('selected');
+  //   fastSpeedBtn.classList.remove('selected');
+  //   slowSpeedBtn.classList.add('selected');
 
-    pikaVolley.normalFPS = 20;
-    ticker.maxFPS = pikaVolley.normalFPS;
-    adjustFPSInputValue(pikaVolley.normalFPS);
-  });
-  mediumSpeedBtn.addEventListener('click', () => {
-    fastSpeedBtn.classList.remove('selected');
-    slowSpeedBtn.classList.remove('selected');
-    mediumSpeedBtn.classList.add('selected');
+  //   pikaVolley.normalFPS = 20;
+  //   ticker.maxFPS = pikaVolley.normalFPS;
+  //   adjustFPSInputValue(pikaVolley.normalFPS);
+  // });
+  // mediumSpeedBtn.addEventListener('click', () => {
+  //   fastSpeedBtn.classList.remove('selected');
+  //   slowSpeedBtn.classList.remove('selected');
+  //   mediumSpeedBtn.classList.add('selected');
 
-    pikaVolley.normalFPS = 25;
-    ticker.maxFPS = pikaVolley.normalFPS;
-    adjustFPSInputValue(pikaVolley.normalFPS);
-  });
-  fastSpeedBtn.addEventListener('click', () => {
-    slowSpeedBtn.classList.remove('selected');
-    mediumSpeedBtn.classList.remove('selected');
-    fastSpeedBtn.classList.add('selected');
+  //   pikaVolley.normalFPS = 25;
+  //   ticker.maxFPS = pikaVolley.normalFPS;
+  //   adjustFPSInputValue(pikaVolley.normalFPS);
+  // });
+  // fastSpeedBtn.addEventListener('click', () => {
+  //   slowSpeedBtn.classList.remove('selected');
+  //   mediumSpeedBtn.classList.remove('selected');
+  //   fastSpeedBtn.classList.add('selected');
 
-    pikaVolley.normalFPS = 30;
-    ticker.maxFPS = pikaVolley.normalFPS;
-    adjustFPSInputValue(pikaVolley.normalFPS);
-  });
+  //   pikaVolley.normalFPS = 30;
+  //   ticker.maxFPS = pikaVolley.normalFPS;
+  //   adjustFPSInputValue(pikaVolley.normalFPS);
+  // });
 
   //   pikaVolley.normalFPS = 25;
   //   ticker.maxFPS = pikaVolley.normalFPS;
