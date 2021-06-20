@@ -332,7 +332,7 @@ function physicsEngine(player1, player2, ball, userInputArray) {
 
     // FUN_00402830 ommited
     // FUN_00406020 ommited
-    // tow function ommited above maybe participates in graphic drawing for a player
+    // These two functions ommited above maybe participate in graphic drawing for a player
   }
 
   for (let i = 0; i < 2; i++) {
@@ -366,7 +366,7 @@ function physicsEngine(player1, player2, ball, userInputArray) {
 
   // FUN_00403040
   // FUN_00406020
-  // tow function ommited above maybe participates in graphic drawing for a ball
+  // These two functions ommited above maybe participate in graphic drawing for a player
 
   return isBallTouchingGround;
 }
