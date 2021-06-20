@@ -93,6 +93,9 @@ function setUpInitialUI() {
       // @ts-ignore
       optionsDropdownBtn.disabled = false;
     }
+    aboutBtn.getElementsByClassName('text-play')[0].classList.add('hidden');
+    aboutBtn.getElementsByClassName('text-about')[0].classList.remove('hidden');
+
     loader.load(setup); // setup is called after loader finishes loading
     loadingBox.classList.remove('hidden');
     aboutBtn.removeEventListener('click', closeAboutBox);
