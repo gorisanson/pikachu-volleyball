@@ -301,9 +301,8 @@ class Ball {
  * @return {boolean} Is ball tounching ground?
  */
 function physicsEngine(player1, player2, ball, userInputArray) {
-  const isBallTouchingGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
-    ball
-  );
+  const isBallTouchingGround =
+    processCollisionBetweenBallAndWorldAndSetBallPosition(ball);
 
   let player;
   let theOtherPlayer;
@@ -622,7 +621,8 @@ function processPlayerMovementAndSetPlayerPosition(
       const futureFrameNumber =
         player.frameNumber + player.normalStatusArmSwingDirection;
       if (futureFrameNumber < 0 || futureFrameNumber > 4) {
-        player.normalStatusArmSwingDirection = -player.normalStatusArmSwingDirection;
+        player.normalStatusArmSwingDirection =
+          -player.normalStatusArmSwingDirection;
       }
       player.frameNumber =
         player.frameNumber + player.normalStatusArmSwingDirection;
