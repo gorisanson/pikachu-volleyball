@@ -404,7 +404,8 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   ball.previousX = ball.x;
   ball.previousY = ball.y;
 
-  let futureFineRotation = ball.fineRotation + ball.xVelocity / 2;
+  // "(ball.xVelocity / 2) | 0" is integer division by 2
+  let futureFineRotation = ball.fineRotation + ((ball.xVelocity / 2) | 0);
   // If futureFineRotation === 50, it skips next if statement finely.
   // Then ball.fineRoation = 50, and then ball.rotation = 5 (which designates hyperball sprite!).
   // In this way, hyper ball glitch occur!
