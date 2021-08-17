@@ -32,7 +32,7 @@ import { rand } from './rand.js';
 /** @constant @type {number} ground width */
 const GROUND_WIDTH = 432;
 /** @constant @type {number} ground half-width, it is also the net pillar x coordinate */
-const GROUND_HALF_WIDTH = (GROUND_WIDTH / 2) | 0; // integer division
+export const GROUND_HALF_WIDTH = (GROUND_WIDTH / 2) | 0; // integer division
 /** @constant @type {number} player (Pikachu) length: width = height = 64 */
 const PLAYER_LENGTH = 64;
 /** @constant @type {number} player half length */
