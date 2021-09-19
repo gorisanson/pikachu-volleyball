@@ -329,3 +329,16 @@ div.indent-minus {
   text-indent: calc(-5.4 * var(--font-size));
   margin-left: calc(5.4 * var(--font-size));
 }
+a {
+  color: #0074cc;
+  text-decoration: none;
+}
+a:visited {
+  color: #0063bf;
+}
+a:hover {
+  color: #0a95ff;
+}
+a:active {
+  color: #0a95ff;
+}
