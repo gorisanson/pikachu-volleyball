@@ -42,12 +42,11 @@ html {
 body {
   color: var(--color-black);
 }
-a {
+a,
+a:link,
+a:visited {
   color: #0074cc;
   text-decoration: none;
-}
-a:visited {
-  color: #0063bf;
 }
 a:hover {
   color: #0a95ff;
