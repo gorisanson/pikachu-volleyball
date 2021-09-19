@@ -7,6 +7,7 @@
   --font-size: 18px;
   --btn-width: calc(5 * var(--font-size));
   --btn-height: calc(3 * var(--font-size));
+  --color-black: #232629;
 }
 /* size of iPad screen is 768px x 1024px in portrait mode */
 @media only screen and (min-width: 768px) and (min-height: 768px) {
@@ -39,7 +40,20 @@ html {
   font-family: Arial, Helvetica, sans-serif;
 }
 body {
-  color: #232629;
+  color: var(--color-black);
+}
+a {
+  color: #0074cc;
+  text-decoration: none;
+}
+a:visited {
+  color: #0063bf;
+}
+a:hover {
+  color: #0a95ff;
+}
+a:active {
+  color: #0a95ff;
 }
 #flex-container,
 #update-history-container {
@@ -292,7 +306,7 @@ button.update {
   margin: 2px;
   padding: 0;
   background-color: white;
-  color: black;
+  color: var(--color-black);
   font-size: var(--font-size);
   text-align: center;
   text-decoration: none;
@@ -328,17 +342,4 @@ div.limit-width {
 div.indent-minus {
   text-indent: calc(-5.4 * var(--font-size));
   margin-left: calc(5.4 * var(--font-size));
-}
-a {
-  color: #0074cc;
-  text-decoration: none;
-}
-a:visited {
-  color: #0063bf;
-}
-a:hover {
-  color: #0a95ff;
-}
-a:active {
-  color: #0a95ff;
 }
