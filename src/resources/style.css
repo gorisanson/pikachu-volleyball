@@ -343,6 +343,9 @@ div.indent-minus {
   text-indent: calc(-5.4 * var(--font-size));
   margin-left: calc(5.4 * var(--font-size));
 }
+#flex-container.embedded-in-other-website {
+  justify-content: flex-start;
+}
 .if-embedded-in-other-website {
   display: flex;
   flex-direction: column;
@@ -351,8 +354,9 @@ div.indent-minus {
   margin-top: calc(var(--font-size) - 10px);
   font-size: calc(0.8 * var(--font-size));
   margin-bottom: var(--font-size);
-  padding-left: var(--font-size);
-  padding-right: var(--font-size);
+  padding: var(--font-size);
+  border: solid;
+  border-width: 3px;
 }
 .if-embedded-in-other-website .limit-width {
   max-width: calc(23 * var(--font-size));

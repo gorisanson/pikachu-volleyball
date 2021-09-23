@@ -105,6 +105,9 @@ function setUpInitialUI() {
   closeAboutBtn.addEventListener('click', closeAboutBox);
 
   if (isEmbeddedInOtherWebsite()) {
+    document
+      .getElementById('flex-container')
+      .classList.add('embedded-in-other-website');
     const elements = document.getElementsByClassName(
       'if-embedded-in-other-website'
     );
