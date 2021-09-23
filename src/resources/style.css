@@ -206,6 +206,7 @@ span.check {
   }
 }
 .fade-in-box.hidden,
+.if-embedded-in-other-website.hidden,
 #menu-bar.hidden,
 span.hidden {
   display: none;
@@ -341,4 +342,12 @@ div.limit-width {
 div.indent-minus {
   text-indent: calc(-5.4 * var(--font-size));
   margin-left: calc(5.4 * var(--font-size));
+}
+.if-embedded-in-other-website {
+  margin-top: calc(var(--font-size) - 10px);
+  font-size: calc(0.8 * var(--font-size));
+  margin-bottom: var(--font-size);
+}
+.original-address {
+  margin-top: var(--font-size);
 }
