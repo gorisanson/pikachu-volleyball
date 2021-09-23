@@ -103,6 +103,13 @@ function setUpInitialUI() {
   };
   aboutBtn.addEventListener('click', closeAboutBox);
   closeAboutBtn.addEventListener('click', closeAboutBox);
+
+  if (isEmbeddedInOtherWebsite()) {
+    const elements = document.getElementsByClassName(
+      'if-embedded-in-other-website'
+    );
+    Array.from(elements).forEach((elem) => elem.classList.remove('hidden'));
+  }
 }
 
 /**
@@ -125,4 +132,15 @@ function start(pikaVolley) {
     renderer.render(stage);
   });
   ticker.start();
+}
+
+/**
+ * Check if the page is embedded in other site.
+ */
+function isEmbeddedInOtherWebsite() {
+  try {
+    return window.self !== window.top;
+  } catch (e) {
+    return true;
+  }
 }
