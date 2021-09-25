@@ -89,9 +89,7 @@ function setUpInitialUI() {
     if (!aboutBox.classList.contains('hidden')) {
       aboutBox.classList.add('hidden');
       // @ts-ignore
-      gameDropdownBtn.disabled = false;
-      // @ts-ignore
-      optionsDropdownBtn.disabled = false;
+      aboutBtn.disabled = true;
     }
     aboutBtn.getElementsByClassName('text-play')[0].classList.add('hidden');
     aboutBtn.getElementsByClassName('text-about')[0].classList.remove('hidden');

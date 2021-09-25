@@ -87,6 +87,12 @@ function setUpBtns(pikaVolley, ticker) {
   const gameDropdownBtn = document.getElementById('game-dropdown-btn');
   const optionsDropdownBtn = document.getElementById('options-dropdown-btn');
   const aboutBtn = document.getElementById('about-btn');
+  // @ts-ignore
+  gameDropdownBtn.disabled = false;
+  // @ts-ignore
+  optionsDropdownBtn.disabled = false;
+  // @ts-ignore
+  aboutBtn.disabled = false;
 
   const pauseBtn = document.getElementById('pause-btn');
   pauseBtn.addEventListener('click', () => {
