@@ -365,7 +365,7 @@ div.indent-minus {
   margin-top: var(--font-size);
 }
 button.glow {
-  box-shadow: 0 0 5px 4px #52aaff;
+  box-shadow: 0 0 5px calc(var(--font-size) / 6) #52aaff;
   animation-name: blinking-glow;
   animation-duration: 0.5s;
   animation-direction: alternate;
@@ -374,9 +374,9 @@ button.glow {
 }
 @keyframes blinking-glow {
   0% {
-    box-shadow: 0 0 5px 4px #52aaff;
+    box-shadow: 0 0 5px calc(var(--font-size) / 6) #52aaff;
   }
   100% {
-    box-shadow: 0 0 5px 7px #52aaff;
+    box-shadow: 0 0 5px calc(1.5 * var(--font-size) / 6) #52aaff;
   }
 }
