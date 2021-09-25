@@ -95,6 +95,12 @@ function setUpInitialUI() {
     }
     aboutBtn.getElementsByClassName('text-play')[0].classList.add('hidden');
     aboutBtn.getElementsByClassName('text-about')[0].classList.remove('hidden');
+    closeAboutBtn
+      .getElementsByClassName('text-play')[0]
+      .classList.add('hidden');
+    closeAboutBtn
+      .getElementsByClassName('text-close')[0]
+      .classList.remove('hidden');
 
     loader.load(setup); // setup is called after loader finishes loading
     loadingBox.classList.remove('hidden');
