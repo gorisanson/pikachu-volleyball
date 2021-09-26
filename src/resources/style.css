@@ -380,3 +380,12 @@ button.glow {
     box-shadow: 0 0 5px calc(1.5 * var(--font-size) / 6) #52aaff;
   }
 }
+.if-embedded-in-other-website button {
+  margin-top: var(--font-size);
+  background-color: white;
+  color: var(--color-black);
+  font-size: calc(0.8 * var(--font-size));
+  border: 3px solid;
+  height: calc(1.6 * var(--font-size));
+  width: calc(4 * var(--font-size));
+}
