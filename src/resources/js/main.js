@@ -129,6 +129,13 @@ function setUpInitialUI() {
     Array.from(
       document.getElementsByClassName('if-embedded-in-other-website')
     ).forEach((elem) => elem.classList.remove('hidden'));
+    document
+      .querySelector('.if-embedded-in-other-website button')
+      .addEventListener('click', () => {
+        Array.from(
+          document.getElementsByClassName('if-embedded-in-other-website')
+        ).forEach((elem) => elem.classList.add('hidden'));
+      });
   }
 }
 
