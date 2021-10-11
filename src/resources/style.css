@@ -8,6 +8,9 @@
   --btn-width: calc(5 * var(--font-size));
   --btn-height: calc(3 * var(--font-size));
   --color-black: #232629;
+  --dark-theme-surface-color: #202124;
+  --dark-theme-surface-color-with-alpha: rgba(32, 33, 36, 0.9);
+  --dark-theme-color-white: #bdc1c6;
 }
 /* size of iPad screen is 768px x 1024px in portrait mode */
 @media only screen and (min-width: 768px) and (min-height: 768px) {
@@ -387,5 +390,47 @@ button.glow {
   }
   100% {
     box-shadow: 0 0 5px calc(1.5 * var(--font-size) / 6) #52aaff;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background: var(--dark-theme-surface-color);
+    color: var(--dark-theme-color-white);
+  }
+  .fade-in-box.update {
+    color: var(--color-black);
+  }
+  a,
+  a:link,
+  a:visited {
+    color: #33a7ff;
+  }
+  a:hover {
+    color: #61c5f8;
+    color: #3dc8ff;
+  }
+  a:active {
+    text-decoration: underline;
+  }
+  .btn {
+    color: var(--color-black);
+    background-color: rgba(232, 232, 232, 1);
+  }
+  .dropdown .btn {
+    background-color: rgba(200, 200, 200, 0.8);
+  }
+  .dropdown .btn:hover,
+  .submenu-btn.open {
+    background-color: rgba(232, 232, 232, 0.8);
+  }
+  button.btn-in-box {
+    background-color: rgba(232, 232, 232, 1);
+    color: #151515;
+  }
+  button:disabled {
+    background-color: #666666;
+  }
+  .fade-in-box {
+    background-color: var(--dark-theme-surface-color-with-alpha);
   }
 }
