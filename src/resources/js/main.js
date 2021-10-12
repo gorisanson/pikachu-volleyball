@@ -110,6 +110,20 @@ function setUpInitialUI() {
   aboutBtn.addEventListener('click', closeAboutBox);
   closeAboutBtn.addEventListener('click', closeAboutBox);
 
+  // Set up dark color scheme checkbox
+  const darkColorSchemeCheckboxElem = document.getElementById(
+    'dark-color-scheme-checkbox'
+  );
+  // @ts-ignore
+  darkColorSchemeCheckboxElem.checked = window.matchMedia(
+    '(prefers-color-scheme: dark)'
+  ).matches;
+  darkColorSchemeCheckboxElem.addEventListener('change', () => {
+    document.documentElement.dataset.colorScheme =
+      // @ts-ignore
+      darkColorSchemeCheckboxElem.checked ? 'dark' : 'light';
+  });
+
   /**
    * Check if the page is embedded in other site.
    * Copied from: https://stackoverflow.com/a/326076/8581025
