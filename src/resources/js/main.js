@@ -33,6 +33,7 @@ import 'pixi-sound';
 import { PikachuVolleyball } from './pikavolley.js';
 import { ASSETS_PATH } from './assets_path.js';
 import { setUpUI } from './ui.js';
+import { setUpDarkColorSchemeCheckbox } from './dark_color_scheme.js';
 
 const settings = PIXI.settings;
 settings.RESOLUTION = window.devicePixelRatio;
@@ -110,19 +111,7 @@ function setUpInitialUI() {
   aboutBtn.addEventListener('click', closeAboutBox);
   closeAboutBtn.addEventListener('click', closeAboutBox);
 
-  // Set up dark color scheme checkbox
-  const darkColorSchemeCheckboxElem = document.getElementById(
-    'dark-color-scheme-checkbox'
-  );
-  // @ts-ignore
-  darkColorSchemeCheckboxElem.checked = window.matchMedia(
-    '(prefers-color-scheme: dark)'
-  ).matches;
-  darkColorSchemeCheckboxElem.addEventListener('change', () => {
-    document.documentElement.dataset.colorScheme =
-      // @ts-ignore
-      darkColorSchemeCheckboxElem.checked ? 'dark' : 'light';
-  });
+  setUpDarkColorSchemeCheckbox();
 
   /**
    * Check if the page is embedded in other site.
