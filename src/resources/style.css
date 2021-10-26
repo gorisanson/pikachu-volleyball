@@ -481,7 +481,7 @@ input.toggle-switch + label {
   cursor: pointer;
   transition: background-color 1s;
 }
-input.toggle-switch + label::before {
+input.toggle-switch + label::after {
   content: '';
   position: absolute;
   left: calc(0.1 * var(--font-size));
@@ -492,6 +492,26 @@ input.toggle-switch + label::before {
   background-color: var(--btn-color);
   transition: left 0.5s, background-color 1s;
 }
-input.toggle-switch:checked + label::before {
+input.toggle-switch:checked + label::after {
   left: calc(1.3 * var(--font-size));
+}
+/*
+ * The following supplement is for displaying the Sun and Moon unicode characters
+ * inside toggle switch label.
+ */
+input.toggle-switch + label::before {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  color: var(--btn-color);
+  left: calc(1.2 * var(--font-size));
+  top: calc(0.1 * var(--font-size));
+  height: calc(1 * var(--font-size));
+  width: calc(1 * var(--font-size));
+  content: '\2600';
+}
+input.toggle-switch:checked + label::before {
+  left: calc(0.2 * var(--font-size));
+  content: '\263E';
 }
