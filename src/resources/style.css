@@ -455,13 +455,6 @@ div.color-scheme {
   display: flex;
   align-items: center;
 }
-img.light-color-scheme,
-img.dark-color-scheme {
-  height: calc(2 * var(--font-size));
-  width: auto;
-  filter: invert(var(--amount-to-invert-image-2));
-  transition: filter 1s;
-}
 /*
  * Toggle switch using CSS
  * Reference: https://dev.to/karankmr/how-to-create-a-custom-toggle-switch-using-css-4pmi
