@@ -384,7 +384,7 @@ button.update {
   }
 }
 button:disabled {
-  background-color: #cccccc;
+  background-color: var(--button-disabled-background-color);
 }
 div.for-margin {
   display: block;
