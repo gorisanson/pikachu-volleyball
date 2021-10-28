@@ -40,6 +40,7 @@
     --amount-to-invert-image-2: 1;
   }
 }
+/* Copy of the variables in :root above */
 :root[data-color-scheme='light'] {
   --background-color: #ffffff;
   --background-color-with-alpha: rgba(255, 255, 255, 0.8);
@@ -55,6 +56,7 @@
   --amount-to-invert-image: 0;
   --amount-to-invert-image-2: 0;
 }
+/* Copy of the variables in @media (prefers-color-scheme: dark) :root above */
 :root[data-color-scheme='dark'] {
   --background-color: #202124;
   --background-color-with-alpha: rgba(32, 33, 36, 0.9);
