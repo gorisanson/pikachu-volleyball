@@ -138,10 +138,12 @@ a:active {
   text-align: left;
 }
 #menu-bar {
-  display: grid;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   width: var(--canvas-width);
   height: var(--btn-height);
-  grid-template-columns: 2fr 1fr;
   margin-bottom: 10px;
 }
 .btn-container {
@@ -149,16 +151,13 @@ a:active {
   align-items: center;
 }
 .btn-container.left {
-  grid-column-start: 1;
   justify-content: flex-start;
 }
 .btn-container.right {
-  grid-column-start: 2;
   justify-content: flex-end;
 }
 .btn {
   display: inline-block;
-  grid-row-start: 1;
   width: var(--btn-width);
   height: var(--btn-height);
   border: none;
