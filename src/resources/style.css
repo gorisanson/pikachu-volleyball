@@ -8,6 +8,70 @@
   --btn-width: calc(5 * var(--font-size));
   --btn-height: calc(3 * var(--font-size));
 }
+:root {
+  --background-color: #ffffff;
+  --background-color-with-alpha: rgba(255, 255, 255, 0.8);
+  --color: #232629;
+  --link-color: #0074cc;
+  --link-hover-color: #0a95ff;
+  --btn-color: #ffffff;
+  --btn-background-color: rgba(50, 50, 50, 1);
+  --btn-in-dropdown-background-color: rgba(100, 100, 100, 0.9);
+  --btn-in-dropdown-hover-background-color: rgba(50, 50, 50, 0.9);
+  --button-disabled-background-color: #cccccc;
+  --update-fade-in-box-background-color: rgba(226, 230, 36, 0.85);
+  --amount-to-invert-image: 0;
+  --amount-to-invert-image-2: 0;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #202124;
+    --background-color-with-alpha: rgba(32, 33, 36, 0.9);
+    --color: #bdc1c6;
+    --link-color: #33a7ff;
+    --link-hover-color: #3dc8ff;
+    --btn-color: #151515;
+    --btn-background-color: rgba(232, 232, 232, 1);
+    --btn-in-dropdown-background-color: rgba(200, 200, 200, 0.8);
+    --btn-in-dropdown-hover-background-color: rgba(232, 232, 232, 0.8);
+    --button-disabled-background-color: #666666;
+    --update-fade-in-box-background-color: rgba(195, 197, 48, 0.85);
+    --amount-to-invert-image: 0.95;
+    --amount-to-invert-image-2: 1;
+  }
+}
+/* Copy of the variables in :root above */
+:root[data-color-scheme='light'] {
+  --background-color: #ffffff;
+  --background-color-with-alpha: rgba(255, 255, 255, 0.8);
+  --color: #232629;
+  --link-color: #0074cc;
+  --link-hover-color: #0a95ff;
+  --btn-color: #ffffff;
+  --btn-background-color: rgba(50, 50, 50, 1);
+  --btn-in-dropdown-background-color: rgba(100, 100, 100, 0.9);
+  --btn-in-dropdown-hover-background-color: rgba(50, 50, 50, 0.9);
+  --button-disabled-background-color: #cccccc;
+  --update-fade-in-box-background-color: rgba(226, 230, 36, 0.85);
+  --amount-to-invert-image: 0;
+  --amount-to-invert-image-2: 0;
+}
+/* Copy of the variables in @media (prefers-color-scheme: dark) :root above */
+:root[data-color-scheme='dark'] {
+  --background-color: #202124;
+  --background-color-with-alpha: rgba(32, 33, 36, 0.9);
+  --color: #bdc1c6;
+  --link-color: #33a7ff;
+  --link-hover-color: #3dc8ff;
+  --btn-color: #151515;
+  --btn-background-color: rgba(232, 232, 232, 1);
+  --btn-in-dropdown-background-color: rgba(200, 200, 200, 0.8);
+  --btn-in-dropdown-hover-background-color: rgba(232, 232, 232, 0.8);
+  --button-disabled-background-color: #666666;
+  --update-fade-in-box-background-color: rgba(195, 197, 48, 0.85);
+  --amount-to-invert-image: 0.95;
+  --amount-to-invert-image-2: 1;
+}
 /* size of iPad screen is 768px x 1024px in portrait mode */
 @media only screen and (min-width: 768px) and (min-height: 768px) {
   :root {
@@ -39,7 +103,18 @@ html {
   font-family: Arial, Helvetica, sans-serif;
 }
 body {
-  color: #202124;
+  background-color: var(--background-color);
+  color: var(--color);
+}
+a,
+a:link,
+a:visited {
+  color: var(--link-color);
+  text-decoration: none;
+}
+a:hover,
+a:active {
+  color: var(--link-hover-color);
 }
 #flex-container,
 #update-history-container {
@@ -65,10 +140,12 @@ body {
   text-align: left;
 }
 #menu-bar {
-  display: grid;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   width: var(--canvas-width);
   height: var(--btn-height);
-  grid-template-columns: 2fr 1fr;
   margin-bottom: 10px;
 }
 .btn-container {
@@ -76,23 +153,20 @@ body {
   align-items: center;
 }
 .btn-container.left {
-  grid-column-start: 1;
   justify-content: flex-start;
 }
 .btn-container.right {
-  grid-column-start: 2;
   justify-content: flex-end;
 }
 .btn {
   display: inline-block;
-  grid-row-start: 1;
   width: var(--btn-width);
   height: var(--btn-height);
   border: none;
   border-radius: 10px;
   padding: 0;
-  color: white;
-  background-color: rgba(50, 50, 50, 1);
+  color: var(--btn-color);
+  background-color: var(--btn-background-color);
   font-size: var(--font-size);
   text-align: center;
   text-decoration: none;
@@ -122,7 +196,7 @@ body {
 }
 .dropdown .btn {
   margin-right: 0;
-  background-color: rgba(100, 100, 100, 0.9);
+  background-color: var(--btn-in-dropdown-background-color);
 }
 .submenu > .btn {
   width: calc(1.4 * var(--btn-width));
@@ -130,7 +204,7 @@ body {
 }
 .dropdown .btn:hover,
 .submenu-btn.open {
-  background-color: rgba(50, 50, 50, 0.9);
+  background-color: var(--btn-in-dropdown-hover-background-color);
 }
 span.check {
   display: none;
@@ -166,7 +240,7 @@ span.check {
   z-index: 10;
   visibility: visible;
   opacity: 1;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: var(--background-color-with-alpha);
   animation-name: fade-in;
   animation-duration: 1s;
 }
@@ -178,11 +252,12 @@ span.check {
 }
 .fade-in-box.loading {
   background-color: transparent;
-  color: white;
+  color: #eeeeee;
   animation-duration: 0.5s;
 }
 .fade-in-box.update {
-  background-color: rgba(226, 230, 36, 0.85);
+  background-color: var(--update-fade-in-box-background-color);
+  color: #232629;
 }
 @keyframes fade-in {
   0% {
@@ -193,7 +268,9 @@ span.check {
   }
 }
 .fade-in-box.hidden,
-#menu-bar.hidden {
+.if-embedded-in-other-website.hidden,
+#menu-bar.hidden,
+span.hidden {
   display: none;
 }
 #about-box-head {
@@ -215,8 +292,8 @@ button.btn-in-box {
   border: none;
   margin: 0 auto;
   padding: 0;
-  background-color: rgb(50, 50, 50);
-  color: white;
+  background-color: var(--btn-background-color);
+  color: var(--btn-color);
   font-size: var(--font-size);
   text-align: center;
   text-decoration: none;
@@ -259,6 +336,7 @@ div.align-center-horizontally {
 }
 img.screenshot,
 img.controls {
+  height: auto;
   width: 100%;
 }
 img.screenshot {
@@ -266,11 +344,12 @@ img.screenshot {
 }
 img.controls {
   max-width: 960px;
+  filter: invert(var(--amount-to-invert-image));
 }
 #progress-bar-border {
   position: relative;
   border: solid;
-  border-color: white;
+  border-color: #eeeeee;
   height: var(--btn-height);
   width: calc(var(--canvas-width) / 2);
 }
@@ -280,7 +359,7 @@ img.controls {
   left: 0;
   /*width: width is set on style property of progress-bar element;*/
   height: 100%;
-  background-color: white;
+  background-color: #eeeeee;
 }
 button.update {
   display: inline-block;
@@ -289,8 +368,8 @@ button.update {
   border: none;
   margin: 2px;
   padding: 0;
-  background-color: white;
-  color: black;
+  background-color: #eeeeee;
+  color: #232629;
   font-size: var(--font-size);
   text-align: center;
   text-decoration: none;
@@ -326,4 +405,123 @@ div.limit-width {
 div.indent-minus {
   text-indent: calc(-5.4 * var(--font-size));
   margin-left: calc(5.4 * var(--font-size));
+}
+#flex-container.embedded-in-other-website {
+  justify-content: flex-start;
+}
+.if-embedded-in-other-website {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: calc(var(--font-size) - 10px);
+  font-size: calc(0.8 * var(--font-size));
+  margin-bottom: var(--font-size);
+  padding: var(--font-size);
+  border: 3px solid;
+  border-radius: 10px;
+}
+.if-embedded-in-other-website .limit-width {
+  max-width: calc(23 * var(--font-size));
+}
+.if-embedded-in-other-website button {
+  margin-top: var(--font-size);
+  background-color: var(--background-color);
+  color: var(--color);
+  font-size: calc(0.8 * var(--font-size));
+  border: 3px solid;
+  height: calc(1.6 * var(--font-size));
+  width: calc(4 * var(--font-size));
+}
+.original-address {
+  margin-top: var(--font-size);
+}
+button.glow {
+  box-shadow: 0 0 5px calc(var(--font-size) / 6) #52aaff;
+  animation-name: blinking-glow;
+  animation-duration: 0.5s;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+@keyframes blinking-glow {
+  0% {
+    box-shadow: 0 0 5px calc(var(--font-size) / 6) #52aaff;
+  }
+  100% {
+    box-shadow: 0 0 5px calc(1.5 * var(--font-size) / 6) #52aaff;
+  }
+}
+div.color-scheme-toggle-switch-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--btn-width);
+  height: var(--btn-height);
+  --toggle-switch-height: calc(1.6 * var(--font-size));
+  --toggle-ball-diameter: calc(1.2 * var(--font-size));
+  --toggle-switch-width: calc(2 * var(--toggle-switch-height));
+  --toggle-ball-top: calc(
+    (var(--toggle-switch-height) - var(--toggle-ball-diameter)) / 2
+  );
+  --toggle-ball-left: calc(
+    (var(--toggle-switch-height) - var(--toggle-ball-diameter)) / 2
+  );
+  --toggle-ball-left-toggled: calc(
+    var(--toggle-switch-width) - var(--toggle-ball-diameter) -
+      var(--toggle-ball-left)
+  );
+}
+/*
+ * Toggle switch using CSS
+ * Reference: https://dev.to/karankmr/how-to-create-a-custom-toggle-switch-using-css-4pmi
+ */
+input.toggle-switch {
+  display: none;
+}
+input.toggle-switch + label {
+  display: inline-block;
+  position: relative;
+  margin: auto;
+  background-color: var(--btn-background-color);
+  height: var(--toggle-switch-height);
+  width: var(--toggle-switch-width);
+  border-radius: calc(var(--toggle-switch-height) / 2);
+  cursor: pointer;
+  transition: background-color 1s;
+}
+input.toggle-switch + label::after {
+  content: '';
+  position: absolute;
+  left: var(--toggle-ball-left);
+  top: var(--toggle-ball-top);
+  height: var(--toggle-ball-diameter);
+  width: var(--toggle-ball-diameter);
+  border-radius: 50%;
+  background-color: var(--btn-color);
+  transition: left 0.5s, background-color 1s;
+}
+input.toggle-switch:checked + label::after {
+  left: var(--toggle-ball-left-toggled);
+}
+/*
+ * The following supplement is for displaying the Sun and Moon unicode characters
+ * inside toggle switch label.
+ */
+input.toggle-switch + label::before {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  color: var(--btn-color);
+  left: var(--toggle-ball-left-toggled);
+  top: var(--toggle-ball-top);
+  height: var(--toggle-ball-diameter);
+  width: var(--toggle-ball-diameter);
+  font-size: var(--toggle-ball-diameter);
+  content: '\2600';
+}
+input.toggle-switch:checked + label::before {
+  left: var(--toggle-ball-left);
+  content: '\263E';
 }

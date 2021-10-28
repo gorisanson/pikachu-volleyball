@@ -41,35 +41,47 @@
             <!-- </div> -->
           </div>
           <div class="relative-container">
-            <button id="options-dropdown-btn" class="btn dropdown-btn">
+            <button
+              type="button"
+              id="options-dropdown-btn"
+              class="btn dropdown-btn"
+            >
               Options
             </button>
             <div id="options-dropdown" class="dropdown">
               <div class="relative-container">
-                <button id="bgm-submenu-btn" class="btn submenu-btn">
+                <button
+                  type="button"
+                  id="bgm-submenu-btn"
+                  class="btn submenu-btn"
+                >
                   BGM &#9654;&#xfe0e;
                 </button>
                 <div id="bgm-submenu" class="submenu">
-                  <button id="bgm-on-btn" class="btn selected">
+                  <button type="button" id="bgm-on-btn" class="btn selected">
                     <span class="check">&check; </span>on
                   </button>
-                  <button id="bgm-off-btn" class="btn">
+                  <button type="button" id="bgm-off-btn" class="btn">
                     <span class="check">&check; </span>off
                   </button>
                 </div>
               </div>
               <div class="relative-container">
-                <button id="sfx-submenu-btn" class="btn submenu-btn">
+                <button
+                  type="button"
+                  id="sfx-submenu-btn"
+                  class="btn submenu-btn"
+                >
                   SFX &#9654;&#xfe0e;
                 </button>
                 <div id="sfx-submenu" class="submenu">
-                  <button id="stereo-btn" class="btn selected">
+                  <button type="button" id="stereo-btn" class="btn selected">
                     <span class="check">&check; </span>stereo
                   </button>
-                  <button id="mono-btn" class="btn">
+                  <button type="button" id="mono-btn" class="btn">
                     <span class="check">&check; </span>mono
                   </button>
-                  <button id="sfx-off-btn" class="btn">
+                  <button type="button" id="sfx-off-btn" class="btn">
                     <span class="check">&check; </span>off
                   </button>
                 </div>
@@ -79,13 +91,17 @@
                   Speed &#9654;&#xfe0e;
                 </button>
                 <div id="speed-submenu" class="submenu">
-                  <button id="slow-speed-btn" class="btn">
+                  <button type="button" id="slow-speed-btn" class="btn">
                     <span class="check">&check; </span>slow
                   </button>
-                  <button id="medium-speed-btn" class="btn selected">
+                  <button
+                    type="button"
+                    id="medium-speed-btn"
+                    class="btn selected"
+                  >
                     <span class="check">&check; </span>medium
                   </button>
-                  <button id="fast-speed-btn" class="btn">
+                  <button type="button" id="fast-speed-btn" class="btn">
                     <span class="check">&check; </span>fast
                   </button>
                 </div>
@@ -95,13 +111,17 @@
                   Winning score &#9654;&#xfe0e;
                 </button>
                 <div id="winning-score-submenu" class="submenu">
-                  <button id="winning-score-5-btn" class="btn">
+                  <button type="button" id="winning-score-5-btn" class="btn">
                     <span class="check">&check; </span>5 pts
                   </button>
-                  <button id="winning-score-10-btn" class="btn">
+                  <button type="button" id="winning-score-10-btn" class="btn">
                     <span class="check">&check; </span>10 pts
                   </button>
-                  <button id="winning-score-15-btn" class="btn selected">
+                  <button
+                    type="button"
+                    id="winning-score-15-btn"
+                    class="btn selected"
+                  >
                     <span class="check">&check; </span>15 pts
                   </button>
                 </div>
@@ -111,15 +131,27 @@
                   Practice mode &#9654;&#xfe0e;
                 </button>
                 <div id="practice-mode-submenu" class="submenu">
-                  <button id="practice-mode-on-btn" class="btn">
+                  <button type="button" id="practice-mode-on-btn" class="btn">
                     <span class="check">&check; </span>on
                   </button>
-                  <button id="practice-mode-off-btn" class="btn selected">
+                  <button
+                    type="button"
+                    id="practice-mode-off-btn"
+                    class="btn selected"
+                  >
                     <span class="check">&check; </span>off
                   </button>
                 </div>
               </div> -->
             </div>
+          </div>
+          <div class="color-scheme-toggle-switch-container">
+            <input
+              type="checkbox"
+              id="dark-color-scheme-checkbox"
+              class="toggle-switch"
+            />
+            <label for="dark-color-scheme-checkbox"></label>
           </div>
           <div class="relative-container">
             <label for="fps-input">FPS:</label>
@@ -133,7 +165,30 @@
           </div>
         </div>
         <div class="btn-container right">
-          <button id="about-btn" class="btn">About</button>
+          <button type="button" id="about-btn" class="btn glow">
+            <span class="text-about hidden">About</span
+            ><span class="text-play">Play</span>
+          </button>
+        </div>
+      </div>
+      <div class="if-embedded-in-other-website hidden">
+        <div class="limit-width">
+          It seems that you are playing this web version of
+          <span class="no-wrap">Pikachu Volleyball</span>
+          in some foreign website. If you visit the following link directly, you
+          can play the game in a pleasant environment without ads.
+          <div class="original-address">
+            The original address of this web version of Pikachu Volleyball:<br />
+            <a
+              href="https://gorisanson.github.io/pikachu-volleyball/en/"
+              target="_blank"
+              rel="noopener"
+              >https://gorisanson.github.io/pikachu-volleyball/en/</a
+            >
+          </div>
+          <button type="button" class="btn-in-box">
+            <span>close</span>
+          </button>
         </div>
       </div>
       <div id="game-canvas-container">
@@ -145,10 +200,10 @@
               <a href="../ko/" target="_self">Korean(한국어)</a>
             </p>
             <p class="p2p-online-version">
-              You can play
+              You can also play
               <a
                 href="https://gorisanson.github.io/pikachu-volleyball-p2p-online/en/"
-                >the peer-to-peer online version here</a
+                >the peer-to-peer online version</a
               >.
             </p>
             <p class="small"><a href="./replay/">Replay Viewer is here</a>.</p>
@@ -186,6 +241,8 @@
               <img
                 class="screenshot"
                 src="../resources/assets/images/screenshot.png"
+                width="1728"
+                height="1216"
                 alt="Pikachu Volleyball game screenshot"
               />
             </div>
@@ -198,16 +255,21 @@
               This web version is made by reverse engineering the original game
               and implementing it to JavaScript. It is executed directly on the
               web browser so, unlike the original game, you can play it
-              regardless of the operating system of your computer. If you have a
-              Bluetooth keyboard, you can play even on your touch/mobile device.
+              regardless of the operating system of your computer.
             </p>
             <p class="margin-top"><span class="thick">Controls:</span></p>
             <div class="align-center-horizontally">
               <img
                 class="controls"
                 src="../resources/assets/images/controls.png"
+                width="1994"
+                height="997"
                 alt="game controls"
               />
+              <p>
+                If you have a Bluetooth keyboard, you can play also on your
+                touch/mobile devices.
+              </p>
             </div>
             <p class="margin-top">
               <span class="thick">Tip 1:</span><br />
@@ -256,7 +318,14 @@
               >. On a mobile device, "Add to Home Screen" this page.
             </p>
             <div class="margin-top">
-              <button id="close-about-btn" class="btn-in-box">close</button>
+              <button
+                type="button"
+                id="close-about-btn"
+                class="btn-in-box glow"
+              >
+                <span class="text-close hidden">close</span
+                ><span class="text-play">Play</span>
+              </button>
             </div>
             <div class="for-margin"></div>
           </div>
@@ -267,7 +336,9 @@
             <span id="winning-score-in-notice-box-1"></span> pts, since the
             score is already reached.
           </p>
-          <button id="notice-ok-btn-1" class="btn-in-box">OK</button>
+          <button type="button" id="notice-ok-btn-1" class="btn-in-box">
+            OK
+          </button>
         </div>
         <div class="fade-in-box notice hidden" id="notice-box-2">
           <p>
@@ -277,7 +348,9 @@
               >"Options &rarr; Practice mode &rarr; off"</span
             >.
           </p>
-          <button id="notice-ok-btn-2" class="btn-in-box">OK</button>
+          <button type="button" id="notice-ok-btn-2" class="btn-in-box">
+            OK
+          </button>
         </div>
         <div class="fade-in-box loading hidden" id="loading-box">
           <div>
@@ -293,10 +366,10 @@
         >
           A new version is available. Update now?
           <div>
-            <button class="update" id="update-now">
+            <button type="button" class="update" id="update-now">
               Update Now (current game state will be lost)
             </button>
-            <button class="update" id="later">
+            <button type="button" class="update" id="later">
               Later (automatically at relaunching the browser)
             </button>
           </div>

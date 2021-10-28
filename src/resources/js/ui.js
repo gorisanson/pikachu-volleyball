@@ -72,6 +72,11 @@ export function setUpUI(pikaVolley, ticker) {
         menuBar.classList.add('hidden');
       }
       event.preventDefault();
+    } else if (event.code === 'Space') {
+      const aboutBox = document.getElementById('about-box');
+      if (aboutBox.classList.contains('hidden')) {
+        event.preventDefault();
+      }
     }
   });
 }
@@ -86,11 +91,19 @@ function setUpBtns(pikaVolley, ticker) {
   // const gameDropdownBtn = document.getElementById('game-dropdown-btn');
   const optionsDropdownBtn = document.getElementById('options-dropdown-btn');
   const aboutBtn = document.getElementById('about-btn');
+  // @ts-ignore
+  // gameDropdownBtn.disabled = false;
+  // @ts-ignore
+  optionsDropdownBtn.disabled = false;
+  // @ts-ignore
+  aboutBtn.disabled = false;
 
   const saveReplayBtn = document.getElementById('save-replay-btn');
   saveReplayBtn.addEventListener('click', () => {
     replaySaver.saveAsFile();
   });
+  // @ts-ignore
+  saveReplayBtn.disabled = false;
 
   const bgmOnBtn = document.getElementById('bgm-on-btn');
   const bgmOffBtn = document.getElementById('bgm-off-btn');

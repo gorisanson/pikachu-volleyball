@@ -3,7 +3,7 @@
  */
 'use strict';
 
-import { PikaPhysics, PikaUserInput } from './physics.js';
+import { GROUND_HALF_WIDTH, PikaPhysics, PikaUserInput } from './physics.js';
 import { MenuView, GameView, FadeInOut, IntroView } from './view.js';
 import { PikaKeyboard } from './keyboard.js';
 import { PikaAudio } from './audio.js';
@@ -384,7 +384,7 @@ export class PikachuVolleyball {
       this.roundEnded === false &&
       this.gameEnded === false
     ) {
-      if (this.physics.ball.punchEffectX < 216) {
+      if (this.physics.ball.punchEffectX < GROUND_HALF_WIDTH) {
         this.isPlayer2Serve = true;
         this.scores[1] += 1;
         if (this.scores[1] >= this.winningScore) {
@@ -495,9 +495,9 @@ export class PikachuVolleyball {
     const sound = ball.sound;
     let leftOrCenterOrRight = 0;
     if (this.isStereoSound) {
-      if (ball.punchEffectX < 216) {
+      if (ball.punchEffectX < GROUND_HALF_WIDTH) {
         leftOrCenterOrRight = -1;
-      } else if (ball.punchEffectX > 216) {
+      } else if (ball.punchEffectX > GROUND_HALF_WIDTH) {
         leftOrCenterOrRight = 1;
       }
     }

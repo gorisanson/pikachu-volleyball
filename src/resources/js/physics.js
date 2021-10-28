@@ -32,11 +32,11 @@ import { rand } from './rand.js';
 /** @constant @type {number} ground width */
 const GROUND_WIDTH = 432;
 /** @constant @type {number} ground half-width, it is also the net pillar x coordinate */
-const GROUND_HALF_WIDTH = GROUND_WIDTH / 2;
+export const GROUND_HALF_WIDTH = (GROUND_WIDTH / 2) | 0; // integer division
 /** @constant @type {number} player (Pikachu) length: width = height = 64 */
 const PLAYER_LENGTH = 64;
 /** @constant @type {number} player half length */
-const PLAYER_HALF_LENGTH = PLAYER_LENGTH / 2;
+const PLAYER_HALF_LENGTH = (PLAYER_LENGTH / 2) | 0; // integer division
 /** @constant @type {number} player's y coordinate when they are touching ground */
 const PLAYER_TOUCHING_GROUND_Y_COORD = 244;
 /** @constant @type {number} ball's radius */
@@ -301,9 +301,8 @@ class Ball {
  * @return {boolean} Is ball tounching ground?
  */
 function physicsEngine(player1, player2, ball, userInputArray) {
-  const isBallTouchingGround = processCollisionBetweenBallAndWorldAndSetBallPosition(
-    ball
-  );
+  const isBallTouchingGround =
+    processCollisionBetweenBallAndWorldAndSetBallPosition(ball);
 
   let player;
   let theOtherPlayer;
@@ -332,7 +331,7 @@ function physicsEngine(player1, player2, ball, userInputArray) {
 
     // FUN_00402830 ommited
     // FUN_00406020 ommited
-    // tow function ommited above maybe participates in graphic drawing for a player
+    // These two functions ommited above maybe participate in graphic drawing for a player
   }
 
   for (let i = 0; i < 2; i++) {
@@ -366,7 +365,7 @@ function physicsEngine(player1, player2, ball, userInputArray) {
 
   // FUN_00403040
   // FUN_00406020
-  // tow function ommited above maybe participates in graphic drawing for a ball
+  // These two functions ommited above maybe participate in graphic drawing for a player
 
   return isBallTouchingGround;
 }
@@ -405,7 +404,8 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   ball.previousX = ball.x;
   ball.previousY = ball.y;
 
-  let futureFineRotation = ball.fineRotation + ball.xVelocity / 2;
+  // "(ball.xVelocity / 2) | 0" is integer division by 2
+  let futureFineRotation = ball.fineRotation + ((ball.xVelocity / 2) | 0);
   // If futureFineRotation === 50, it skips next if statement finely.
   // Then ball.fineRoation = 50, and then ball.rotation = 5 (which designates hyperball sprite!).
   // In this way, hyper ball glitch occur!
@@ -418,7 +418,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
     futureFineRotation += -50;
   }
   ball.fineRotation = futureFineRotation;
-  ball.rotation = (ball.fineRotation / 10) >> 0; // integer division
+  ball.rotation = (ball.fineRotation / 10) | 0; // integer division
 
   const futureBallX = ball.x + ball.xVelocity;
   /*
@@ -622,7 +622,8 @@ function processPlayerMovementAndSetPlayerPosition(
       const futureFrameNumber =
         player.frameNumber + player.normalStatusArmSwingDirection;
       if (futureFrameNumber < 0 || futureFrameNumber > 4) {
-        player.normalStatusArmSwingDirection = -player.normalStatusArmSwingDirection;
+        player.normalStatusArmSwingDirection =
+          -player.normalStatusArmSwingDirection;
       }
       player.frameNumber =
         player.frameNumber + player.normalStatusArmSwingDirection;
@@ -685,11 +686,11 @@ function processCollisionBetweenBallAndPlayer(
   // greater the x position difference between pika and ball,
   // greater the x velocity of the ball.
   if (ball.x < playerX) {
-    // Since javascript division is float division by default
-    // I use "Math.floor" to do integer division
-    ball.xVelocity = -Math.floor(Math.abs(ball.x - playerX) / 3);
+    // Since javascript division is float division by default,
+    // Here we use "| 0" to do integer division (refer: https://stackoverflow.com/a/17218003/8581025)
+    ball.xVelocity = -((Math.abs(ball.x - playerX) / 3) | 0);
   } else if (ball.x > playerX) {
-    ball.xVelocity = Math.floor(Math.abs(ball.x - playerX) / 3);
+    ball.xVelocity = (Math.abs(ball.x - playerX) / 3) | 0;
   }
 
   // If ball velocity x is 0, randomly choose one of -1, 0, 1.
@@ -817,7 +818,8 @@ function letComputerDecideUserInput(player, ball, theOtherPlayer, userInput) {
       player.computerWhereToStandBy === 0
     ) {
       // If conditions above met, the computer estimates the proper location to stay as the middle point of their side
-      virtualExpectedLandingPointX = leftBoundary + GROUND_HALF_WIDTH / 2;
+      virtualExpectedLandingPointX =
+        leftBoundary + ((GROUND_HALF_WIDTH / 2) | 0);
     }
   }
 

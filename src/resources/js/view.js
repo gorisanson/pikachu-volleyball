@@ -88,9 +88,8 @@ export class MenuView {
       sachisoft: makeSpriteWithAnchorXY(textures, TEXURES.SACHISOFT, 0, 0),
       fight: makeSpriteWithAnchorXY(textures, TEXURES.FIGHT, 0, 0),
     };
-    this.sittingPikachuTilesContainer = makeSittingPikachuTilesContainer(
-      textures
-    );
+    this.sittingPikachuTilesContainer =
+      makeSittingPikachuTilesContainer(textures);
 
     // refered FUN_004059f0
     this.messages.sachisoft.x = 216 - this.messages.sachisoft.texture.width / 2;
@@ -251,7 +250,8 @@ export class MenuView {
       this.messages.pikachuVolleyball.width = 40 + 15 * (frameCounter - 55);
     } else if (frameCounter > 71) {
       this.messages.pikachuVolleyball.x = 140;
-      this.messages.pikachuVolleyball.width = this.messages.pikachuVolleyball.texture.width;
+      this.messages.pikachuVolleyball.width =
+        this.messages.pikachuVolleyball.texture.width;
     }
   }
 
