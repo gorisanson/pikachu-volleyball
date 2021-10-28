@@ -450,10 +450,25 @@ button.glow {
     box-shadow: 0 0 5px calc(1.5 * var(--font-size) / 6) #52aaff;
   }
 }
-div.color-scheme {
-  margin: 0.3em auto;
+div.color-scheme-toggle-switch-container {
   display: flex;
+  justify-content: center;
   align-items: center;
+  width: var(--btn-width);
+  height: var(--btn-height);
+  --toggle-switch-height: calc(1.6 * var(--font-size));
+  --toggle-ball-diameter: calc(1.2 * var(--font-size));
+  --toggle-switch-width: calc(2 * var(--toggle-switch-height));
+  --toggle-ball-top: calc(
+    (var(--toggle-switch-height) - var(--toggle-ball-diameter)) / 2
+  );
+  --toggle-ball-left: calc(
+    (var(--toggle-switch-height) - var(--toggle-ball-diameter)) / 2
+  );
+  --toggle-ball-left-toggled: calc(
+    var(--toggle-switch-width) - var(--toggle-ball-diameter) -
+      var(--toggle-ball-left)
+  );
 }
 /*
  * Toggle switch using CSS
@@ -466,26 +481,26 @@ input.toggle-switch + label {
   display: inline-block;
   position: relative;
   margin: auto;
-  border-radius: calc(0.75 * var(--font-size));
   background-color: var(--btn-background-color);
-  height: calc(1.2 * var(--font-size));
-  width: calc(2.4 * var(--font-size));
+  height: var(--toggle-switch-height);
+  width: var(--toggle-switch-width);
+  border-radius: calc(var(--toggle-switch-height) / 2);
   cursor: pointer;
   transition: background-color 1s;
 }
 input.toggle-switch + label::after {
   content: '';
   position: absolute;
-  left: calc(0.1 * var(--font-size));
-  top: calc(0.1 * var(--font-size));
-  height: calc(1 * var(--font-size));
-  width: calc(1 * var(--font-size));
-  border-radius: calc(0.5 * var(--font-size));
+  left: var(--toggle-ball-left);
+  top: var(--toggle-ball-top);
+  height: var(--toggle-ball-diameter);
+  width: var(--toggle-ball-diameter);
+  border-radius: 50%;
   background-color: var(--btn-color);
   transition: left 0.5s, background-color 1s;
 }
 input.toggle-switch:checked + label::after {
-  left: calc(1.3 * var(--font-size));
+  left: var(--toggle-ball-left-toggled);
 }
 /*
  * The following supplement is for displaying the Sun and Moon unicode characters
@@ -497,13 +512,14 @@ input.toggle-switch + label::before {
   align-items: center;
   position: absolute;
   color: var(--btn-color);
-  left: calc(1.2 * var(--font-size));
-  top: calc(0.1 * var(--font-size));
-  height: calc(1 * var(--font-size));
-  width: calc(1 * var(--font-size));
+  left: var(--toggle-ball-left-toggled);
+  top: var(--toggle-ball-top);
+  height: var(--toggle-ball-diameter);
+  width: var(--toggle-ball-diameter);
+  font-size: var(--toggle-ball-diameter);
   content: '\2600';
 }
 input.toggle-switch:checked + label::before {
-  left: calc(0.2 * var(--font-size));
+  left: var(--toggle-ball-left);
   content: '\263E';
 }
