@@ -55,7 +55,7 @@ const NET_PILLAR_TOP_BOTTOM_Y_COORD = 192;
  * This constant is not in the original machine code. (The original machine code does not limit the looping number.)
  *
  * In the original ball x coord range setting (ball x coord in [20, 432]), the infinite loops in
- * {@link caculate_expected_landing_point_x_for} function and {@link expectedLandingPointXWhenPowerHit} function seems to be always terminated soon.
+ * {@link calculateExpectedLandingPointXFor} function and {@link expectedLandingPointXWhenPowerHit} function seems to be always terminated soon.
  * But if the ball x coord range is edited, for example, to [20, 432 - 20] for left-right symmetry,
  * it is observed that the infinite loop in {@link expectedLandingPointXWhenPowerHit} does not terminate.
  * So for safety, this infinite loop limit is included for the infinite loops mentioned above.
@@ -319,8 +319,8 @@ function physicsEngine(player1, player2, ball, userInputArray) {
     // FUN_00402810 ommited
     // this javascript code is refactored not to need above two function except for
     // a part of FUN_00402d90:
-    // FUN_00402d90 include FUN_004031b0(caculate_expected_landing_point_x_for)
-    caculate_expected_landing_point_x_for(ball); // calculate expected_X;
+    // FUN_00402d90 include FUN_004031b0(calculateExpectedLandingPointXFor)
+    calculateExpectedLandingPointXFor(ball); // calculate expected_X;
 
     processPlayerMovementAndSetPlayerPosition(
       player,
@@ -343,12 +343,12 @@ function physicsEngine(player1, player2, ball, userInputArray) {
 
     // FUN_00402810 ommited: this javascript code is refactored not to need this function
 
-    const is_happend = isCollisionBetweenBallAndPlayerHappened(
+    const isHappend = isCollisionBetweenBallAndPlayerHappened(
       ball,
       player.x,
       player.y
     );
-    if (is_happend === true) {
+    if (isHappend === true) {
       if (player.isCollisionWithBallHappened === false) {
         processCollisionBetweenBallAndPlayer(
           ball,
@@ -727,7 +727,7 @@ function processCollisionBetweenBallAndPlayer(
     ball.isPowerHit = false;
   }
 
-  caculate_expected_landing_point_x_for(ball);
+  calculateExpectedLandingPointXFor(ball);
 }
 
 /**
@@ -735,7 +735,7 @@ function processCollisionBetweenBallAndPlayer(
  * Calculate x coordinate of expected landing point of the ball
  * @param {Ball} ball
  */
-function caculate_expected_landing_point_x_for(ball) {
+function calculateExpectedLandingPointXFor(ball) {
   const copyBall = {
     x: ball.x,
     y: ball.y,
