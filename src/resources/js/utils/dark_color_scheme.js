@@ -22,9 +22,7 @@ function setUpDarkColorSchemeCheckbox() {
   } else {
     darkColorSchemeCheckboxElements.forEach((elem) => {
       // @ts-ignore
-      elem.checked =
-        colorScheme ===
-        window.matchMedia('(prefers-color-scheme: dark)').matches;
+      elem.checked = window.matchMedia('(prefers-color-scheme: dark)').matches;
     });
   }
   darkColorSchemeCheckboxElements.forEach((elem) => {
