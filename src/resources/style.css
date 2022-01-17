@@ -101,6 +101,7 @@ html {
 body {
   background-color: var(--background-color);
   color: var(--color);
+  margin: 0;
 }
 a,
 a:link,
@@ -124,6 +125,8 @@ a:active {
   height: 100vh;
   margin-left: auto;
   margin-right: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 #update-history-container {
   justify-content: center;
