@@ -8,7 +8,7 @@ module.exports = {
   entry: {
     main: './src/resources/js/main.js',
     ko: './src/ko/ko.js',
-    dark_color_scheme: './src/resources/js/dark_color_scheme.js',
+    dark_color_scheme: './src/resources/js/utils/dark_color_scheme.js',
   },
   output: {
     filename: '[name].bundle.js',
