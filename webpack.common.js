@@ -9,6 +9,8 @@ module.exports = {
     main: './src/resources/js/main.js',
     ko: './src/ko/ko.js',
     dark_color_scheme: './src/resources/js/utils/dark_color_scheme.js',
+    is_embedded_in_other_website:
+      './src/resources/js/utils/is_embedded_in_other_website.js',
   },
   output: {
     filename: '[name].bundle.js',
@@ -38,7 +40,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/en/index.html',
       filename: 'en/index.html',
-      chunks: ['runtime', 'main', 'dark_color_scheme'],
+      chunks: [
+        'runtime',
+        'main',
+        'dark_color_scheme',
+        'is_embedded_in_other_website',
+      ],
       chunksSortMode: 'manual',
       minify: {
         collapseWhitespace: true,
@@ -58,7 +65,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/ko/index.html',
       filename: 'ko/index.html',
-      chunks: ['runtime', 'ko', 'main', 'dark_color_scheme'],
+      chunks: [
+        'runtime',
+        'ko',
+        'main',
+        'dark_color_scheme',
+        'is_embedded_in_other_website',
+      ],
       chunksSortMode: 'manual',
       minify: {
         collapseWhitespace: true,
@@ -78,7 +91,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/zh/index.html',
       filename: 'zh/index.html',
-      chunks: ['runtime', 'main', 'dark_color_scheme'],
+      chunks: [
+        'runtime',
+        'main',
+        'dark_color_scheme',
+        'is_embedded_in_other_website',
+      ],
       chunksSortMode: 'manual',
       minify: {
         collapseWhitespace: true,
