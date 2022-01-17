@@ -1,7 +1,9 @@
+setUpDarkColorSchemeCheckbox();
+
 /**
  * Set up dark color scheme checkbox
  */
-export function setUpDarkColorSchemeCheckbox() {
+function setUpDarkColorSchemeCheckbox() {
   const darkColorSchemeCheckboxElem = document.getElementById(
     'dark-color-scheme-checkbox'
   );
