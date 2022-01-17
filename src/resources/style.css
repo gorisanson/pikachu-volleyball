@@ -21,7 +21,6 @@
   --button-disabled-background-color: #cccccc;
   --update-fade-in-box-background-color: rgba(226, 230, 36, 0.85);
   --amount-to-invert-image: 0;
-  --amount-to-invert-image-2: 0;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -37,7 +36,6 @@
     --button-disabled-background-color: #666666;
     --update-fade-in-box-background-color: rgba(195, 197, 48, 0.85);
     --amount-to-invert-image: 0.95;
-    --amount-to-invert-image-2: 1;
   }
 }
 /* Copy of the variables in :root above */
@@ -54,7 +52,6 @@
   --button-disabled-background-color: #cccccc;
   --update-fade-in-box-background-color: rgba(226, 230, 36, 0.85);
   --amount-to-invert-image: 0;
-  --amount-to-invert-image-2: 0;
 }
 /* Copy of the variables in @media (prefers-color-scheme: dark) :root above */
 :root[data-color-scheme='dark'] {
@@ -70,7 +67,6 @@
   --button-disabled-background-color: #666666;
   --update-fade-in-box-background-color: rgba(195, 197, 48, 0.85);
   --amount-to-invert-image: 0.95;
-  --amount-to-invert-image-2: 1;
 }
 /* size of iPad screen is 768px x 1024px in portrait mode */
 @media only screen and (min-width: 768px) and (min-height: 768px) {
