@@ -5,7 +5,10 @@
   --canvas-width: 96vmin;
   --canvas-height: calc(96vmin * var(--inverse-aspect-ratio));
   --font-size: 18px;
-  --btn-width: calc(5 * var(--font-size));
+  --btn-width: min(
+    calc(5 * var(--font-size)),
+    calc((var(--canvas-width) - 30px) / 4)
+  );
   --btn-height: calc(3 * var(--font-size));
 }
 :root {
@@ -72,7 +75,10 @@
 @media only screen and (min-width: 768px) and (min-height: 768px) {
   :root {
     --font-size: 22px;
-    --btn-width: calc(6 * var(--font-size));
+    --btn-width: min(
+      calc(6 * var(--font-size)),
+      calc((var(--canvas-width) - 30px) / 4)
+    );
   }
 }
 @media only screen and (min-aspect-ratio: 432/304) {
