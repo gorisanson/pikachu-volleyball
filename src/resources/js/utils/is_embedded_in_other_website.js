@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Check if the page is embedded in other site.
  * Copied from: https://stackoverflow.com/a/326076/8581025
