@@ -64,10 +64,15 @@ function setUpDarkColorSchemeCheckbox() {
  */
 function applyColorScheme(colorScheme) {
   document.documentElement.dataset.colorScheme = colorScheme;
-  document
-    .querySelector('meta[name="theme-color"]')
-    .setAttribute(
+  const themeColorMetaElement = document.querySelector(
+    'meta[name="theme-color"]'
+  );
+  if (themeColorMetaElement !== null) {
+    // The line below is for the status bar color, which is set by theme-color
+    // meta tag content, of PWA in Apple devices.
+    themeColorMetaElement.setAttribute(
       'content',
       colorScheme === 'dark' ? THEME_COLOR_DARK : THEME_COLOR_LIGHT
     );
+  }
 }
