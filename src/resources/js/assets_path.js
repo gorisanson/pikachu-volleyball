@@ -46,10 +46,10 @@ TEXTURES.SITTING_PIKACHU = 'sitting_pikachu.png';
 
 const SOUNDS = ASSETS_PATH.SOUNDS;
 SOUNDS.BGM = '../resources/assets/sounds/bgm.mp3';
-SOUNDS.PIPIKACHU = '../resources/assets/sounds/WAVE140_1.wav';
-SOUNDS.PIKA = '../resources/assets/sounds/WAVE141_1.wav';
-SOUNDS.CHU = '../resources/assets/sounds/WAVE142_1.wav';
-SOUNDS.PI = '../resources/assets/sounds/WAVE143_1.wav';
-SOUNDS.PIKACHU = '../resources/assets/sounds/WAVE144_1.wav';
-SOUNDS.POWERHIT = '../resources/assets/sounds/WAVE145_1.wav';
-SOUNDS.BALLTOUCHESGROUND = '../resources/assets/sounds/WAVE146_1.wav';
+SOUNDS.PIPIKACHU = '../resources/assets/sounds/WAVE140_1.mp3';
+SOUNDS.PIKA = '../resources/assets/sounds/WAVE141_1.mp3';
+SOUNDS.CHU = '../resources/assets/sounds/WAVE142_1.mp3';
+SOUNDS.PI = '../resources/assets/sounds/WAVE143_1.mp3';
+SOUNDS.PIKACHU = '../resources/assets/sounds/WAVE144_1.mp3';
+SOUNDS.POWERHIT = '../resources/assets/sounds/WAVE145_1.mp3';
+SOUNDS.BALLTOUCHESGROUND = '../resources/assets/sounds/WAVE146_1.mp3';
