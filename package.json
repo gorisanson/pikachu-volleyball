@@ -35,7 +35,7 @@
     "workbox-webpack-plugin": "^6.2.4"
   },
   "dependencies": {
-    "pixi-sound": "3.0.5",
+    "pixi-sound": "github:gorisanson/sound#509fbc1f52871eee5cde05a0088c2be1ade97e92",
     "pixi.js-legacy": "5.3.10"
   }
 }
