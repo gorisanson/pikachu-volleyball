@@ -22,20 +22,20 @@
   },
   "homepage": "https://github.com/gorisanson/pikachu-volleyball#readme",
   "devDependencies": {
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^9.0.1",
-    "eslint": "^7.32.0",
-    "eslint-plugin-prettier": "^3.4.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^10.2.4",
+    "eslint": "^8.12.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "html-webpack-plugin": "^5.3.2",
     "prettier": "^2.3.2",
     "webpack": "^5.50.0",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.7.4",
     "webpack-merge": "^5.8.0",
     "workbox-webpack-plugin": "^6.2.4"
   },
   "dependencies": {
-    "pixi-sound": "github:gorisanson/sound#509fbc1f52871eee5cde05a0088c2be1ade97e92",
-    "pixi.js-legacy": "5.3.10"
+    "@pixi/sound": "^4.2.0",
+    "pixi.js-legacy": "^6.3.0"
   }
 }
