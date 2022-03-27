@@ -2,7 +2,7 @@
  * This module takes charge of the game audio (or sounds)
  */
 'use strict';
-import PIXIsound from 'pixi-sound';
+import { Sound, filters } from '@pixi/sound';
 import { ASSETS_PATH } from './assets_path.js';
 
 const SOUNDS = ASSETS_PATH.SOUNDS;
@@ -90,16 +90,16 @@ export class PikaAudio {
 class PikaStereoSound {
   /**
    * create a PikaStereoSound object
-   * @param {PIXI.sound.Sound} sound
+   * @param {Sound} sound
    */
   constructor(sound) {
     this.center = sound;
-    this.left = PIXIsound.Sound.from(sound.url);
-    this.right = PIXIsound.Sound.from(sound.url);
+    this.left = Sound.from(sound.url);
+    this.right = Sound.from(sound.url);
 
-    const centerPanning = new PIXIsound.filters.StereoFilter(0);
-    const leftPanning = new PIXIsound.filters.StereoFilter(-0.75);
-    const rightPanning = new PIXIsound.filters.StereoFilter(0.75);
+    const centerPanning = new filters.StereoFilter(0);
+    const leftPanning = new filters.StereoFilter(-0.75);
+    const rightPanning = new filters.StereoFilter(0.75);
     this.center.filters = [centerPanning];
     this.left.filters = [leftPanning];
     this.right.filters = [rightPanning];

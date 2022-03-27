@@ -29,7 +29,7 @@
  */
 'use strict';
 import * as PIXI from 'pixi.js-legacy';
-import 'pixi-sound';
+import '@pixi/sound';
 import { PikachuVolleyball } from './pikavolley.js';
 import { ASSETS_PATH } from './assets_path.js';
 import { setUpUI } from './ui.js';
