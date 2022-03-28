@@ -44,9 +44,12 @@ import '@pixi/sound';
 import { PikachuVolleyball } from './pikavolley.js';
 import { ASSETS_PATH } from './assets_path.js';
 import { setUpUI } from './ui.js';
-
+// Reference for how to use Renderer.registerPlugin:
+// https://github.com/pixijs/pixijs/blob/af3c0c6bb15aeb1049178c972e4a14bb4cabfce4/bundles/pixi.js/src/index.ts#L27-L34
 Renderer.registerPlugin('prepare', Prepare);
 Renderer.registerPlugin('batch', BatchRenderer);
+// Reference for how to use CanvasRenderer.registerPlugin:
+// https://github.com/pixijs/pixijs/blob/af3c0c6bb15aeb1049178c972e4a14bb4cabfce4/bundles/pixi.js-legacy/src/index.ts#L13-L19
 CanvasRenderer.registerPlugin('prepare', CanvasPrepare);
 CanvasRenderer.registerPlugin('sprite', CanvasSpriteRenderer);
 Loader.registerPlugin(SpritesheetLoader);
