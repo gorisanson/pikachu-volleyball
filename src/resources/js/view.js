@@ -6,12 +6,15 @@
  * ex) FUN_00405d50 means the function at the address 00405d50 in the machine code.
  */
 'use strict';
-import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js-legacy';
+import { Graphics } from '@pixi/graphics';
+import { AnimatedSprite } from '@pixi/sprite-animated';
+import { Sprite } from '@pixi/sprite';
+import { Container } from '@pixi/display';
 import { Cloud, Wave, cloudAndWaveEngine } from './cloud_and_wave.js';
 import { ASSETS_PATH } from './assets_path.js';
 
-/** @typedef {import('pixi.js-legacy').LoaderResource} LoaderResource */
-/** @typedef {import('pixi.js-legacy').Texture} Texture */
+/** @typedef {import('@pixi/loaders').LoaderResource} LoaderResource */
+/** @typedef {import('@pixi/core').Texture} Texture */
 
 const TEXTURES = ASSETS_PATH.TEXTURES;
 

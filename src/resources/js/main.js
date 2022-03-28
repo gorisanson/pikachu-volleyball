@@ -28,27 +28,46 @@
  *  - "ui.js": For the user interface (menu bar, buttons etc.) of the html page.
  */
 'use strict';
-import * as PIXI from 'pixi.js-legacy';
+import { settings } from '@pixi/settings';
+import { SCALE_MODES } from '@pixi/constants';
+import { Renderer, BatchRenderer, autoDetectRenderer } from '@pixi/core';
+import { Prepare } from '@pixi/prepare';
+import { Container } from '@pixi/display';
+import { Loader } from '@pixi/loaders';
+import { SpritesheetLoader } from '@pixi/spritesheet';
+import { Ticker } from '@pixi/ticker';
+import { CanvasRenderer } from '@pixi/canvas-renderer';
+import { CanvasGraphicsRenderer } from '@pixi/canvas-graphics';
+import { CanvasSpriteRenderer } from '@pixi/canvas-sprite';
+import { CanvasPrepare } from '@pixi/canvas-prepare';
+import '@pixi/canvas-renderer';
+import '@pixi/canvas-display';
 import '@pixi/sound';
 import { PikachuVolleyball } from './pikavolley.js';
 import { ASSETS_PATH } from './assets_path.js';
 import { setUpUI } from './ui.js';
 
-const settings = PIXI.settings;
+Renderer.registerPlugin('prepare', Prepare);
+Renderer.registerPlugin('batch', BatchRenderer);
+CanvasRenderer.registerPlugin('graphics', CanvasGraphicsRenderer);
+CanvasRenderer.registerPlugin('prepare', CanvasPrepare);
+CanvasRenderer.registerPlugin('sprite', CanvasSpriteRenderer);
+Loader.registerPlugin(SpritesheetLoader);
 settings.RESOLUTION = window.devicePixelRatio;
-settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+settings.SCALE_MODE = SCALE_MODES.NEAREST;
 settings.ROUND_PIXELS = true;
 
-const renderer = PIXI.autoDetectRenderer({
+const renderer = autoDetectRenderer({
   width: 432,
   height: 304,
   antialias: false,
   backgroundColor: 0x000000,
   backgroundAlpha: 1,
 });
-const stage = new PIXI.Container();
-const ticker = new PIXI.Ticker();
-const loader = new PIXI.Loader();
+
+const stage = new Container();
+const ticker = new Ticker();
+const loader = new Loader();
 
 renderer.view.setAttribute('id', 'game-canvas');
 document.getElementById('game-canvas-container').appendChild(renderer.view);

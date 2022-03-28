@@ -7,13 +7,15 @@ import { ASSETS_PATH } from './assets_path.js';
 
 const SOUNDS = ASSETS_PATH.SOUNDS;
 
+/** @typedef {import('@pixi/loaders').LoaderResource} LoaderResource */
+
 /**
  * Class represeting audio
  */
 export class PikaAudio {
   /**
    * Create a PikaAudio object
-   * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
+   * @param {Object.<string,LoaderResource>} resources loader.resources
    */
   constructor(resources) {
     /** @type {Object.<string,PikaStereoSound>} sounds pack */
