@@ -40,7 +40,6 @@ import { CanvasRenderer } from '@pixi/canvas-renderer';
 import { CanvasSpriteRenderer } from '@pixi/canvas-sprite';
 import { CanvasPrepare } from '@pixi/canvas-prepare';
 import '@pixi/canvas-display';
-import '@pixi/sound';
 import { PikachuVolleyball } from './pikavolley.js';
 import { ASSETS_PATH } from './assets_path.js';
 import { setUpUI } from './ui.js';
