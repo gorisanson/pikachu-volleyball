@@ -37,10 +37,8 @@ import { Loader } from '@pixi/loaders';
 import { SpritesheetLoader } from '@pixi/spritesheet';
 import { Ticker } from '@pixi/ticker';
 import { CanvasRenderer } from '@pixi/canvas-renderer';
-import { CanvasGraphicsRenderer } from '@pixi/canvas-graphics';
 import { CanvasSpriteRenderer } from '@pixi/canvas-sprite';
 import { CanvasPrepare } from '@pixi/canvas-prepare';
-import '@pixi/canvas-renderer';
 import '@pixi/canvas-display';
 import '@pixi/sound';
 import { PikachuVolleyball } from './pikavolley.js';
@@ -49,7 +47,6 @@ import { setUpUI } from './ui.js';
 
 Renderer.registerPlugin('prepare', Prepare);
 Renderer.registerPlugin('batch', BatchRenderer);
-CanvasRenderer.registerPlugin('graphics', CanvasGraphicsRenderer);
 CanvasRenderer.registerPlugin('prepare', CanvasPrepare);
 CanvasRenderer.registerPlugin('sprite', CanvasSpriteRenderer);
 Loader.registerPlugin(SpritesheetLoader);

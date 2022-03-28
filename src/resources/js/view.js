@@ -6,7 +6,6 @@
  * ex) FUN_00405d50 means the function at the address 00405d50 in the machine code.
  */
 'use strict';
-import { Graphics } from '@pixi/graphics';
 import { AnimatedSprite } from '@pixi/sprite-animated';
 import { Sprite } from '@pixi/sprite';
 import { Container } from '@pixi/display';
@@ -650,11 +649,11 @@ export class GameView {
  * Class representing fade in out effect
  */
 export class FadeInOut {
-  constructor() {
-    this.black = new Graphics();
-    this.black.beginFill(0x000000);
-    this.black.drawRect(0, 0, 432, 304);
-    this.black.endFill();
+  constructor(resources) {
+    const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
+    this.black = makeSpriteWithAnchorXY(textures, TEXTURES.BLACK, 0, 0);
+    this.black.width = 432;
+    this.black.height = 304;
     this.black.x = 0;
     this.black.y = 0;
     this.black.alpha = 1;

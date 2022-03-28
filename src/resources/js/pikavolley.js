@@ -26,7 +26,7 @@ export class PikachuVolleyball {
       intro: new IntroView(resources),
       menu: new MenuView(resources),
       game: new GameView(resources),
-      fadeInOut: new FadeInOut(),
+      fadeInOut: new FadeInOut(resources),
     };
     stage.addChild(this.view.intro.container);
     stage.addChild(this.view.menu.container);
