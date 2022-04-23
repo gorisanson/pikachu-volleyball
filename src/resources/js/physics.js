@@ -28,6 +28,11 @@
  */
 'use strict';
 import { rand } from './rand.js';
+import {
+  serveMode,
+  SkillTypeForPlayer2Available,
+  SkillTypeForPlayer1Available,
+} from './ui.js';
 
 /** @constant @type {number} ground width */
 const GROUND_WIDTH = 432;
@@ -128,6 +133,8 @@ class Player {
    * @param {boolean} isComputer Is this player controlled by computer?
    */
   constructor(isPlayer2, isComputer) {
+    this.serve = new ServeMachine(isPlayer2);
+
     /** @type {boolean} Is this player on the right side? */
     this.isPlayer2 = isPlayer2; // 0xA0
     /** @type {boolean} Is controlled by computer? */
@@ -164,6 +171,10 @@ class Player {
       pika: false,
       chu: false,
     };
+    this.tactics = 0;
+    this.goodtime = -1;
+    this.attackX = 0;
+    this.direction = 0;
   }
 
   /**
@@ -211,6 +222,7 @@ class Player {
      * @type {number} 0, 1, 2, 3 or 4
      */
     this.computerBoldness = rand() % 5; // 0xD8  // initialized to (_rand() % 5)
+    this.serve.initializeForNewRound();
   }
 }
 
@@ -264,6 +276,12 @@ class Ball {
       powerHit: false,
       ballTouchesGround: false,
     };
+
+    this.path = Array();
+    this.predict = Array();
+    this.shortX = 0;
+    this.farX = 0;
+    this.bestDefense = 0;
   }
 
   /**
@@ -286,6 +304,8 @@ class Ball {
     this.punchEffectRadius = 0; // 0x4c // initialized to 0
     /** @type {boolean} is power hit */
     this.isPowerHit = false; // 0x68  // initialized to 0 i.e. false
+    this.frame = 0;
+    this.isPlayer2Serve = isPlayer2Serve;
   }
 }
 
@@ -403,6 +423,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   ball.previousPreviousY = ball.previousY;
   ball.previousX = ball.x;
   ball.previousY = ball.y;
+  ball.frame += 1;
 
   // "(ball.xVelocity / 2) | 0" is integer division by 2
   let futureFineRotation = ball.fineRotation + ((ball.xVelocity / 2) | 0);
@@ -460,6 +481,13 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
       }
     }
   }
+  // // 帶入不同狀況來算
+  // ball.predict = Array();
+  // for (let yDirection = -1; yDirection < 2; yDirection++) {
+  //   for (let xDirection = 0; xDirection < 2; xDirection++) {
+  //     calculateExpectedLandingPointXwithpredict(ball, xDirection, yDirection);
+  //   }
+  // }
 
   futureBallY = ball.y + ball.yVelocity;
   // if ball would touch ground
@@ -500,7 +528,11 @@ function processPlayerMovementAndSetPlayerPosition(
   ball
 ) {
   if (player.isComputer === true) {
-    letComputerDecideUserInput(player, ball, theOtherPlayer, userInput);
+    // if (player.isPlayer2) {
+    letAIDecideUserInput(player, ball, theOtherPlayer, userInput);
+    // } else {
+    //   letComputerDecideUserInput(player, ball, theOtherPlayer, userInput);
+    // }
   }
 
   // if player is lying down.. don't move
@@ -741,8 +773,22 @@ function calculateExpectedLandingPointXFor(ball) {
     y: ball.y,
     xVelocity: ball.xVelocity,
     yVelocity: ball.yVelocity,
+    predict: Array(),
   };
   let loopCounter = 0;
+  ball.path = Array();
+  copyBall.predict = Array();
+  for (let yDirection = -1; yDirection < 2; yDirection++) {
+    for (let xDirection = 0; xDirection < 2; xDirection++) {
+      calculateExpectedLandingPointXwithpredict(
+        copyBall,
+        xDirection,
+        yDirection
+      );
+    }
+  }
+  ball.path.push(Object.assign({}, copyBall));
+
   while (true) {
     loopCounter++;
 
@@ -783,8 +829,483 @@ function calculateExpectedLandingPointXFor(ball) {
     }
     copyBall.x = copyBall.x + copyBall.xVelocity;
     copyBall.yVelocity += 1;
+    // 帶入不同狀況來算
+    copyBall.predict = Array();
+    for (let yDirection = -1; yDirection < 2; yDirection++) {
+      for (let xDirection = 0; xDirection < 2; xDirection++) {
+        calculateExpectedLandingPointXwithpredict(
+          copyBall,
+          xDirection,
+          yDirection
+        );
+      }
+    }
+    ball.path.push(Object.assign({}, copyBall));
   }
   ball.expectedLandingPointX = copyBall.x;
+}
+
+function calculateExpectedLandingPointXwithpredict(
+  ball,
+  xDirection,
+  yDirection
+) {
+  const copyBall = {
+    x: ball.x,
+    y: ball.y,
+    xVelocity: ball.xVelocity,
+    yVelocity: ball.yVelocity,
+  };
+  // 調整力道
+
+  const ballAbsYVelocity = Math.abs(copyBall.yVelocity);
+  copyBall.yVelocity = -ballAbsYVelocity;
+
+  if (ballAbsYVelocity < 15) {
+    copyBall.yVelocity = -15;
+  }
+  if (copyBall.x < GROUND_HALF_WIDTH) {
+    copyBall.xVelocity = (Math.abs(xDirection) + 1) * 10;
+  } else {
+    copyBall.xVelocity = -(Math.abs(xDirection) + 1) * 10;
+  }
+  copyBall.yVelocity = Math.abs(copyBall.yVelocity) * yDirection * 2;
+
+  let loopCounter = 0;
+  const tmppath = Array();
+  while (true) {
+    loopCounter++;
+
+    const futureCopyBallX = copyBall.xVelocity + copyBall.x;
+    if (futureCopyBallX < BALL_RADIUS || futureCopyBallX > GROUND_WIDTH) {
+      copyBall.xVelocity = -copyBall.xVelocity;
+    }
+    if (copyBall.y + copyBall.yVelocity < 0) {
+      copyBall.yVelocity = 1;
+    }
+
+    // If copy ball touches net
+    if (
+      Math.abs(copyBall.x - GROUND_HALF_WIDTH) < NET_PILLAR_HALF_WIDTH &&
+      copyBall.y > NET_PILLAR_TOP_TOP_Y_COORD
+    ) {
+      // It maybe should be <= NET_PILLAR_TOP_BOTTOM_Y_COORD as in FUN_00402dc0, is it the original game author's mistake?
+      if (copyBall.y < NET_PILLAR_TOP_BOTTOM_Y_COORD) {
+        if (copyBall.yVelocity > 0) {
+          copyBall.yVelocity = -copyBall.yVelocity;
+        }
+      } else {
+        if (copyBall.x < GROUND_HALF_WIDTH) {
+          copyBall.xVelocity = -Math.abs(copyBall.xVelocity);
+        } else {
+          copyBall.xVelocity = Math.abs(copyBall.xVelocity);
+        }
+      }
+    }
+
+    copyBall.y = copyBall.y + copyBall.yVelocity;
+    // if copyBall would touch ground
+    if (
+      copyBall.y > BALL_TOUCHING_GROUND_Y_COORD ||
+      loopCounter >= INFINITE_LOOP_LIMIT
+    ) {
+      break;
+    }
+    copyBall.x = copyBall.x + copyBall.xVelocity;
+    copyBall.yVelocity += 1;
+    tmppath.push(Object.assign({}, copyBall));
+  }
+  ball.predict.push(tmppath);
+}
+
+function playerYpredict(player, frame) {
+  if (player.state === 0) {
+    let total = -16;
+    let speed = -15;
+    for (let i = 0; i < frame; i++) {
+      total += speed;
+      speed += 1;
+    }
+    return PLAYER_TOUCHING_GROUND_Y_COORD + total;
+  }
+  if (player.state === 1) {
+    let speed = player.yVelocity;
+    let realY = player.y + speed;
+    for (let i = 0; i < frame; i++) {
+      speed += 1;
+      realY += speed;
+    }
+    return realY;
+  }
+}
+
+/**
+ * 如果球power hit 跑到 path最後位置
+ * 如果球沒有power hit 跑到predict 最短路徑位置
+ *
+ * @param {Player} player The player whom computer contorls
+ * @param {number} ballX ball
+ */
+function sameside(player, ballX) {
+  if (ballX === GROUND_HALF_WIDTH) {
+    return true;
+  }
+  return player.isPlayer2
+    ? ballX > GROUND_HALF_WIDTH
+    : ballX < GROUND_HALF_WIDTH;
+}
+
+/**
+ * FUN_00402360
+ * Computer controls its player by this function.
+ * Computer decides the user input for the player it controls,
+ * according to the game situation it figures out
+ * by the given parameters (player, ball and theOtherplayer),
+ * and reflects these to the given user input object.
+ * 如果球power hit 跑到 path最後位置
+ * 如果球沒有power hit 跑到predict 最短路徑位置
+ *
+ * @param {Player} player The player whom computer contorls
+ * @param {Ball} ball ball
+ * @param {Player} theOtherPlayer The other player
+ * @param {PikaUserInput} userInput user input of the player whom computer controls
+ */
+function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
+  userInput.xDirection = 0;
+  userInput.yDirection = 0;
+  userInput.powerHit = 0;
+  // console.log('frame:' + ball.frame);
+  // console.log('xVelocity:' + ball.xVelocity);
+  // console.log('yVelocity:' + ball.yVelocity);
+  // console.log('tactics:' + player.tactics);
+  // console.log('expectedLandingPointX:' + ball.expectedLandingPointX);
+  // if (!player.isPlayer2) {
+  //   player.serve.executeMove(player, ball, theOtherPlayer, userInput);
+  //   return;
+  // }
+
+  // 判斷半步拖球
+  if (
+    ball.frame === 22 &&
+    ball.expectedLandingPointX === (player.isPlayer2 ? 184 : 248)
+  ) {
+    player.tactics = 1;
+  }
+  // 尾閃拖
+  if (
+    ball.frame === 22 &&
+    ball.expectedLandingPointX === (player.isPlayer2 ? 392 : 236)
+  ) {
+    player.tactics = 2;
+  }
+  if (
+    ball.frame < 5 &&
+    (player.isPlayer2 ? ball.isPlayer2Serve : !ball.isPlayer2Serve)
+  ) {
+    // 發球
+    player.tactics = 3;
+  }
+  if (player.tactics === 0) {
+    // 平常狀態
+    let virtualExpectedLandingPointX;
+    if (sameside(theOtherPlayer, ball.expectedLandingPointX)) {
+      // 預測防守
+      let short_len = 1000;
+      let short_x = player.isPlayer2 ? 288 : 144;
+      // let far_diff = 0;
+      // let far_len = 1000;
+      // let far_x = 0;
+      // 找出ball.path.predict最短路徑
+      for (let frame = 0; frame < ball.path.length && frame < 16; frame++) {
+        const copyball = ball.path[frame];
+        for (let direct = 0; direct < 6; direct++) {
+          const predict = copyball.predict[direct];
+          if (
+            sameside(theOtherPlayer, copyball.x) &&
+            predict.length > 0 &&
+            sameside(player, predict[predict.length - 1].x)
+          ) {
+            if (predict.length <= short_len) {
+              short_len = predict.length;
+              short_x = predict[predict.length - 1].x;
+            }
+            // if (Math.abs(player.x - predict[predict.length - 1].x) > far_diff) {
+            //   far_diff = Math.abs(player.x - predict[predict.length - 1].x);
+            //   far_len = predict.length;
+            //   far_x = predict[predict.length - 1].x;
+            // }
+          }
+        }
+      }
+      // ball.shortX = short_x;
+      // ball.farX = far_x;
+
+      // virtualExpectedLandingPointX =
+      //   ((short_x * far_len + far_x * short_len) / (short_len + far_len)) | 0;
+      virtualExpectedLandingPointX = short_x;
+      // console.log('short_len: ' + short_len);
+      // console.log('short_x: ' + short_x);
+      ball.farX = virtualExpectedLandingPointX;
+      player.goodtime = -1;
+    } else {
+      // 起跳時機
+      if (
+        sameside(player, ball.x) &&
+        ball.path.length > 1 &&
+        player.goodtime < 0
+      ) {
+        let shortPath = 1000;
+
+        for (let frame = 1; frame < ball.path.length && frame < 31; frame++) {
+          if (
+            Math.abs(playerYpredict(player, frame) - ball.path[frame].y) <=
+              PLAYER_HALF_LENGTH &&
+            Math.abs(
+              playerYpredict(player, frame - 1) - ball.path[frame - 1].y
+            ) > PLAYER_HALF_LENGTH &&
+            sameside(player, ball.path[frame].x) &&
+            Math.abs(player.x - ball.path[frame].x) / 6 < frame
+          ) {
+            const copyball = ball.path[frame];
+            for (let direct = 0; direct < 6; direct++) {
+              const predict = copyball.predict[direct];
+              if (
+                predict.length > 0 &&
+                sameside(theOtherPlayer, predict[predict.length - 1].x) &&
+                predict.length < shortPath
+              ) {
+                shortPath = predict.length;
+
+                player.goodtime = frame;
+                player.attackX = ball.path[frame].x;
+                player.direction = direct;
+                // ball.shortX = predict[predict.length - 1].x;
+                // console.log(copyball);
+                // console.log(predict);
+                // console.log('short_attack: ' + shortPath);
+              }
+            }
+
+            // break;
+          }
+        }
+        // console.log('goodtime' + player.goodtime);
+        // console.log('dict' + player.direction);
+        // console.log('shortX' + ball.shortX);
+        if (player.goodtime > 0) {
+          userInput.yDirection = -1;
+        }
+      }
+      if (player.goodtime >= 0) {
+        virtualExpectedLandingPointX = player.attackX;
+      } else {
+        // 防守
+        // console.log(ball);
+        virtualExpectedLandingPointX = ball.expectedLandingPointX;
+      }
+    }
+    // 執行移動
+    if (Math.abs(player.x - virtualExpectedLandingPointX) > 3) {
+      if (player.x < virtualExpectedLandingPointX) {
+        userInput.xDirection = 1;
+      } else {
+        userInput.xDirection = -1;
+      }
+    }
+
+    if (player.goodtime === 0 && player.state === 1) {
+      userInput.powerHit = 1;
+      const attackFar = rand() % 5 === 0;
+      // 打最遠
+      // console.log(attackFar);
+      if (attackFar) {
+        let far_diff = 0;
+        const copyball = ball.path[0];
+        for (let direct = 0; direct < 6; direct++) {
+          const predict = copyball.predict[direct];
+          if (
+            predict.length > 0 &&
+            sameside(theOtherPlayer, predict[predict.length - 1].x) &&
+            Math.abs(theOtherPlayer.x - predict[predict.length - 1].x) >=
+              far_diff
+          ) {
+            far_diff = Math.abs(
+              theOtherPlayer.x - predict[predict.length - 1].x
+            );
+            player.direction = direct;
+          }
+        }
+      }
+
+      // 防攔網
+      if (
+        Math.abs(theOtherPlayer.x - GROUND_HALF_WIDTH) <
+          PLAYER_HALF_LENGTH + 18 &&
+        (theOtherPlayer.state === 1 || theOtherPlayer.state === 2)
+      ) {
+        player.direction = 0;
+      }
+
+      if (player.direction === 0) {
+        userInput.yDirection = -1;
+        userInput.xDirection = 0;
+      }
+      if (player.direction === 1) {
+        userInput.yDirection = -1;
+        userInput.xDirection = 1;
+      }
+      if (player.direction === 2) {
+        userInput.yDirection = 0;
+        userInput.xDirection = 0;
+      }
+      if (player.direction === 3) {
+        userInput.yDirection = 0;
+        userInput.xDirection = 1;
+      }
+      if (player.direction === 4) {
+        userInput.yDirection = 1;
+        userInput.xDirection = 0;
+      }
+      if (player.direction === 5) {
+        userInput.yDirection = 1;
+        userInput.xDirection = 1;
+      }
+      player.goodtime = -1;
+    } else {
+      player.goodtime -= 1;
+    }
+  }
+  if (player.tactics === 1) {
+    // console.log(ball.frame);
+    // console.log(ball.xVelocity);
+    // console.log(ball.yVelocity);
+    // console.log(ball);
+    // 防偷襲
+    if (
+      (sameside(player, ball.expectedLandingPointX) &&
+        sameside(player, ball.x)) ||
+      (player.isPlayer2 &&
+        ball.xVelocity === 10 &&
+        ball.yVelocity < -25 &&
+        ball.x !== 204 &&
+        ball.y !== 144)
+    ) {
+      player.tactics = 0;
+    }
+    if (ball.frame < 40) {
+      userInput.xDirection = 1;
+    }
+    if (ball.frame === 40) {
+      userInput.xDirection = -1;
+    }
+    //3. Head thunder(fake, flat) 52
+    //1. Break net(fake, flat) 54
+    //5. Net thunder(fake, flat) 72
+    // Net G smash 72
+    if (
+      ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
+      ball.yVelocity === 1
+    ) {
+      player.tactics = 0;
+      userInput.xDirection = -1;
+      if (player.isPlayer2 && ball.y > 100) {
+        userInput.yDirection = -1;
+      }
+    }
+    //0. Break net 52
+    if (
+      ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
+      ball.yVelocity === 35
+    ) {
+      player.tactics = 0;
+      userInput.xDirection = 1;
+    }
+    //2. Head thunder 52
+    if (
+      ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
+      ball.yVelocity === 65
+    ) {
+      player.tactics = 0;
+      userInput.xDirection = 1;
+      userInput.yDirection = -1;
+    }
+    // 左邊彈網
+    if (ball.expectedLandingPointX === 392) {
+      player.tactics = 4;
+    }
+    //4. Net V smash 76
+    if (ball.xVelocity === -10 && ball.yVelocity === 65) {
+      userInput.xDirection = 1;
+      userInput.yDirection = -1;
+      player.tactics = 0;
+    }
+    if (player.isPlayer2) {
+      userInput.xDirection = -userInput.xDirection;
+    }
+  }
+  if (player.tactics === 2) {
+    // console.log(ball.frame);
+    // console.log(ball.xVelocity);
+    // console.log(ball.yVelocity);
+    // console.log(ball);
+    if (
+      (sameside(player, ball.expectedLandingPointX) &&
+        sameside(player, ball.x)) ||
+      (player.isPlayer2 &&
+        ball.xVelocity === 10 &&
+        ball.yVelocity < -25 &&
+        ball.x !== 215 &&
+        ball.y !== 144)
+    ) {
+      player.tactics = 0;
+    }
+    if (ball.frame < 53) {
+      userInput.xDirection = 1;
+    }
+    //7. Tail thunder(fake, flat) 48
+    if (
+      ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
+      ball.yVelocity === 1
+    ) {
+      player.tactics = 0;
+      userInput.xDirection = -1;
+    }
+    //6. Tail thunder 52
+    if (
+      ball.xVelocity === (player.isPlayer2 ? 10 : -20) &&
+      ball.yVelocity === 65
+    ) {
+      player.tactics = 0;
+      userInput.yDirection = -1;
+    }
+    if (player.isPlayer2) {
+      userInput.xDirection = -userInput.xDirection;
+    }
+    if (ball.frame > 53) {
+      player.tactics = 0;
+    }
+  }
+  if (player.tactics === 3) {
+    player.serve.executeMove(player, ball, theOtherPlayer, userInput);
+    if (player.serve.framesLeft < -1000) {
+      player.tactics = 0;
+    }
+  }
+  if (player.tactics === 4) {
+    // 左邊彈網
+    if (ball.frame < 66) {
+      userInput.xDirection = 1;
+    }
+    if (ball.frame === 73) {
+      //4. Net V smash
+      if (ball.xVelocity === 10 && ball.yVelocity === 31) {
+        userInput.xDirection = -1;
+      } else {
+        userInput.xDirection = 1;
+      }
+      player.tactics = 0;
+    }
+  }
 }
 
 /**
@@ -1028,5 +1549,292 @@ function expectedLandingPointXWhenPowerHit(
     }
     copyBall.x = copyBall.x + copyBall.xVelocity;
     copyBall.yVelocity += 1;
+  }
+}
+const serveModeT = {
+  randomOrder: 0,
+  fixedOrder: 1,
+  completeRandom: 2,
+};
+const actionType = {
+  wait: 0,
+  forward: 1,
+  forwardUp: 2,
+  up: 3,
+  backwardUp: 4,
+  backward: 5,
+  backwardDown: 6,
+  down: 7,
+  forwardDown: 8,
+  forwardSmash: 9,
+  forwardUpSmash: 10,
+  upSmash: 11,
+  backwardUpSmash: 12,
+  backwardSmash: 13,
+  backwardDownSmash: 14,
+  downSmash: 15,
+  forwardDownSmash: 16,
+};
+const fullSkillTypeForPlayer1 = {
+  breakNet: 0,
+  tossAndFlat: 1,
+  headThunder: 2,
+  fakeHeadThunderFlat: 3,
+  netVSmash: 4,
+  netRSmash: 5,
+  netGSmash: 6,
+  netDodge: 7,
+  tailThunder: 8,
+  fakeTailThunderFlat: 9,
+};
+const fullSkillTypeForPlayer2 = {
+  breakNet: 0,
+  tossAndFlat: 1,
+  headThunder: 2,
+  fakeHeadThunderFlat: 3,
+  netThunder: 4,
+  fakeNetThunderFlat: 5,
+};
+const player1Formula = [
+  [
+    //0. Break net
+    { action: actionType.forward, frames: 1 },
+    { action: actionType.wait, frames: 20 },
+    { action: actionType.forward, frames: 26 },
+    { action: actionType.forwardUp, frames: 4 },
+    { action: actionType.forwardDownSmash, frames: 1 },
+  ],
+  [
+    //1. Break net(fake, flat)
+    { action: actionType.forward, frames: 1 },
+    { action: actionType.wait, frames: 20 },
+    { action: actionType.forward, frames: 30 },
+    { action: actionType.forwardUp, frames: 1 },
+    { action: actionType.forwardSmash, frames: 2 },
+  ],
+  [
+    //2. Head thunder
+    { action: actionType.forward, frames: 1 },
+    { action: actionType.wait, frames: 20 },
+    { action: actionType.forward, frames: 11 },
+    { action: actionType.forwardUp, frames: 15 },
+    { action: actionType.downSmash, frames: 1 },
+    { action: actionType.forwardDownSmash, frames: 4 },
+  ],
+  [
+    //3. Head thunder(fake, flat)
+    { action: actionType.forward, frames: 1 },
+    { action: actionType.wait, frames: 20 },
+    { action: actionType.forward, frames: 11 },
+    { action: actionType.forwardUp, frames: 15 },
+    { action: actionType.forwardSmash, frames: 1 },
+  ],
+  [
+    //4. Net V smash
+    { action: actionType.forward, frames: 1 },
+    { action: actionType.wait, frames: 20 },
+    { action: actionType.forward, frames: 31 },
+    { action: actionType.forwardUpSmash, frames: 3 },
+    { action: actionType.wait, frames: 16 },
+    { action: actionType.downSmash, frames: 5 },
+  ],
+  [
+    //5. Net R smash
+    { action: actionType.forward, frames: 1 },
+    { action: actionType.wait, frames: 20 },
+    { action: actionType.forward, frames: 31 },
+    { action: actionType.forwardUpSmash, frames: 3 },
+    { action: actionType.wait, frames: 16 },
+    { action: actionType.upSmash, frames: 1 },
+  ],
+  [
+    //6. Net G smash
+    { action: actionType.forward, frames: 1 },
+    { action: actionType.wait, frames: 20 },
+    { action: actionType.forward, frames: 31 },
+    { action: actionType.forwardUpSmash, frames: 3 },
+    { action: actionType.wait, frames: 16 },
+    { action: actionType.forwardSmash, frames: 1 },
+  ],
+  [
+    //7. Net dodge
+    { action: actionType.forward, frames: 1 },
+    { action: actionType.wait, frames: 20 },
+    { action: actionType.forward, frames: 31 },
+    { action: actionType.forwardUpSmash, frames: 3 },
+    { action: actionType.wait, frames: 16 },
+    { action: actionType.backward, frames: 1 },
+  ],
+  [
+    //8. Tail thunder
+    { action: actionType.forward, frames: 7 },
+    { action: actionType.wait, frames: 14 },
+    { action: actionType.forward, frames: 11 },
+    { action: actionType.forwardUp, frames: 15 },
+    { action: actionType.downSmash, frames: 5 },
+  ],
+  [
+    //9. Tail thunder(fake, flat)
+    { action: actionType.forward, frames: 7 },
+    { action: actionType.wait, frames: 14 },
+    { action: actionType.forward, frames: 11 },
+    { action: actionType.forwardUp, frames: 15 },
+    { action: actionType.forwardSmash, frames: 1 },
+  ],
+];
+const player2Formula = [
+  player1Formula[0].slice(), //0. Break net
+  player1Formula[1].slice(), //1. Break net(fake, flat)
+  player1Formula[2].slice(), //2. Head thunder
+  player1Formula[3].slice(), //3. Head thunder(fake, flat)
+  player1Formula[4].slice(), //4. Net thunder
+  player1Formula[6].slice(), //5. Net thunder(fake, flat)
+  [
+    //6. Tail thunder
+    { action: actionType.forward, frames: 7 },
+    { action: actionType.wait, frames: 14 },
+    { action: actionType.forward, frames: 11 },
+    { action: actionType.forwardUp, frames: 2 },
+    { action: actionType.wait, frames: 13 },
+    { action: actionType.forwardDownSmash, frames: 5 },
+  ],
+  [
+    //7. Tail thunder(fake, flat)
+    { action: actionType.forward, frames: 7 },
+    { action: actionType.wait, frames: 14 },
+    { action: actionType.forward, frames: 11 },
+    { action: actionType.forwardUp, frames: 2 },
+    { action: actionType.wait, frames: 13 },
+    { action: actionType.forwardSmash, frames: 1 },
+  ],
+];
+class ServeMachine {
+  constructor(isPlayer2) {
+    this.isPlayer2 = isPlayer2;
+
+    if (isPlayer2 === false) this.skillCount = 10;
+    else if (isPlayer2 === true) this.skillCount = 8;
+    this.randServeIndex = this.skillCount - 1;
+    this.skillList = [...Array(this.skillCount).keys()];
+    this.usingFullSkill = -1;
+    //console.log(this.skillList);
+  }
+  shuffle() {
+    for (let i = this.skillCount - 1; i >= 0; i--) {
+      var randomIndex = Math.floor(Math.random() * (i + 1));
+      // swap
+      let temp = this.skillList[randomIndex];
+      this.skillList[randomIndex] = this.skillList[i];
+      this.skillList[i] = temp;
+    }
+    this.randServeIndex = 0;
+  }
+  chooseNextSkill() {
+    if (serveMode === serveModeT.randomOrder)
+      while (1) {
+        // get next
+        this.usingFullSkill = this.skillList[this.randServeIndex];
+        this.randServeIndex++;
+        if (this.randServeIndex === this.skillCount) this.shuffle();
+        // check if it's available
+        if (
+          this.isPlayer2 === false &&
+          SkillTypeForPlayer1Available[this.usingFullSkill] === true
+        )
+          return;
+        else if (
+          this.isPlayer2 === true &&
+          SkillTypeForPlayer2Available[this.usingFullSkill] === true
+        )
+          return;
+      }
+    else if (serveMode === serveModeT.fixedOrder)
+      while (1) {
+        // get next
+        this.usingFullSkill++;
+        if (this.usingFullSkill === this.skillCount) this.usingFullSkill = 0;
+        // check if it's available
+        if (
+          this.isPlayer2 === false &&
+          SkillTypeForPlayer1Available[this.usingFullSkill] === true
+        )
+          return;
+        else if (
+          this.isPlayer2 === true &&
+          SkillTypeForPlayer2Available[this.usingFullSkill] === true
+        )
+          return;
+      }
+  }
+  initializeForNewRound() {
+    this.chooseNextSkill();
+    this.framesLeft = 0;
+    this.phase = 0;
+  }
+  executeMove(player, ball, theOtherPlayer, userInput) {
+    //move
+    this.getNextAction();
+    this.framesLeft--;
+    if (this.action === actionType.forward) {
+      userInput.xDirection = 1;
+    } else if (this.action === actionType.forwardUp) {
+      userInput.xDirection = 1;
+      userInput.yDirection = -1;
+    } else if (this.action === actionType.forwardDownSmash) {
+      userInput.xDirection = 1;
+      userInput.yDirection = 1;
+      userInput.powerHit = 1;
+    } else if (this.action === actionType.forwardSmash) {
+      userInput.xDirection = 1;
+      userInput.powerHit = 1;
+    } else if (this.action === actionType.downSmash) {
+      userInput.yDirection = 1;
+      userInput.powerHit = 1;
+    } else if (this.action === actionType.upSmash) {
+      userInput.yDirection = -1;
+      userInput.powerHit = 1;
+    } else if (this.action === actionType.forwardUpSmash) {
+      userInput.xDirection = 1;
+      userInput.yDirection = -1;
+      userInput.powerHit = 1;
+    } else if (this.action === actionType.backward) {
+      userInput.xDirection = -1;
+    }
+    // console.log(this.action);
+    if (this.isPlayer2 === true) {
+      userInput.xDirection = -userInput.xDirection;
+    }
+    return;
+  }
+  getNextAction() {
+    if (this.framesLeft === 0) {
+      //check formula
+      if (this.isPlayer2 === false) {
+        if (this.phase < player1Formula[this.usingFullSkill].length) {
+          this.action = player1Formula[this.usingFullSkill][this.phase].action;
+          this.framesLeft =
+            player1Formula[this.usingFullSkill][this.phase].frames;
+        } else {
+          // don't move
+          this.action = actionType.wait;
+          this.framesLeft = -1000;
+        }
+      } else if (this.isPlayer2 === true) {
+        if (this.phase < player2Formula[this.usingFullSkill].length) {
+          this.action = player2Formula[this.usingFullSkill][this.phase].action;
+          this.framesLeft =
+            player2Formula[this.usingFullSkill][this.phase].frames;
+        } else {
+          // don't move
+          this.action = actionType.wait;
+          this.framesLeft = -1000;
+        }
+      }
+      this.phase++;
+    }
+
+    if (this.framesLeft === 0) {
+      this.getNextAction();
+    }
   }
 }

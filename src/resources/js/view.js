@@ -374,6 +374,20 @@ export class GameView {
 
     this.cloudContainer = makeCloudContainer(textures);
     this.waveContainer = makeWaveContainer(textures);
+    // this.line = new Graphics();
+    // this.predict = new Array(6).fill(new Graphics());
+    // this.shortX = new Graphics();
+    // this.shortX.beginFill(0xff0000);
+    // this.shortX.drawRect(0, 0, 40, 10);
+    // this.shortX.y = 255;
+    // this.farX = new Graphics();
+    // this.farX.beginFill(0x0000ff);
+    // this.farX.drawRect(0, 0, 40, 10);
+    // this.farX.y = 255;
+    // this.exp = new Graphics();
+    // this.exp.beginFill(0x00ff00);
+    // this.exp.drawRect(0, 0, 40, 10);
+    // this.exp.y = 255;
 
     // container which include whold display objects
     // Should be careful on addChild order
@@ -390,6 +404,15 @@ export class GameView {
     this.container.addChild(this.ballTrail);
     this.container.addChild(this.ballHyper);
     this.container.addChild(this.ball);
+
+    // this.container.addChild(this.line);
+    // for (let predictCount = 0; predictCount < 6; predictCount++) {
+    //   this.container.addChild(this.predict[predictCount]);
+    // }
+    // this.container.addChild(this.shortX);
+    // this.container.addChild(this.farX);
+    // this.container.addChild(this.exp);
+
     this.container.addChild(this.punch);
     this.container.addChild(this.scoreBoards[0]);
     this.container.addChild(this.scoreBoards[1]);
@@ -449,6 +472,10 @@ export class GameView {
     }
   }
 
+  // leftside(x) {
+  //   return x < 216;
+  // }
+
   /** @typedef {import("./physics").PikaPhysics} PikaPhysics */
   /**
    * Draw players and ball in the given physics object
@@ -492,6 +519,50 @@ export class GameView {
     this.ball.y = ball.y;
     this.shadows.forBall.x = ball.x;
     this.ball.gotoAndStop(ball.rotation);
+
+    // this.shortX.x = ball.shortX - 20;
+    // this.farX.x = ball.farX - 20;
+    // this.exp.x = ball.bestDefense - 20;
+    // this.line.clear();
+    // this.line.lineStyle(3, 0, 0.2);
+    // let lastball = ball;
+    // ball.path.forEach((copyball) => {
+    //   this.line.moveTo(lastball.x, lastball.y);
+    //   this.line.lineTo(copyball.x, copyball.y);
+    //   lastball = copyball;
+    // });
+
+    // const rgb = [0x00ff00, 0x00ff00, 0xff8000, 0xff8000, 0xff0000, 0xff0000];
+    // console.log(ball.predict);
+    // for (
+    //   let predictCount = 0;
+    //   predictCount < ball.predict.length;
+    //   predictCount++
+    // ) {
+    //   this.predict[predictCount].clear();
+    // }
+    // for (
+    //   let predictCount = 0;
+    //   predictCount < ball.predict.length;
+    //   predictCount++
+    // ) {
+    //   const ballpredict = ball.predict[predictCount];
+    //   this.predict[predictCount].lineStyle(3, rgb[predictCount], 0.5);
+    //   if (
+    //     ballpredict.length === 0 ||
+    //     this.leftside(ball.x) ===
+    //       this.leftside(ballpredict[ballpredict.length - 1].x)
+    //   ) {
+    //     continue;
+    //   }
+    //   // @ts-ignore
+    //   let last = ball;
+    //   ballpredict.forEach((copyball) => {
+    //     this.predict[predictCount].moveTo(last.x, last.y);
+    //     this.predict[predictCount].lineTo(copyball.x, copyball.y);
+    //     last = copyball;
+    //   });
+    // }
 
     // For punch effect, refer FUN_00402ee0
     if (ball.punchEffectRadius > 0) {

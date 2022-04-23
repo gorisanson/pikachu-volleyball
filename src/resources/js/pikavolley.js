@@ -48,7 +48,7 @@ export class PikachuVolleyball {
     ];
 
     /** @type {number} game fps */
-    this.normalFPS = 25;
+    this.normalFPS = 30;
     /** @type {number} fps for slow motion */
     this.slowMotionFPS = 5;
 
@@ -224,8 +224,8 @@ export class PikachuVolleyball {
       this.keyboardArray[1].powerHit === 1
     ) {
       if (this.selectedWithWho === 1) {
-        this.physics.player1.isComputer = false;
-        this.physics.player2.isComputer = false;
+        this.physics.player1.isComputer = true;
+        this.physics.player2.isComputer = true;
       } else {
         if (this.keyboardArray[0].powerHit === 1) {
           this.physics.player1.isComputer = false;

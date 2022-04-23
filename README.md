@@ -1,3 +1,15 @@
+# Pikachu Volleyball with new AI
+
+The original JavaScript version of Pikachu Volleyball is developed by gorisanson.
+
+This is a modified version with new AI.  
+There are many skills in new AI, such as super serve/receive, dynamic defense and predict attack.  
+You can turn off serve options below to reduce difficulty.  
+The 2 players mode is change to AI vs. AI. You can watch a top game in this mode.  
+Thank pxter7777 for the serve machine. Thank CBKM for testing.  
+
+---
+
 # Pikachu Volleyball
 
 _&check;_ _English_ | [_Korean(한국어)_](README.ko.md)
