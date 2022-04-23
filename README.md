@@ -8,6 +8,8 @@ You can turn off serve options below to reduce difficulty.
 The 2 players mode is change to AI vs. AI. You can watch a top game in this mode.  
 Thank pxter7777 for the serve machine. Thank CBKM for testing.  
 
+You can play this game on the website: https://pika.duckll.tw/
+
 ---
 
 # Pikachu Volleyball
