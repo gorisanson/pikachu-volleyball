@@ -1267,9 +1267,6 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
           userInput.powerHit = 0;
         }
       }
-      if (Math.abs(ball.yVelocity) >= 30) {
-        player.direction = 4;
-      }
       // console.log(ball);
       if (player.direction === 0) {
         userInput.yDirection = -1;
