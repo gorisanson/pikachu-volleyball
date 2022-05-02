@@ -1864,7 +1864,8 @@ class ServeMachine {
         // get next
         this.usingFullSkill = this.skillList[this.randServeIndex];
         this.randServeIndex++;
-        if (this.randServeIndex === this.skillCount) this.shuffle();
+        // if (this.randServeIndex === this.skillCount)
+        this.shuffle();
         // check if it's available
         if (
           this.isPlayer2 === false &&
