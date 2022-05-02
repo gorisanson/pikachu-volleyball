@@ -956,6 +956,54 @@ function sameside(player, ballX) {
 }
 
 /**
+ * 如果球power hit 跑到 path最後位置
+ * 如果球沒有power hit 跑到predict 最短路徑位置
+ *
+ * @param {Player} player The player whom computer contorls
+ * @param {Array} predict ball
+ */
+function canblock(player, predict) {
+  let playeryV = player.yVelocity;
+  let playerY = player.y;
+  for (let frame = 0; frame < predict.length; frame++) {
+    playerY += playeryV;
+    playeryV += 1;
+    if (sameside(player, predict[frame].x)) {
+      if (Math.abs(predict[frame].x - GROUND_HALF_WIDTH) > PLAYER_LENGTH + 60) {
+        return false;
+      } else {
+        if (Math.abs(playerY - predict[frame].y) <= PLAYER_HALF_LENGTH) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * 如果球power hit 跑到 path最後位置
+ * 如果球沒有power hit 跑到predict 最短路徑位置
+ *
+ * @param {Player} player The player whom computer contorls
+ * @param {Array} predict ball
+ */
+function canblockPredict(player, predict) {
+  for (let frame = 0; frame < predict.length; frame++) {
+    if (sameside(player, predict[frame].x)) {
+      if (Math.abs(predict[frame].x - GROUND_HALF_WIDTH) > PLAYER_LENGTH + 60) {
+        return false;
+      } else {
+        if (predict[frame].y > 108) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+/**
  * FUN_00402360
  * Computer controls its player by this function.
  * Computer decides the user input for the player it controls,
@@ -1008,10 +1056,14 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
   if (player.tactics === 0) {
     // 平常狀態
     let virtualExpectedLandingPointX;
-    if (sameside(theOtherPlayer, ball.expectedLandingPointX)) {
+    if (
+      sameside(theOtherPlayer, ball.expectedLandingPointX) ||
+      (sameside(theOtherPlayer, ball.x) && Math.abs(ball.xVelocity) < 7)
+    ) {
       // 預測防守
       let short_len = 1000;
       let short_x = player.isPlayer2 ? 288 : 144;
+      let closeDiff = 216;
       // let far_diff = 0;
       // let far_len = 1000;
       // let far_x = 0;
@@ -1025,9 +1077,15 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
             predict.length > 0 &&
             sameside(player, predict[predict.length - 1].x)
           ) {
-            if (predict.length <= short_len) {
+            if (
+              predict.length < short_len ||
+              (predict.length === short_len &&
+                Math.abs(predict[predict.length - 1].x - GROUND_HALF_WIDTH) <=
+                  closeDiff)
+            ) {
               short_len = predict.length;
               short_x = predict[predict.length - 1].x;
+              closeDiff = Math.abs(short_x - GROUND_HALF_WIDTH);
             }
             // if (Math.abs(player.x - predict[predict.length - 1].x) > far_diff) {
             //   far_diff = Math.abs(player.x - predict[predict.length - 1].x);
@@ -1064,21 +1122,23 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
               playerYpredict(player, frame - 1) - ball.path[frame - 1].y
             ) > PLAYER_HALF_LENGTH &&
             sameside(player, ball.path[frame].x) &&
-            Math.abs(player.x - ball.path[frame].x) / 6 < frame
+            Math.abs(player.x - ball.path[frame].x) <=
+              6 * frame + PLAYER_HALF_LENGTH
           ) {
             const copyball = ball.path[frame];
-            for (let direct = 0; direct < 6; direct++) {
+            for (let direct = 2; direct < 6; direct++) {
               const predict = copyball.predict[direct];
               if (
                 predict.length > 0 &&
                 sameside(theOtherPlayer, predict[predict.length - 1].x) &&
-                predict.length < shortPath
+                predict.length <= shortPath + 1
               ) {
                 shortPath = predict.length;
-
                 player.goodtime = frame;
                 player.attackX = ball.path[frame].x;
                 player.direction = direct;
+                userInput.yDirection = -1;
+
                 // ball.shortX = predict[predict.length - 1].x;
                 // console.log(copyball);
                 // console.log(predict);
@@ -1089,14 +1149,38 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
             // break;
           }
         }
+        // 0 sec jump
+        if (
+          sameside(player, ball.path[0].x) &&
+          player.state === 0 &&
+          Math.abs(player.y - 16 - ball.path[0].y) <= PLAYER_HALF_LENGTH &&
+          Math.abs(player.x - ball.path[0].x) <= PLAYER_HALF_LENGTH &&
+          !player.isCollisionWithBallHappened &&
+          sameside(player, ball.expectedLandingPointX) &&
+          Math.abs(player.x - ball.expectedLandingPointX) >
+            ball.path.length * 6 + PLAYER_HALF_LENGTH
+        ) {
+          const copyball = ball.path[0];
+          for (let direct = 0; direct < 6; direct++) {
+            const predict = copyball.predict[direct];
+            if (
+              predict.length > 0 &&
+              sameside(theOtherPlayer, predict[predict.length - 1].x) &&
+              predict.length < shortPath
+            ) {
+              shortPath = predict.length;
+              player.goodtime = 0;
+              player.attackX = ball.path[0].x;
+              player.direction = direct;
+              userInput.yDirection = -1;
+            }
+          }
+        }
         // console.log('goodtime' + player.goodtime);
         // console.log('dict' + player.direction);
         // console.log('shortX' + ball.shortX);
-        if (player.goodtime > 0) {
-          userInput.yDirection = -1;
-        }
       }
-      if (player.goodtime >= 0) {
+      if (player.goodtime > -1) {
         virtualExpectedLandingPointX = player.attackX;
       } else {
         // 防守
@@ -1113,9 +1197,9 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       }
     }
 
-    if (player.goodtime === 0 && player.state === 1) {
+    if (player.goodtime === 0) {
       userInput.powerHit = 1;
-      const attackFar = rand() % 5 === 0;
+      const attackFar = rand() % 10 === 0;
       // 打最遠
       // console.log(attackFar);
       if (attackFar) {
@@ -1138,21 +1222,62 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       }
 
       // 防攔網
+      // console.log(
+      //   'other player' +
+      //     (Math.abs(theOtherPlayer.x - GROUND_HALF_WIDTH) - PLAYER_HALF_LENGTH)
+      // );
+      // console.log('hit');
       if (
         Math.abs(theOtherPlayer.x - GROUND_HALF_WIDTH) <
-          PLAYER_HALF_LENGTH + 18 &&
-        (theOtherPlayer.state === 1 || theOtherPlayer.state === 2)
+          PLAYER_HALF_LENGTH + 61 &&
+        theOtherPlayer.state < 3
       ) {
-        player.direction = 0;
+        // console.log('anti block');
+        // console.log(player.isPlayer2);
+        let canbypass = false;
+        const copyball = ball.path[0];
+        for (let direct = 0; direct < 6; direct++) {
+          const predict = copyball.predict[direct];
+          if (
+            predict.length > 0 &&
+            sameside(theOtherPlayer, predict[predict.length - 1].x)
+          ) {
+            // console.log(theOtherPlayer.state);
+            if (theOtherPlayer.state === 0 || theOtherPlayer.yVelocity > 13) {
+              if (
+                !canblockPredict(theOtherPlayer, predict) ||
+                predict.length < 5
+              ) {
+                // console.log('no jump');
+                // console.log(predict);
+                player.direction = direct;
+                canbypass = true;
+              }
+            } else {
+              if (!canblock(theOtherPlayer, predict) || predict.length < 5) {
+                // console.log('jump');
+                // console.log(predict);
+                player.direction = direct;
+                canbypass = true;
+              }
+            }
+          }
+        }
+        if (!canbypass) {
+          userInput.powerHit = 0;
+        }
       }
-
+      if (Math.abs(ball.yVelocity) >= 30) {
+        player.direction = 4;
+      }
+      // console.log(ball);
       if (player.direction === 0) {
         userInput.yDirection = -1;
         userInput.xDirection = 0;
       }
       if (player.direction === 1) {
         userInput.yDirection = -1;
-        userInput.xDirection = 1;
+        userInput.xDirection = userInput.xDirection === 1 ? 1 : -1;
       }
       if (player.direction === 2) {
         userInput.yDirection = 0;
@@ -1160,7 +1285,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       }
       if (player.direction === 3) {
         userInput.yDirection = 0;
-        userInput.xDirection = 1;
+        userInput.xDirection = userInput.xDirection === 1 ? 1 : -1;
       }
       if (player.direction === 4) {
         userInput.yDirection = 1;
@@ -1168,7 +1293,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       }
       if (player.direction === 5) {
         userInput.yDirection = 1;
-        userInput.xDirection = 1;
+        userInput.xDirection = userInput.xDirection === 1 ? 1 : -1;
       }
       player.goodtime = -1;
     } else {
@@ -1176,10 +1301,9 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
     }
   }
   if (player.tactics === 1) {
-    // console.log(ball.frame);
-    // console.log(ball.xVelocity);
-    // console.log(ball.yVelocity);
-    // console.log(ball);
+    // console.log('frame: ' + ball.frame);
+    // console.log('xVelocity: ' + ball.xVelocity);
+    // console.log('yVelocity: ' + ball.yVelocity);
     // 防偷襲
     if (
       (sameside(player, ball.expectedLandingPointX) &&
@@ -1233,7 +1357,12 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
     if (ball.expectedLandingPointX === 392) {
       player.tactics = 4;
     }
-    //4. Net V smash 76
+    // 右邊彈網不打
+    if (ball.frame === 73 && ball.xVelocity === -20 && ball.yVelocity === 14) {
+      userInput.xDirection = -1;
+      player.tactics = 0;
+    }
+    // net thunder
     if (ball.xVelocity === -10 && ball.yVelocity === 65) {
       userInput.xDirection = 1;
       userInput.yDirection = -1;
