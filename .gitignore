@@ -1,6 +1,5 @@
 dist/
 node_modules/
-package-lock.json
 analytics.html
 .firebase/
 .firebaserc
