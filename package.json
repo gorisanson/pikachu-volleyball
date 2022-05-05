@@ -45,7 +45,7 @@
     "@pixi/loaders": "^6.3.2",
     "@pixi/prepare": "^6.3.2",
     "@pixi/settings": "^6.3.2",
-    "@pixi/sound": "^4.2.0",
+    "@pixi/sound": "github:gorisanson/sound#773aceef8b2e82ea4fa52d3a2856cd83bb7d1d44",
     "@pixi/sprite": "^6.3.2",
     "@pixi/sprite-animated": "^6.3.2",
     "@pixi/spritesheet": "^6.3.2",
