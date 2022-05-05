@@ -8,6 +8,35 @@ You can play this game on the website: https://gorisanson.github.io/pikachu-voll
 
 <img src="src/resources/assets/images/screenshot.png" alt="Pikachu Volleyball game screenshot" width="648">
 
+## How to run locally
+
+1. Clone this repoistory and get into the directory.
+
+```sh
+git clone https://github.com/gorisanson/pikachu-volleyball.git
+cd pikachu-volleyball
+```
+
+2. Install dependencies. (If errors occur, you can try with `node v14.18.2` and `npm v6.14.15`.)
+
+```sh
+npm install
+```
+
+3. Bundle the code.
+
+```sh
+npm run build
+```
+
+4. Run a local web server.
+
+```sh
+npx http-server dist
+```
+
+5. Connect to the local web server on a web browser. (In most cases, the URL for connecting to the server would be `http://localhost:8080`. For the exact URL, it is supposed to be found on the printed messages on your terminal.)
+
 ## Game structure
 
 - Physics Engine: The physics engine, which calculates the position of the ball and the players (Pikachus), is contained in the file [`src/resources/js/physics.js`](src/resources/js/physics.js). (This file also containes the AI which determines the keyboard input of the computer when you are playing against your computer.) This source code file is gained by reverse engineering the function at the address 00403dd0 of the machine code of the original game.
