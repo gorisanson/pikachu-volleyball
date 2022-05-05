@@ -280,6 +280,14 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
 	"sourceSize": {"w":32,"h":32}
 },
+"objects/black.png":
+{
+	"frame": {"x":2,"y":2,"w":8,"h":8},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":8},
+	"sourceSize": {"w":8,"h":8}
+},
 "objects/cloud.png":
 {
 	"frame": {"x":100,"y":90,"w":48,"h":24},
@@ -290,7 +298,7 @@
 },
 "objects/ground_line.png":
 {
-	"frame": {"x":56,"y":2,"w":16,"h":16},
+	"frame": {"x":66,"y":2,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -298,7 +306,7 @@
 },
 "objects/ground_line_leftmost.png":
 {
-	"frame": {"x":74,"y":2,"w":16,"h":16},
+	"frame": {"x":84,"y":2,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -306,7 +314,7 @@
 },
 "objects/ground_line_rightmost.png":
 {
-	"frame": {"x":92,"y":2,"w":16,"h":16},
+	"frame": {"x":102,"y":2,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -314,7 +322,7 @@
 },
 "objects/ground_red.png":
 {
-	"frame": {"x":110,"y":2,"w":16,"h":16},
+	"frame": {"x":120,"y":2,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -322,7 +330,7 @@
 },
 "objects/ground_yellow.png":
 {
-	"frame": {"x":128,"y":2,"w":16,"h":16},
+	"frame": {"x":138,"y":2,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -338,7 +346,7 @@
 },
 "objects/net_pillar.png":
 {
-	"frame": {"x":2,"y":2,"w":8,"h":8},
+	"frame": {"x":12,"y":2,"w":8,"h":8},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":8},
@@ -346,7 +354,7 @@
 },
 "objects/net_pillar_top.png":
 {
-	"frame": {"x":12,"y":2,"w":8,"h":8},
+	"frame": {"x":22,"y":2,"w":8,"h":8},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":8},
@@ -354,7 +362,7 @@
 },
 "objects/shadow.png":
 {
-	"frame": {"x":22,"y":2,"w":32,"h":8},
+	"frame": {"x":32,"y":2,"w":32,"h":8},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":8},
@@ -362,7 +370,7 @@
 },
 "objects/sky_blue.png":
 {
-	"frame": {"x":146,"y":2,"w":16,"h":16},
+	"frame": {"x":156,"y":2,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -625,6 +633,6 @@
 	"format": "RGBA8888",
 	"size": {"w":476,"h":885},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:bc39cfe4c7bb2b217373dc21b633e35b:05248f354d7463b1eac75b9b0d492716:6cc8953523e0367402f95f3c9a630665$"
+	"smartupdate": "$TexturePacker:SmartUpdate:37eaeab36e11c29cadb9c763d77ccd63:4ee02ff09c4e34c8aca11301db3f8fd1:6cc8953523e0367402f95f3c9a630665$"
 }
 }

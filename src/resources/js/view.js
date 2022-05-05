@@ -6,9 +6,14 @@
  * ex) FUN_00405d50 means the function at the address 00405d50 in the machine code.
  */
 'use strict';
-import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js-legacy';
+import { AnimatedSprite } from '@pixi/sprite-animated';
+import { Sprite } from '@pixi/sprite';
+import { Container } from '@pixi/display';
 import { Cloud, Wave, cloudAndWaveEngine } from './cloud_and_wave.js';
 import { ASSETS_PATH } from './assets_path.js';
+
+/** @typedef {import('@pixi/loaders').LoaderResource} LoaderResource */
+/** @typedef {import('@pixi/core').Texture} Texture */
 
 const TEXTURES = ASSETS_PATH.TEXTURES;
 
@@ -21,7 +26,7 @@ const NUM_OF_CLOUDS = 10;
 export class IntroView {
   /**
    * Create an IntroView object
-   * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
+   * @param {Object.<string,LoaderResource>} resources loader.resources
    */
   constructor(resources) {
     const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
@@ -68,7 +73,7 @@ export class IntroView {
 export class MenuView {
   /**
    * Create a MenuView object
-   * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
+   * @param {Object.<string,LoaderResource>} resources loader.resources
    */
   constructor(resources) {
     const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
@@ -324,7 +329,7 @@ export class MenuView {
 export class GameView {
   /**
    * Create a GameView object
-   * @param {Object.<string,PIXI.LoaderResource>} resources
+   * @param {Object.<string,LoaderResource>} resources
    */
   constructor(resources) {
     const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
@@ -644,11 +649,11 @@ export class GameView {
  * Class representing fade in out effect
  */
 export class FadeInOut {
-  constructor() {
-    this.black = new Graphics();
-    this.black.beginFill(0x000000);
-    this.black.drawRect(0, 0, 432, 304);
-    this.black.endFill();
+  constructor(resources) {
+    const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
+    this.black = makeSpriteWithAnchorXY(textures, TEXTURES.BLACK, 0, 0);
+    this.black.width = 432;
+    this.black.height = 304;
     this.black.x = 0;
     this.black.y = 0;
     this.black.alpha = 1;
@@ -697,8 +702,8 @@ export class FadeInOut {
 
 /**
  * Make sitting pikachu tiles
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.Container}
+ * @param {Object.<string,Texture>} textures
+ * @return {Container}
  */
 function makeSittingPikachuTilesContainer(textures) {
   const container = new Container();
@@ -719,8 +724,8 @@ function makeSittingPikachuTilesContainer(textures) {
 
 /**
  * Make background
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.Container}
+ * @param {Object.<string,Texture>} textures
+ * @return {Container}
  */
 function makeBGContainer(textures) {
   const bgContainer = new Container();
@@ -789,8 +794,8 @@ function makeBGContainer(textures) {
 
 /**
  * Make animated sprites for both players
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.AnimatedSprite[]} [0] for player 1, [1] for player2
+ * @param {Object.<string,Texture>} textures
+ * @return {AnimatedSprite[]} [0] for player 1, [1] for player2
  */
 function makePlayerAnimatedSprites(textures) {
   const getPlayerTexture = (i, j) => textures[TEXTURES.PIKACHU(i, j)];
@@ -820,8 +825,8 @@ function makePlayerAnimatedSprites(textures) {
 
 /**
  * Make animated sprite of ball
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.AnimatedSprite}
+ * @param {Object.<string,Texture>} textures
+ * @return {AnimatedSprite}
  */
 function makeBallAnimatedSprites(textures) {
   const getBallTexture = (s) => textures[TEXTURES.BALL(s)];
@@ -843,11 +848,11 @@ function makeBallAnimatedSprites(textures) {
 
 /**
  * Make sprite with the texture on the path and with the given anchor x, y
- * @param {Object.<string,PIXI.Texture>} textures
+ * @param {Object.<string,Texture>} textures
  * @param {string} path
  * @param {number} anchorX anchor.x, number in [0, 1]
  * @param {number} anchorY anchor.y, number in [0, 1]
- * @return {PIXI.Sprite}
+ * @return {Sprite}
  */
 function makeSpriteWithAnchorXY(textures, path, anchorX, anchorY) {
   const sprite = new Sprite(textures[path]);
@@ -858,8 +863,8 @@ function makeSpriteWithAnchorXY(textures, path, anchorX, anchorY) {
 
 /**
  * Make score boards
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.Container} child with index 0 for player 1 score board, child with index 1 for player2 score board
+ * @param {Object.<string,Texture>} textures
+ * @return {Container} child with index 0 for player 1 score board, child with index 1 for player2 score board
  */
 function makeScoreBoardSprite(textures) {
   const getNumberTexture = (n) => textures[TEXTURES.NUMBER(n)];
@@ -893,8 +898,8 @@ function makeScoreBoardSprite(textures) {
 
 /**
  * Make a container with cloud sprites
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.Container}
+ * @param {Object.<string,Texture>} textures
+ * @return {Container}
  */
 function makeCloudContainer(textures) {
   const cloudContainer = new Container();
@@ -911,8 +916,8 @@ function makeCloudContainer(textures) {
 
 /**
  * Make a container with wave sprites
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.Container}
+ * @param {Object.<string,Texture>} textures
+ * @return {Container}
  */
 function makeWaveContainer(textures) {
   const waveContainer = new Container();
@@ -927,8 +932,8 @@ function makeWaveContainer(textures) {
 
 /**
  * Add child to parent and set local position
- * @param {PIXI.Container} parent
- * @param {PIXI.Sprite} child
+ * @param {Container} parent
+ * @param {Sprite} child
  * @param {number} x local x
  * @param {number} y local y
  */
