@@ -17,7 +17,7 @@ git clone https://github.com/gorisanson/pikachu-volleyball.git
 cd pikachu-volleyball
 ```
 
-2. 의존하는 패키지를 설치합니다. (오류가 발생한다면, `node v14.18.2`와 `npm v6.14.15`을 사용해보세요.)
+2. 의존하는 패키지를 설치합니다. (오류가 발생한다면, `node v16`와 `npm v8`을 사용해보세요.)
 
 ```sh
 npm install
