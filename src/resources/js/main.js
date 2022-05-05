@@ -62,6 +62,12 @@ const renderer = autoDetectRenderer({
   antialias: false,
   backgroundColor: 0x000000,
   backgroundAlpha: 1,
+  // Decided to use only Canvas for compatibility reason. One player had reported that
+  // on theire browser, where pixi chooses to use WebGL renderer, the graphics are not fine.
+  // And the issue had been fixed by using Canvas renderer. And also for the sake of testing,
+  // it is more comfortable just to stick with Canvas renderer so that it is unnecessary to switch
+  // between WebGL renderer and Canvas renderer.
+  forceCanvas: true,
 });
 
 const stage = new Container();
