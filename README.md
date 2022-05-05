@@ -17,7 +17,7 @@ git clone https://github.com/gorisanson/pikachu-volleyball.git
 cd pikachu-volleyball
 ```
 
-2. Install dependencies. (If errors occur, you can try with `node v14.18.2` and `npm v6.14.15`.)
+2. Install dependencies. (If errors occur, you can try with `node v16` and `npm v8`.)
 
 ```sh
 npm install
