@@ -3,7 +3,7 @@
  */
 'use strict';
 /** @typedef {import('./pikavolley.js').PikachuVolleyball} PikachuVolleyball */
-/** @typedef {import('pixi.js-legacy').Ticker} Ticker */
+/** @typedef {import('@pixi/ticker').Ticker} Ticker */
 
 /**
  * Enum for "game paused by what?".

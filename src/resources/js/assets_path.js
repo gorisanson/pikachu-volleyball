@@ -29,6 +29,7 @@ TEXTURES.BALL_TRAIL = 'ball/ball_trail.png';
 TEXTURES.BALL_PUNCH = 'ball/ball_punch.png';
 TEXTURES.CLOUD = 'objects/cloud.png';
 TEXTURES.WAVE = 'objects/wave.png';
+TEXTURES.BLACK = 'objects/black.png';
 
 TEXTURES.SACHISOFT = 'messages/common/sachisoft.png';
 TEXTURES.READY = 'messages/common/ready.png';
