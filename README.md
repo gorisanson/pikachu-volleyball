@@ -16,7 +16,7 @@ You can play this game on the website: https://gorisanson.github.io/pikachu-voll
 
 Refer comments on [`src/resources/js/main.js`](src/resources/js/main.js) for other details.
 
-## Reverse Engineering Method
+## Methods used for reverse engineering
 
 The main tools used for reverse engineering are following.
 
