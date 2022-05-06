@@ -177,6 +177,14 @@ export function setUpUI(pikaVolley, ticker) {
       }
     }
   });
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') {
+      pikaVolley.audio.unmuteAll();
+    } else {
+      pikaVolley.audio.muteAll();
+    }
+  });
 }
 
 /**
