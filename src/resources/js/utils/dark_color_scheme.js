@@ -1,4 +1,5 @@
 'use strict';
+import { localStorageWrapper } from './local_storage_wrapper';
 const THEME_COLOR_LIGHT = '#FFFFFF';
 const THEME_COLOR_DARK = '#202124';
 
@@ -11,12 +12,7 @@ function setUpDarkColorSchemeCheckbox() {
   const darkColorSchemeCheckboxElements = Array.from(
     document.getElementsByClassName('dark-color-scheme-checkbox')
   );
-  let colorScheme = null;
-  try {
-    colorScheme = window.localStorage.getItem('colorScheme');
-  } catch (err) {
-    console.error(err);
-  }
+  const colorScheme = localStorageWrapper.get('colorScheme');
   if (colorScheme === 'dark' || colorScheme === 'light') {
     darkColorSchemeCheckboxElements.forEach((elem) => {
       // @ts-ignore
@@ -42,11 +38,7 @@ function setUpDarkColorSchemeCheckbox() {
       // @ts-ignore
       const colorScheme = elem.checked ? 'dark' : 'light';
       applyColorScheme(colorScheme);
-      try {
-        window.localStorage.setItem('colorScheme', colorScheme);
-      } catch (err) {
-        console.error(err);
-      }
+      localStorageWrapper.set('colorScheme', colorScheme);
       // For syncing states of other checkbox elements
       darkColorSchemeCheckboxElements.forEach((element) => {
         if (element !== elem) {

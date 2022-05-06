@@ -2,7 +2,7 @@
  * This module takes charge of the game audio (or sounds)
  */
 'use strict';
-import { Sound, filters } from '@pixi/sound';
+import { sound, Sound, filters } from '@pixi/sound';
 import { ASSETS_PATH } from './assets_path.js';
 
 const SOUNDS = ASSETS_PATH.SOUNDS;
@@ -83,6 +83,14 @@ export class PikaAudio {
         this.sounds[prop].volume = volume;
       }
     }
+  }
+
+  muteAll() {
+    sound.muteAll();
+  }
+
+  unmuteAll() {
+    sound.unmuteAll();
   }
 }
 
