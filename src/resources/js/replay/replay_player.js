@@ -231,7 +231,7 @@ export function setTickerMaxFPSAccordingToNormalFPS(normalFPS) {
 
 /**
  * Set up the loader progress bar.
- * @param {PIXI.Loader} loader
+ * @param {Loader} loader
  */
 function setUpLoaderProgresBar(loader) {
   const loadingBox = document.getElementById('loading-box');

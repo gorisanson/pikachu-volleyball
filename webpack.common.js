@@ -134,7 +134,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/en/replay/index.html',
       filename: 'en/replay/index.html',
-      chunks: ['runtime', 'main_replay'],
+      chunks: ['runtime', 'main_replay', 'dark_color_scheme'],
       chunksSortMode: 'manual',
       minify: {
         collapseWhitespace: true,
@@ -144,7 +144,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/ko/replay/index.html',
       filename: 'ko/replay/index.html',
-      chunks: ['runtime', 'ko', 'main_replay'],
+      chunks: ['runtime', 'ko', 'main_replay', 'dark_color_scheme'],
       chunksSortMode: 'manual',
       minify: {
         collapseWhitespace: true,

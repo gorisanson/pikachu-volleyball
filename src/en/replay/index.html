@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Pikachu Volleyball Replay Viewer</title>
-    <meta name="description" content="Pikachu Volleyball Replay Viewer" />
+    <meta
+      name="description"
+      content="Pikachu Volleyball P2P Online Replay Viewer"
+    />
     <meta name="author" content="Lee, Kyutae" />
 
     <link
@@ -18,6 +21,18 @@
   <body>
     <div id="flex-container">
       <div id="game-canvas-container">
+        <div id="player1-chat-box" class="chat-box pre-wrap"></div>
+        <div id="player2-chat-box" class="chat-box pre-wrap"></div>
+        <div class="nicknames-container">
+          <div class="nickname-and-partial-ip left">
+            <span id="player1-nickname" class="nickname"></span>
+            <span id="player1-partial-ip" class="partial-ip"></span>
+          </div>
+          <div class="nickname-and-partial-ip right">
+            <span id="player2-nickname" class="nickname"></span>
+            <span id="player2-partial-ip" class="partial-ip"></span>
+          </div>
+        </div>
         <div class="fade-in-box loading black hidden" id="loading-box">
           <div>
             <p>Loading the game assets...</p>
@@ -35,7 +50,11 @@
         </div>
         <div class="fade-in-box notice hidden" id="notice-end-of-replay">
           <p>Replay is over</p>
-          <button id="notice-end-of-replay-ok-btn" class="btn-in-box">
+          <button
+            type="button"
+            id="notice-end-of-replay-ok-btn"
+            class="btn-in-box"
+          >
             OK
           </button>
         </div>
@@ -44,7 +63,11 @@
             The file can't be opened.<br />It is not a replay file, or it is
             damaged.
           </p>
-          <button id="notice-file-open-error-ok-btn" class="btn-in-box">
+          <button
+            type="button"
+            id="notice-file-open-error-ok-btn"
+            class="btn-in-box"
+          >
             OK
           </button>
         </div>
@@ -76,7 +99,11 @@
         />
       </div>
       <div>
-        <button id="play-pause-btn" class="btn-for-replay disable-dbl-tap-zoom">
+        <button
+          type="button"
+          id="play-pause-btn"
+          class="btn-for-replay disable-dbl-tap-zoom"
+        >
           &#x25b6;&#xfe0e;
         </button>
         <span class="margin-left-right"
@@ -85,24 +112,28 @@
         >
         <div class="inline">
           <button
+            type="button"
             id="seek-backward-3"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
             &lt;&lt; 3
           </button>
           <button
+            type="button"
             id="seek-backward-1"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
             &lt;&lt; 1
           </button>
           <button
+            type="button"
             id="seek-forward-1"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
             1 &gt;&gt;
           </button>
           <button
+            type="button"
             id="seek-forward-3"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
@@ -111,24 +142,28 @@
         </div>
         <div class="margin-top-little">
           <button
+            type="button"
             id="speed-btn-5-fps"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
             5 fps
           </button>
           <button
+            type="button"
             id="speed-btn-half-times"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
             &times;0.5
           </button>
           <button
+            type="button"
             id="speed-btn-1-times"
             class="btn-for-replay disable-dbl-tap-zoom selected"
           >
             &times;1
           </button>
           <button
+            type="button"
             id="speed-btn-2-times"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
@@ -144,14 +179,40 @@
           />
         </div>
         <div class="margin-top-little show-checkboxes-container">
-          <input id="show-keyboard-checkbox" type="checkbox" checked />
-          <label for="show-keyboard-checkbox">Keyboard</label>
-          <!-- <input id="show-chat-checkbox" type="checkbox" checked />
-          <label for="show-chat-checkbox">Chat</label>
-          <input id="show-nicknames-checkbox" type="checkbox" checked />
-          <label for="show-nicknames-checkbox">Nicknames</label>
-          <input id="show-ip-addresses-checkbox" type="checkbox" checked />
-          <label for="show-ip-addresses-checkbox">IPs</label> -->
+          <label>
+            <input id="show-keyboard-checkbox" type="checkbox" checked />
+            Keyboard
+          </label>
+          <!-- <label>
+            <input id="show-chat-checkbox" type="checkbox" checked />
+            Chat
+          </label>
+          <label>
+            <input id="show-nicknames-checkbox" type="checkbox" checked />
+            Nicknames
+          </label>
+          <label>
+            <input id="show-ip-addresses-checkbox" type="checkbox" checked />
+            IPs
+          </label> -->
+          <label>
+            <input id="turn-on-bgm-checkbox" type="checkbox" checked />
+            BGM
+          </label>
+          <label>
+            <input id="turn-on-sfx-checkbox" type="checkbox" checked />
+            SFX
+          </label>
+        </div>
+        <div class="margin-top-little">
+          <div class="color-scheme-toggle-switch-container">
+            <input
+              type="checkbox"
+              id="dark-color-scheme-checkbox-1"
+              class="toggle-switch dark-color-scheme-checkbox"
+            />
+            <label for="dark-color-scheme-checkbox-1"></label>
+          </div>
         </div>
       </div>
       <div id="play-mark" class="hidden">&#x25b6;&#xfe0e;</div>

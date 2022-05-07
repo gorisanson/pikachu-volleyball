@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>피카츄 배구 리플레이 재생기</title>
-    <meta name="description" content="피카츄 배구 리플레이 재생기" />
+    <meta name="description" content="피카츄 배구 P2P 온라인 리플레이 재생기" />
     <meta name="author" content="이규태" />
 
     <link
@@ -49,7 +49,11 @@
         </div>
         <div class="fade-in-box notice hidden" id="notice-end-of-replay">
           <p>리플레이가 끝났습니다.</p>
-          <button id="notice-end-of-replay-ok-btn" class="btn-in-box">
+          <button
+            type="button"
+            id="notice-end-of-replay-ok-btn"
+            class="btn-in-box"
+          >
             알겠어요
           </button>
         </div>
@@ -58,7 +62,11 @@
             파일을 열 수 없습니다.<br />리플레이 파일이 아니거나, 손상된
             리플레이 파일입니다.
           </p>
-          <button id="notice-file-open-error-ok-btn" class="btn-in-box">
+          <button
+            type="button"
+            id="notice-file-open-error-ok-btn"
+            class="btn-in-box"
+          >
             알겠어요
           </button>
         </div>
@@ -90,7 +98,11 @@
         />
       </div>
       <div>
-        <button id="play-pause-btn" class="btn-for-replay disable-dbl-tap-zoom">
+        <button
+          type="button"
+          id="play-pause-btn"
+          class="btn-for-replay disable-dbl-tap-zoom"
+        >
           &#x25b6;&#xfe0e;
         </button>
         <span class="margin-left-right"
@@ -99,24 +111,28 @@
         >
         <div class="inline">
           <button
+            type="button"
             id="seek-backward-3"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
             &lt;&lt; 3
           </button>
           <button
+            type="button"
             id="seek-backward-1"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
             &lt;&lt; 1
           </button>
           <button
+            type="button"
             id="seek-forward-1"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
             1 &gt;&gt;
           </button>
           <button
+            type="button"
             id="seek-forward-3"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
@@ -125,24 +141,28 @@
         </div>
         <div class="margin-top-little">
           <button
+            type="button"
             id="speed-btn-5-fps"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
             5 fps
           </button>
           <button
+            type="button"
             id="speed-btn-half-times"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
             &times;0.5
           </button>
           <button
+            type="button"
             id="speed-btn-1-times"
             class="btn-for-replay disable-dbl-tap-zoom selected"
           >
             &times;1
           </button>
           <button
+            type="button"
             id="speed-btn-2-times"
             class="btn-for-replay disable-dbl-tap-zoom"
           >
@@ -158,14 +178,40 @@
           />
         </div>
         <div class="margin-top-little show-checkboxes-container">
-          <input id="show-keyboard-checkbox" type="checkbox" checked />
-          <label for="show-keyboard-checkbox">키보드</label>
-          <!-- <input id="show-chat-checkbox" type="checkbox" checked /> -->
-          <!-- <label for="show-chat-checkbox">채팅</label>
-          <input id="show-nicknames-checkbox" type="checkbox" checked />
-          <label for="show-nicknames-checkbox">닉네임</label>
-          <input id="show-ip-addresses-checkbox" type="checkbox" checked />
-          <label for="show-ip-addresses-checkbox">IP</label> -->
+          <label>
+            <input id="show-keyboard-checkbox" type="checkbox" checked />
+            키보드
+          </label>
+          <!-- <label>
+            <input id="show-chat-checkbox" type="checkbox" checked />
+            채팅
+          </label>
+          <label>
+            <input id="show-nicknames-checkbox" type="checkbox" checked />
+            닉네임
+          </label>
+          <label>
+            <input id="show-ip-addresses-checkbox" type="checkbox" checked />
+            IP
+          </label> -->
+          <label>
+            <input id="turn-on-bgm-checkbox" type="checkbox" checked />
+            배경음악
+          </label>
+          <label>
+            <input id="turn-on-sfx-checkbox" type="checkbox" checked />
+            효과음
+          </label>
+        </div>
+        <div class="margin-top-little">
+          <div class="color-scheme-toggle-switch-container">
+            <input
+              type="checkbox"
+              id="dark-color-scheme-checkbox-1"
+              class="toggle-switch dark-color-scheme-checkbox"
+            />
+            <label for="dark-color-scheme-checkbox-1"></label>
+          </div>
         </div>
       </div>
       <div id="play-mark" class="hidden">&#x25b6;&#xfe0e;</div>

@@ -243,6 +243,45 @@ export function setUpUI() {
   //     }
   //   }
   // });
+
+  const turnOnBGMCheckbox = document.getElementById('turn-on-bgm-checkbox');
+  turnOnBGMCheckbox.addEventListener('change', () => {
+    if (replayPlayer.pikaVolley === null) {
+      return;
+    }
+    // @ts-ignore
+    if (turnOnBGMCheckbox.checked) {
+      replayPlayer.pikaVolley.audio.turnBGMVolume(true);
+    } else {
+      replayPlayer.pikaVolley.audio.turnBGMVolume(false);
+    }
+  });
+
+  const turnOnSFXCheckbox = document.getElementById('turn-on-sfx-checkbox');
+  turnOnSFXCheckbox.addEventListener('change', () => {
+    if (replayPlayer.pikaVolley === null) {
+      return;
+    }
+    // @ts-ignore
+    if (turnOnSFXCheckbox.checked) {
+      replayPlayer.pikaVolley.audio.turnSFXVolume(true);
+    } else {
+      replayPlayer.pikaVolley.audio.turnSFXVolume(false);
+    }
+  });
+
+  window.addEventListener('keydown', (event) => {
+    if (event.code === 'Space') {
+      event.preventDefault();
+      playPauseBtn.click();
+    } else if (event.code === 'ArrowLeft') {
+      event.preventDefault();
+      seekBackward3Btn.click();
+    } else if (event.code === 'ArrowRight') {
+      event.preventDefault();
+      seekForward3Btn.click();
+    }
+  });
 }
 
 export function adjustFPSInputValue() {
@@ -254,9 +293,8 @@ export function adjustFPSInputValue() {
 export function adjustPlayPauseBtnIcon() {
   const playPauseBtn = document.getElementById('play-pause-btn');
   if (replayPlayer.ticker.started) {
-    playPauseBtn.textContent = document.getElementById(
-      'pause-mark'
-    ).textContent;
+    playPauseBtn.textContent =
+      document.getElementById('pause-mark').textContent;
   } else {
     playPauseBtn.textContent = document.getElementById('play-mark').textContent;
   }
@@ -296,9 +334,8 @@ export function moveScrubberTo(value) {
  * @param {number} timeCurrent unit: second
  */
 export function showTimeCurrent(timeCurrent) {
-  document.getElementById('time-current').textContent = getTimeText(
-    timeCurrent
-  );
+  document.getElementById('time-current').textContent =
+    getTimeText(timeCurrent);
 }
 
 /**
@@ -306,9 +343,8 @@ export function showTimeCurrent(timeCurrent) {
  * @param {number} timeDuration unit: second
  */
 export function showTotalTimeDuration(timeDuration) {
-  document.getElementById('time-duration').textContent = getTimeText(
-    timeDuration
-  );
+  document.getElementById('time-duration').textContent =
+    getTimeText(timeDuration);
 }
 
 /**

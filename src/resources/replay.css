@@ -5,14 +5,103 @@
   --canvas-width: 92vmin;
   --canvas-height: calc(92vmin * var(--inverse-aspect-ratio));
   --font-size: 18px;
-  --btn-width: calc(5 * var(--font-size));
+  --btn-width: min(
+    calc(5 * var(--font-size)),
+    calc((var(--canvas-width) - 30px) / 4)
+  );
   --btn-height: calc(2 * var(--font-size));
+  --color-black: #232629;
+}
+:root {
+  --background-color: #ffffff;
+  --background-color-with-alpha: rgba(255, 255, 255, 0.8);
+  --color: #232629;
+  --link-color: #0074cc;
+  --link-hover-color: #0a95ff;
+  --btn-color: #ffffff;
+  --btn-background-color: rgba(50, 50, 50, 1);
+  --btn-background-color-2: rgb(210, 210, 210);
+  --btn-background-image: linear-gradient(
+    rgb(250, 250, 250),
+    rgb(230, 230, 230)
+  );
+  --btn-border-color: rgb(50, 50, 50);
+  --btn-in-dropdown-background-color: rgba(100, 100, 100, 0.9);
+  --btn-in-dropdown-hover-background-color: rgba(50, 50, 50, 0.9);
+  --button-disabled-color: rgb(200, 200, 200);
+  --button-disabled-background-color: #cccccc;
+  --update-fade-in-box-background-color: rgba(226, 230, 36, 0.85);
+  --amount-to-invert-image: 0;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #202124;
+    --background-color-with-alpha: rgba(32, 33, 36, 0.9);
+    --color: #bdc1c6;
+    --link-color: #33a7ff;
+    --link-hover-color: #3dc8ff;
+    --btn-color: #151515;
+    --btn-background-color: rgba(232, 232, 232, 1);
+    --btn-background-color-2: rgb(100, 100, 100);
+    --btn-background-image: linear-gradient(rgb(60, 60, 60), rgb(40, 40, 40));
+    --btn-border-color: rgb(230, 230, 230);
+    --btn-in-dropdown-background-color: rgba(200, 200, 200, 0.8);
+    --btn-in-dropdown-hover-background-color: rgba(232, 232, 232, 0.8);
+    --button-disabled-color: rgb(120, 120, 120);
+    --button-disabled-background-color: #666666;
+    --update-fade-in-box-background-color: rgba(195, 197, 48, 0.85);
+    --amount-to-invert-image: 0.95;
+  }
+}
+/* Copy of the variables in :root above */
+:root[data-color-scheme='light'] {
+  --background-color: #ffffff;
+  --background-color-with-alpha: rgba(255, 255, 255, 0.8);
+  --color: #232629;
+  --link-color: #0074cc;
+  --link-hover-color: #0a95ff;
+  --btn-color: #ffffff;
+  --btn-background-color: rgba(50, 50, 50, 1);
+  --btn-background-color-2: rgb(210, 210, 210);
+  --btn-background-image: linear-gradient(
+    rgb(250, 250, 250),
+    rgb(230, 230, 230)
+  );
+  --btn-border-color: rgb(50, 50, 50);
+  --btn-in-dropdown-background-color: rgba(100, 100, 100, 0.9);
+  --btn-in-dropdown-hover-background-color: rgba(50, 50, 50, 0.9);
+  --button-disabled-color: rgb(200, 200, 200);
+  --button-disabled-background-color: #cccccc;
+  --update-fade-in-box-background-color: rgba(226, 230, 36, 0.85);
+  --amount-to-invert-image: 0;
+}
+/* Copy of the variables in @media (prefers-color-scheme: dark) :root above */
+:root[data-color-scheme='dark'] {
+  --background-color: #202124;
+  --background-color-with-alpha: rgba(32, 33, 36, 0.9);
+  --color: #bdc1c6;
+  --link-color: #33a7ff;
+  --link-hover-color: #3dc8ff;
+  --btn-color: #151515;
+  --btn-background-color: rgba(232, 232, 232, 1);
+  --btn-background-color-2: rgb(100, 100, 100);
+  --btn-background-image: linear-gradient(rgb(60, 60, 60), rgb(40, 40, 40));
+  --btn-border-color: rgb(230, 230, 230);
+  --btn-in-dropdown-background-color: rgba(200, 200, 200, 0.8);
+  --btn-in-dropdown-hover-background-color: rgba(232, 232, 232, 0.8);
+  --button-disabled-color: rgb(120, 120, 120);
+  --button-disabled-background-color: #666666;
+  --update-fade-in-box-background-color: rgba(195, 197, 48, 0.85);
+  --amount-to-invert-image: 0.95;
 }
 /* size of iPad screen is 768px x 1024px in portrait mode */
 @media only screen and (min-width: 768px) and (min-height: 768px) {
   :root {
     --font-size: 22px;
-    --btn-width: calc(6 * var(--font-size));
+    --btn-width: min(
+      calc(6 * var(--font-size)),
+      calc((var(--canvas-width) - 30px) / 4)
+    );
   }
 }
 @media only screen and (min-aspect-ratio: 432/304) {
@@ -39,7 +128,21 @@ html {
   font-family: Arial, Helvetica, sans-serif;
 }
 body {
-  color: #202124;
+  background-color: var(--background-color);
+  color: var(--color);
+  margin: 0;
+}
+a,
+a:link,
+a:visited {
+  color: var(--link-color);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--link-hover-color);
+}
+a:active {
+  color: var(--link-hover-color);
 }
 #flex-container,
 #before-connection,
@@ -54,6 +157,8 @@ body {
   min-height: 100vh;
   margin-left: auto;
   margin-right: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 #before-connection,
 #update-history-container {
@@ -117,7 +222,7 @@ canvas {
   animation-duration: 5s;
 }
 .chat-box.in-speech-bubble {
-  color: black;
+  color: var(--color-black);
   background-color: rgba(255, 255, 255, 0.95);
 }
 @keyframes fade-inout {
@@ -153,9 +258,10 @@ canvas {
   height: 100%;
   z-index: 1;
   grid-template-columns: auto var(--btn-width);
+  align-items: center;
 }
 #create-btn-with-created-room-id {
-  grid-template-columns: var(--btn-width) auto;
+  grid-template-columns: var(--btn-width) auto var(--btn-width);
 }
 .nickname-input-container,
 #room-id-with-join-btn {
@@ -200,6 +306,7 @@ canvas {
 }
 #network-test-btn,
 #create-btn,
+#exit-room-btn,
 #join-room-id-input,
 #nickname-input,
 #join-btn {
@@ -210,9 +317,10 @@ canvas {
   width: calc(var(--btn-width) / 1.5);
   height: var(--btn-height);
   background-image: none;
-  background-color: white;
-  color: black;
+  background-color: var(--background-color);
+  color: var(--color);
   margin-left: 20px;
+  margin-right: 10px;
 }
 #join-room-id-input,
 #create-btn {
@@ -220,6 +328,7 @@ canvas {
 }
 #network-test-btn,
 #create-btn,
+#exit-room-btn,
 #join-btn,
 #chat-disabling-btn,
 #send-btn,
@@ -302,7 +411,7 @@ span.margin-left-right {
   z-index: 10;
   visibility: visible;
   opacity: 1;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: var(--background-color-with-alpha);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   animation-name: fade-in;
@@ -350,23 +459,23 @@ span.margin-left-right {
 }
 button {
   display: inline-block;
-  border: 2px solid rgb(50, 50, 50);
+  border: 2px solid var(--btn-border-color);
   margin: 0;
   padding: 0;
-  background-color: rbg(210, 210, 210);
-  background-image: linear-gradient(rgb(250, 250, 250), rgb(230, 230, 230));
-  color: black;
+  background-color: var(--btn-background-color-2);
+  background-image: var(--btn-background-image);
+  color: var(--color);
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
 }
 input {
-  border-color: black;
+  border-color: var(--color-black);
 }
 button:disabled,
 input:disabled {
-  border-color: rgb(200, 200, 200);
-  color: rgb(200, 200, 200);
+  border-color: var(--button-disabled-color);
+  color: var(--button-disabled-color);
 }
 button.btn-in-box {
   display: block;
@@ -375,9 +484,9 @@ button.btn-in-box {
   border: none;
   margin: 0 auto;
   padding: 0;
-  background-color: rgb(50, 50, 50);
+  background-color: var(--btn-background-color);
   background-image: none;
-  color: white;
+  color: var(--btn-color);
   font-size: var(--font-size);
   text-align: center;
   text-decoration: none;
@@ -389,6 +498,7 @@ button.large {
 }
 img.screenshot,
 img.controls {
+  height: auto;
   width: 100%;
 }
 img.screenshot {
@@ -396,6 +506,7 @@ img.screenshot {
 }
 img.controls {
   max-width: 950px;
+  filter: invert(var(--amount-to-invert-image));
 }
 div.hidden,
 span.hidden,
@@ -449,7 +560,7 @@ div.scroll {
   overflow: scroll;
 }
 button:disabled {
-  background-color: #cccccc;
+  background-color: var(--button-disabled-background-color);
 }
 #menu-bar {
   display: grid;
@@ -466,8 +577,8 @@ button.btn {
   border: none;
   border-radius: 10px;
   padding: 0;
-  color: white;
-  background-color: rgba(50, 50, 50, 1);
+  color: var(--btn-color);
+  background-color: var(--btn-background-color);
   background-image: none;
   font-size: var(--font-size);
   text-align: center;
@@ -476,7 +587,16 @@ button.btn {
   margin-right: 5px;
 }
 button.btn:disabled {
-  background-color: #cccccc;
+  background-color: var(--button-disabled-background-color);
+}
+button.btn.hidden {
+  display: none;
+}
+#options-dropdown-btn {
+  margin-left: 0;
+}
+#exit-btn {
+  margin-right: 0;
 }
 .relative-container {
   position: relative;
@@ -495,7 +615,7 @@ button.btn:disabled {
 }
 .dropdown .btn {
   margin-right: 0;
-  background-color: rgba(100, 100, 100, 0.9);
+  background-color: var(--btn-in-dropdown-background-color);
 }
 .submenu > .btn {
   width: calc(1.4 * var(--btn-width));
@@ -503,7 +623,7 @@ button.btn:disabled {
 }
 .dropdown .btn:hover,
 .submenu-btn.open {
-  background-color: rgba(50, 50, 50, 0.9);
+  background-color: var(--btn-in-dropdown-hover-background-color);
 }
 span.check {
   display: none;
@@ -525,11 +645,11 @@ div.nicknames-container {
   position: absolute;
   top: 0;
   left: 50%;
-  margin-left: -30%; /* half of width */
+  margin-left: -35%; /* half of width */
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: calc(1.5 * var(--font-size));
-  width: 60%;
+  width: 70%;
   height: calc(4 * var(--font-size));
   z-index: 9;
 }
@@ -558,7 +678,7 @@ div.nicknames-container {
 /* CSS for replay is below */
 #dropbox {
   border-style: solid;
-  border-color: black;
+  border-color: var(--color);
   border-width: 2px;
 }
 .btn-container {
@@ -612,9 +732,9 @@ label.custom-file-upload {
   border: 2px solid rgb(50, 50, 50);
   margin: 0;
   padding: 0;
-  background-color: rbg(210, 210, 210);
-  background-image: linear-gradient(rgb(250, 250, 250), rgb(230, 230, 230));
-  color: black;
+  background-color: var(--btn-background-color-2);
+  background-image: var(--btn-background-image);
+  color: var(--color);
   border-radius: 5px;
   width: var(--btn-width);
   height: var(--btn-height);
@@ -679,6 +799,9 @@ label.custom-file-upload {
 }
 div.show-checkboxes-container {
   font-size: calc(var(--font-size) / 1.2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 label[for='fps-input'] {
   margin-left: 10px;
@@ -687,4 +810,160 @@ label[for='fps-input'] {
   height: var(--btn-height);
   width: calc(var(--btn-width) / 2);
   font-size: calc(var(--font-size) / 1.2);
+}
+.open-chat-list {
+  margin-block-start: 1em;
+  margin-block-end: 0;
+}
+.open-chat-list li {
+  margin-top: 10px;
+}
+.no-margin-top {
+  margin-top: 0;
+}
+.if-embedded-in-other-website {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: calc(var(--font-size) - 10px);
+  font-size: calc(0.8 * var(--font-size));
+  margin-bottom: var(--font-size);
+  padding: var(--font-size);
+  border: 3px solid;
+  border-radius: 10px;
+}
+.if-embedded-in-other-website .limit-width {
+  max-width: calc(23 * var(--font-size));
+}
+.if-embedded-in-other-website button {
+  margin-top: var(--font-size);
+  background-color: var(--background-color);
+  color: var(--color);
+  font-size: calc(0.8 * var(--font-size));
+  border: 3px solid;
+  height: calc(1.6 * var(--font-size));
+  width: calc(4 * var(--font-size));
+}
+.original-address {
+  margin-top: var(--font-size);
+}
+table.blocked-ip-addresses-table {
+  /* box-sizing below is necessary for Chrome and Safari, not for Firefox.
+     Is it a bug in Chrome and Safari? */
+  box-sizing: border-box;
+  border-collapse: collapse;
+  border: 2px solid rgb(200, 200, 200);
+  width: 100%;
+}
+table.blocked-ip-addresses-table th,
+table.blocked-ip-addresses-table td {
+  border: 1px solid rgb(190, 190, 190);
+  padding: 5px;
+  text-align: center;
+}
+table.blocked-ip-addresses-table tbody td {
+  cursor: default;
+}
+table.blocked-ip-addresses-table tfoot td {
+  padding: 0;
+}
+table.blocked-ip-addresses-table tr.selected {
+  background-color: var(--link-hover-color);
+}
+table.blocked-ip-addresses-table input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  font-size: var(--font-size);
+}
+table.blocked-ip-addresses-table .delete-btn {
+  height: 100%;
+  width: 100%;
+  font-size: var(--font-size);
+}
+details {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 0;
+}
+summary {
+  /* box-sizing below is necessary for Chrome and Safari, not for Firefox.
+     Is it a bug in Chrome and Safari? */
+  box-sizing: border-box;
+  font-weight: bold;
+  padding: 0.5em;
+}
+div.color-scheme-toggle-switch-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--btn-width);
+  height: var(--btn-height);
+  --toggle-switch-height: calc(1.6 * var(--font-size));
+  --toggle-ball-diameter: calc(1.2 * var(--font-size));
+  --toggle-switch-width: calc(2 * var(--toggle-switch-height));
+  --toggle-ball-top: calc(
+    (var(--toggle-switch-height) - var(--toggle-ball-diameter)) / 2
+  );
+  --toggle-ball-left: calc(
+    (var(--toggle-switch-height) - var(--toggle-ball-diameter)) / 2
+  );
+  --toggle-ball-left-toggled: calc(
+    var(--toggle-switch-width) - var(--toggle-ball-diameter) -
+      var(--toggle-ball-left)
+  );
+}
+/*
+ * Toggle switch using CSS
+ * Reference: https://dev.to/karankmr/how-to-create-a-custom-toggle-switch-using-css-4pmi
+ */
+input.toggle-switch {
+  display: none;
+}
+input.toggle-switch + label {
+  display: inline-block;
+  position: relative;
+  margin: auto;
+  background-color: var(--btn-background-color);
+  height: var(--toggle-switch-height);
+  width: var(--toggle-switch-width);
+  border-radius: calc(var(--toggle-switch-height) / 2);
+  cursor: pointer;
+  transition: background-color 1s;
+}
+input.toggle-switch + label::after {
+  content: '';
+  position: absolute;
+  left: var(--toggle-ball-left);
+  top: var(--toggle-ball-top);
+  height: var(--toggle-ball-diameter);
+  width: var(--toggle-ball-diameter);
+  border-radius: 50%;
+  background-color: var(--btn-color);
+  transition: left 0.5s, background-color 1s;
+}
+input.toggle-switch:checked + label::after {
+  left: var(--toggle-ball-left-toggled);
+}
+/*
+ * The following supplement is for displaying the Sun and Moon unicode characters
+ * inside toggle switch label.
+ */
+input.toggle-switch + label::before {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  color: var(--btn-color);
+  left: var(--toggle-ball-left-toggled);
+  top: var(--toggle-ball-top);
+  height: var(--toggle-ball-diameter);
+  width: var(--toggle-ball-diameter);
+  font-size: var(--toggle-ball-diameter);
+  content: '\2600';
+}
+input.toggle-switch:checked + label::before {
+  left: var(--toggle-ball-left);
+  content: '\263E';
 }
