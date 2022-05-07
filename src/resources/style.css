@@ -5,7 +5,10 @@
   --canvas-width: 96vmin;
   --canvas-height: calc(96vmin * var(--inverse-aspect-ratio));
   --font-size: 18px;
-  --btn-width: calc(5 * var(--font-size));
+  --btn-width: min(
+    calc(5 * var(--font-size)),
+    calc((var(--canvas-width) - 30px) / 4)
+  );
   --btn-height: calc(3 * var(--font-size));
 }
 :root {
@@ -21,7 +24,6 @@
   --button-disabled-background-color: #cccccc;
   --update-fade-in-box-background-color: rgba(226, 230, 36, 0.85);
   --amount-to-invert-image: 0;
-  --amount-to-invert-image-2: 0;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -37,7 +39,6 @@
     --button-disabled-background-color: #666666;
     --update-fade-in-box-background-color: rgba(195, 197, 48, 0.85);
     --amount-to-invert-image: 0.95;
-    --amount-to-invert-image-2: 1;
   }
 }
 /* Copy of the variables in :root above */
@@ -54,7 +55,6 @@
   --button-disabled-background-color: #cccccc;
   --update-fade-in-box-background-color: rgba(226, 230, 36, 0.85);
   --amount-to-invert-image: 0;
-  --amount-to-invert-image-2: 0;
 }
 /* Copy of the variables in @media (prefers-color-scheme: dark) :root above */
 :root[data-color-scheme='dark'] {
@@ -70,13 +70,15 @@
   --button-disabled-background-color: #666666;
   --update-fade-in-box-background-color: rgba(195, 197, 48, 0.85);
   --amount-to-invert-image: 0.95;
-  --amount-to-invert-image-2: 1;
 }
 /* size of iPad screen is 768px x 1024px in portrait mode */
 @media only screen and (min-width: 768px) and (min-height: 768px) {
   :root {
     --font-size: 22px;
-    --btn-width: calc(6 * var(--font-size));
+    --btn-width: min(
+      calc(6 * var(--font-size)),
+      calc((var(--canvas-width) - 30px) / 4)
+    );
   }
 }
 @media only screen and (min-aspect-ratio: 432/304) {
@@ -105,6 +107,7 @@ html {
 body {
   background-color: var(--background-color);
   color: var(--color);
+  margin: 0;
 }
 a,
 a:link,
@@ -128,6 +131,8 @@ a:active {
   height: 100vh;
   margin-left: auto;
   margin-right: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 #update-history-container {
   justify-content: center;

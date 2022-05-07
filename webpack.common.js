@@ -10,6 +10,9 @@ module.exports = {
     main: './src/resources/js/main.js',
     ko: './src/ko/ko.js',
     main_replay: './src/resources/js/replay/main_replay.js',
+    dark_color_scheme: './src/resources/js/utils/dark_color_scheme.js',
+    is_embedded_in_other_website:
+      './src/resources/js/utils/is_embedded_in_other_website.js',
   },
   output: {
     filename: '[name].bundle.js',
@@ -42,18 +45,6 @@ module.exports = {
         { from: 'src/zh/manifest.json', to: 'zh/manifest.json' },
         { from: 'src/resources/style.css', to: 'resources/style.css' },
         { from: 'src/index.html', to: 'index.html' },
-        {
-          from: 'src/en/update-history/index.html',
-          to: 'en/update-history/index.html',
-        },
-        {
-          from: 'src/ko/update-history/index.html',
-          to: 'ko/update-history/index.html',
-        },
-        {
-          from: 'src/zh/update-history/index.html',
-          to: 'zh/update-history/index.html',
-        },
       ],
     }),
     new MiniCssExtractPlugin({
@@ -62,7 +53,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/en/index.html',
       filename: 'en/index.html',
-      chunks: ['runtime', 'main'],
+      chunks: [
+        'runtime',
+        'main',
+        'dark_color_scheme',
+        'is_embedded_in_other_website',
+      ],
       chunksSortMode: 'manual',
       minify: {
         collapseWhitespace: true,
@@ -72,7 +68,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/ko/index.html',
       filename: 'ko/index.html',
-      chunks: ['runtime', 'ko', 'main'],
+      chunks: [
+        'runtime',
+        'ko',
+        'main',
+        'dark_color_scheme',
+        'is_embedded_in_other_website',
+      ],
       chunksSortMode: 'manual',
       minify: {
         collapseWhitespace: true,
@@ -82,7 +84,42 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/zh/index.html',
       filename: 'zh/index.html',
-      chunks: ['runtime', 'main'],
+      chunks: [
+        'runtime',
+        'main',
+        'dark_color_scheme',
+        'is_embedded_in_other_website',
+      ],
+      chunksSortMode: 'manual',
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      template: 'src/en/update-history/index.html',
+      filename: 'en/update-history/index.html',
+      chunks: ['dark_color_scheme'],
+      chunksSortMode: 'manual',
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      template: 'src/ko/update-history/index.html',
+      filename: 'ko/update-history/index.html',
+      chunks: ['dark_color_scheme'],
+      chunksSortMode: 'manual',
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      template: 'src/zh/update-history/index.html',
+      filename: 'zh/update-history/index.html',
+      chunks: ['dark_color_scheme'],
       chunksSortMode: 'manual',
       minify: {
         collapseWhitespace: true,

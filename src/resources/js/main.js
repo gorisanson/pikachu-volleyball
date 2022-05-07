@@ -28,32 +28,55 @@
  *  - "ui.js": For the user interface (menu bar, buttons etc.) of the html page.
  */
 'use strict';
-import * as PIXI from 'pixi.js-legacy';
-import 'pixi-sound';
-import seedrandom from 'seedrandom';
+import { settings } from '@pixi/settings';
+import { SCALE_MODES } from '@pixi/constants';
+import { Renderer, BatchRenderer, autoDetectRenderer } from '@pixi/core';
+import { Prepare } from '@pixi/prepare';
+import { Container } from '@pixi/display';
+import { Loader } from '@pixi/loaders';
+import { SpritesheetLoader } from '@pixi/spritesheet';
+import { Ticker } from '@pixi/ticker';
+import { CanvasRenderer } from '@pixi/canvas-renderer';
+import { CanvasSpriteRenderer } from '@pixi/canvas-sprite';
+import { CanvasPrepare } from '@pixi/canvas-prepare';
+import '@pixi/canvas-display';
 import { PikachuVolleyball } from './pikavolley.js';
 import { ASSETS_PATH } from './assets_path.js';
 import { setUpUI } from './ui.js';
+import seedrandom from 'seedrandom';
 import { generatePushID } from './utils/generate_pushid.js';
 import { setCustomRng } from './rand.js';
 import { replaySaver } from './replay/replay_saver.js';
-import { setUpDarkColorSchemeCheckbox } from './dark_color_scheme.js';
-
-const settings = PIXI.settings;
+// Reference for how to use Renderer.registerPlugin:
+// https://github.com/pixijs/pixijs/blob/af3c0c6bb15aeb1049178c972e4a14bb4cabfce4/bundles/pixi.js/src/index.ts#L27-L34
+Renderer.registerPlugin('prepare', Prepare);
+Renderer.registerPlugin('batch', BatchRenderer);
+// Reference for how to use CanvasRenderer.registerPlugin:
+// https://github.com/pixijs/pixijs/blob/af3c0c6bb15aeb1049178c972e4a14bb4cabfce4/bundles/pixi.js-legacy/src/index.ts#L13-L19
+CanvasRenderer.registerPlugin('prepare', CanvasPrepare);
+CanvasRenderer.registerPlugin('sprite', CanvasSpriteRenderer);
+Loader.registerPlugin(SpritesheetLoader);
 settings.RESOLUTION = window.devicePixelRatio;
-settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+settings.SCALE_MODE = SCALE_MODES.NEAREST;
 settings.ROUND_PIXELS = true;
 
-const renderer = PIXI.autoDetectRenderer({
+const renderer = autoDetectRenderer({
   width: 432,
   height: 304,
   antialias: false,
   backgroundColor: 0x000000,
-  transparent: false,
+  backgroundAlpha: 1,
+  // Decided to use only Canvas for compatibility reason. One player had reported that
+  // on theire browser, where pixi chooses to use WebGL renderer, the graphics are not fine.
+  // And the issue had been fixed by using Canvas renderer. And also for the sake of testing,
+  // it is more comfortable just to stick with Canvas renderer so that it is unnecessary to switch
+  // between WebGL renderer and Canvas renderer.
+  forceCanvas: true,
 });
-const stage = new PIXI.Container();
-const ticker = new PIXI.Ticker();
-const loader = new PIXI.Loader();
+
+const stage = new Container();
+const ticker = new Ticker();
+const loader = new Loader();
 
 renderer.view.setAttribute('id', 'game-canvas');
 document.getElementById('game-canvas-container').appendChild(renderer.view);
@@ -114,38 +137,6 @@ function setUpInitialUI() {
   };
   aboutBtn.addEventListener('click', closeAboutBox);
   closeAboutBtn.addEventListener('click', closeAboutBox);
-
-  setUpDarkColorSchemeCheckbox();
-
-  /**
-   * Check if the page is embedded in other site.
-   * Copied from: https://stackoverflow.com/a/326076/8581025
-   */
-  const isEmbeddedInOtherWebsite = () => {
-    try {
-      return window.self !== window.top;
-    } catch (e) {
-      return true;
-    }
-  };
-
-  if (isEmbeddedInOtherWebsite()) {
-    document
-      .getElementById('flex-container')
-      .classList.add('embedded-in-other-website');
-    Array.from(
-      document.getElementsByClassName('if-embedded-in-other-website')
-    ).forEach((elem) => elem.classList.remove('hidden'));
-    Array.from(
-      document.querySelectorAll('.if-embedded-in-other-website button')
-    ).forEach((elem) =>
-      elem.addEventListener('click', () => {
-        Array.from(
-          document.getElementsByClassName('if-embedded-in-other-website')
-        ).forEach((elem) => elem.classList.add('hidden'));
-      })
-    );
-  }
 }
 
 /**

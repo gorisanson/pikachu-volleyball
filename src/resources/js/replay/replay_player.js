@@ -1,6 +1,16 @@
 'use strict';
-import * as PIXI from 'pixi.js-legacy';
-import 'pixi-sound';
+import { settings } from '@pixi/settings';
+import { SCALE_MODES } from '@pixi/constants';
+import { Renderer, BatchRenderer, autoDetectRenderer } from '@pixi/core';
+import { Prepare } from '@pixi/prepare';
+import { Container } from '@pixi/display';
+import { Loader } from '@pixi/loaders';
+import { SpritesheetLoader } from '@pixi/spritesheet';
+import { Ticker } from '@pixi/ticker';
+import { CanvasRenderer } from '@pixi/canvas-renderer';
+import { CanvasSpriteRenderer } from '@pixi/canvas-sprite';
+import { CanvasPrepare } from '@pixi/canvas-prepare';
+import '@pixi/canvas-display';
 import { ASSETS_PATH } from '../assets_path.js';
 import { PikachuVolleyballReplay } from './pikavolley_replay.js';
 import {
@@ -19,17 +29,31 @@ import { getHashCode } from '../utils/hash_code.js';
 
 class ReplayPlayer {
   constructor() {
-    this.ticker = new PIXI.Ticker();
+    // Reference for how to use Renderer.registerPlugin:
+    // https://github.com/pixijs/pixijs/blob/af3c0c6bb15aeb1049178c972e4a14bb4cabfce4/bundles/pixi.js/src/index.ts#L27-L34
+    Renderer.registerPlugin('prepare', Prepare);
+    Renderer.registerPlugin('batch', BatchRenderer);
+    // Reference for how to use CanvasRenderer.registerPlugin:
+    // https://github.com/pixijs/pixijs/blob/af3c0c6bb15aeb1049178c972e4a14bb4cabfce4/bundles/pixi.js-legacy/src/index.ts#L13-L19
+    CanvasRenderer.registerPlugin('prepare', CanvasPrepare);
+    CanvasRenderer.registerPlugin('sprite', CanvasSpriteRenderer);
+    Loader.registerPlugin(SpritesheetLoader);
+    settings.RESOLUTION = window.devicePixelRatio;
+    settings.SCALE_MODE = SCALE_MODES.NEAREST;
+    settings.ROUND_PIXELS = true;
+
+    this.ticker = new Ticker();
     this.ticker.minFPS = 1;
-    this.renderer = PIXI.autoDetectRenderer({
+    this.renderer = autoDetectRenderer({
       width: 432,
       height: 304,
       antialias: false,
       backgroundColor: 0x000000,
-      transparent: false,
+      backgroundAlpha: 1,
+      forceCanvas: true,
     });
-    this.stage = new PIXI.Container();
-    this.loader = new PIXI.Loader();
+    this.stage = new Container();
+    this.loader = new Loader();
     this.pikaVolley = null;
     this.playBackSpeedTimes = 1;
     this.playBackSpeedFPS = null;
@@ -37,9 +61,8 @@ class ReplayPlayer {
 
   readFile(file) {
     // Adjust PIXI settings;
-    const settings = PIXI.settings;
     settings.RESOLUTION = window.devicePixelRatio;
-    settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+    settings.SCALE_MODE = SCALE_MODES.NEAREST;
     settings.ROUND_PIXELS = true;
 
     // // To show two "with friend" on the menu

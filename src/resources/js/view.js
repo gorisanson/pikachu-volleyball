@@ -6,11 +6,16 @@
  * ex) FUN_00405d50 means the function at the address 00405d50 in the machine code.
  */
 'use strict';
-import { Container, Sprite, AnimatedSprite, Graphics } from 'pixi.js-legacy';
+import { AnimatedSprite } from '@pixi/sprite-animated';
+import { Sprite } from '@pixi/sprite';
+import { Container } from '@pixi/display';
 import { Cloud, Wave, cloudAndWaveEngine } from './cloud_and_wave.js';
 import { ASSETS_PATH } from './assets_path.js';
 
-const TEXURES = ASSETS_PATH.TEXTURES;
+/** @typedef {import('@pixi/loaders').LoaderResource} LoaderResource */
+/** @typedef {import('@pixi/core').Texture} Texture */
+
+const TEXTURES = ASSETS_PATH.TEXTURES;
 
 /** @constant @type {number} number of clouds to be rendered */
 const NUM_OF_CLOUDS = 10;
@@ -21,12 +26,12 @@ const NUM_OF_CLOUDS = 10;
 export class IntroView {
   /**
    * Create an IntroView object
-   * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
+   * @param {Object.<string,LoaderResource>} resources loader.resources
    */
   constructor(resources) {
     const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
 
-    this.mark = makeSpriteWithAnchorXY(textures, TEXURES.MARK, 0.5, 0.5);
+    this.mark = makeSpriteWithAnchorXY(textures, TEXTURES.MARK, 0.5, 0.5);
     this.mark.x = 432 / 2;
     this.mark.y = 304 / 2;
 
@@ -68,25 +73,25 @@ export class IntroView {
 export class MenuView {
   /**
    * Create a MenuView object
-   * @param {Object.<string,PIXI.LoaderResource>} resources loader.resources
+   * @param {Object.<string,LoaderResource>} resources loader.resources
    */
   constructor(resources) {
     const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
 
     this.messages = {
-      pokemon: makeSpriteWithAnchorXY(textures, TEXURES.POKEMON, 0, 0),
+      pokemon: makeSpriteWithAnchorXY(textures, TEXTURES.POKEMON, 0, 0),
       pikachuVolleyball: makeSpriteWithAnchorXY(
         textures,
-        TEXURES.PIKACHU_VOLLEYBALL,
+        TEXTURES.PIKACHU_VOLLEYBALL,
         0,
         0
       ),
       withWho: [
-        makeSpriteWithAnchorXY(textures, TEXURES.WITH_COMPUTER, 0, 0),
-        makeSpriteWithAnchorXY(textures, TEXURES.WITH_FRIEND, 0, 0),
+        makeSpriteWithAnchorXY(textures, TEXTURES.WITH_COMPUTER, 0, 0),
+        makeSpriteWithAnchorXY(textures, TEXTURES.WITH_FRIEND, 0, 0),
       ],
-      sachisoft: makeSpriteWithAnchorXY(textures, TEXURES.SACHISOFT, 0, 0),
-      fight: makeSpriteWithAnchorXY(textures, TEXURES.FIGHT, 0, 0),
+      sachisoft: makeSpriteWithAnchorXY(textures, TEXTURES.SACHISOFT, 0, 0),
+      fight: makeSpriteWithAnchorXY(textures, TEXTURES.FIGHT, 0, 0),
     };
     this.sittingPikachuTilesContainer =
       makeSittingPikachuTilesContainer(textures);
@@ -324,7 +329,7 @@ export class MenuView {
 export class GameView {
   /**
    * Create a GameView object
-   * @param {Object.<string,PIXI.LoaderResource>} resources
+   * @param {Object.<string,LoaderResource>} resources
    */
   constructor(resources) {
     const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
@@ -337,17 +342,22 @@ export class GameView {
     this.ball = makeBallAnimatedSprites(textures);
     this.ballHyper = makeSpriteWithAnchorXY(
       textures,
-      TEXURES.BALL_HYPER,
+      TEXTURES.BALL_HYPER,
       0.5,
       0.5
     );
     this.ballTrail = makeSpriteWithAnchorXY(
       textures,
-      TEXURES.BALL_TRAIL,
+      TEXTURES.BALL_TRAIL,
       0.5,
       0.5
     );
-    this.punch = makeSpriteWithAnchorXY(textures, TEXURES.BALL_PUNCH, 0.5, 0.5);
+    this.punch = makeSpriteWithAnchorXY(
+      textures,
+      TEXTURES.BALL_PUNCH,
+      0.5,
+      0.5
+    );
 
     // this.scoreBoards[0] for player1, this.scoreBoards[1] for player2
     this.scoreBoards = [
@@ -356,15 +366,15 @@ export class GameView {
     ];
 
     this.shadows = {
-      forPlayer1: makeSpriteWithAnchorXY(textures, TEXURES.SHADOW, 0.5, 0.5),
-      forPlayer2: makeSpriteWithAnchorXY(textures, TEXURES.SHADOW, 0.5, 0.5),
-      forBall: makeSpriteWithAnchorXY(textures, TEXURES.SHADOW, 0.5, 0.5),
+      forPlayer1: makeSpriteWithAnchorXY(textures, TEXTURES.SHADOW, 0.5, 0.5),
+      forPlayer2: makeSpriteWithAnchorXY(textures, TEXTURES.SHADOW, 0.5, 0.5),
+      forBall: makeSpriteWithAnchorXY(textures, TEXTURES.SHADOW, 0.5, 0.5),
     };
 
     this.messages = {
-      gameStart: makeSpriteWithAnchorXY(textures, TEXURES.GAME_START, 0, 0),
-      ready: makeSpriteWithAnchorXY(textures, TEXURES.READY, 0, 0),
-      gameEnd: makeSpriteWithAnchorXY(textures, TEXURES.GAME_END, 0, 0),
+      gameStart: makeSpriteWithAnchorXY(textures, TEXTURES.GAME_START, 0, 0),
+      ready: makeSpriteWithAnchorXY(textures, TEXTURES.READY, 0, 0),
+      gameEnd: makeSpriteWithAnchorXY(textures, TEXTURES.GAME_END, 0, 0),
     };
 
     this.cloudContainer = makeCloudContainer(textures);
@@ -639,11 +649,11 @@ export class GameView {
  * Class representing fade in out effect
  */
 export class FadeInOut {
-  constructor() {
-    this.black = new Graphics();
-    this.black.beginFill(0x000000);
-    this.black.drawRect(0, 0, 432, 304);
-    this.black.endFill();
+  constructor(resources) {
+    const textures = resources[ASSETS_PATH.SPRITE_SHEET].textures;
+    this.black = makeSpriteWithAnchorXY(textures, TEXTURES.BLACK, 0, 0);
+    this.black.width = 432;
+    this.black.height = 304;
     this.black.x = 0;
     this.black.y = 0;
     this.black.alpha = 1;
@@ -692,12 +702,12 @@ export class FadeInOut {
 
 /**
  * Make sitting pikachu tiles
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.Container}
+ * @param {Object.<string,Texture>} textures
+ * @return {Container}
  */
 function makeSittingPikachuTilesContainer(textures) {
   const container = new Container();
-  const texture = textures[TEXURES.SITTING_PIKACHU];
+  const texture = textures[TEXTURES.SITTING_PIKACHU];
   const w = texture.width;
   const h = texture.height;
 
@@ -714,15 +724,15 @@ function makeSittingPikachuTilesContainer(textures) {
 
 /**
  * Make background
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.Container}
+ * @param {Object.<string,Texture>} textures
+ * @return {Container}
  */
 function makeBGContainer(textures) {
   const bgContainer = new Container();
 
   // sky
   let tile;
-  let texture = textures[TEXURES.SKY_BLUE];
+  let texture = textures[TEXTURES.SKY_BLUE];
   for (let j = 0; j < 12; j++) {
     for (let i = 0; i < 432 / 16; i++) {
       tile = new Sprite(texture);
@@ -731,32 +741,32 @@ function makeBGContainer(textures) {
   }
 
   // mountain
-  texture = textures[TEXURES.MOUNTAIN];
+  texture = textures[TEXTURES.MOUNTAIN];
   tile = new Sprite(texture);
   addChildToParentAndSetLocalPosition(bgContainer, tile, 0, 188);
 
   // ground_red
-  texture = textures[TEXURES.GROUND_RED];
+  texture = textures[TEXTURES.GROUND_RED];
   for (let i = 0; i < 432 / 16; i++) {
     tile = new Sprite(texture);
     addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 248);
   }
 
   // ground_line
-  texture = textures[TEXURES.GROUND_LINE];
+  texture = textures[TEXTURES.GROUND_LINE];
   for (let i = 1; i < 432 / 16 - 1; i++) {
     tile = new Sprite(texture);
     addChildToParentAndSetLocalPosition(bgContainer, tile, 16 * i, 264);
   }
-  texture = textures[TEXURES.GROUND_LINE_LEFT_MOST];
+  texture = textures[TEXTURES.GROUND_LINE_LEFT_MOST];
   tile = new Sprite(texture);
   addChildToParentAndSetLocalPosition(bgContainer, tile, 0, 264);
-  texture = textures[TEXURES.GROUND_LINE_RIGHT_MOST];
+  texture = textures[TEXTURES.GROUND_LINE_RIGHT_MOST];
   tile = new Sprite(texture);
   addChildToParentAndSetLocalPosition(bgContainer, tile, 432 - 16, 264);
 
   // ground_yellow
-  texture = textures[TEXURES.GROUND_YELLOW];
+  texture = textures[TEXTURES.GROUND_YELLOW];
   for (let j = 0; j < 2; j++) {
     for (let i = 0; i < 432 / 16; i++) {
       tile = new Sprite(texture);
@@ -770,10 +780,10 @@ function makeBGContainer(textures) {
   }
 
   // net pillar
-  texture = textures[TEXURES.NET_PILLAR_TOP];
+  texture = textures[TEXTURES.NET_PILLAR_TOP];
   tile = new Sprite(texture);
   addChildToParentAndSetLocalPosition(bgContainer, tile, 213, 176);
-  texture = textures[TEXURES.NET_PILLAR];
+  texture = textures[TEXTURES.NET_PILLAR];
   for (let j = 0; j < 12; j++) {
     tile = new Sprite(texture);
     addChildToParentAndSetLocalPosition(bgContainer, tile, 213, 184 + 8 * j);
@@ -784,11 +794,11 @@ function makeBGContainer(textures) {
 
 /**
  * Make animated sprites for both players
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.AnimatedSprite[]} [0] for player 1, [1] for player2
+ * @param {Object.<string,Texture>} textures
+ * @return {AnimatedSprite[]} [0] for player 1, [1] for player2
  */
 function makePlayerAnimatedSprites(textures) {
-  const getPlayerTexture = (i, j) => textures[TEXURES.PIKACHU(i, j)];
+  const getPlayerTexture = (i, j) => textures[TEXTURES.PIKACHU(i, j)];
   const playerTextureArray = [];
   for (let i = 0; i < 7; i++) {
     if (i === 3) {
@@ -815,11 +825,11 @@ function makePlayerAnimatedSprites(textures) {
 
 /**
  * Make animated sprite of ball
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.AnimatedSprite}
+ * @param {Object.<string,Texture>} textures
+ * @return {AnimatedSprite}
  */
 function makeBallAnimatedSprites(textures) {
-  const getBallTexture = (s) => textures[TEXURES.BALL(s)];
+  const getBallTexture = (s) => textures[TEXTURES.BALL(s)];
   const ballTextureArray = [
     getBallTexture(0),
     getBallTexture(1),
@@ -838,11 +848,11 @@ function makeBallAnimatedSprites(textures) {
 
 /**
  * Make sprite with the texture on the path and with the given anchor x, y
- * @param {Object.<string,PIXI.Texture>} textures
+ * @param {Object.<string,Texture>} textures
  * @param {string} path
  * @param {number} anchorX anchor.x, number in [0, 1]
  * @param {number} anchorY anchor.y, number in [0, 1]
- * @return {PIXI.Sprite}
+ * @return {Sprite}
  */
 function makeSpriteWithAnchorXY(textures, path, anchorX, anchorY) {
   const sprite = new Sprite(textures[path]);
@@ -853,11 +863,11 @@ function makeSpriteWithAnchorXY(textures, path, anchorX, anchorY) {
 
 /**
  * Make score boards
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.Container} child with index 0 for player 1 score board, child with index 1 for player2 score board
+ * @param {Object.<string,Texture>} textures
+ * @return {Container} child with index 0 for player 1 score board, child with index 1 for player2 score board
  */
 function makeScoreBoardSprite(textures) {
-  const getNumberTexture = (n) => textures[TEXURES.NUMBER(n)];
+  const getNumberTexture = (n) => textures[TEXTURES.NUMBER(n)];
   const numberTextureArray = [];
   for (let i = 0; i < 10; i++) {
     numberTextureArray.push(getNumberTexture(i));
@@ -888,12 +898,12 @@ function makeScoreBoardSprite(textures) {
 
 /**
  * Make a container with cloud sprites
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.Container}
+ * @param {Object.<string,Texture>} textures
+ * @return {Container}
  */
 function makeCloudContainer(textures) {
   const cloudContainer = new Container();
-  const texture = textures[TEXURES.CLOUD];
+  const texture = textures[TEXTURES.CLOUD];
   for (let i = 0; i < NUM_OF_CLOUDS; i++) {
     const cloud = new Sprite(texture);
     cloud.anchor.x = 0;
@@ -906,12 +916,12 @@ function makeCloudContainer(textures) {
 
 /**
  * Make a container with wave sprites
- * @param {Object.<string,PIXI.Texture>} textures
- * @return {PIXI.Container}
+ * @param {Object.<string,Texture>} textures
+ * @return {Container}
  */
 function makeWaveContainer(textures) {
   const waveContainer = new Container();
-  const texture = textures[TEXURES.WAVE];
+  const texture = textures[TEXTURES.WAVE];
   for (let i = 0; i < 432 / 16; i++) {
     const tile = new Sprite(texture);
     addChildToParentAndSetLocalPosition(waveContainer, tile, 16 * i, 0);
@@ -922,8 +932,8 @@ function makeWaveContainer(textures) {
 
 /**
  * Add child to parent and set local position
- * @param {PIXI.Container} parent
- * @param {PIXI.Sprite} child
+ * @param {Container} parent
+ * @param {Sprite} child
  * @param {number} x local x
  * @param {number} y local y
  */
