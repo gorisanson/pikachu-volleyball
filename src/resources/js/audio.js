@@ -32,7 +32,7 @@ export class PikaAudio {
 
     this.sounds.bgm.loop = true;
     /** @constant @type {number} proper bgm volume */
-    this.properBGMVolume = 0.2;
+    this.properBGMVolume = 0;
     /** @constant @type {number} proper sfx volume */
     this.properSFXVolume = 0.35;
     this.adjustVolume();
