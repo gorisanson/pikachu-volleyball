@@ -1199,7 +1199,8 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         if (
           player.state === 0 &&
           Math.abs(player.y - 16 - ball.path[0].y) <= PLAYER_HALF_LENGTH &&
-          Math.abs(player.x - ball.path[0].x) <= PLAYER_HALF_LENGTH + 6
+          Math.abs(player.x - ball.path[0].x) <= PLAYER_HALF_LENGTH + 6 &&
+          !player.isCollisionWithBallHappened
         ) {
           const copyball = ball.path[0];
           const predict = copyball.predict[1];
@@ -1221,7 +1222,8 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                   playerYpredict(player, predictframe)
               ) > PLAYER_HALF_LENGTH &&
               Math.abs(predictball.x - copyball.x) <=
-                6 * predictframe + PLAYER_HALF_LENGTH + 12
+                6 * predictframe + PLAYER_HALF_LENGTH + 12 &&
+              rand() % 10 < 8
             ) {
               shortPath = -1;
               player.goodtime = 0;
@@ -1256,6 +1258,12 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                 sameside(theOtherPlayer, predict[predict.length - 1].x) &&
                 predict.length <= shortPath
               ) {
+                if (
+                  Math.abs(copyball.x - GROUND_HALF_WIDTH) > 144 &&
+                  frame < 16
+                ) {
+                  continue;
+                }
                 shortPath = predict.length;
                 player.goodtime = frame;
                 player.attackX = copyball.x;
@@ -1314,13 +1322,13 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         }
         // 0 sec jump
         if (
-          sameside(player, ball.path[0].x) &&
           player.state === 0 &&
           Math.abs(player.y - 16 - ball.path[0].y) <= PLAYER_HALF_LENGTH &&
           Math.abs(player.x - ball.path[0].x) <= PLAYER_HALF_LENGTH + 6 &&
           sameside(player, ball.expectedLandingPointX) &&
           Math.abs(player.x - ball.expectedLandingPointX) >=
-            ball.path.length * 6 + PLAYER_HALF_LENGTH
+            ball.path.length * 6 + PLAYER_HALF_LENGTH &&
+          !player.isCollisionWithBallHappened
         ) {
           const copyball = ball.path[0];
           for (let direct = 0; direct < 6; direct++) {
@@ -1363,7 +1371,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       // console.log(ball.path);
       if (!player.freestyle) {
         // 打最遠
-        const attackFar = rand() % 10 === 0;
+        const attackFar = rand() % 10 < 2;
         // console.log(attackFar);
         if (attackFar) {
           let far_diff = 0;
@@ -1391,7 +1399,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         // console.log('hit');
         if (
           Math.abs(theOtherPlayer.x - GROUND_HALF_WIDTH) <
-            PLAYER_HALF_LENGTH + 61 &&
+            PLAYER_HALF_LENGTH + 72 &&
           theOtherPlayer.state < 3
         ) {
           // console.log('anti block');
