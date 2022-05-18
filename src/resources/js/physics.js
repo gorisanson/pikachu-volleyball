@@ -1171,6 +1171,24 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       player.goodtime = -1;
     } else {
       virtualExpectedLandingPointX = ball.expectedLandingPointX;
+
+      // jumping defense
+      if (player.state > 0 && !player.isCollisionWithBallHappened) {
+        for (let frame = 0; frame < ball.path.length; frame++) {
+          const copyball = ball.path[frame];
+          if (
+            sameside(player, copyball.x) &&
+            Math.abs(playerYpredict(player, frame) - copyball.y) <=
+              PLAYER_HALF_LENGTH &&
+            Math.abs(player.x - copyball.x) <=
+              6 * frame + PLAYER_HALF_LENGTH + 6
+          ) {
+            virtualExpectedLandingPointX = copyball.x;
+            // console.log('jumping defense');
+          }
+        }
+      }
+
       // thunder defense
       let thunder_defense = false;
       if (sameside(theOtherPlayer, ball.x)) {
@@ -1193,6 +1211,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         userInput.yDirection = -1;
       }
 
+      // normal attack
       if (!thunder_defense && player.goodtime < 0) {
         let shortPath = 1000;
 
@@ -1364,7 +1383,10 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         userInput.xDirection = -1;
       }
     }
-    if (player.goodtime === 0 || player.secondattack === 0) {
+    if (
+      player.goodtime === 0 ||
+      (player.yVelocity < 16 && player.secondattack === 0)
+    ) {
       userInput.powerHit = 1;
       // console.log((player.isPlayer2 ? '2' : '1') + ':hit');
       // console.log(ball.frame);
