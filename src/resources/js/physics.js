@@ -935,8 +935,7 @@ function playerYpredict(player, frame) {
       return PLAYER_TOUCHING_GROUND_Y_COORD;
     }
     return PLAYER_TOUCHING_GROUND_Y_COORD + total;
-  }
-  if (player.state === 1) {
+  } else {
     let speed = player.yVelocity;
     let realY = player.y + speed;
     for (let i = 0; i < frame; i++) {
@@ -948,6 +947,18 @@ function playerYpredict(player, frame) {
     }
     return realY;
   }
+}
+function playerYpredictRealtime(player, frame) {
+  let speed = player.yVelocity;
+  let realY = player.y;
+  for (let i = 0; i < frame; i++) {
+    realY += speed;
+    speed += 1;
+  }
+  if (realY > PLAYER_TOUCHING_GROUND_Y_COORD) {
+    return PLAYER_TOUCHING_GROUND_Y_COORD;
+  }
+  return realY;
 }
 
 /**
@@ -1044,19 +1055,19 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
   // }
 
   // 判斷半步拖球
-  if (
-    ball.frame === 22 &&
-    ball.expectedLandingPointX === (player.isPlayer2 ? 184 : 248)
-  ) {
-    player.tactics = 1;
-  }
-  // 尾閃拖
-  if (
-    ball.frame === 22 &&
-    ball.expectedLandingPointX === (player.isPlayer2 ? 392 : 236)
-  ) {
-    player.tactics = 2;
-  }
+  // if (
+  //   ball.frame === 22 &&
+  //   ball.expectedLandingPointX === (player.isPlayer2 ? 184 : 248)
+  // ) {
+  //   player.tactics = 1;
+  // }
+  // // 尾閃拖
+  // if (
+  //   ball.frame === 22 &&
+  //   ball.expectedLandingPointX === (player.isPlayer2 ? 392 : 236)
+  // ) {
+  //   player.tactics = 2;
+  // }
   if (
     ball.frame < 5 &&
     (player.isPlayer2 ? ball.isPlayer2Serve : !ball.isPlayer2Serve)
@@ -1067,10 +1078,40 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
   if (player.tactics === 0) {
     // 平常狀態
     let virtualExpectedLandingPointX;
+    let maychange = false;
+    // predict 2sec attack
+    // console.log(ball.path);
+    if (Math.abs(ball.xVelocity) > 9) {
+      for (let frame = 0; frame < ball.path.length; frame++) {
+        const copyball = ball.path[frame];
+        if (!sameside(theOtherPlayer, copyball.x)) {
+          break;
+        }
+        if (
+          theOtherPlayer.state > 0 &&
+          Math.abs(
+            copyball.y - playerYpredictRealtime(theOtherPlayer, frame)
+          ) <= PLAYER_HALF_LENGTH &&
+          Math.abs(copyball.x - theOtherPlayer.x) <=
+            6 * frame + PLAYER_HALF_LENGTH
+        ) {
+          maychange = true;
+          // console.log((player.isPlayer2 ? '2' : '1') + ':detect maychange');
+          break;
+        }
+      }
+    }
+    // if (
+    //   theOtherPlayer.state > 0 &&
+    //   Math.abs(ball.y - theOtherPlayer.y) <= PLAYER_HALF_LENGTH &&
+    //   Math.abs(ball.x - theOtherPlayer.x) <= 6 + PLAYER_HALF_LENGTH
+    // ) {
+    //   maychange = true;
+    // }
     if (
       sameside(theOtherPlayer, ball.expectedLandingPointX) ||
-      (sameside(theOtherPlayer, ball.x) && Math.abs(ball.xVelocity) < 7) ||
-      theOtherPlayer.secondattack > -1
+      (sameside(theOtherPlayer, ball.x) && Math.abs(ball.xVelocity) < 10) ||
+      maychange
     ) {
       // 預測防守
       let short_len = 1000;
@@ -1084,16 +1125,13 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         const copyball = ball.path[frame];
         for (let direct = 0; direct < 6; direct++) {
           const predict = copyball.predict[direct];
-          if (
-            sameside(theOtherPlayer, copyball.x) &&
-            // predict.length > 0 &&
-            sameside(player, predict[predict.length - 1].x)
-          ) {
+          if (sameside(theOtherPlayer, copyball.x)) {
             if (
-              predict.length < short_len ||
-              (predict.length === short_len &&
-                Math.abs(predict[predict.length - 1].x - GROUND_HALF_WIDTH) <=
-                  closeDiff)
+              sameside(player, predict[predict.length - 1].x) &&
+              (predict.length < short_len ||
+                (predict.length === short_len &&
+                  Math.abs(predict[predict.length - 1].x - GROUND_HALF_WIDTH) <=
+                    closeDiff))
             ) {
               short_len = predict.length;
               short_x = predict[predict.length - 1].x;
@@ -1104,6 +1142,16 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
             //   far_len = predict.length;
             //   far_x = predict[predict.length - 1].x;
             // }
+            if (
+              predict.length > 3 &&
+              predict[0].yVelocity > 30 &&
+              predict[3].yVelocity < -30 &&
+              sameside(theOtherPlayer, predict[3].x)
+            ) {
+              short_len = 0;
+              short_x = GROUND_HALF_WIDTH;
+              // console.log('predict thunder defense');
+            }
           }
         }
       }
@@ -1122,12 +1170,30 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       }
       player.goodtime = -1;
     } else {
-      // 起跳時機
-      if (
-        sameside(player, ball.x) &&
-        ball.path.length > 1 &&
-        player.goodtime < 0
-      ) {
+      virtualExpectedLandingPointX = ball.expectedLandingPointX;
+      // thunder defense
+      let thunder_defense = false;
+      if (sameside(theOtherPlayer, ball.x)) {
+        for (let frame = 0; frame < ball.path.length && frame < 4; frame++) {
+          const copyball = ball.path[frame];
+          if (
+            sameside(theOtherPlayer, copyball.x) &&
+            copyball.yVelocity < -30
+          ) {
+            // console.log((player.isPlayer2 ? '2' : '1') + ':thunder defense');
+            userInput.yDirection = 0;
+            virtualExpectedLandingPointX = GROUND_HALF_WIDTH;
+            thunder_defense = true;
+            break;
+          }
+        }
+      }
+      if (ball.yVelocity > 60) {
+        virtualExpectedLandingPointX = GROUND_HALF_WIDTH;
+        userInput.yDirection = -1;
+      }
+
+      if (!thunder_defense && player.goodtime < 0) {
         let shortPath = 1000;
 
         if (
@@ -1277,25 +1343,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         // console.log('dict' + player.direction);
         // console.log('shortX' + ball.shortX);
       }
-      virtualExpectedLandingPointX = ball.expectedLandingPointX;
 
-      if (sameside(theOtherPlayer, ball.x)) {
-        for (let frame = 0; frame < ball.path.length && frame < 4; frame++) {
-          const copyball = ball.path[frame];
-          if (
-            sameside(theOtherPlayer, copyball.x) &&
-            copyball.yVelocity < -30
-          ) {
-            // console.log((player.isPlayer2 ? '2' : '1') + ':thunder defense');
-            virtualExpectedLandingPointX = GROUND_HALF_WIDTH;
-            break;
-          }
-        }
-      }
-      if (ball.yVelocity > 60) {
-        virtualExpectedLandingPointX = GROUND_HALF_WIDTH;
-        userInput.yDirection = -1;
-      }
       if (player.goodtime > -1) {
         virtualExpectedLandingPointX = player.attackX;
       }
@@ -1360,7 +1408,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
               if (theOtherPlayer.state === 0 || theOtherPlayer.yVelocity > 13) {
                 if (
                   !canblockPredict(theOtherPlayer, predict) ||
-                  predict.length < 7
+                  predict.length < 6
                 ) {
                   // console.log('no jump');
                   // console.log(predict);
@@ -1368,7 +1416,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                   canbypass = true;
                 }
               } else {
-                if (!canblock(theOtherPlayer, predict) || predict.length < 7) {
+                if (!canblock(theOtherPlayer, predict) || predict.length < 6) {
                   // console.log('jump');
                   // console.log(predict);
                   player.direction = direct;
@@ -1461,141 +1509,141 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
     player.goodtime -= 1;
     player.secondattack -= 1;
   }
-  if (player.tactics === 1) {
-    // console.log('frame: ' + ball.frame);
-    // console.log('xVelocity: ' + ball.xVelocity);
-    // console.log('yVelocity: ' + ball.yVelocity);
-    // 防偷襲
-    if (
-      (sameside(player, ball.expectedLandingPointX) &&
-        sameside(player, ball.x)) ||
-      (player.isPlayer2 &&
-        ball.xVelocity === 10 &&
-        ball.yVelocity < -25 &&
-        ball.x !== 204 &&
-        ball.y !== 144)
-    ) {
-      player.tactics = 0;
-    }
-    if (ball.frame < 40) {
-      userInput.xDirection = 1;
-    }
-    if (ball.frame === 40) {
-      userInput.xDirection = -1;
-    }
-    // 3. Head thunder(fake, flat) 52
-    // 1. Break net(fake, flat) 54
-    // 5. Net thunder(fake, flat) 72
-    // Net G smash 72
-    if (
-      ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
-      ball.yVelocity === 1
-    ) {
-      player.tactics = 0;
-      userInput.xDirection = -1;
-      if (player.isPlayer2 && ball.y > 100) {
-        userInput.yDirection = -1;
-      }
-    }
-    // 0. Break net 52
-    if (
-      ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
-      ball.yVelocity === 35
-    ) {
-      player.tactics = 0;
-      userInput.xDirection = 1;
-    }
-    // 2. Head thunder 52
-    if (
-      ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
-      ball.yVelocity === 65
-    ) {
-      player.tactics = 0;
-      userInput.xDirection = 1;
-      userInput.yDirection = -1;
-    }
-    // 左邊彈網
-    if (ball.expectedLandingPointX === 392) {
-      player.tactics = 4;
-    }
-    // 右邊彈網不打
-    if (ball.frame === 73 && ball.xVelocity === -20 && ball.yVelocity === 14) {
-      userInput.xDirection = -1;
-      player.tactics = 0;
-    }
-    // net thunder
-    if (ball.xVelocity === -10 && ball.yVelocity === 65) {
-      userInput.xDirection = 1;
-      userInput.yDirection = -1;
-      player.tactics = 0;
-    }
-    if (player.isPlayer2) {
-      userInput.xDirection = -userInput.xDirection;
-    }
-  }
-  if (player.tactics === 2) {
-    // console.log(ball.frame);
-    // console.log(ball.xVelocity);
-    // console.log(ball.yVelocity);
-    // console.log(ball);
-    if (
-      (sameside(player, ball.expectedLandingPointX) &&
-        sameside(player, ball.x)) ||
-      (player.isPlayer2 &&
-        ball.xVelocity === 10 &&
-        ball.yVelocity < -25 &&
-        ball.x !== 215 &&
-        ball.y !== 144)
-    ) {
-      player.tactics = 0;
-    }
-    if (ball.frame < 53) {
-      userInput.xDirection = 1;
-    }
-    // 7. Tail thunder(fake, flat) 48
-    if (
-      ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
-      ball.yVelocity === 1
-    ) {
-      player.tactics = 0;
-      userInput.xDirection = -1;
-    }
-    // 6. Tail thunder 52
-    if (
-      ball.xVelocity === (player.isPlayer2 ? 10 : -20) &&
-      ball.yVelocity === 65
-    ) {
-      player.tactics = 0;
-      userInput.yDirection = -1;
-    }
-    if (player.isPlayer2) {
-      userInput.xDirection = -userInput.xDirection;
-    }
-    if (ball.frame > 53) {
-      player.tactics = 0;
-    }
-  }
+  // if (player.tactics === 1) {
+  //   // console.log('frame: ' + ball.frame);
+  //   // console.log('xVelocity: ' + ball.xVelocity);
+  //   // console.log('yVelocity: ' + ball.yVelocity);
+  //   // 防偷襲
+  //   if (
+  //     (sameside(player, ball.expectedLandingPointX) &&
+  //       sameside(player, ball.x)) ||
+  //     (player.isPlayer2 &&
+  //       ball.xVelocity === 10 &&
+  //       ball.yVelocity < -25 &&
+  //       ball.x !== 204 &&
+  //       ball.y !== 144)
+  //   ) {
+  //     player.tactics = 0;
+  //   }
+  //   if (ball.frame < 40) {
+  //     userInput.xDirection = 1;
+  //   }
+  //   if (ball.frame === 40) {
+  //     userInput.xDirection = -1;
+  //   }
+  //   // 3. Head thunder(fake, flat) 52
+  //   // 1. Break net(fake, flat) 54
+  //   // 5. Net thunder(fake, flat) 72
+  //   // Net G smash 72
+  //   if (
+  //     ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
+  //     ball.yVelocity === 1
+  //   ) {
+  //     player.tactics = 0;
+  //     userInput.xDirection = -1;
+  //     if (player.isPlayer2 && ball.y > 100) {
+  //       userInput.yDirection = -1;
+  //     }
+  //   }
+  //   // 0. Break net 52
+  //   if (
+  //     ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
+  //     ball.yVelocity === 35
+  //   ) {
+  //     player.tactics = 0;
+  //     userInput.xDirection = 1;
+  //   }
+  //   // 2. Head thunder 52
+  //   if (
+  //     ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
+  //     ball.yVelocity === 65
+  //   ) {
+  //     player.tactics = 0;
+  //     userInput.xDirection = 1;
+  //     userInput.yDirection = -1;
+  //   }
+  //   // 左邊彈網
+  //   if (ball.expectedLandingPointX === 392) {
+  //     player.tactics = 4;
+  //   }
+  //   // 右邊彈網不打
+  //   if (ball.frame === 73 && ball.xVelocity === -20 && ball.yVelocity === 14) {
+  //     userInput.xDirection = -1;
+  //     player.tactics = 0;
+  //   }
+  //   // net thunder
+  //   if (ball.xVelocity === -10 && ball.yVelocity === 65) {
+  //     userInput.xDirection = 1;
+  //     userInput.yDirection = -1;
+  //     player.tactics = 0;
+  //   }
+  //   if (player.isPlayer2) {
+  //     userInput.xDirection = -userInput.xDirection;
+  //   }
+  // }
+  // if (player.tactics === 2) {
+  //   // console.log(ball.frame);
+  //   // console.log(ball.xVelocity);
+  //   // console.log(ball.yVelocity);
+  //   // console.log(ball);
+  //   if (
+  //     (sameside(player, ball.expectedLandingPointX) &&
+  //       sameside(player, ball.x)) ||
+  //     (player.isPlayer2 &&
+  //       ball.xVelocity === 10 &&
+  //       ball.yVelocity < -25 &&
+  //       ball.x !== 215 &&
+  //       ball.y !== 144)
+  //   ) {
+  //     player.tactics = 0;
+  //   }
+  //   if (ball.frame < 53) {
+  //     userInput.xDirection = 1;
+  //   }
+  //   // 7. Tail thunder(fake, flat) 48
+  //   if (
+  //     ball.xVelocity === (player.isPlayer2 ? 20 : -20) &&
+  //     ball.yVelocity === 1
+  //   ) {
+  //     player.tactics = 0;
+  //     userInput.xDirection = -1;
+  //   }
+  //   // 6. Tail thunder 52
+  //   if (
+  //     ball.xVelocity === (player.isPlayer2 ? 10 : -20) &&
+  //     ball.yVelocity === 65
+  //   ) {
+  //     player.tactics = 0;
+  //     userInput.yDirection = -1;
+  //   }
+  //   if (player.isPlayer2) {
+  //     userInput.xDirection = -userInput.xDirection;
+  //   }
+  //   if (ball.frame > 53) {
+  //     player.tactics = 0;
+  //   }
+  // }
   if (player.tactics === 3) {
     player.serve.executeMove(player, ball, theOtherPlayer, userInput);
     if (player.serve.framesLeft < -1000) {
       player.tactics = 0;
     }
   }
-  if (player.tactics === 4) {
-    // 左邊彈網
-    if (ball.frame < 66) {
-      userInput.xDirection = 1;
-    }
-    if (ball.frame === 73) {
-      // 4. Net V smash
-      if (ball.xVelocity === 10 && ball.yVelocity === 31) {
-        userInput.xDirection = -1;
-      } else {
-        userInput.xDirection = 1;
-      }
-      player.tactics = 0;
-    }
-  }
+  // if (player.tactics === 4) {
+  //   // 左邊彈網
+  //   if (ball.frame < 66) {
+  //     userInput.xDirection = 1;
+  //   }
+  //   if (ball.frame === 73) {
+  //     // 4. Net V smash
+  //     if (ball.xVelocity === 10 && ball.yVelocity === 31) {
+  //       userInput.xDirection = -1;
+  //     } else {
+  //       userInput.xDirection = 1;
+  //     }
+  //     player.tactics = 0;
+  //   }
+  // }
 }
 
 // /**
