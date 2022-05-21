@@ -985,6 +985,9 @@ function sameside(player, ballX) {
  * @param {Array} predict ball
  */
 function canblock(player, predict) {
+  if (predict.length < 6) {
+    return false;
+  }
   for (let frame = 0; frame < predict.length; frame++) {
     if (sameside(player, predict[frame].x)) {
       if (Math.abs(predict[frame].x - GROUND_HALF_WIDTH) > PLAYER_LENGTH + 60) {
@@ -1010,6 +1013,9 @@ function canblock(player, predict) {
  * @param {Array} predict ball
  */
 function canblockPredict(player, predict) {
+  if (predict.length < 6) {
+    return false;
+  }
   for (let frame = 0; frame < predict.length; frame++) {
     if (sameside(player, predict[frame].x)) {
       if (Math.abs(predict[frame].x - GROUND_HALF_WIDTH) > PLAYER_LENGTH + 60) {
@@ -1020,6 +1026,38 @@ function canblockPredict(player, predict) {
         }
       }
     }
+  }
+  return false;
+}
+
+/**
+ * 如果球power hit 跑到 path最後位置
+ * 如果球沒有power hit 跑到predict 最短路徑位置
+ *
+ * @param {Player} player The player whom computer contorls
+ * @param {Ball} copyball ball
+ * @param {Number} frame ball
+ */
+function cantouch(player, copyball, frame) {
+  if (
+    sameside(player, copyball.x) &&
+    Math.abs(copyball.x - player.x) <= 6 * frame + PLAYER_HALF_LENGTH + 6
+  ) {
+    let top = 76;
+    if (player.state > 0) {
+      const touch_ground = 16 - player.yVelocity;
+      if (frame < touch_ground) {
+        return true;
+      } else {
+        top = PLAYER_TOUCHING_GROUND_Y_COORD - PLAYER_HALF_LENGTH;
+        let speed = -16;
+        for (let count = 0; count < frame - touch_ground; count++) {
+          top += speed;
+          speed += 1;
+        }
+      }
+    }
+    return copyball.y >= top;
   }
   return false;
 }
@@ -1100,13 +1138,9 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         }
       }
     }
-    // if (
-    //   theOtherPlayer.state > 0 &&
-    //   Math.abs(ball.y - theOtherPlayer.y) <= PLAYER_HALF_LENGTH &&
-    //   Math.abs(ball.x - theOtherPlayer.x) <= 6 + PLAYER_HALF_LENGTH
-    // ) {
-    //   maychange = true;
-    // }
+    if (player.state === 0 || player.yVelocity === 16) {
+      player.secondattack = -1;
+    }
     if (
       sameside(theOtherPlayer, ball.expectedLandingPointX) ||
       (sameside(theOtherPlayer, ball.x) && Math.abs(ball.xVelocity) < 10) ||
@@ -1118,7 +1152,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       let closeDiff = 216;
       for (let frame = 0; frame < ball.path.length && frame < 16; frame++) {
         const copyball = ball.path[frame];
-        if (sameside(theOtherPlayer, copyball.x) && copyball.y >= 76) {
+        if (cantouch(theOtherPlayer, copyball, frame)) {
           for (let direct = 0; direct < 6; direct++) {
             const predict = copyball.predict[direct];
             // normal
@@ -1208,9 +1242,9 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         if (
           player.state > 0 &&
           player.yVelocity < 16 &&
-          Math.abs(playerYpredict(player, 0) - ball.path[0].y) <=
-            PLAYER_HALF_LENGTH &&
-          Math.abs(player.x - ball.path[0].x) <= PLAYER_HALF_LENGTH + 6 &&
+          Math.abs(playerYpredict(player, 0) - ball.y) <= PLAYER_HALF_LENGTH &&
+          Math.abs(player.x - ball.x) <= PLAYER_HALF_LENGTH + 6 &&
+          sameside(player, ball.x) &&
           !player.isCollisionWithBallHappened
         ) {
           const copyball = ball.path[0];
@@ -1258,7 +1292,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                 player.freestyle = true;
                 player.secondX = predictball.x;
                 player.secondattack = predictframe + 1;
-                // console.log((player.isPlayer2 ? '2' : '1') + ':freestyle');
+                // console.log((player.isPlayer2 ? '2' : '1') + ':jump freestyle');
               }
             }
           }
@@ -1338,6 +1372,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
           player.state === 0 &&
           Math.abs(player.y - 16 - ball.path[0].y) <= PLAYER_HALF_LENGTH &&
           Math.abs(player.x - ball.path[0].x) <= PLAYER_HALF_LENGTH + 6 &&
+          sameside(player, ball.x) &&
           !player.isCollisionWithBallHappened
         ) {
           const copyball = ball.path[0];
@@ -1415,10 +1450,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         userInput.xDirection = -1;
       }
     }
-    if (
-      player.goodtime === 0 ||
-      (player.state > 0 && player.yVelocity < 16 && player.secondattack === 0)
-    ) {
+    if (player.goodtime === 0 || player.secondattack === 0) {
       userInput.powerHit = 1;
       // console.log((player.isPlayer2 ? '2' : '1') + ':hit');
       // console.log(ball.frame);
@@ -1447,7 +1479,9 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
 
         // anti block
         // console.log(
-        //   'other player' + Math.abs(theOtherPlayer.x - GROUND_HALF_WIDTH)
+        //   (theOtherPlayer.isPlayer2 ? '2 ' : '1 ') +
+        //     (Math.abs(theOtherPlayer.x - GROUND_HALF_WIDTH) -
+        //       PLAYER_HALF_LENGTH)
         // );
         if (
           Math.abs(theOtherPlayer.x - GROUND_HALF_WIDTH) <
@@ -1459,39 +1493,49 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
           let canbypass = false;
           const copyball = ball.path[0];
           let short_path = 1000;
-          for (let direct = 0; direct < 6; direct++) {
-            const predict = copyball.predict[direct];
+          // noraml
+          if (theOtherPlayer.state === 0 || theOtherPlayer.yVelocity > 13) {
             if (
-              // predict.length > 0 &&
-              sameside(theOtherPlayer, predict[predict.length - 1].x)
+              canblockPredict(
+                theOtherPlayer,
+                copyball.predict[player.direction]
+              )
             ) {
-              // console.log(theOtherPlayer.state);
-              if (theOtherPlayer.state === 0 || theOtherPlayer.yVelocity > 13) {
+              for (let direct = 0; direct < 6; direct++) {
+                const predict = copyball.predict[direct];
                 if (
+                  sameside(theOtherPlayer, predict[predict.length - 1].x) &&
                   predict.length <= short_path &&
-                  (!canblockPredict(theOtherPlayer, predict) ||
-                    predict.length < 6)
+                  !canblockPredict(theOtherPlayer, predict)
                 ) {
-                  // console.log('no jump');
-                  // console.log(predict);
-                  short_path = predict.length;
-                  player.direction = direct;
-                  canbypass = true;
-                }
-              } else {
-                if (
-                  predict.length <= short_path &&
-                  (!canblock(theOtherPlayer, predict) || predict.length < 6)
-                ) {
-                  // console.log('jump');
-                  // console.log(predict);
                   short_path = predict.length;
                   player.direction = direct;
                   canbypass = true;
                 }
               }
+            } else {
+              canbypass = true;
+            }
+          } else {
+            // jump
+            if (canblock(theOtherPlayer, copyball.predict[player.direction])) {
+              for (let direct = 0; direct < 6; direct++) {
+                const predict = copyball.predict[direct];
+                if (
+                  sameside(theOtherPlayer, predict[predict.length - 1].x) &&
+                  predict.length <= short_path &&
+                  !canblock(theOtherPlayer, predict)
+                ) {
+                  short_path = predict.length;
+                  player.direction = direct;
+                  canbypass = true;
+                }
+              }
+            } else {
+              canbypass = true;
             }
           }
+
           if (!canbypass) {
             userInput.powerHit = 0;
           }
