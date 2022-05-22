@@ -1043,19 +1043,18 @@ function cantouch(player, copyball, frame) {
     sameside(player, copyball.x) &&
     Math.abs(copyball.x - player.x) <= 6 * frame + PLAYER_HALF_LENGTH + 6
   ) {
-    let top = 76;
+    let needframe = -1;
     if (player.state > 0) {
-      const touch_ground = 16 - player.yVelocity;
-      if (frame < touch_ground) {
+      needframe = 16 - player.yVelocity;
+      if (frame < needframe) {
         return true;
-      } else {
-        top = PLAYER_TOUCHING_GROUND_Y_COORD - PLAYER_HALF_LENGTH;
-        let speed = -16;
-        for (let count = 0; count < frame - touch_ground; count++) {
-          top += speed;
-          speed += 1;
-        }
       }
+    }
+    let top = PLAYER_TOUCHING_GROUND_Y_COORD - PLAYER_HALF_LENGTH;
+    let speed = -16;
+    for (let count = 0; count < frame - needframe; count++) {
+      top += speed;
+      speed += 1;
     }
     return copyball.y >= top;
   }
