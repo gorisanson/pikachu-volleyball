@@ -1,62 +1,62 @@
 /*!
- * @pixi/canvas-display - v6.3.2
- * Compiled Wed, 04 May 2022 17:49:13 UTC
+ * @pixi/canvas-display - v6.4.2
+ * Compiled Thu, 02 Jun 2022 15:39:26 UTC
  *
  * @pixi/canvas-display is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
  */
 
 /*!
- * @pixi/constants - v6.3.2
- * Compiled Wed, 04 May 2022 17:49:13 UTC
+ * @pixi/constants - v6.4.2
+ * Compiled Thu, 02 Jun 2022 15:39:26 UTC
  *
  * @pixi/constants is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
  */
 
 /*!
- * @pixi/core - v6.3.2
- * Compiled Wed, 04 May 2022 17:49:13 UTC
+ * @pixi/core - v6.4.2
+ * Compiled Thu, 02 Jun 2022 15:39:26 UTC
  *
  * @pixi/core is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
  */
 
 /*!
- * @pixi/display - v6.3.2
- * Compiled Wed, 04 May 2022 17:49:13 UTC
+ * @pixi/display - v6.4.2
+ * Compiled Thu, 02 Jun 2022 15:39:26 UTC
  *
  * @pixi/display is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
  */
 
 /*!
- * @pixi/loaders - v6.3.2
- * Compiled Wed, 04 May 2022 17:49:13 UTC
+ * @pixi/loaders - v6.4.2
+ * Compiled Thu, 02 Jun 2022 15:39:26 UTC
  *
  * @pixi/loaders is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
  */
 
 /*!
- * @pixi/math - v6.3.2
- * Compiled Wed, 04 May 2022 17:49:13 UTC
+ * @pixi/math - v6.4.2
+ * Compiled Thu, 02 Jun 2022 15:39:26 UTC
  *
  * @pixi/math is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
  */
 
 /*!
- * @pixi/prepare - v6.3.2
- * Compiled Wed, 04 May 2022 17:49:13 UTC
+ * @pixi/prepare - v6.4.2
+ * Compiled Thu, 02 Jun 2022 15:39:26 UTC
  *
  * @pixi/prepare is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
  */
 
 /*!
- * @pixi/ticker - v6.3.2
- * Compiled Wed, 04 May 2022 17:49:13 UTC
+ * @pixi/ticker - v6.4.2
+ * Compiled Thu, 02 Jun 2022 15:39:26 UTC
  *
  * @pixi/ticker is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
