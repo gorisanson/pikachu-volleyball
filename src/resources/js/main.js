@@ -43,6 +43,7 @@ import '@pixi/canvas-display';
 import { PikachuVolleyball } from './pikavolley.js';
 import { ASSETS_PATH } from './assets_path.js';
 import { setUpUI } from './ui.js';
+
 // Reference for how to use Renderer.registerPlugin:
 // https://github.com/pixijs/pixijs/blob/af3c0c6bb15aeb1049178c972e4a14bb4cabfce4/bundles/pixi.js/src/index.ts#L27-L34
 Renderer.registerPlugin('prepare', Prepare);
@@ -52,7 +53,24 @@ Renderer.registerPlugin('batch', BatchRenderer);
 CanvasRenderer.registerPlugin('prepare', CanvasPrepare);
 CanvasRenderer.registerPlugin('sprite', CanvasSpriteRenderer);
 Loader.registerPlugin(SpritesheetLoader);
-settings.RESOLUTION = window.devicePixelRatio;
+
+// When the page is zoomed in or out in a browser, the value of window.devicePixelRatio
+// can be a decimal number with nonzero factional part. For example, when I tested on my machine,
+// the value of window.devicePixelRatio was 1.7999999523162842 in Chrome browser with 90% zoom.
+// And If settings.RESOLUTION is set to be some decimal number with nonezero fractional part,
+// some vertial/horizontal black lines, which are actullay the gaps between the sprite tiles
+// covering the background, could apper on the canvas when CanvasRenderer is being used.
+//
+// The reason behind this buggy behavior seems to be the Math.foor being used
+// in the context.drawImage in the source of pixi.js below:
+// https://github.com/pixijs/pixijs/blob/a87bb87036d5fb9119ee92fd9c3da23b5bb9424b/packages/canvas-sprite/src/CanvasSpriteRenderer.ts#L158-L167
+//
+// Reference for CanvasRenderingContext2D.drawImage():
+// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+//
+// Math.ceil here is used to set settings.RESOLUTION always to an integer value whether or not
+// the browser is zomming in or out, so to avoid the buggy behavior described above.
+settings.RESOLUTION = Math.ceil(window.devicePixelRatio);
 settings.SCALE_MODE = SCALE_MODES.NEAREST;
 settings.ROUND_PIXELS = true;
 
