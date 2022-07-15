@@ -333,7 +333,6 @@ class Ball {
 function physicsEngine(player1, player2, ball, userInputArray) {
   const isBallTouchingGround =
     processCollisionBetweenBallAndWorldAndSetBallPosition(ball);
-  console.log(ball.path[1]);
 
   let player;
   let theOtherPlayer;
@@ -397,7 +396,7 @@ function physicsEngine(player1, player2, ball, userInputArray) {
   // FUN_00403040
   // FUN_00406020
   // These two functions ommited above maybe participate in graphic drawing for a player
-
+  console.log(ball.x, ball.y, ball.xVelocity, ball.yVelocity);
   return isBallTouchingGround;
 }
 
@@ -1304,6 +1303,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       if (theOtherPlayer.isCollisionWithBallHappened) {
         player.goodtime = -1;
         player.secondattack = -1;
+        player.freestyle = false;
       }
 
       // attack
@@ -1352,7 +1352,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                     playerYpredict(player, predictframe)
                 ) > PLAYER_HALF_LENGTH &&
                 Math.abs(predictball.x - player.x) <=
-                  6 * predictframe + PLAYER_HALF_LENGTH
+                  6 * predictframe + PLAYER_HALF_LENGTH - (direct === 3 ? 6 : 0)
               ) {
                 shortPath = -1;
                 player.goodtime = 0;
@@ -1463,6 +1463,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                     : PLAYER_HALF_LENGTH - 9);
                 player.secondattack = predictframe + 1;
                 console.log((player.isPlayer2 ? '2' : '1') + ':0sec freestyle');
+                break;
               }
             }
           }
@@ -1492,6 +1493,9 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                 player.attackX = copyball.x;
                 player.direction = direct;
                 userInput.yDirection = -1;
+                console.log(
+                  (player.isPlayer2 ? '2' : '1') + ':0sec attack miss'
+                );
               }
             }
           }
@@ -1544,12 +1548,13 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                         playerYpredict(player, frame + predictframe)
                     ) > PLAYER_HALF_LENGTH &&
                     Math.abs(predictball.x - copyball.x) <=
-                      6 * predictframe + PLAYER_LENGTH
+                      6 * predictframe + PLAYER_LENGTH - (direct === 3 ? 6 : 0)
                   ) {
                     // short ball should close net
                     if (
                       direct === 2 &&
-                      Math.abs(predictball.x - GROUND_HALF_WIDTH) > 30
+                      Math.abs(predictball.x - GROUND_HALF_WIDTH) > 30 &&
+                      copyball.yVelocity < 30
                     ) {
                       continue;
                     }
@@ -1779,9 +1784,6 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
               const predict = copyball.predict[direct];
               if (samesideloss(theOtherPlayer, predict[predict.length - 1].x)) {
                 if (predict.length < shortPath) {
-                  if (org === 0 && rand() % 2 < 1) {
-                    continue;
-                  }
                   player.direction = direct;
                   shortPath = predict.length;
                 } else if (predict.length === shortPath && rand() % 2 < 1) {
@@ -1789,6 +1791,14 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                   shortPath = predict.length;
                 }
                 console.log((player.isPlayer2 ? '2' : '1') + ':second attack');
+                userInput.powerHit = 1;
+              }
+            }
+            if (org === 0 && theOtherPlayer.state > 0 && player.direction > 3) {
+              if (Math.abs(ball.x - player.x) > PLAYER_HALF_LENGTH) {
+                player.direction = 1;
+              } else {
+                player.direction = 0;
               }
             }
           }
@@ -1893,11 +1903,13 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         ) {
           userInput.powerHit = 0;
           player.secondattack = -1;
+          console.log('cancel 0 freestyle');
         }
         player.freestyle = false;
       }
       console.log((player.isPlayer2 ? '2' : '1') + ':hit');
       console.log(player.y + player.yVelocity);
+      console.log(ball.path[0]);
       console.log(ball.path[0].predict[player.direction]);
       if (player.direction === 0) {
         userInput.yDirection = -1;
