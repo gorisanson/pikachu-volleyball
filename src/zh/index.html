@@ -197,8 +197,8 @@
           </p>
           <p class="reverse-engineered-by">
             此版本由<span class="no-wrap"><a href="https://blog.duckll.tw/" target="_blank">DuckLL</a></span>改版<br />
-            擁有超級發球、接發球、預測動態防守、精準攻擊等技能，強化AI到地域等級難度<br />
-            如果覺得連發球都接不到，可以將下方的發球機選項調整至一項來降低難度<br />
+            擁有超級發球、預測動態防守、精準攻擊等技能，強化AI到神仙等級難度<br />
+            下方有選項可以調整AI的能力，成為你最好的練球伙伴<br />
             另外2P改為電腦互打，喜歡欣賞神仙打架的人不能錯過<br />
             特此感謝pxter7777的發球機以及台灣球王CBKM的測試<br />
           </p>
@@ -208,8 +208,8 @@
             檢視原始碼
           </p>
           <p class="update-history-on">
-            版本: 2.0.20220522(最新) | <a href="/version/1120220502/">1.1.20220502</a> | <a
-              href="/version/1020220423/">1.0.20220423</a>
+            版本: 3.0.20220903(最新) | <a href="/version/2020220522/">2.0.20220522</a> | <a
+              href="/version/1120220502/">1.1.20220502</a> | <a href="/version/1020220423/">1.0.20220423</a>
           </p>
         </div>
         <div class="margin-top limit-width">
@@ -313,55 +313,71 @@
       </div>
     </div>
   </div>
-  <div>
-    <table style="margin:auto;">
-      <tr>
-        <td rowspan="2" style="width:10%;text-align: center;">Player1(Left)</td>
-        <td style="width:18%;"><input id="player-1-skill-0-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-0-checkbox">Break net</label></td>
-        <td style="width:18%;"><input id="player-1-skill-1-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-1-checkbox">Break net(fake, flat)</label></td>
-        <td style="width:18%;"><input id="player-1-skill-2-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-2-checkbox">Head thunder</label></td>
-        <td style="width:18%;"><input id="player-1-skill-3-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-3-checkbox">Head thunder(fake, flat)</label></td>
-        <td style="width:18%;"><input id="player-1-skill-4-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-4-checkbox">Net V smash</label></td>
-      </tr>
-      <tr>
-        <td><input id="player-1-skill-5-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-5-checkbox">Net R smash</label></td>
-        <td><input id="player-1-skill-6-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-6-checkbox">Net G smash</label></td>
-        <td><input id="player-1-skill-7-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-7-checkbox">Net dodge</label></td>
-        <td><input id="player-1-skill-8-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-8-checkbox">Tail thunder</label></td>
-        <td><input id="player-1-skill-9-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-9-checkbox">Tail thunder(fake, flat)</label></td>
-      </tr>
-      <tr>
-        <td rowspan="2" style="text-align: center;">Player2(Right)</td>
-        <td><input id="player-2-skill-0-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-0-checkbox">Break net</label></td>
-        <td><input id="player-2-skill-1-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-1-checkbox">Break net(fake, flat)</label></td>
-        <td><input id="player-2-skill-2-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-2-checkbox">Head thunder</label></td>
-        <td><input id="player-2-skill-3-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-3-checkbox">Head thunder(fake, flat)</label></td>
-        <td><input id="player-2-skill-4-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-4-checkbox">Net thunder</label></td>
-      </tr>
-      <tr>
-        <td><input id="player-2-skill-5-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-5-checkbox">Net thunder(fake, flat)</label></td>
-        <td><input id="player-2-skill-6-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-6-checkbox">Tail thunder</label></td>
-        <td><input id="player-2-skill-7-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-7-checkbox">Tail thunder(fake, flat)</label></td>
-      </tr>
-    </table>
+  <div id="setting">
+    <h1>能力</h1>
+    <div id="capability">
+      <div><input id="serve" type="checkbox" checked="checked"><label>發球</label></div>
+      <div><input id="freestyle" type="checkbox" checked="checked"><label>花式</label></div>
+      <div><input id="block" type="checkbox" checked="checked"><label>攔網</label></div>
+      <div><input id="diving" type="checkbox" checked="checked"><label>飛撲</label></div>
+      <div><input id="jump" type="checkbox"><label>同步跳</label></div>
+    </div>
+    <h1 style="margin-bottom: 0;">發球</h1>
+    <div style="width: 100%;">
+      <div class="player" style="float: left;">
+        <h3>玩家一</h3>
+        <div>
+          <div class="serve">
+            <div><b>一步托發球</b><input id="player1-1-step-serve" type="checkbox" checked="checked">
+            </div>
+            <div><input id="player-1-skill-0-checkbox" type="checkbox" checked="checked"> <label>穿網</label></div>
+            <div><input id="player-1-skill-1-checkbox" type="checkbox" checked="checked"> <label>平殺</label>
+            </div>
+            <div><input id="player-1-skill-2-checkbox" type="checkbox" checked="checked"> <label>頭閃</label>
+            </div>
+            <div><input id="player-1-skill-3-checkbox" type="checkbox" checked="checked"> <label>頭閃平殺</label></div>
+            <div><input id="player-1-skill-4-checkbox" type="checkbox" checked="checked"> <label>彈網下殺</label>
+            </div>
+            <div><input id="player-1-skill-5-checkbox" type="checkbox" checked="checked"> <label>彈網上殺</label>
+            </div>
+            <div><input id="player-1-skill-6-checkbox" type="checkbox" checked="checked"> <label>彈網平殺</label>
+            </div>
+            <div><input id="player-1-skill-7-checkbox" type="checkbox" checked="checked"> <label>彈網不打</label></div>
+            <hr style="width: 100%;">
+            <div><b>尾托發球</b><input id="player1-tail-serve" type="checkbox" checked="checked">
+            </div>
+            <div><input id="player-1-skill-8-checkbox" type="checkbox" checked="checked"> <label>尾閃</label>
+            </div>
+            <div><input id="player-1-skill-9-checkbox" type="checkbox" checked="checked"> <label>尾閃平殺</label></div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="player" style="float: right;">
+        <h3>玩家二</h3>
+        <div>
+          <div class="surve">
+            <div><b>一步托發球</b><input id="player2-1-step-serve" type="checkbox" checked="checked">
+            </div>
+            <div><input id="player-2-skill-0-checkbox" type="checkbox" checked="checked"> <label>穿網</label></div>
+            <div><input id="player-2-skill-1-checkbox" type="checkbox" checked="checked"> <label>平殺</label></div>
+            <div><input id="player-2-skill-2-checkbox" type="checkbox" checked="checked"> <label>頭閃</label>
+            </div>
+            <div><input id="player-2-skill-3-checkbox" type="checkbox" checked="checked"> <label>頭閃平殺</label></div>
+            <div><input id="player-2-skill-4-checkbox" type="checkbox" checked="checked"> <label>彈網閃</label>
+            </div>
+            <div><input id="player-2-skill-5-checkbox" type="checkbox" checked="checked"> <label>彈網閃平殺</label></div>
+            <hr style="width: 100%;">
+            <div><b>尾托發球</b><input id="player2-tail-serve" type="checkbox" checked="checked">
+            </div>
+            <div><input id="player-2-skill-6-checkbox" type="checkbox" checked="checked"> <label>尾閃</label>
+            </div>
+            <div><input id="player-2-skill-7-checkbox" type="checkbox" checked="checked"> <label>尾閃平殺</label></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <script type="module">
     /*

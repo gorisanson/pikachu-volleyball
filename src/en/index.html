@@ -201,7 +201,7 @@
             This version is modified by <span class="no-wrap"><a href="https://blog.duckll.tw/"
                 target="_blank">DuckLL</a></span>.<br />
             There are many skills in new AI, such as super serve/receive, dynamic defense and predict attack.<br />
-            You can turn off serve options below to reduce difficulty.<br />
+            There are some options blow for AI capability.<br />
             The 2 players mode is change to AI vs. AI. You can watch a top game in this mode.<br />
             Thank pxter7777 for the serve machine. Thank CBKM for testing.<br />
           </p>
@@ -211,8 +211,8 @@
             .
           </p>
           <p class="update-history-on">
-            Version: 2.0.20220522(latest) | <a href="/version/1120220502/">1.1.20220502</a> | <a
-              href="/version/1020220423/">1.0.20220423</a>
+            Version: 3.0.20220903(latest) | <a href="/version/2020220522/">2.0.20220522</a> | <a
+              href="/version/1120220502/">1.1.20220502</a> | <a href="/version/1020220423/">1.0.20220423</a>
           </p>
         </div>
         <div class="margin-top limit-width">
@@ -324,55 +324,77 @@
       </div>
     </div>
   </div>
-  <div>
-    <table style="margin:auto;">
-      <tr>
-        <td rowspan="2" style="width:10%;text-align: center;">Player1(Left)</td>
-        <td style="width:18%;"><input id="player-1-skill-0-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-0-checkbox">Break net</label></td>
-        <td style="width:18%;"><input id="player-1-skill-1-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-1-checkbox">Break net(fake, flat)</label></td>
-        <td style="width:18%;"><input id="player-1-skill-2-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-2-checkbox">Head thunder</label></td>
-        <td style="width:18%;"><input id="player-1-skill-3-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-3-checkbox">Head thunder(fake, flat)</label></td>
-        <td style="width:18%;"><input id="player-1-skill-4-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-4-checkbox">Net V smash</label></td>
-      </tr>
-      <tr>
-        <td><input id="player-1-skill-5-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-5-checkbox">Net R smash</label></td>
-        <td><input id="player-1-skill-6-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-6-checkbox">Net G smash</label></td>
-        <td><input id="player-1-skill-7-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-7-checkbox">Net dodge</label></td>
-        <td><input id="player-1-skill-8-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-8-checkbox">Tail thunder</label></td>
-        <td><input id="player-1-skill-9-checkbox" type="checkbox" checked="checked"> <label
-            for="player-1-skill-9-checkbox">Tail thunder(fake, flat)</label></td>
-      </tr>
-      <tr>
-        <td rowspan="2" style="text-align: center;">Player2(Right)</td>
-        <td><input id="player-2-skill-0-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-0-checkbox">Break net</label></td>
-        <td><input id="player-2-skill-1-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-1-checkbox">Break net(fake, flat)</label></td>
-        <td><input id="player-2-skill-2-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-2-checkbox">Head thunder</label></td>
-        <td><input id="player-2-skill-3-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-3-checkbox">Head thunder(fake, flat)</label></td>
-        <td><input id="player-2-skill-4-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-4-checkbox">Net thunder</label></td>
-      </tr>
-      <tr>
-        <td><input id="player-2-skill-5-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-5-checkbox">Net thunder(fake, flat)</label></td>
-        <td><input id="player-2-skill-6-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-6-checkbox">Tail thunder</label></td>
-        <td><input id="player-2-skill-7-checkbox" type="checkbox" checked="checked"> <label
-            for="player-2-skill-7-checkbox">Tail thunder(fake, flat)</label></td>
-      </tr>
-    </table>
+  <div id="setting">
+    <h1>Capability</h1>
+    <div id="capability">
+      <div><input id="serve" type="checkbox" checked="checked"><label>Serve</label></div>
+      <div><input id="freestyle" type="checkbox" checked="checked"><label>Freestyle</label></div>
+      <div><input id="block" type="checkbox" checked="checked"><label>Block</label></div>
+      <div><input id="diving" type="checkbox" checked="checked"><label>Diving</label></div>
+      <div><input id="jump" type="checkbox"><label>Same time Jump</label></div>
+    </div>
+    <h1 style="margin-bottom: 0;">serve</h1>
+    <div style="width: 100%;">
+      <div class="player" style="float: left;">
+        <h3>player1</h3>
+        <div>
+          <div class="serve">
+            <div><b>1 step serve</b><input id="player1-1-step-serve" type="checkbox" checked="checked">
+            </div>
+            <div><input id="player-1-skill-0-checkbox" type="checkbox" checked="checked"> <label>Break net</label></div>
+            <div><input id="player-1-skill-1-checkbox" type="checkbox" checked="checked"> <label>Break net(fake,
+                flat)</label>
+            </div>
+            <div><input id="player-1-skill-2-checkbox" type="checkbox" checked="checked"> <label>Head thunder</label>
+            </div>
+            <div><input id="player-1-skill-3-checkbox" type="checkbox" checked="checked"> <label>Head thunder(fake,
+                flat)</label></div>
+            <div><input id="player-1-skill-4-checkbox" type="checkbox" checked="checked"> <label>Net V smash</label>
+            </div>
+            <div><input id="player-1-skill-5-checkbox" type="checkbox" checked="checked"> <label>Net R smash</label>
+            </div>
+            <div><input id="player-1-skill-6-checkbox" type="checkbox" checked="checked"> <label>Net G smash</label>
+            </div>
+            <div><input id="player-1-skill-7-checkbox" type="checkbox" checked="checked"> <label>Net dodge</label></div>
+            <hr style="width: 100%;">
+            <div><b>tail serve</b><input id="player1-tail-serve" type="checkbox" checked="checked">
+            </div>
+            <div><input id="player-1-skill-8-checkbox" type="checkbox" checked="checked"> <label>Tail thunder</label>
+            </div>
+            <div><input id="player-1-skill-9-checkbox" type="checkbox" checked="checked"> <label>Tail thunder(fake,
+                flat)</label></div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="player" style="float: right;">
+        <h3>player2</h3>
+        <div>
+          <div class="surve">
+            <div><b>1 step serve</b><input id="player2-1-step-serve" type="checkbox" checked="checked">
+            </div>
+            <div><input id="player-2-skill-0-checkbox" type="checkbox" checked="checked"> <label>Break net</label></div>
+            <div><input id="player-2-skill-1-checkbox" type="checkbox" checked="checked"> <label>Break net(fake,
+                flat)</label></div>
+            <div><input id="player-2-skill-2-checkbox" type="checkbox" checked="checked"> <label>Head thunder</label>
+            </div>
+            <div><input id="player-2-skill-3-checkbox" type="checkbox" checked="checked"> <label>Head thunder(fake,
+                flat)</label></div>
+            <div><input id="player-2-skill-4-checkbox" type="checkbox" checked="checked"> <label>Net thunder</label>
+            </div>
+            <div><input id="player-2-skill-5-checkbox" type="checkbox" checked="checked"> <label>Net thunder(fake,
+                flat)</label></div>
+            <hr style="width: 100%;">
+            <div><b>tail serve</b><input id="player2-tail-serve" type="checkbox" checked="checked"></div>
+            <div><input id="player-2-skill-6-checkbox" type="checkbox" checked="checked"> <label>Tail thunder</label>
+            </div>
+            <div><input id="player-2-skill-7-checkbox" type="checkbox" checked="checked"> <label>Tail thunder(fake,
+                flat)</label></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <script type="module">
     /*

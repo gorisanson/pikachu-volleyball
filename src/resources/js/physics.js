@@ -32,6 +32,7 @@ import {
   serveMode,
   SkillTypeForPlayer2Available,
   SkillTypeForPlayer1Available,
+  capability,
 } from './ui.js';
 
 /** @constant @type {number} ground width */
@@ -1295,9 +1296,10 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       //   (player.isPlayer2 ? '2: ' : '1: ') + virtualExpectedLandingPointX
       // );
       player.goodtime = -1;
-      // if (theOtherPlayer.state > 0) {
-      //   userInput.yDirection = -1;
-      // }
+      if (capability.jump && theOtherPlayer.yVelocity < -6) {
+        userInput.yDirection = -1;
+        virtualExpectedLandingPointX = GROUND_HALF_WIDTH;
+      }
     } else {
       // console.log((player.isPlayer2 ? '2' : '1') + ': now');
       // normal defense
@@ -1369,7 +1371,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
           const copyball = ball.path[0];
 
           // freestyle
-          for (let direct = 0; direct < 6; direct++) {
+          for (let direct = 0; capability.freestyle && direct < 6; direct++) {
             if (
               Math.abs(player.x - ball.x) > PLAYER_HALF_LENGTH &&
               direct % 2 === 0
@@ -1461,7 +1463,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
             const copyball = ball.path[0];
 
             // freestyle
-            for (let direct = 0; direct < 2; direct++) {
+            for (let direct = 0; capability.freestyle && direct < 2; direct++) {
               if (
                 Math.abs(player.x - ball.x) > PLAYER_HALF_LENGTH &&
                 direct % 2 === 0
@@ -1575,7 +1577,11 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                   6 * frame + PLAYER_HALF_LENGTH
               ) {
                 // freestyle
-                for (let direct = 0; direct < 6; direct++) {
+                for (
+                  let direct = 0;
+                  capability.freestyle && direct < 6;
+                  direct++
+                ) {
                   // random;
                   if (rand() % 10 < 1) {
                     continue;
@@ -1773,6 +1779,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       }
 
       if (
+        capability.diving &&
         !thunder_defense &&
         player.goodtime < 0 &&
         player.secondattack < 0 &&
@@ -1819,7 +1826,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
           var shortPath = 1000;
 
           // freestyle
-          for (let direct = 0; direct < 6; direct++) {
+          for (let direct = 0; capability.freestyle && direct < 6; direct++) {
             if (
               Math.abs(ball.x - player.x) > PLAYER_HALF_LENGTH &&
               direct % 2 === 0
@@ -2020,6 +2027,16 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
               userInput.powerHit = 0;
               console.log((player.isPlayer2 ? '2' : '1') + ':block');
             }
+          }
+
+          // block
+          if (
+            !capability.block &&
+            ball.isPowerHit &&
+            player.isPlayer2 === ball.xVelocity > 0 &&
+            Math.abs(ball.x - GROUND_HALF_WIDTH) < 72
+          ) {
+            userInput.powerHit = 0;
           }
         }
       } else {
@@ -2231,6 +2248,11 @@ const player2Formula = [
     { action: actionType.forwardSmash, frames: 1 },
   ],
 ];
+const noserve = [
+  { action: actionType.forwardUp, frames: 1 },
+  { action: actionType.wait, frames: 11 },
+  { action: actionType.forwardUpSmash, frames: 1 },
+];
 class ServeMachine {
   constructor(isPlayer2) {
     this.isPlayer2 = isPlayer2;
@@ -2333,7 +2355,16 @@ class ServeMachine {
   getNextAction() {
     if (this.framesLeft === 0) {
       // check formula
-      if (this.isPlayer2 === false) {
+      if (capability.serve === false) {
+        if (this.phase < noserve.length) {
+          this.action = noserve[this.phase].action;
+          this.framesLeft = noserve[this.phase].frames;
+        } else {
+          // don't move
+          this.action = actionType.wait;
+          this.framesLeft = -1000;
+        }
+      } else if (this.isPlayer2 === false) {
         if (this.phase < player1Formula[this.usingFullSkill].length) {
           this.action = player1Formula[this.usingFullSkill][this.phase].action;
           this.framesLeft =
