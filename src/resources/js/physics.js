@@ -1266,12 +1266,12 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                 short_x = predict[predict.length - 1].x;
                 if (
                   player.state === 0 &&
-                  Math.abs(short_x - GROUND_HALF_WIDTH) > 72
+                  Math.abs(short_x - GROUND_HALF_WIDTH) > 44
                 ) {
                   short_x =
                     short_x + (short_len - 1) * (player.isPlayer2 ? -6 : 6);
-                  if (Math.abs(short_x - GROUND_HALF_WIDTH) < 72) {
-                    short_x = GROUND_HALF_WIDTH + (player.isPlayer2 ? 72 : -72);
+                  if (Math.abs(short_x - GROUND_HALF_WIDTH) < 44) {
+                    short_x = GROUND_HALF_WIDTH + (player.isPlayer2 ? 44 : -44);
                   }
                 }
               }
@@ -1555,7 +1555,6 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
             }
           } else {
             // normal
-            const lock1 = rand() % 10;
             const lock2 = rand() % 10;
             const lock3 = rand() % 20;
             for (
@@ -1777,7 +1776,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         !thunder_defense &&
         player.goodtime < 0 &&
         player.secondattack < 0 &&
-        ball.path.length < 12 &&
+        ball.expectedLandingPointX > player.x === ball.x > player.x &&
         sameside(player, ball.expectedLandingPointX) &&
         Math.abs(player.x - ball.expectedLandingPointX) >
           ball.path.length * 6 + PLAYER_HALF_LENGTH
@@ -1914,8 +1913,8 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
               console.log((player.isPlayer2 ? '2' : '1') + ':anti predict');
             }
             // 2nd jump fail
-            if (player.yVelocity < -10 && player.direction === 3) {
-              player.direction = 1;
+            if (player.yVelocity < -10 && player.direction < 4) {
+              player.direction = 0;
               console.log((player.isPlayer2 ? '2' : '1') + ':2nd jump fail');
             }
             // anti-block
@@ -1923,7 +1922,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
               player.direction === 3 &&
               Math.abs(theOtherPlayer.x - GROUND_HALF_WIDTH) < 72 &&
               (Math.abs(player.x - GROUND_HALF_WIDTH) > 108 ||
-                Math.abs(theOtherPlayer.y - player.y) < 10)
+                Math.abs(theOtherPlayer.y - player.y) < PLAYER_HALF_LENGTH)
             ) {
               player.direction = 1;
               console.log((player.isPlayer2 ? '2' : '1') + ':anti block');
@@ -1956,8 +1955,9 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
           // anti block
           if (
             theOtherPlayer.state < 3 &&
-            player.yVelocity < 8 &&
             player.direction < 4 &&
+            (player.yVelocity < 0 ||
+              Math.abs(player.x - GROUND_HALF_WIDTH) > 124) &&
             Math.abs(theOtherPlayer.x - GROUND_HALF_WIDTH) <
               PLAYER_HALF_LENGTH + 61
           ) {
