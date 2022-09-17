@@ -33,6 +33,9 @@ import 'pixi-sound';
 import { PikachuVolleyball } from './pikavolley.js';
 import { ASSETS_PATH } from './assets_path.js';
 import { setUpUI } from './ui.js';
+import { replaySaver } from './replay/replay_saver.js';
+import seedrandom from 'seedrandom';
+import { true_rand, setCustomRng } from './rand.js';
 
 const settings = PIXI.settings;
 settings.RESOLUTION = window.devicePixelRatio;
@@ -115,6 +118,10 @@ function setUpInitialUI() {
  * Set up the game and the full UI, and start the game.
  */
 function setup() {
+  const roomId = 'DuckLL_AI_GOD_' + true_rand();
+  replaySaver.recordRoomID(roomId);
+  const customRng = seedrandom.alea(roomId.slice(10));
+  setCustomRng(customRng);
   const pikaVolley = new PikachuVolleyball(stage, loader.resources);
   setUpUI(pikaVolley, ticker);
   start(pikaVolley);

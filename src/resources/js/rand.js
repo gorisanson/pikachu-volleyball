@@ -35,3 +35,11 @@ export function rand() {
 export function setCustomRng(rng) {
   customRng = rng;
 }
+
+/**
+ *
+ * @return {number} random integer
+ */
+export function true_rand() {
+  return Math.floor(32768 * Math.random());
+}

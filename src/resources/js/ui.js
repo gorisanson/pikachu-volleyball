@@ -2,6 +2,9 @@
  * Manages event listeners relevant to the UI (menu bar, buttons, etc.) of the web page
  */
 'use strict';
+
+import { replaySaver } from './replay/replay_saver.js';
+
 /** @typedef {import('./pikavolley.js').PikachuVolleyball} PikachuVolleyball */
 /** @typedef {import('pixi.js-legacy').Ticker} Ticker */
 export var serveMode = 0;
@@ -826,6 +829,11 @@ function setUpBtns(pikaVolley, ticker) {
       player2Skill1Checkbox.checked = true;
       SkillTypeForPlayer2Available[1] = true;
     }
+  });
+
+  const saveReplayBtn = document.getElementById('save-replay-btn');
+  saveReplayBtn.addEventListener('click', () => {
+    replaySaver.saveAsFile();
   });
 
   const aboutBox = document.getElementById('about-box');

@@ -2,10 +2,14 @@
  * The Controller part in MVC pattern
  */
 'use strict';
-import { GROUND_HALF_WIDTH, PikaPhysics } from './physics.js';
+import { GROUND_HALF_WIDTH, PikaPhysics, PikaUserInput } from './physics.js';
 import { MenuView, GameView, FadeInOut, IntroView } from './view.js';
 import { PikaKeyboard } from './keyboard.js';
 import { PikaAudio } from './audio.js';
+import { replaySaver } from './replay/replay_saver.js';
+import seedrandom from 'seedrandom';
+import { true_rand, setCustomRng, rand } from './rand.js';
+import { Cloud, Wave } from './cloud_and_wave.js';
 
 /** @typedef GameState @type {function():void} */
 
@@ -118,6 +122,21 @@ export class PikachuVolleyball {
     if (this.paused === true) {
       return;
     }
+
+    // catch keyboard input and freeze it
+    this.keyboardArray[0].getInput();
+    this.keyboardArray[1].getInput();
+    if (this.state !== this.round) {
+      const player1Input = new PikaUserInput();
+      player1Input.xDirection = this.keyboardArray[0].xDirection;
+      player1Input.yDirection = this.keyboardArray[0].yDirection;
+      player1Input.powerHit = this.keyboardArray[0].powerHit;
+      const player2Input = new PikaUserInput();
+      player2Input.xDirection = this.keyboardArray[1].xDirection;
+      player2Input.yDirection = this.keyboardArray[1].yDirection;
+      player2Input.powerHit = this.keyboardArray[1].powerHit;
+      replaySaver.recordInputs(player1Input, player2Input);
+    }
     if (this.slowMotionFramesLeft > 0) {
       this.slowMotionNumOfSkippedFrames++;
       if (
@@ -130,9 +149,6 @@ export class PikachuVolleyball {
       this.slowMotionFramesLeft--;
       this.slowMotionNumOfSkippedFrames = 0;
     }
-    // catch keyboard input and freeze it
-    this.keyboardArray[0].getInput();
-    this.keyboardArray[1].getInput();
     this.state();
   }
 
@@ -226,13 +242,16 @@ export class PikachuVolleyball {
       if (this.selectedWithWho === 1) {
         this.physics.player1.isComputer = true;
         this.physics.player2.isComputer = true;
+        replaySaver.recordNicknames('AI', 'AI');
       } else {
         if (this.keyboardArray[0].powerHit === 1) {
           this.physics.player1.isComputer = false;
           this.physics.player2.isComputer = true;
+          replaySaver.recordNicknames('Player', 'AI');
         } else if (this.keyboardArray[1].powerHit === 1) {
           this.physics.player1.isComputer = true;
           this.physics.player2.isComputer = false;
+          replaySaver.recordNicknames('AI', 'Player');
         }
       }
       this.audio.sounds.pikachu.play();
@@ -242,13 +261,13 @@ export class PikachuVolleyball {
       return;
     }
 
-    if (this.noInputFrameCounter >= this.noInputFrameTotal.menu) {
-      this.physics.player1.isComputer = true;
-      this.physics.player2.isComputer = true;
-      this.frameCounter = 0;
-      this.noInputFrameCounter = 0;
-      this.state = this.afterMenuSelection;
-    }
+    // if (this.noInputFrameCounter >= this.noInputFrameTotal.menu) {
+    //   this.physics.player1.isComputer = true;
+    //   this.physics.player2.isComputer = true;
+    //   this.frameCounter = 0;
+    //   this.noInputFrameCounter = 0;
+    //   this.state = this.afterMenuSelection;
+    // }
   }
 
   /**
@@ -329,20 +348,20 @@ export class PikachuVolleyball {
       this.keyboardArray[0].powerHit === 1 ||
       this.keyboardArray[1].powerHit === 1;
 
-    if (
-      this.physics.player1.isComputer === true &&
-      this.physics.player2.isComputer === true &&
-      pressedPowerHit
-    ) {
-      this.frameCounter = 0;
-      this.view.game.visible = false;
-      this.state = this.intro;
-      return;
-    }
+    // if (
+    //   this.physics.player1.isComputer === true &&
+    //   this.physics.player2.isComputer === true &&
+    //   pressedPowerHit
+    // ) {
+    //   this.frameCounter = 0;
+    //   this.view.game.visible = false;
+    //   this.state = this.intro;
+    //   return;
+    // }
 
-    const isBallTouchingGround = this.physics.runEngineForNextFrame(
-      this.keyboardArray
-    );
+    const result = this.physics.runEngineForNextFrame(this.keyboardArray);
+    const isBallTouchingGround = result[0];
+    replaySaver.recordInputs(result[1][0], result[1][1]);
 
     this.playSoundEffect();
     this.view.game.drawPlayersAndBall(this.physics);
@@ -446,6 +465,10 @@ export class PikachuVolleyball {
       this.view.game.drawReadyMessage(false);
       this.view.fadeInOut.setBlackAlphaTo(0);
       this.roundEnded = false;
+      const nullInput = new PikaUserInput();
+      for (let i = 0; i < this.frameTotal.beforeStartOfNextRound; i++) {
+        replaySaver.recordInputs(nullInput, nullInput);
+      }
       this.state = this.round;
     }
   }
@@ -506,6 +529,18 @@ export class PikachuVolleyball {
     this.view.menu.visible = false;
     this.view.game.visible = false;
     this.state = this.intro;
+    replaySaver.cleanRecord();
+    const roomId = 'DuckLL_AI_GOD_' + true_rand();
+    replaySaver.recordRoomID(roomId);
+    const customRng = seedrandom.alea(roomId.slice(10));
+    setCustomRng(customRng);
+    this.view.game.cloudArray = [];
+    for (let i = 0; i < 10; i++) {
+      this.view.game.cloudArray.push(new Cloud());
+    }
+    this.view.game.wave = new Wave();
+    rand();
+    rand();
   }
 
   /** @return {boolean} */
