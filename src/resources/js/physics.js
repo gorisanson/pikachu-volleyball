@@ -1763,6 +1763,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       if (
         capability.diving &&
         !thunder_defense &&
+        player.state < 3 &&
         player.goodtime < 0 &&
         player.secondattack < 0 &&
         ball.expectedLandingPointX > player.x === ball.x > player.x &&
