@@ -126,15 +126,16 @@ export class PikachuVolleyball {
     // catch keyboard input and freeze it
     this.keyboardArray[0].getInput();
     this.keyboardArray[1].getInput();
+
+    const player1Input = new PikaUserInput();
+    player1Input.xDirection = this.keyboardArray[0].xDirection;
+    player1Input.yDirection = this.keyboardArray[0].yDirection;
+    player1Input.powerHit = this.keyboardArray[0].powerHit;
+    const player2Input = new PikaUserInput();
+    player2Input.xDirection = this.keyboardArray[1].xDirection;
+    player2Input.yDirection = this.keyboardArray[1].yDirection;
+    player2Input.powerHit = this.keyboardArray[1].powerHit;
     if (this.state !== this.round) {
-      const player1Input = new PikaUserInput();
-      player1Input.xDirection = this.keyboardArray[0].xDirection;
-      player1Input.yDirection = this.keyboardArray[0].yDirection;
-      player1Input.powerHit = this.keyboardArray[0].powerHit;
-      const player2Input = new PikaUserInput();
-      player2Input.xDirection = this.keyboardArray[1].xDirection;
-      player2Input.yDirection = this.keyboardArray[1].yDirection;
-      player2Input.powerHit = this.keyboardArray[1].powerHit;
       replaySaver.recordInputs(player1Input, player2Input);
     }
     if (this.slowMotionFramesLeft > 0) {
@@ -144,6 +145,7 @@ export class PikachuVolleyball {
           Math.round(this.normalFPS / this.slowMotionFPS) !==
         0
       ) {
+        replaySaver.recordInputs(player1Input, player2Input);
         return;
       }
       this.slowMotionFramesLeft--;
@@ -465,10 +467,6 @@ export class PikachuVolleyball {
       this.view.game.drawReadyMessage(false);
       this.view.fadeInOut.setBlackAlphaTo(0);
       this.roundEnded = false;
-      const nullInput = new PikaUserInput();
-      for (let i = 0; i < this.frameTotal.beforeStartOfNextRound; i++) {
-        replaySaver.recordInputs(nullInput, nullInput);
-      }
       this.state = this.round;
     }
   }
