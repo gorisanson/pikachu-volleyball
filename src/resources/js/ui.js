@@ -32,7 +32,7 @@ export var SkillTypeForPlayer2Available = [
 ];
 export var capability = {
   serve: true,
-  freestyle: true,
+  fancy: true,
   block: true,
   diving: true,
   jump: false,
@@ -202,6 +202,10 @@ function setUpBtns(pikaVolley, ticker) {
 
     pikaVolley.normalFPS = 20;
     ticker.maxFPS = pikaVolley.normalFPS;
+    replaySaver.recordOptions({
+      speed: 'slow',
+      winningScore: pikaVolley.winningScore,
+    });
   });
   mediumSpeedBtn.addEventListener('click', () => {
     fastSpeedBtn.classList.remove('selected');
@@ -210,6 +214,10 @@ function setUpBtns(pikaVolley, ticker) {
 
     pikaVolley.normalFPS = 25;
     ticker.maxFPS = pikaVolley.normalFPS;
+    replaySaver.recordOptions({
+      speed: 'medium',
+      winningScore: pikaVolley.winningScore,
+    });
   });
   fastSpeedBtn.addEventListener('click', () => {
     slowSpeedBtn.classList.remove('selected');
@@ -218,6 +226,10 @@ function setUpBtns(pikaVolley, ticker) {
 
     pikaVolley.normalFPS = 30;
     ticker.maxFPS = pikaVolley.normalFPS;
+    replaySaver.recordOptions({
+      speed: 'fast',
+      winningScore: pikaVolley.winningScore,
+    });
   });
 
   const winningScore5Btn = document.getElementById('winning-score-5-btn');
@@ -279,6 +291,15 @@ function setUpBtns(pikaVolley, ticker) {
     winningScore15Btn.classList.remove('selected');
     winningScore5Btn.classList.add('selected');
     pikaVolley.winningScore = 5;
+    replaySaver.recordOptions({
+      speed:
+        pikaVolley.normalFPS === 30
+          ? 'fast'
+          : pikaVolley.normalFPS === 25
+          ? 'medium'
+          : 'slow',
+      winningScore: 5,
+    });
   });
   winningScore10Btn.addEventListener('click', () => {
     if (winningScore10Btn.classList.contains('selected')) {
@@ -315,6 +336,15 @@ function setUpBtns(pikaVolley, ticker) {
     winningScore15Btn.classList.remove('selected');
     winningScore10Btn.classList.add('selected');
     pikaVolley.winningScore = 10;
+    replaySaver.recordOptions({
+      speed:
+        pikaVolley.normalFPS === 30
+          ? 'fast'
+          : pikaVolley.normalFPS === 25
+          ? 'medium'
+          : 'slow',
+      winningScore: 10,
+    });
   });
   winningScore15Btn.addEventListener('click', () => {
     if (winningScore15Btn.classList.contains('selected')) {
@@ -351,6 +381,15 @@ function setUpBtns(pikaVolley, ticker) {
     winningScore10Btn.classList.remove('selected');
     winningScore15Btn.classList.add('selected');
     pikaVolley.winningScore = 15;
+    replaySaver.recordOptions({
+      speed:
+        pikaVolley.normalFPS === 30
+          ? 'fast'
+          : pikaVolley.normalFPS === 25
+          ? 'medium'
+          : 'slow',
+      winningScore: 15,
+    });
   });
   noticeOKBtn1.addEventListener('click', () => {
     if (!noticeBox1.classList.contains('hidden')) {
@@ -722,10 +761,10 @@ function setUpBtns(pikaVolley, ticker) {
     // @ts-ignore
     capability.serve = serve.checked;
   });
-  const freestyle = document.getElementById('freestyle');
-  freestyle.addEventListener('change', () => {
+  const fancy = document.getElementById('fancy');
+  fancy.addEventListener('change', () => {
     // @ts-ignore
-    capability.freestyle = freestyle.checked;
+    capability.fancy = fancy.checked;
   });
   const block = document.getElementById('block');
   block.addEventListener('change', () => {
