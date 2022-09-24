@@ -1123,7 +1123,10 @@ function cantouch(player, copyball, frame) {
     if (player.state > 0) {
       needframe = 16 - player.yVelocity;
       if (frame < needframe) {
-        return true;
+        return (
+          Math.abs(copyball.y - otherPlayerYpredict(player, frame)) <=
+          PLAYER_HALF_LENGTH
+        );
       }
     }
     let top = PLAYER_TOUCHING_GROUND_Y_COORD - PLAYER_HALF_LENGTH;
@@ -1196,7 +1199,10 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
     let maychange = false;
     let diving = false;
     // check collision
-    if (theOtherPlayer.isCollisionWithBallHappened) {
+    if (
+      theOtherPlayer.isCollisionWithBallHappened &&
+      Math.abs(ball.xVelocity) < 20
+    ) {
       player.goodtime = -1;
       player.secondattack = -1;
       player.fancy = false;
@@ -1208,6 +1214,13 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       }
       if (cantouch(theOtherPlayer, copyball, frame)) {
         maychange = true;
+        if (
+          theOtherPlayer.isCollisionWithBallHappened &&
+          Math.abs(ball.xVelocity) === 20 &&
+          Math.abs(ball.yVelocity) < 5
+        ) {
+          maychange = false;
+        }
         // console.log((player.isPlayer2 ? '2' : '1') + ':detect maychange');
         // console.log(copyball);
         break;
@@ -1228,7 +1241,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       let short_len = 1000;
       let short_x = 216;
       let closeDiff = 216;
-      for (let frame = 0; frame < ball.path.length && frame < 16; frame++) {
+      for (let frame = 0; frame < ball.path.length && frame < 32; frame++) {
         const copyball = ball.path[frame];
         if (cantouch(theOtherPlayer, copyball, frame)) {
           for (let direct = 0; direct < 6; direct++) {
@@ -1236,8 +1249,8 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
             // thunder
             if (
               direct > 3 &&
-              predict.length > 3 &&
-              predict[3].yVelocity < 0 &&
+              predict.length > 2 &&
+              predict[2].yVelocity < 0 &&
               sameside(theOtherPlayer, predict[1].x)
             ) {
               short_len = 0;
@@ -1541,7 +1554,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
             const lock3 = true_rand() % 20;
             for (
               let frame = 1;
-              frame < ball.path.length && frame < 31 && shortPath > -1;
+              frame < ball.path.length && frame < 32 && shortPath > -1;
               frame++
             ) {
               const copyball = ball.path[frame];
@@ -1739,7 +1752,10 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                       ) {
                         shortPath = predict.length;
                         player.goodtime = frame;
-                        player.attackX = copyball.x;
+                        const shift = player.isPlayer2
+                          ? -PLAYER_HALF_LENGTH + (direct % 2 === 1 ? 15 : 9)
+                          : PLAYER_HALF_LENGTH - (direct % 2 === 1 ? 15 : 9);
+                        player.attackX = copyball.x + shift;
                         player.direction = direct;
                         userInput.yDirection = -1;
                         console.log(
@@ -1943,7 +1959,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
             theOtherPlayer.state < 3 &&
             player.direction < 4 &&
             (player.yVelocity < 0 ||
-              Math.abs(player.x - GROUND_HALF_WIDTH) > 124) &&
+              Math.abs(player.x - GROUND_HALF_WIDTH) > 112) && // 216-32-72
             Math.abs(theOtherPlayer.x - GROUND_HALF_WIDTH) <
               PLAYER_HALF_LENGTH + 61
           ) {
@@ -2031,7 +2047,8 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         player.fancy = false;
       }
       console.log((player.isPlayer2 ? '2' : '1') + ':hit');
-      console.log(player.y + player.yVelocity);
+      // console.log(player.x);
+      // console.log(player.y + player.yVelocity);
       console.log(ball.path[0]);
       console.log(ball.path[0].predict[player.direction]);
       if (player.direction === 0) {
