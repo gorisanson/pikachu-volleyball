@@ -1121,7 +1121,7 @@ function cantouch(player, copyball, frame) {
   ) {
     let needframe = -1;
     if (player.state > 0) {
-      needframe = 16 - player.yVelocity;
+      needframe = 16 - player.yVelocity - (player.isPlayer2 ? 1 : 0);
       if (frame < needframe) {
         return (
           Math.abs(copyball.y - otherPlayerYpredict(player, frame)) <=
@@ -1226,13 +1226,10 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         break;
       }
     }
-    if (player.yVelocity === 16 && player.y === 244) {
-      if (player.secondjump) {
-        userInput.yDirection = -1;
-        console.log((player.isPlayer2 ? '2' : '1') + ':second jump');
-      } else {
-        player.secondattack = -1;
-      }
+    if (player.yVelocity === 16 && player.y === 244 && player.secondjump) {
+      userInput.yDirection = -1;
+      console.log((player.isPlayer2 ? '2' : '1') + ':second jump');
+
       player.secondjump = false;
     }
     if (maychange && player.goodtime < 0 && player.secondattack < 0) {
@@ -1249,8 +1246,8 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
             // thunder
             if (
               direct > 3 &&
-              predict.length > 2 &&
-              predict[2].yVelocity < 0 &&
+              predict.length > 3 &&
+              predict[3].yVelocity < 3 &&
               sameside(theOtherPlayer, predict[1].x)
             ) {
               short_len = 0;
@@ -1307,6 +1304,12 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       // console.log((player.isPlayer2 ? '2' : '1') + ': now');
       // normal defense
       virtualExpectedLandingPointX = ball.expectedLandingPointX;
+
+      if (ball.path.length > 16) {
+        virtualExpectedLandingPointX =
+          ball.expectedLandingPointX +
+          (player.isPlayer2 ? -6 : 6) * (ball.path.length - 16);
+      }
       if (
         player.state > 0 &&
         player.yVelocity < 16 &&
@@ -1350,7 +1353,12 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       }
 
       // attack
-      if (!thunder_defense && player.secondattack < 0 && player.state < 3) {
+      if (
+        !thunder_defense &&
+        (player.secondattack < 0 ||
+          (player.secondattack > -1 && player.state === 0)) &&
+        player.state < 3
+      ) {
         let shortPath = 1000;
         // jumping ball from x;
         if (
@@ -1388,6 +1396,78 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                 break;
               }
               if (
+                direct === 2 &&
+                playerYpredictJump(player, predictframe + 1) !== 244 &&
+                Math.abs(
+                  predictball.y - playerYpredictJump(player, predictframe + 1)
+                ) <= PLAYER_HALF_LENGTH &&
+                Math.abs(
+                  predict[predictframe - 1].y -
+                    playerYpredictJump(player, predictframe)
+                ) > PLAYER_HALF_LENGTH &&
+                Math.abs(predictball.x - copyball.x) <=
+                  6 * predictframe + PLAYER_LENGTH
+              ) {
+                // short ball should close net
+                if (
+                  Math.abs(predictball.x - GROUND_HALF_WIDTH) > 20 ||
+                  predictball.y > 176
+                ) {
+                  continue;
+                }
+                shortPath = -1;
+                player.goodtime = 0;
+                const shift =
+                  predictball.x < copyball.x
+                    ? -PLAYER_HALF_LENGTH + 3
+                    : PLAYER_HALF_LENGTH - 3;
+                player.attackX = copyball.x + shift;
+                player.direction = direct;
+                userInput.yDirection = -1;
+                player.fancy = true;
+                player.secondX =
+                  predictball.x +
+                  (player.isPlayer2
+                    ? -PLAYER_HALF_LENGTH + 9
+                    : PLAYER_HALF_LENGTH - 9);
+                player.secondattack = predictframe + 1;
+                player.secondjump = true;
+                console.log(
+                  (player.isPlayer2 ? '2' : '1') + ':jump fancy jump'
+                );
+              }
+              if (
+                direct === 3 &&
+                predictframe > 3 &&
+                Math.abs(
+                  predictball.y - playerYpredict(player, predictframe + 1)
+                ) <= PLAYER_HALF_LENGTH &&
+                Math.abs(predictball.x - copyball.x) <=
+                  6 * predictframe + PLAYER_LENGTH - 6
+              ) {
+                shortPath = -1;
+                player.goodtime = 0;
+                const shift =
+                  predictball.x < copyball.x
+                    ? -PLAYER_HALF_LENGTH + 9
+                    : PLAYER_HALF_LENGTH - 9;
+                player.attackX = copyball.x + shift;
+                player.direction = direct;
+                userInput.yDirection = -1;
+                player.fancy = true;
+                player.secondX =
+                  predictball.x +
+                  (player.isPlayer2
+                    ? -PLAYER_HALF_LENGTH + 9
+                    : PLAYER_HALF_LENGTH - 9);
+                player.secondattack = predictframe + 1;
+                player.secondjump = false;
+                console.log(
+                  (player.isPlayer2 ? '2' : '1') + ':jump fancy flat'
+                );
+                break;
+              }
+              if (
                 Math.abs(
                   predictball.y - playerYpredict(player, predictframe + 1)
                 ) <= PLAYER_HALF_LENGTH &&
@@ -1413,6 +1493,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                     ? -PLAYER_HALF_LENGTH + 9
                     : PLAYER_HALF_LENGTH - 9);
                 player.secondattack = predictframe + 1;
+                player.secondjump = false;
                 console.log((player.isPlayer2 ? '2' : '1') + ':jump fancy');
                 // console.log(predict);
                 // console.log('predictframe ' + predictframe);
@@ -1425,7 +1506,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
 
           // normal
           if (shortPath > -1) {
-            for (let direct = 2; direct < 6; direct++) {
+            for (let direct = 0; direct < 6; direct++) {
               if (
                 Math.abs(player.x - ball.x) > PLAYER_HALF_LENGTH &&
                 direct % 2 === 0
@@ -1434,7 +1515,8 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
               }
               const predict = copyball.predict[direct];
               if (
-                samesideloss(theOtherPlayer, predict[predict.length - 1].x) &&
+                (samesideloss(theOtherPlayer, predict[predict.length - 1].x) ||
+                  (player.state === 2 && predict.length > 20)) &&
                 predict.length < shortPath
               ) {
                 shortPath = predict.length;
@@ -1519,6 +1601,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
 
             // jump or miss
             if (
+              player.secondattack < 0 &&
               shortPath > -1 &&
               sameside(player, ball.expectedLandingPointX) &&
               Math.abs(player.x - ball.expectedLandingPointX) >
@@ -1533,7 +1616,11 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                 }
                 const predict = copyball.predict[direct];
                 if (
-                  samesideloss(theOtherPlayer, predict[predict.length - 1].x) &&
+                  (samesideloss(
+                    theOtherPlayer,
+                    predict[predict.length - 1].x
+                  ) ||
+                    predict.length > 20) &&
                   (predict.length < shortPath ||
                     (predict.length === shortPath && true_rand() % 2 < 1))
                 ) {
@@ -1632,6 +1719,38 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                       );
                     }
                     if (
+                      direct === 3 &&
+                      predictframe > 3 &&
+                      Math.abs(
+                        predictball.y -
+                          playerYpredict(player, frame + predictframe + 1)
+                      ) <= PLAYER_HALF_LENGTH &&
+                      Math.abs(predictball.x - copyball.x) <=
+                        6 * predictframe + PLAYER_LENGTH - 6
+                    ) {
+                      shortPath = -1;
+                      player.goodtime = frame;
+                      const shift =
+                        predictball.x < copyball.x
+                          ? -PLAYER_HALF_LENGTH + 9
+                          : PLAYER_HALF_LENGTH - 9;
+                      player.attackX = copyball.x + shift;
+                      player.direction = direct;
+                      userInput.yDirection = -1;
+                      player.fancy = true;
+                      player.secondX =
+                        predictball.x +
+                        (player.isPlayer2
+                          ? -PLAYER_HALF_LENGTH + 9
+                          : PLAYER_HALF_LENGTH - 9);
+                      player.secondattack = frame + predictframe + 1;
+                      player.secondjump = false;
+                      console.log(
+                        (player.isPlayer2 ? '2' : '1') + ':normal fancy flat'
+                      );
+                      break;
+                    }
+                    if (
                       Math.abs(
                         predictball.y -
                           playerYpredict(player, frame + predictframe + 1)
@@ -1645,16 +1764,6 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                           PLAYER_LENGTH -
                           (direct === 3 ? 6 : 0)
                     ) {
-                      // short ball should close net
-                      if (
-                        (direct === 2 &&
-                          Math.abs(predictball.x - GROUND_HALF_WIDTH) > 30 &&
-                          copyball.yVelocity < 30) ||
-                        (predictball.y > NET_PILLAR_TOP_BOTTOM_Y_COORD &&
-                          true_rand() % 10 < 5)
-                      ) {
-                        continue;
-                      }
                       shortPath = -1;
                       player.goodtime = frame;
                       const shift =
@@ -1683,6 +1792,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                 if (shortPath > -1) {
                   // jump or miss
                   if (
+                    player.secondattack < 0 &&
                     samesideloss(player, ball.expectedLandingPointX) &&
                     Math.abs(player.x - ball.expectedLandingPointX) >
                       ball.path.length * 6 + PLAYER_HALF_LENGTH
@@ -1690,10 +1800,11 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                     for (let direct = 0; direct < 6; direct++) {
                       const predict = copyball.predict[direct];
                       if (
-                        samesideloss(
+                        (samesideloss(
                           theOtherPlayer,
                           predict[predict.length - 1].x
-                        ) &&
+                        ) ||
+                          predict.length > 20) &&
                         (predict.length < shortPath ||
                           (predict.length === shortPath && true_rand() % 2 < 1))
                       ) {
@@ -1805,7 +1916,10 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       diving = false;
     }
     // attack
-    if (player.goodtime === 0 || player.secondattack === 0) {
+    if (
+      player.goodtime === 0 ||
+      (player.state > 0 && player.secondattack === 0)
+    ) {
       userInput.powerHit = 1;
       // block
       // if (Math.abs(ball.x - GROUND_HALF_WIDTH) < 72 && ball.isPowerHit) {
@@ -1826,6 +1940,9 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
             ) {
               continue;
             }
+            if (Math.abs(ball.x - player.x) > PLAYER_HALF_LENGTH + 6) {
+              continue;
+            }
             const predict = copyball.predict[direct];
             for (
               let predictframe = 1;
@@ -1835,6 +1952,47 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
               const predictball = predict[predictframe];
               if (!sameside(player, predictball.x)) {
                 break;
+              }
+              if (
+                direct === 2 &&
+                playerYpredictJump(player, predictframe + 1) !== 244 &&
+                Math.abs(
+                  predictball.y - playerYpredictJump(player, predictframe + 1)
+                ) <= PLAYER_HALF_LENGTH &&
+                Math.abs(
+                  predict[predictframe - 1].y -
+                    playerYpredictJump(player, predictframe)
+                ) > PLAYER_HALF_LENGTH &&
+                Math.abs(predictball.x - copyball.x) <=
+                  6 * predictframe + PLAYER_LENGTH
+              ) {
+                // short ball should close net
+                if (
+                  Math.abs(predictball.x - GROUND_HALF_WIDTH) > 20 ||
+                  predictball.y > 176
+                ) {
+                  continue;
+                }
+                shortPath = -1;
+                player.goodtime = 0;
+                const shift =
+                  predictball.x < copyball.x
+                    ? -PLAYER_HALF_LENGTH + 3
+                    : PLAYER_HALF_LENGTH - 3;
+                player.attackX = copyball.x + shift;
+                player.direction = direct;
+                userInput.yDirection = -1;
+                player.fancy = true;
+                player.secondX =
+                  predictball.x +
+                  (player.isPlayer2
+                    ? -PLAYER_HALF_LENGTH + 9
+                    : PLAYER_HALF_LENGTH - 9);
+                player.secondattack = predictframe + 1;
+                player.secondjump = true;
+                console.log(
+                  (player.isPlayer2 ? '2' : '1') + ':second fancy jump'
+                );
               }
               if (
                 Math.abs(
@@ -1867,6 +2025,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                     ? -PLAYER_HALF_LENGTH + 9
                     : PLAYER_HALF_LENGTH - 9);
                 player.secondattack = predictframe + 1;
+                player.secondjump = false;
                 console.log((player.isPlayer2 ? '2' : '1') + ':second fancy');
                 break;
               }
