@@ -150,8 +150,14 @@ class Key {
    * Subscribe event listeners
    */
   subscribe() {
-    window.addEventListener('keydown', this.downListener);
+    // I think an event listener for keyup should be attached
+    // before the one for keydown to prevent a buggy behavior.
+    // If keydown event listener were attached first and
+    // a key was downed and upped before keyup event listener were attached,
+    // I think the value of this.isDown would be true (and the value of this.isUp would be false)
+    // for a while before the user press this key again.
     window.addEventListener('keyup', this.upListner);
+    window.addEventListener('keydown', this.downListener);
   }
 
   /**
