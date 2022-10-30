@@ -82,11 +82,12 @@ export class ReplaySaver {
     const d = new Date();
     // The code removing illegal characters in Windows by replace method is from:
     // https://stackoverflow.com/a/42210346/8581025
-    const filename = `${d.getFullYear()}${('0' + (d.getMonth() + 1)).slice(
+    const filename = `offline_${d.getFullYear()}${(
+      '0' +
+      (d.getMonth() + 1)
+    ).slice(-2)}${('0' + d.getDate()).slice(-2)}_${('0' + d.getHours()).slice(
       -2
-    )}${('0' + d.getDate()).slice(-2)}_${('0' + d.getHours()).slice(-2)}${(
-      '0' + d.getMinutes()
-    ).slice(-2)}_offline.txt`.replace(/[/\\?%*:|"<>]/g, '_');
+    )}${('0' + d.getMinutes()).slice(-2)}.txt`.replace(/[/\\?%*:|"<>]/g, '_');
     saveAs(blob, filename, { autoBom: true });
   }
 }
