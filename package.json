@@ -15,7 +15,7 @@
   "keywords": [
     "game"
   ],
-  "author": "Lee, Kyutae",
+  "author": "Kyutae Lee",
   "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/gorisanson/pikachu-volleyball/issues"
@@ -49,7 +49,7 @@
     "@pixi/loaders": "^6.4.2",
     "@pixi/prepare": "^6.4.2",
     "@pixi/settings": "^6.4.2",
-    "@pixi/sound": "github:gorisanson/sound#773aceef8b2e82ea4fa52d3a2856cd83bb7d1d44",
+    "@pixi/sound": "^4.2.1",
     "@pixi/sprite": "^6.4.2",
     "@pixi/sprite-animated": "^6.4.2",
     "@pixi/spritesheet": "^6.4.2",
