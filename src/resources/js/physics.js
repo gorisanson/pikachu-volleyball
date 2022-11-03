@@ -1331,22 +1331,6 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         }
       }
 
-      // thunder defense
-      let thunder_defense = false;
-      if (sameside(theOtherPlayer, ball.x)) {
-        for (let frame = 0; frame < ball.path.length && frame < 4; frame++) {
-          const copyball = ball.path[frame];
-          if (
-            sameside(theOtherPlayer, copyball.x) &&
-            copyball.yVelocity < -29
-          ) {
-            // console.log((player.isPlayer2 ? '2' : '1') + ':thunder defense');
-            virtualExpectedLandingPointX = GROUND_HALF_WIDTH;
-            thunder_defense = true;
-            break;
-          }
-        }
-      }
       if (ball.yVelocity > 60 && ball.y < 244 - 32) {
         virtualExpectedLandingPointX = GROUND_HALF_WIDTH;
         userInput.yDirection = -1;
@@ -1354,7 +1338,6 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
 
       // attack
       if (
-        !thunder_defense &&
         (player.secondattack < 0 ||
           (player.secondattack > -1 &&
             (player.state === 0 || player.yVelocity === 16))) &&
@@ -1406,7 +1389,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                   predict[predictframe - 1].y -
                     playerYpredictJump(player, predictframe)
                 ) > PLAYER_HALF_LENGTH &&
-                Math.abs(predictball.x - copyball.x) <=
+                Math.abs(predictball.x - player.x) <=
                   6 * predictframe + PLAYER_LENGTH &&
                 predictframe - 100 <= shortPath
               ) {
@@ -1444,11 +1427,11 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                 Math.abs(
                   predictball.y - playerYpredict(player, predictframe + 1)
                 ) <= PLAYER_HALF_LENGTH &&
-                Math.abs(predictball.x - copyball.x) <=
-                  6 * predictframe + PLAYER_LENGTH - 6 &&
-                predictframe - 100 <= shortPath
+                Math.abs(predictball.x - player.x) <=
+                  6 * predictframe + PLAYER_HALF_LENGTH - 6 &&
+                predictframe - 1000 <= shortPath
               ) {
-                shortPath = predictframe - 100;
+                shortPath = predictframe - 1000;
                 player.goodtime = 0;
                 const shift =
                   predictball.x < copyball.x
@@ -1735,9 +1718,9 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                       ) <= PLAYER_HALF_LENGTH &&
                       Math.abs(predictball.x - copyball.x) <=
                         6 * predictframe + PLAYER_LENGTH - 6 &&
-                      predictframe - 100 <= shortPath
+                      predictframe - 1000 <= shortPath
                     ) {
-                      shortPath = predictframe - 100;
+                      shortPath = predictframe - 1000;
                       player.goodtime = frame;
                       const shift =
                         predictball.x < copyball.x
@@ -1838,7 +1821,11 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                     // ) {
                     //   continue;
                     // }
-                    for (let direct = 2; direct < 6; direct++) {
+                    for (let direct = 0; direct < 6; direct++) {
+                      // up forward disable;
+                      if (direct === 1) {
+                        continue;
+                      }
                       // random;
                       if (true_rand() % 10 < 2) {
                         continue;
@@ -1860,6 +1847,13 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                         predict.length > lock3 + 10 &&
                         (theOtherPlayer.yVelocity > -1 ||
                           Math.abs(copyball.x - GROUND_HALF_WIDTH) > 72)
+                      ) {
+                        continue;
+                      }
+                      // far ball
+                      if (
+                        Math.abs(copyball.x - GROUND_HALF_WIDTH) > 144 &&
+                        direct > 0
                       ) {
                         continue;
                       }
@@ -1894,7 +1888,6 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
 
       if (
         capability.diving &&
-        !thunder_defense &&
         player.state < 3 &&
         player.goodtime < 0 &&
         player.secondattack < 0 &&
