@@ -89,7 +89,7 @@ export class PikaPhysics {
    * run {@link physicsEngine} function with this physics object and user input
    *
    * @param {PikaUserInput[]} userInputArray userInputArray[0]: PikaUserInput object for player 1, userInputArray[1]: PikaUserInput object for player 2
-   * @return {Array} Is ball touching ground?
+   * @return {boolean} Is ball touching ground?
    */
   runEngineForNextFrame(userInputArray) {
     const isBallTouchingGournd = physicsEngine(
@@ -98,7 +98,7 @@ export class PikaPhysics {
       this.ball,
       userInputArray
     );
-    return [isBallTouchingGournd, userInputArray];
+    return isBallTouchingGournd;
   }
 }
 
