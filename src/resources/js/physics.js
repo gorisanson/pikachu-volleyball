@@ -1291,6 +1291,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         }
       }
       if (
+        capability.close_defense &&
         Math.abs(short_x - GROUND_HALF_WIDTH) > 44 &&
         // player.state === 0
         (player.state === 0 ||
@@ -1466,10 +1467,10 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                   (player.isPlayer2
                     ? -PLAYER_HALF_LENGTH + 9
                     : PLAYER_HALF_LENGTH - 9);
-                if (Math.abs(player.secondX - GROUND_HALF_WIDTH) < 44) {
-                  player.secondX =
-                    GROUND_HALF_WIDTH + (player.isPlayer2 ? 44 : -44);
-                }
+                // if (Math.abs(player.secondX - GROUND_HALF_WIDTH) < 44) {
+                //   player.secondX =
+                //     GROUND_HALF_WIDTH + (player.isPlayer2 ? 44 : -44);
+                // }
                 player.secondattack = predictframe + 1;
                 player.secondjump = false;
                 console.log(
@@ -1560,9 +1561,9 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
               ) {
                 continue;
               }
-              if (direct === 0 && ball.yVelocity > 60) {
-                continue;
-              }
+              // if (direct === 0 && ball.yVelocity > 60) {
+              //   continue;
+              // }
               if (true_rand() % 10 < 1) {
                 continue;
               }
@@ -1779,10 +1780,10 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                         (player.isPlayer2
                           ? -PLAYER_HALF_LENGTH + 9
                           : PLAYER_HALF_LENGTH - 9);
-                      if (Math.abs(player.secondX - GROUND_HALF_WIDTH) < 44) {
-                        player.secondX =
-                          GROUND_HALF_WIDTH + (player.isPlayer2 ? 44 : -44);
-                      }
+                      // if (Math.abs(player.secondX - GROUND_HALF_WIDTH) < 44) {
+                      //   player.secondX =
+                      //     GROUND_HALF_WIDTH + (player.isPlayer2 ? 44 : -44);
+                      // }
                       player.secondattack = frame + predictframe + 1;
                       player.secondjump = false;
                       console.log(
@@ -1876,14 +1877,6 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                     }
                   } else {
                     // noraml;
-                    // long high ball
-                    // if (
-                    //   player.state === 0 &&
-                    //   Math.abs(copyball.x - GROUND_HALF_WIDTH) > 144 &&
-                    //   copyball.y < lock1 + 80
-                    // ) {
-                    //   continue;
-                    // }
                     for (let direct = 0; direct < 6; direct++) {
                       // up forward disable;
                       if (direct === 1) {
@@ -1895,6 +1888,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                       }
                       // early hit
                       if (
+                        !capability.early_ball &&
                         direct < 4 &&
                         player.state === 0 &&
                         frame < lock2 + 10 &&
@@ -2174,7 +2168,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
           // juke
           if (player.juke && player.secondattack === 0) {
             console.log((player.isPlayer2 ? '2' : '1') + ':juke');
-            if (true_rand() % 10 < 8 || ball.x === GROUND_HALF_WIDTH) {
+            if (true_rand() % 10 < 5 || ball.x === GROUND_HALF_WIDTH) {
               player.direction = -3;
             }
             player.juke = false;
@@ -2206,6 +2200,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
 
           // anti block
           if (
+            capability.anti_block &&
             theOtherPlayer.state < 3 &&
             player.direction < 4 &&
             (player.yVelocity < 0 ||

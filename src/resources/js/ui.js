@@ -35,6 +35,9 @@ export var capability = {
   fancy: true,
   block: true,
   diving: true,
+  anti_block: true,
+  close_defense: true,
+  early_ball: false,
   jump: false,
 };
 /**
@@ -756,31 +759,15 @@ function setUpBtns(pikaVolley, ticker) {
     }
   });
 
-  const serve = document.getElementById('serve');
-  serve.addEventListener('change', () => {
-    // @ts-ignore
-    capability.serve = serve.checked;
-  });
-  const fancy = document.getElementById('fancy');
-  fancy.addEventListener('change', () => {
-    // @ts-ignore
-    capability.fancy = fancy.checked;
-  });
-  const block = document.getElementById('block');
-  block.addEventListener('change', () => {
-    // @ts-ignore
-    capability.block = block.checked;
-  });
-  const diving = document.getElementById('diving');
-  diving.addEventListener('change', () => {
-    // @ts-ignore
-    capability.diving = diving.checked;
-  });
-  const jump = document.getElementById('jump');
-  jump.addEventListener('change', () => {
-    // @ts-ignore
-    capability.jump = jump.checked;
-  });
+  for (var key in capability) {
+    (function (key) {
+      document.getElementById(key).addEventListener('change', () => {
+        console.log(key);
+        // @ts-ignore
+        capability[key] = document.getElementById(key).checked;
+      });
+    })(key);
+  }
 
   const player1_1_step = document.getElementById('player1-1-step-serve');
   player1_1_step.addEventListener('change', () => {
