@@ -1314,7 +1314,11 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
       //   (player.isPlayer2 ? '2: ' : '1: ') + virtualExpectedLandingPointX
       // );
       // player.goodtime = -1;
-      if (capability.jump && theOtherPlayer.yVelocity < -6) {
+      if (
+        capability.jump &&
+        theOtherPlayer.yVelocity === -10 &&
+        theOtherPlayer.state === 1
+      ) {
         userInput.yDirection = -1;
         virtualExpectedLandingPointX = GROUND_HALF_WIDTH;
       }
