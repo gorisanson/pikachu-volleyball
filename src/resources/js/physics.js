@@ -1398,12 +1398,13 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         if (
           ball.xVelocity !== 0 &&
           player.isPlayer2 === ball.xVelocity < 0 &&
-          ball.yVelocity < 12 &&
+          ball.yVelocity < 13 &&
           !cansmash
         ) {
           virtualExpectedLandingPointX =
-            (ball.path.length > 1 ? ball.path[1].x : ball.x) +
-            (player.isPlayer2 ? 1 : -1) * PLAYER_HALF_LENGTH;
+            ball.x + (player.isPlayer2 ? 1 : -1) * (PLAYER_HALF_LENGTH - 3);
+          // (ball.path.length > 1 ? ball.path[1].x : ball.x) +
+          // (player.isPlayer2 ? 1 : -1) * (PLAYER_HALF_LENGTH - 2);
         } else {
           if (Math.abs(player.x - ball.x) > PLAYER_HALF_LENGTH) {
             virtualExpectedLandingPointX = player.x;
@@ -1433,6 +1434,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
         player.state < 3
       ) {
         let shortPath = 100;
+        const testflag = true;
         // jumping ball from x;
         if (
           player.goodtime !== 0 &&
@@ -1484,7 +1486,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
               if (
                 true_rand() % 10 < 9 &&
                 direct === 3 &&
-                playerYpredictJump(player, predictframe + 1) !== 244 &&
+                playerYpredictJump(player, predictframe + 1) === 228 &&
                 Math.abs(
                   predictball.y - playerYpredictJump(player, predictframe + 1)
                 ) <= PLAYER_HALF_LENGTH &&
@@ -1533,15 +1535,12 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                 ) > PLAYER_HALF_LENGTH &&
                 Math.abs(predictball.x - player.x) <=
                   6 * predictframe + PLAYER_HALF_LENGTH &&
-                predictframe - 100 <= shortPath
-              ) {
-                // short ball should close net
-                if (
+                predictframe - 100 <= shortPath &&
+                !(
                   Math.abs(predictball.x - GROUND_HALF_WIDTH) > 20 ||
                   predictball.y > 176
-                ) {
-                  continue;
-                }
+                )
+              ) {
                 shortPath = predictframe - 100;
                 player.goodtime = 0;
                 const shift =
@@ -1887,10 +1886,11 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                       flatX = predictball.x;
                     }
                     if (
+                      testflag &&
                       true_rand() % 10 < 9 &&
                       direct === 3 &&
-                      playerYpredictJump(player, frame + predictframe + 1) !==
-                        244 &&
+                      playerYpredictJump(player, frame + predictframe + 1) ===
+                        228 &&
                       Math.abs(
                         predictball.y -
                           playerYpredictJump(player, frame + predictframe + 1)
@@ -1926,7 +1926,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                       );
                     }
                     if (
-                      // false &&
+                      //   testflag &&
                       true_rand() % 10 < 9 &&
                       direct === 2 &&
                       playerYpredictJump(player, frame + predictframe + 1) !==
@@ -1941,15 +1941,12 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                       ) > PLAYER_HALF_LENGTH &&
                       Math.abs(predictball.x - copyball.x) <=
                         6 * predictframe + PLAYER_LENGTH &&
-                      predictframe - 100 <= shortPath
-                    ) {
-                      // short ball should close net
-                      if (
+                      predictframe - 100 <= shortPath &&
+                      !(
                         Math.abs(predictball.x - GROUND_HALF_WIDTH) > 20 ||
                         predictball.y > 176
-                      ) {
-                        continue;
-                      }
+                      )
+                    ) {
                       shortPath = predictframe - 100;
                       player.goodtime = frame;
                       const shift =
@@ -1972,7 +1969,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                       );
                     }
                     if (
-                      // false &&
+                      testflag &&
                       true_rand() % 10 < 9 &&
                       direct === 2 &&
                       dropX !== 0 &&
@@ -2020,7 +2017,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                       break;
                     }
                     if (
-                      // false &&
+                      testflag &&
                       true_rand() % 10 < 9 &&
                       direct === 3 &&
                       frame > 1 &&
@@ -2188,7 +2185,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                         continue;
                       }
                       if (
-                        // false &&
+                        testflag &&
                         true_rand() % 10 < 8 &&
                         samesideloss(
                           theOtherPlayer,
@@ -2315,15 +2312,12 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
                 ) > PLAYER_HALF_LENGTH &&
                 Math.abs(predictball.x - player.x) <=
                   6 * predictframe + PLAYER_HALF_LENGTH + 6 &&
-                predictframe - 100 <= shortPath
-              ) {
-                // short ball should close net
-                if (
+                predictframe - 100 <= shortPath &&
+                !(
                   Math.abs(predictball.x - GROUND_HALF_WIDTH) > 20 ||
                   predictball.y > 176
-                ) {
-                  continue;
-                }
+                )
+              ) {
                 shortPath = predictframe - 100;
                 player.goodtime = 0;
                 const shift =
