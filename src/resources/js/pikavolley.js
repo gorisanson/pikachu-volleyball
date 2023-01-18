@@ -360,13 +360,14 @@ export class PikachuVolleyball {
     //   this.state = this.intro;
     //   return;
     // }
-    if (this.gameEnded) {
+    const PlayerMove = this.gameEnded && this.frameCounter >= 70;
+    if (PlayerMove) {
       replaySaver.recordInputs(this.keyboardArray[0], this.keyboardArray[1]);
     }
     const isBallTouchingGround = this.physics.runEngineForNextFrame(
       this.keyboardArray
     );
-    if (!this.gameEnded) {
+    if (!PlayerMove) {
       replaySaver.recordInputs(this.keyboardArray[0], this.keyboardArray[1]);
     }
 
