@@ -24,7 +24,7 @@ function setUpDarkColorSchemeCheckbox() {
       '(prefers-color-scheme: dark)'
     ).matches;
     // The following line is not for "document.documentElement.dataset.colorScheme = colorScheme;".
-    // document.documentElement.dataset.colorShceme is not needed to be set for displaying dark color scheme,
+    // document.documentElement.dataset.colorScheme is not needed to be set for displaying dark color scheme,
     // since style.css has media query "@media (prefers-color-scheme: dark)" which deals with it without JavaScript.
     // The following line is for setting theme color and etc...
     applyColorScheme(doesPreferDarkColorScheme ? 'dark' : 'light');

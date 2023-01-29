@@ -268,7 +268,7 @@ export class PikachuVolleyball {
   }
 
   /**
-   * Delay before start of new game (This is for the dalay that exist in the original game)
+   * Delay before start of new game (This is for the delay that exist in the original game)
    * @type {GameState}
    */
   beforeStartOfNewGame() {

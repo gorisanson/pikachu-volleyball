@@ -4,7 +4,7 @@
  * It is the core module which acts as a physics engine.
  * This physics engine calculates the movements of the ball and the players (Pikachus).
  *
- * It is gained by reverse engineering the original game.
+ * It was gained by reverse engineering the original game.
  * The address of each function in the original machine code is specified at the comment above each function.
  * ex) FUN_00403dd0 means the original function at the address 00403dd0.
  *
@@ -86,13 +86,13 @@ export class PikaPhysics {
    * @return {boolean} Is ball touching ground?
    */
   runEngineForNextFrame(userInputArray) {
-    const isBallTouchingGournd = physicsEngine(
+    const isBallTouchingGround = physicsEngine(
       this.player1,
       this.player2,
       this.ball,
       userInputArray
     );
-    return isBallTouchingGournd;
+    return isBallTouchingGround;
   }
 }
 
@@ -119,7 +119,7 @@ export class PikaUserInput {
  * e.g. address to player1.isPlayer: 00411F28 -> +28 -> +10 -> +C -> +A0
  * e.g. address to player2.isComputer: 00411F28 -> +28 -> +10 -> +10 -> +A4
  *
- * For initial values: refer FUN_000403a90 && FUN_00401f40
+ * For initial values: refer to FUN_000403a90 && FUN_00401f40
  */
 class Player {
   /**
@@ -147,7 +147,7 @@ class Player {
      * It flips randomly to 0 or 1 by the {@link letComputerDecideUserInput} function (FUN_00402360)
      * when ball is hanging around on the other player's side.
      * If it is 0, computer player stands by around the middle point of their side.
-     * If it is 1, computer player stands by adjecent to the net.
+     * If it is 1, computer player stands by adjacent to the net.
      * @type {number} 0 or 1
      */
     this.computerWhereToStandBy = 0; // 0xDC
@@ -155,7 +155,7 @@ class Player {
     /**
      * This property is not in the player pointers of the original source code.
      * But for sound effect (especially for stereo sound),
-     * it is convinient way to give sound property to a Player.
+     * it is convenient way to give sound property to a Player.
      * The original name is stereo sound.
      * @type {Object.<string, boolean>}
      */
@@ -180,7 +180,7 @@ class Player {
     /** @type {number} y direction velocity */
     this.yVelocity = 0; // 0xB0  // initialized to 0
     /** @type {boolean} */
-    this.isCollisionWithBallHappened = false; // 0xBC   // initizlized to 0 i.e false
+    this.isCollisionWithBallHappened = false; // 0xBC   // initialized to 0 i.e false
 
     /**
      * Player's state
@@ -195,17 +195,17 @@ class Player {
     /** @type {number} */
     this.normalStatusArmSwingDirection = 1; // 0xC8  // initialized to 1
     /** @type {number} */
-    this.delayBeforeNextFrame = 0; // 0xCC  // initizlized to 0
+    this.delayBeforeNextFrame = 0; // 0xCC  // initialized to 0
 
     /**
      * This value is initialized to (_rand() % 5) before the start of every round.
      * The greater the number, the bolder the computer player.
      *
      * If computer has higher boldness,
-     * judges more the ball is haing around the other player's side,
+     * judges more the ball is hanging around the other player's side,
      * has greater distance to the expected landing point of the ball,
      * jumps more,
-     * dives less.
+     * and dives less.
      * See the source code of the {@link letComputerDecideUserInput} function (FUN_00402360).
      *
      * @type {number} 0, 1, 2, 3 or 4
@@ -221,7 +221,7 @@ class Player {
  * The "..." part is written on the line comment at the right side of each property.
  * e.g. address to ball.fineRotation: 00411F28 -> +28 -> +10 -> +14 -> +48
  *
- * For initial Values: refer FUN_000403a90 && FUN_00402d60
+ * For initial Values: refer to FUN_000403a90 && FUN_00402d60
  */
 class Ball {
   /**
@@ -257,7 +257,7 @@ class Ball {
     /**
      * this property is not in the ball pointer of the original source code.
      * But for sound effect (especially for stereo sound),
-     * it is convinient way to give sound property to a Ball.
+     * it is convenient way to give sound property to a Ball.
      * The original name is stereo sound.
      */
     this.sound = {
@@ -280,7 +280,7 @@ class Ball {
     this.y = 0; // 0x34   // initialized to 0
     /** @type {number} x direction velocity */
     this.xVelocity = 0; // 0x38  // initialized to 0
-    /** @type {number} y directin velicity */
+    /** @type {number} y direction velocity */
     this.yVelocity = 1; // 0x3C  // initialized to 1
     /** @type {number} punch effect radius */
     this.punchEffectRadius = 0; // 0x4c // initialized to 0
@@ -298,7 +298,7 @@ class Ball {
  * @param {Player} player2 player on the right side
  * @param {Ball} ball ball
  * @param {PikaUserInput[]} userInputArray userInputArray[0]: user input for player 1, userInputArray[1]: user input for player 2
- * @return {boolean} Is ball tounching ground?
+ * @return {boolean} Is ball touching ground?
  */
 function physicsEngine(player1, player2, ball, userInputArray) {
   const isBallTouchingGround =
@@ -315,8 +315,8 @@ function physicsEngine(player1, player2, ball, userInputArray) {
       theOtherPlayer = player1;
     }
 
-    // FUN_00402d90 ommited
-    // FUN_00402810 ommited
+    // FUN_00402d90 omitted
+    // FUN_00402810 omitted
     // this javascript code is refactored not to need above two function except for
     // a part of FUN_00402d90:
     // FUN_00402d90 include FUN_004031b0(calculateExpectedLandingPointXFor)
@@ -329,9 +329,9 @@ function physicsEngine(player1, player2, ball, userInputArray) {
       ball
     );
 
-    // FUN_00402830 ommited
-    // FUN_00406020 ommited
-    // These two functions ommited above maybe participate in graphic drawing for a player
+    // FUN_00402830 omitted
+    // FUN_00406020 omitted
+    // These two functions omitted above maybe participate in graphic drawing for a player
   }
 
   for (let i = 0; i < 2; i++) {
@@ -341,14 +341,14 @@ function physicsEngine(player1, player2, ball, userInputArray) {
       player = player2;
     }
 
-    // FUN_00402810 ommited: this javascript code is refactored not to need this function
+    // FUN_00402810 omitted: this javascript code is refactored not to need this function
 
-    const isHappend = isCollisionBetweenBallAndPlayerHappened(
+    const isHappened = isCollisionBetweenBallAndPlayerHappened(
       ball,
       player.x,
       player.y
     );
-    if (isHappend === true) {
+    if (isHappened === true) {
       if (player.isCollisionWithBallHappened === false) {
         processCollisionBetweenBallAndPlayer(
           ball,
@@ -365,14 +365,14 @@ function physicsEngine(player1, player2, ball, userInputArray) {
 
   // FUN_00403040
   // FUN_00406020
-  // These two functions ommited above maybe participate in graphic drawing for a player
+  // These two functions omitted above maybe participate in graphic drawing for a player
 
   return isBallTouchingGround;
 }
 
 /**
  * FUN_00403070
- * Is collision between ball and player happend?
+ * Is collision between ball and player happened?
  * @param {Ball} ball
  * @param {Player["x"]} playerX player.x
  * @param {Player["y"]} playerY player.y
@@ -407,10 +407,10 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   // "(ball.xVelocity / 2) | 0" is integer division by 2
   let futureFineRotation = ball.fineRotation + ((ball.xVelocity / 2) | 0);
   // If futureFineRotation === 50, it skips next if statement finely.
-  // Then ball.fineRoation = 50, and then ball.rotation = 5 (which designates hyperball sprite!).
+  // Then ball.fineRotation = 50, and then ball.rotation = 5 (which designates hyper ball sprite!).
   // In this way, hyper ball glitch occur!
   // If this happen at the end of round,
-  // since ball.xVeloicy is 0-initailized at each start of round,
+  // since ball.xVelocity is 0-initialized at each start of round,
   // hyper ball sprite is rendered continuously until a collision happens.
   if (futureFineRotation < 0) {
     futureFineRotation += 50;
@@ -429,9 +429,9 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
     or "futureBallX < BALL_RADIUS" should be changed to "futureBallX < 0".
     Maybe the former one is more proper when seeing Pikachu player's x-direction boundary.
     Is this a mistake of the author of the original game?
-    Or, was it set to this value to resolve inifite loop problem? (See comments on the constant INFINITE_LOOP_LIMIT.)
+    Or, was it set to this value to resolve infinite loop problem? (See comments on the constant INFINITE_LOOP_LIMIT.)
     If apply (futureBallX > (GROUND_WIDTH - BALL_RADIUS)), and if the maximum number of loop is not limited,
-    it is observed that inifinite loop in the function expectedLandingPointXWhenPowerHit does not terminate.
+    it is observed that infinite loop in the function expectedLandingPointXWhenPowerHit does not terminate.
   */
   if (futureBallX < BALL_RADIUS || futureBallX > GROUND_WIDTH) {
     ball.xVelocity = -ball.xVelocity;
@@ -552,9 +552,9 @@ function processPlayerMovementAndSetPlayerPosition(
     player.yVelocity = -16;
     player.state = 1;
     player.frameNumber = 0;
-    // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
-    // refer a detailed comment above about this function
-    // maybe-sound code function (playerpointer + 0x90 + 0x10)? ommited
+    // maybe-stereo-sound function FUN_00408470 (0x90) omitted:
+    // refer to a detailed comment above about this function
+    // maybe-sound code function (playerpointer + 0x90 + 0x10)? omitted
     player.sound.chu = true;
   }
 
@@ -585,10 +585,10 @@ function processPlayerMovementAndSetPlayerPosition(
       player.delayBeforeNextFrame = 5;
       player.frameNumber = 0;
       player.state = 2;
-      // maybe-sound function (playerpointer + 0x90 + 0x18)? ommited
-      // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
-      // refer a detailed comment above about this function
-      // maybe-sound function (playerpointer + 0x90 + 0x14)? ommited
+      // maybe-sound function (playerpointer + 0x90 + 0x18)? omitted
+      // maybe-stereo-sound function FUN_00408470 (0x90) omitted:
+      // refer to a detailed comment above about this function
+      // maybe-sound function (playerpointer + 0x90 + 0x14)? omitted
       player.sound.pika = true;
     } else if (player.state === 0 && userInput.xDirection !== 0) {
       // then player do diving!
@@ -596,9 +596,9 @@ function processPlayerMovementAndSetPlayerPosition(
       player.frameNumber = 0;
       player.divingDirection = userInput.xDirection;
       player.yVelocity = -5;
-      // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
-      // refer a detailed comment above about this function
-      // maybe-sound code function (playerpointer + 0x90 + 0x10)? ommited
+      // maybe-stereo-sound function FUN_00408470 (0x90) omitted:
+      // refer to a detailed comment above about this function
+      // maybe-sound code function (playerpointer + 0x90 + 0x10)? omitted
       player.sound.chu = true;
     }
   }
@@ -634,9 +634,9 @@ function processPlayerMovementAndSetPlayerPosition(
     if (player.state === 0) {
       if (player.isWinner === true) {
         player.state = 5;
-        // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
-        // refer a detailed comment above about this function
-        // maybe-sound code function (0x98 + 0x10) ommited
+        // maybe-stereo-sound function FUN_00408470 (0x90) omitted:
+        // refer to a detailed comment above about this function
+        // maybe-sound code function (0x98 + 0x10) omitted
         player.sound.pipikachu = true;
       } else {
         player.state = 6;
@@ -687,7 +687,7 @@ function processCollisionBetweenBallAndPlayer(
   // greater the x velocity of the ball.
   if (ball.x < playerX) {
     // Since javascript division is float division by default,
-    // Here we use "| 0" to do integer division (refer: https://stackoverflow.com/a/17218003/8581025)
+    // Here we use "| 0" to do integer division (refer to: https://stackoverflow.com/a/17218003/8581025)
     ball.xVelocity = -((Math.abs(ball.x - playerX) / 3) | 0);
   } else if (ball.x > playerX) {
     ball.xVelocity = (Math.abs(ball.x - playerX) / 3) | 0;
@@ -717,9 +717,9 @@ function processCollisionBetweenBallAndPlayer(
 
     ball.yVelocity = Math.abs(ball.yVelocity) * userInput.yDirection * 2;
     ball.punchEffectRadius = BALL_RADIUS;
-    // maybe-stereo-sound function FUN_00408470 (0x90) ommited:
-    // refer a detailed comment above about this function
-    // maybe-soundcode function (ballpointer + 0x24 + 0x10) ommited:
+    // maybe-stereo-sound function FUN_00408470 (0x90) omitted:
+    // refer to a detailed comment above about this function
+    // maybe-soundcode function (ballpointer + 0x24 + 0x10) omitted:
     ball.sound.powerHit = true;
 
     ball.isPowerHit = true;
@@ -792,10 +792,10 @@ function calculateExpectedLandingPointXFor(ball) {
  * Computer controls its player by this function.
  * Computer decides the user input for the player it controls,
  * according to the game situation it figures out
- * by the given parameters (player, ball and theOtherplayer),
+ * by the given parameters (player, ball and theOtherPlayer),
  * and reflects these to the given user input object.
  *
- * @param {Player} player The player whom computer contorls
+ * @param {Player} player The player whom computer controls
  * @param {Ball} ball ball
  * @param {Player} theOtherPlayer The other player
  * @param {PikaUserInput} userInput user input of the player whom computer controls

@@ -1,8 +1,8 @@
 /**
  * The View part in the MVC pattern
  *
- * Some codes in this module are gaind by reverse engineering the original machine code.
- * The codes gain by reverse engineering are commented by the refered funcion address in the machine code.
+ * Some codes in this module were gained by reverse engineering the original machine code.
+ * The codes gained by reverse engineering are commented by the address of the function referred to in the machine code.
  * ex) FUN_00405d50 means the function at the address 00405d50 in the machine code.
  */
 'use strict';
@@ -21,7 +21,7 @@ const TEXTURES = ASSETS_PATH.TEXTURES;
 const NUM_OF_CLOUDS = 10;
 
 /**
- * Class representing intro view where the man with a briefcase mark appers
+ * Class representing intro view where the man with a briefcase mark appears
  */
 export class IntroView {
   /**
@@ -96,11 +96,11 @@ export class MenuView {
     this.sittingPikachuTilesContainer =
       makeSittingPikachuTilesContainer(textures);
 
-    // refered FUN_004059f0
+    // referred to FUN_004059f0
     this.messages.sachisoft.x = 216 - this.messages.sachisoft.texture.width / 2;
     this.messages.sachisoft.y = 264;
 
-    // refered FUN_00405b70
+    // referred to FUN_00405b70
     this.messages.pikachuVolleyball.x = 140;
     this.messages.pikachuVolleyball.y = 80;
     this.messages.pokemon.x = 170;
@@ -143,7 +143,7 @@ export class MenuView {
   }
 
   /**
-   * refered FUN_00405d50
+   * referred to FUN_00405d50
    * Draw "fight!" message which get bigger and smaller as frame goes
    * @param {number} frameCounter
    */
@@ -162,7 +162,7 @@ export class MenuView {
       const halfHeight = Math.floor(Math.floor((frameCounter * h) / 30) / 2);
       fightMessage.width = halfWidth * 2; // width
       fightMessage.height = halfHeight * 2; // height
-      fightMessage.x = 100 - halfWidth; // x coor
+      fightMessage.x = 100 - halfWidth; // x coord
       fightMessage.y = 70 - halfHeight; // y coord
     } else {
       const index = (frameCounter + 1) % 9;
@@ -172,7 +172,7 @@ export class MenuView {
         Math.floor((sizeArray[index] * h) / 30) / 2
       );
       fightMessage.width = halfWidth * 2; // width
-      fightMessage.height = halfHeight * 2; // heigth
+      fightMessage.height = halfHeight * 2; // height
       fightMessage.y = 70 - halfHeight; // y coord
       fightMessage.x = 100 - halfWidth; // x coord
     }
@@ -198,7 +198,7 @@ export class MenuView {
   }
 
   /**
-   * refered FUN_00405ca0
+   * referred to FUN_00405ca0
    * Draw sitting pikachu tiles as frame goes
    * @param {number} frameCounter
    */
@@ -230,7 +230,7 @@ export class MenuView {
   }
 
   /**
-   * refered FUN_00405b70
+   * referred to FUN_00405b70
    * Draw pikachu volleyball message as frame goes
    * @param {number} frameCounter
    */
@@ -261,7 +261,7 @@ export class MenuView {
   }
 
   /**
-   * refered FUN_00405b70
+   * referred to FUN_00405b70
    * Draw pokemon message as frame goes
    * @param {number} frameCounter
    */
@@ -277,7 +277,7 @@ export class MenuView {
   }
 
   /**
-   * refered FUN_00405ec0
+   * referred to FUN_00405ec0
    * Draw with who messages (with computer or with friend) as frame goes
    * @param {number} frameCounter
    */
@@ -380,7 +380,7 @@ export class GameView {
     this.cloudContainer = makeCloudContainer(textures);
     this.waveContainer = makeWaveContainer(textures);
 
-    // container which include whold display objects
+    // container which include whole display objects
     // Should be careful on addChild order
     // The later added, the more front(z-index) on screen
     this.container = new Container();
