@@ -8,7 +8,7 @@
  * which is developed by "1997 (C) SACHI SOFT / SAWAYAKAN Programmers" & "1997 (C) Satoshi Takenouchi".
  *
  * "physics.js", "cloud_and_wave.js", and some codes in "view.js" are the results of this reverse engineering.
- * Refer the comments in each file for the machine code addresses of the original functions.
+ * Refer to the comments in each file for the machine code addresses of the original functions.
  ********************************************************************************************************************
  *
  * This web version game is mainly composed of three parts which follows MVC pattern.
@@ -18,7 +18,7 @@
  *                       Some codes in this part is gained by reverse engineering the original machine code.
  *  3) "pikavolley.js" (Controller): Make the game work by controlling the Model and the View according to the user input.
  *
- * And expainations for other source files are below.
+ * And explanations for other source files are below.
  *  - "cloud_and_wave.js": This is also a Model part which takes charge of the clouds and wave motion in the game. Of course, it is also rendered by "view.js".
  *                         It is also gained by reverse engineering the original machine code.
  *  - "keyboard.js": Support the Controller("pikavolley.js") to get a user input via keyboard.
@@ -57,11 +57,11 @@ Loader.registerPlugin(SpritesheetLoader);
 // When the page is zoomed in or out in a browser, the value of window.devicePixelRatio
 // can be a decimal number with nonzero factional part. For example, when I tested on my machine,
 // the value of window.devicePixelRatio was 1.7999999523162842 in Chrome browser with 90% zoom.
-// And If settings.RESOLUTION is set to be some decimal number with nonezero fractional part,
-// some vertial/horizontal black lines, which are actullay the gaps between the sprite tiles
-// covering the background, could apper on the canvas when CanvasRenderer is being used.
+// And If settings.RESOLUTION is set to be some decimal number with nonzero fractional part,
+// some vertical/horizontal black lines, which are actually the gaps between the sprite tiles
+// covering the background, could appear on the canvas when CanvasRenderer is being used.
 //
-// The reason behind this buggy behavior seems to be the Math.foor being used
+// The reason behind this buggy behavior seems to be the Math.floor being used
 // in the context.drawImage in the source of pixi.js below:
 // https://github.com/pixijs/pixijs/blob/a87bb87036d5fb9119ee92fd9c3da23b5bb9424b/packages/canvas-sprite/src/CanvasSpriteRenderer.ts#L158-L167
 //
@@ -69,7 +69,7 @@ Loader.registerPlugin(SpritesheetLoader);
 // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
 //
 // Math.ceil here is used to set settings.RESOLUTION always to an integer value whether or not
-// the browser is zomming in or out, so to avoid the buggy behavior described above.
+// the browser is zooming in or out, so to avoid the buggy behavior described above.
 settings.RESOLUTION = Math.ceil(window.devicePixelRatio);
 settings.SCALE_MODE = SCALE_MODES.NEAREST;
 settings.ROUND_PIXELS = true;
@@ -81,7 +81,7 @@ const renderer = autoDetectRenderer({
   backgroundColor: 0x000000,
   backgroundAlpha: 1,
   // Decided to use only Canvas for compatibility reason. One player had reported that
-  // on theire browser, where pixi chooses to use WebGL renderer, the graphics are not fine.
+  // on their browser, where pixi chooses to use WebGL renderer, the graphics are not fine.
   // And the issue had been fixed by using Canvas renderer. And also for the sake of testing,
   // it is more comfortable just to stick with Canvas renderer so that it is unnecessary to switch
   // between WebGL renderer and Canvas renderer.
