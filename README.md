@@ -10,7 +10,7 @@ You can play this game on the website: https://gorisanson.github.io/pikachu-voll
 
 ## How to run locally
 
-1. Clone this repoistory and get into the directory.
+1. Clone this repository and get into the directory.
 
 ```sh
 git clone https://github.com/gorisanson/pikachu-volleyball.git
