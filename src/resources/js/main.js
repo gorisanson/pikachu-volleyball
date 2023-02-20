@@ -113,9 +113,7 @@ function setUpInitialUI() {
     progressBar.style.width = `${loader.progress}%`;
   });
   loader.onComplete.add(() => {
-    if (!loadingBox.classList.contains('hidden')) {
-      loadingBox.classList.add('hidden');
-    }
+    loadingBox.classList.add('hidden');
   });
 
   const aboutBox = document.getElementById('about-box');
