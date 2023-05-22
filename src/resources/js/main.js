@@ -70,6 +70,9 @@ Loader.registerPlugin(SpritesheetLoader);
 //
 // Math.ceil here is used to set settings.RESOLUTION always to an integer value whether or not
 // the browser is zooming in or out, so to avoid the buggy behavior described above.
+//
+// The resolutions setting below seems to be unnecessary for the browsers
+// supporting "image-rendering: pixelated" css property.
 settings.RESOLUTION = Math.ceil(window.devicePixelRatio);
 settings.SCALE_MODE = SCALE_MODES.NEAREST;
 settings.ROUND_PIXELS = true;
