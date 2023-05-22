@@ -5,7 +5,7 @@
 import { PikaUserInput } from './physics.js';
 
 /**
- * Class representing a keyboard used to contorl a player
+ * Class representing a keyboard used to control a player
  */
 export class PikaKeyboard extends PikaUserInput {
   /**
@@ -78,7 +78,7 @@ export class PikaKeyboard extends PikaUserInput {
   }
 
   /**
-   * Subscribe keydown, keyup event listners for the keys of this keyboard
+   * Subscribe keydown, keyup event listeners for the keys of this keyboard
    */
   subscribe() {
     this.leftKey.subscribe();
@@ -90,7 +90,7 @@ export class PikaKeyboard extends PikaUserInput {
   }
 
   /**
-   * Unsubscribe keydown, keyup event listners for the keys of this keyboard
+   * Unsubscribe keydown, keyup event listeners for the keys of this keyboard
    */
   unsubscribe() {
     this.leftKey.unsubscribe();
@@ -103,8 +103,8 @@ export class PikaKeyboard extends PikaUserInput {
 }
 
 /**
- * Class respresenting a key on a keyboard
- * refered: https://github.com/kittykatattack/learningPixi
+ * Class representing a key on a keyboard
+ * referred to: https://github.com/kittykatattack/learningPixi
  */
 class Key {
   /**
@@ -118,7 +118,7 @@ class Key {
     this.isUp = true;
 
     this.downListener = this.downHandler.bind(this);
-    this.upListner = this.upHandler.bind(this);
+    this.upListener = this.upHandler.bind(this);
     this.subscribe();
   }
 
@@ -156,7 +156,7 @@ class Key {
     // a key was downed and upped before keyup event listener were attached,
     // I think the value of this.isDown would be true (and the value of this.isUp would be false)
     // for a while before the user press this key again.
-    window.addEventListener('keyup', this.upListner);
+    window.addEventListener('keyup', this.upListener);
     window.addEventListener('keydown', this.downListener);
   }
 
@@ -165,7 +165,7 @@ class Key {
    */
   unsubscribe() {
     window.removeEventListener('keydown', this.downListener);
-    window.removeEventListener('keyup', this.upListner);
+    window.removeEventListener('keyup', this.upListener);
     this.isDown = false;
     this.isUp = true;
   }

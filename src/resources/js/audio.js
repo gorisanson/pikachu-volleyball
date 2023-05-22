@@ -10,7 +10,7 @@ const SOUNDS = ASSETS_PATH.SOUNDS;
 /** @typedef {import('@pixi/loaders').LoaderResource} LoaderResource */
 
 /**
- * Class represeting audio
+ * Class representing audio
  */
 export class PikaAudio {
   /**
