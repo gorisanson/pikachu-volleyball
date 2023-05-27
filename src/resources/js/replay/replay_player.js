@@ -38,7 +38,7 @@ class ReplayPlayer {
     CanvasRenderer.registerPlugin('prepare', CanvasPrepare);
     CanvasRenderer.registerPlugin('sprite', CanvasSpriteRenderer);
     Loader.registerPlugin(SpritesheetLoader);
-    settings.RESOLUTION = Math.ceil(window.devicePixelRatio);
+    settings.RESOLUTION = CSS.supports('image-rendering', 'pixelated') ? 1 : 3;
     settings.SCALE_MODE = SCALE_MODES.NEAREST;
     settings.ROUND_PIXELS = true;
 
