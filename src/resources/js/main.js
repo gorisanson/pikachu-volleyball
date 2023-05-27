@@ -54,26 +54,11 @@ CanvasRenderer.registerPlugin('prepare', CanvasPrepare);
 CanvasRenderer.registerPlugin('sprite', CanvasSpriteRenderer);
 Loader.registerPlugin(SpritesheetLoader);
 
-// When the page is zoomed in or out in a browser, the value of window.devicePixelRatio
-// can be a decimal number with nonzero factional part. For example, when I tested on my machine,
-// the value of window.devicePixelRatio was 1.7999999523162842 in Chrome browser with 90% zoom.
-// And If settings.RESOLUTION is set to be some decimal number with nonzero fractional part,
-// some vertical/horizontal black lines, which are actually the gaps between the sprite tiles
-// covering the background, could appear on the canvas when CanvasRenderer is being used.
-//
-// The reason behind this buggy behavior seems to be the Math.floor being used
-// in the context.drawImage in the source of pixi.js below:
-// https://github.com/pixijs/pixijs/blob/a87bb87036d5fb9119ee92fd9c3da23b5bb9424b/packages/canvas-sprite/src/CanvasSpriteRenderer.ts#L158-L167
-//
-// Reference for CanvasRenderingContext2D.drawImage():
-// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
-//
-// Math.ceil here is used to set settings.RESOLUTION always to an integer value whether or not
-// the browser is zooming in or out, so to avoid the buggy behavior described above.
-//
-// The resolutions setting below seems to be unnecessary for the browsers
-// supporting "image-rendering: pixelated" css property.
-settings.RESOLUTION = Math.ceil(window.devicePixelRatio);
+// If 'image-rendering: pixelated', whose image rendering is like
+// nearest-neighbor interpolation, is not supported, set settings.RESOLUTION
+// to 3 to make the game screen do not look much blurry because of the image
+// rendering of 'image-rendering: auto' which is like bilinear interpolation.
+settings.RESOLUTION = CSS.supports('image-rendering', 'pixelated') ? 1 : 3;
 settings.SCALE_MODE = SCALE_MODES.NEAREST;
 settings.ROUND_PIXELS = true;
 
