@@ -36,10 +36,11 @@ export var capability = {
   block: true,
   diving: true,
   anti_block: true,
-  close_defense: true,
   early_ball: false,
   jump: false,
 };
+export var human_delay = 0; // 6 is good
+export var defense = 2; // mid, mid_plus, predict, mirror, close
 /**
  * Enum for "game paused by what?".
  * The greater the number, the higher the precedence.
