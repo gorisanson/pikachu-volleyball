@@ -7,7 +7,7 @@ import { localStorageWrapper } from './utils/local_storage_wrapper.js';
 
 /** @typedef {import('./pikavolley.js').PikachuVolleyball} PikachuVolleyball */
 /** @typedef {import('@pixi/ticker').Ticker} Ticker */
-/** @typedef {{bgm?: string, sfx?: string, speed?: string, winningScore?: string}} Options */
+/** @typedef {{bgm?: string, sfx?: string, speed?: string, winningScore?: string, aiLevel?: number}} Options */
 
 /**
  * Enum for "game paused by what?".
@@ -22,6 +22,8 @@ const PauseResumePrecedence = {
   dropdown: 1,
   notPaused: 0,
 };
+
+export var ai_level = 4;
 
 /**
  * Manages pausing and resuming of the game
@@ -112,6 +114,23 @@ export function setUpUI(pikaVolley, ticker) {
         pikaVolley.winningScore = 15;
         break;
     }
+    switch (options.aiLevel) {
+      case 0:
+        pikaVolley.aiLevel = 0;
+        break;
+      case 1:
+        pikaVolley.aiLevel = 1;
+        break;
+      case 2:
+        pikaVolley.aiLevel = 2;
+        break;
+      case 3:
+        pikaVolley.aiLevel = 3;
+        break;
+      case 4:
+        pikaVolley.aiLevel = 4;
+        break;
+    }
   };
 
   /**
@@ -131,6 +150,9 @@ export function setUpUI(pikaVolley, ticker) {
     }
     if (options.winningScore) {
       localStorageWrapper.set('pv-offline-winningScore', options.winningScore);
+    }
+    if (options.aiLevel) {
+      localStorageWrapper.set('pv-offline-aiLevel', options.aiLevel);
     }
   };
 
@@ -265,6 +287,47 @@ function setUpBtns(pikaVolley, applyAndSaveOptions) {
   const winningScore5Btn = document.getElementById('winning-score-5-btn');
   const winningScore10Btn = document.getElementById('winning-score-10-btn');
   const winningScore15Btn = document.getElementById('winning-score-15-btn');
+  const aiLevel0Btn = document.getElementById('ai-level-0-btn');
+  const aiLevel1Btn = document.getElementById('ai-level-1-btn');
+  const aiLevel2Btn = document.getElementById('ai-level-2-btn');
+  const aiLevel3Btn = document.getElementById('ai-level-3-btn');
+  const aiLevel4Btn = document.getElementById('ai-level-4-btn');
+  aiLevel0Btn.addEventListener('click', () => {
+    if (aiLevel0Btn.classList.contains('selected')) {
+      ai_level = 0;
+      return;
+    }
+    applyAndSaveOptions({ aiLevel: 0 });
+  });
+  aiLevel1Btn.addEventListener('click', () => {
+    if (aiLevel1Btn.classList.contains('selected')) {
+      ai_level = 1;
+      return;
+    }
+    applyAndSaveOptions({ aiLevel: 1 });
+  });
+  aiLevel2Btn.addEventListener('click', () => {
+    if (aiLevel2Btn.classList.contains('selected')) {
+      ai_level = 2;
+      return;
+    }
+    applyAndSaveOptions({ aiLevel: 2 });
+  });
+  aiLevel3Btn.addEventListener('click', () => {
+    if (aiLevel3Btn.classList.contains('selected')) {
+      ai_level = 3;
+      return;
+    }
+    applyAndSaveOptions({ aiLevel: 3 });
+  });
+  aiLevel4Btn.addEventListener('click', () => {
+    if (aiLevel4Btn.classList.contains('selected')) {
+      ai_level = 4;
+      return;
+    }
+    applyAndSaveOptions({ aiLevel: 4 });
+  });
+
   const noticeBox1 = document.getElementById('notice-box-1');
   const noticeOKBtn1 = document.getElementById('notice-ok-btn-1');
   const winningScoreInNoticeBox1 = document.getElementById(
@@ -542,6 +605,50 @@ function setSelectedOptionsBtn(options) {
         break;
     }
   }
+  if (options.aiLevel) {
+    const aiLevel0Btn = document.getElementById('ai-level-0-btn');
+    const aiLevel1Btn = document.getElementById('ai-level-1-btn');
+    const aiLevel2Btn = document.getElementById('ai-level-2-btn');
+    const aiLevel3Btn = document.getElementById('ai-level-3-btn');
+    const aiLevel4Btn = document.getElementById('ai-level-4-btn');
+    switch (options.aiLevel) {
+      case 0:
+        aiLevel0Btn.classList.add('selected');
+        aiLevel1Btn.classList.remove('selected');
+        aiLevel2Btn.classList.remove('selected');
+        aiLevel3Btn.classList.remove('selected');
+        aiLevel4Btn.classList.remove('selected');
+        break;
+      case 1:
+        aiLevel0Btn.classList.remove('selected');
+        aiLevel1Btn.classList.add('selected');
+        aiLevel2Btn.classList.remove('selected');
+        aiLevel3Btn.classList.remove('selected');
+        aiLevel4Btn.classList.remove('selected');
+        break;
+      case 2:
+        aiLevel0Btn.classList.remove('selected');
+        aiLevel1Btn.classList.remove('selected');
+        aiLevel2Btn.classList.add('selected');
+        aiLevel3Btn.classList.remove('selected');
+        aiLevel4Btn.classList.remove('selected');
+        break;
+      case 3:
+        aiLevel0Btn.classList.remove('selected');
+        aiLevel1Btn.classList.remove('selected');
+        aiLevel2Btn.classList.remove('selected');
+        aiLevel3Btn.classList.add('selected');
+        aiLevel4Btn.classList.remove('selected');
+        break;
+      case 4:
+        aiLevel0Btn.classList.remove('selected');
+        aiLevel1Btn.classList.remove('selected');
+        aiLevel2Btn.classList.remove('selected');
+        aiLevel3Btn.classList.remove('selected');
+        aiLevel4Btn.classList.add('selected');
+        break;
+    }
+  }
 }
 
 /**
@@ -596,6 +703,11 @@ function setUpToShowDropdownsAndSubmenus(pikaVolley) {
       showSubmenu('practice-mode-submenu-btn', 'practice-mode-submenu');
     });
   document
+    .getElementById('ai-level-submenu-btn')
+    .addEventListener('mouseover', () => {
+      showSubmenu('ai-level-submenu-btn', 'ai-level-submenu');
+    });
+  document
     .getElementById('reset-to-default-btn')
     .addEventListener('mouseover', () => {
       hideSubmenus();
@@ -621,6 +733,11 @@ function setUpToShowDropdownsAndSubmenus(pikaVolley) {
     .getElementById('practice-mode-submenu-btn')
     .addEventListener('click', () => {
       showSubmenu('practice-mode-submenu-btn', 'practice-mode-submenu');
+    });
+  document
+    .getElementById('ai-level-submenu-btn')
+    .addEventListener('click', () => {
+      showSubmenu('ai-level-submenu-btn', 'ai-level-submenu');
     });
   document
     .getElementById('reset-to-default-btn')

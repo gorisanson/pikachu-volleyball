@@ -28,6 +28,7 @@
  */
 'use strict';
 import { rand } from './rand.js';
+import { ai_level } from './ui.js';
 
 /** @constant @type {number} ground width */
 const GROUND_WIDTH = 432;
@@ -210,7 +211,8 @@ class Player {
      *
      * @type {number} 0, 1, 2, 3 or 4
      */
-    this.computerBoldness = rand() % 5; // 0xD8  // initialized to (_rand() % 5)
+    // this.computerBoldness = rand() % 5; // 0xD8  // initialized to (_rand() % 5)
+    this.computerBoldness = ai_level;
   }
 }
 
@@ -814,7 +816,7 @@ function letComputerDecideUserInput(player, ball, theOtherPlayer, userInput) {
     if (
       (ball.expectedLandingPointX <= leftBoundary ||
         ball.expectedLandingPointX >=
-          Number(player.isPlayer2) * GROUND_WIDTH + GROUND_HALF_WIDTH) &&
+        Number(player.isPlayer2) * GROUND_WIDTH + GROUND_HALF_WIDTH) &&
       player.computerWhereToStandBy === 0
     ) {
       // If conditions above met, the computer estimates the proper location to stay as the middle point of their side
@@ -853,7 +855,7 @@ function letComputerDecideUserInput(player, ball, theOtherPlayer, userInput) {
       ball.expectedLandingPointX > leftBoundary &&
       ball.expectedLandingPointX < rightBoundary &&
       Math.abs(ball.x - player.x) >
-        player.computerBoldness * 5 + PLAYER_LENGTH &&
+      player.computerBoldness * 5 + PLAYER_LENGTH &&
       ball.x > leftBoundary &&
       ball.x < rightBoundary &&
       ball.y > 174
@@ -918,7 +920,7 @@ function decideWhetherInputPowerHit(player, ball, theOtherPlayer, userInput) {
           (expectedLandingPointX <=
             Number(player.isPlayer2) * GROUND_HALF_WIDTH ||
             expectedLandingPointX >=
-              Number(player.isPlayer2) * GROUND_WIDTH + GROUND_HALF_WIDTH) &&
+            Number(player.isPlayer2) * GROUND_WIDTH + GROUND_HALF_WIDTH) &&
           Math.abs(expectedLandingPointX - theOtherPlayer.x) > PLAYER_LENGTH
         ) {
           userInput.xDirection = xDirection;
@@ -939,7 +941,7 @@ function decideWhetherInputPowerHit(player, ball, theOtherPlayer, userInput) {
           (expectedLandingPointX <=
             Number(player.isPlayer2) * GROUND_HALF_WIDTH ||
             expectedLandingPointX >=
-              Number(player.isPlayer2) * GROUND_WIDTH + GROUND_HALF_WIDTH) &&
+            Number(player.isPlayer2) * GROUND_WIDTH + GROUND_HALF_WIDTH) &&
           Math.abs(expectedLandingPointX - theOtherPlayer.x) > PLAYER_LENGTH
         ) {
           userInput.xDirection = xDirection;
