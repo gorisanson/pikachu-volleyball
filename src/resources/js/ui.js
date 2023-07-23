@@ -281,7 +281,7 @@ function setUpBtns(pikaVolley, applyAndSaveOptions, ticker) {
   const fpsInput = document.getElementById('fps-input');
   fpsInput.addEventListener('change', (e) => {
     // @ts-ignore
-    let value = e.target.value;
+    let value = Number(e.target.value);
     if (value < 0) {
       value = 0;
     } else if (value > 60) {
@@ -289,6 +289,7 @@ function setUpBtns(pikaVolley, applyAndSaveOptions, ticker) {
     }
     pikaVolley.normalFPS = value;
     ticker.maxFPS = pikaVolley.normalFPS;
+    replaySaver.recordOptions({ fps: pikaVolley.normalFPS });
     // fastSpeedBtn.classList.remove('selected');
     // slowSpeedBtn.classList.remove('selected');
     // mediumSpeedBtn.classList.remove('selected');

@@ -60,11 +60,6 @@ class ReplayPlayer {
   }
 
   readFile(file) {
-    // Adjust PIXI settings;
-    settings.RESOLUTION = Math.ceil(window.devicePixelRatio);
-    settings.SCALE_MODE = SCALE_MODES.NEAREST;
-    settings.ROUND_PIXELS = true;
-
     // // To show two "with friend" on the menu
     // const TEXTURES = ASSETS_PATH.TEXTURES;
     // TEXTURES.WITH_COMPUTER = TEXTURES.WITH_FRIEND;
@@ -272,6 +267,9 @@ function getTotalTimeDuration(pack) {
       }
       const frameCounter = options[0];
       speedChangeRecord.push([frameCounter, fpsFromNowOn]);
+    }
+    if (options[1].fps) {
+      speedChangeRecord.push([options[0], options[1].fps]);
     }
     optionsCounter++;
     options = pack.options[optionsCounter];

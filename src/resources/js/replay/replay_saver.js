@@ -4,7 +4,7 @@ import { getHashCode } from '../utils/hash_code.js';
 import { convertUserInputTo5bitNumber } from '../utils/input_conversion.js';
 
 /** @typedef {import('../physics.js').PikaUserInput} PikaUserInput */
-/** @typedef {{speed: string, winningScore: number, restart?: boolean}} Options options communicated with the peer */
+/** @typedef {{speed?: string, winningScore?: number, restart?: boolean, fps?: number}} Options options communicated with the peer */
 
 /**
  * Classs representing replay saver

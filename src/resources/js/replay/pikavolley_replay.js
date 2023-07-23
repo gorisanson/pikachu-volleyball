@@ -105,7 +105,7 @@ export class PikachuVolleyballReplay extends PikachuVolleyball {
 
     this.physics = new PikaPhysics(true, true);
 
-    this.normalFPS = 25;
+    this.normalFPS = 30;
     this.slowMotionFPS = 5;
     this.SLOW_MOTION_FRAMES_NUM = 6;
     this.slowMotionFramesLeft = 0;
@@ -199,6 +199,10 @@ export class PikachuVolleyballReplay extends PikachuVolleyball {
       if (options[1].restart) {
         console.log('ahah');
         this.restart();
+      }
+      if (options[1].fps) {
+        this.normalFPS = options[1].fps;
+        setTickerMaxFPSAccordingToNormalFPS(this.normalFPS);
       }
       this.optionsCounter++;
       options = this.options[this.optionsCounter];
