@@ -411,6 +411,18 @@ function setUpBtns(pikaVolley, applyAndSaveOptions) {
     pikaVolley.isPracticeMode = false;
   });
 
+  const gameFixP1EdgeHitBtn = document.getElementById('game-fix-p1-edge-hit-btn');
+  gameFixP1EdgeHitBtn.addEventListener('click', () => {
+    const enable = !gameFixP1EdgeHitBtn.classList.contains('selected');
+    if (enable) {
+      gameFixP1EdgeHitBtn.classList.add('selected');
+    } else {
+      gameFixP1EdgeHitBtn.classList.remove('selected');
+    }
+
+    pikaVolley.isP1EdgeHitFix = enable;
+  })
+
   const aboutBox = document.getElementById('about-box');
   const closeAboutBtn = document.getElementById('close-about-btn');
   aboutBtn.addEventListener('click', () => {
@@ -594,6 +606,11 @@ function setUpToShowDropdownsAndSubmenus(pikaVolley) {
     .getElementById('practice-mode-submenu-btn')
     .addEventListener('mouseover', () => {
       showSubmenu('practice-mode-submenu-btn', 'practice-mode-submenu');
+    });
+  document
+    .getElementById('game-fixes-btn')
+    .addEventListener('mouseover', () => {
+      showSubmenu('game-fixes-btn', 'game-fixes-submenu');
     });
   document
     .getElementById('reset-to-default-btn')

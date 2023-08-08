@@ -77,6 +77,14 @@ export class PikaPhysics {
     this.player1 = new Player(false, isPlayer1Computer);
     this.player2 = new Player(true, isPlayer2Computer);
     this.ball = new Ball(false);
+
+    this.alterations = {
+      /*
+        * The original machine code has a bug where if the left player hits the ball when its perfectly in the court's center (x = 216)
+        * the ball will go to the left side of the court.
+      */
+      p1EdgeHitFix: false
+    }
   }
 
   /**
@@ -90,7 +98,8 @@ export class PikaPhysics {
       this.player1,
       this.player2,
       this.ball,
-      userInputArray
+      userInputArray,
+      this.alterations
     );
     return isBallTouchingGround;
   }
@@ -300,7 +309,7 @@ class Ball {
  * @param {PikaUserInput[]} userInputArray userInputArray[0]: user input for player 1, userInputArray[1]: user input for player 2
  * @return {boolean} Is ball touching ground?
  */
-function physicsEngine(player1, player2, ball, userInputArray) {
+function physicsEngine(player1, player2, ball, userInputArray, alterations) {
   const isBallTouchingGround =
     processCollisionBetweenBallAndWorldAndSetBallPosition(ball);
 
@@ -354,7 +363,8 @@ function physicsEngine(player1, player2, ball, userInputArray) {
           ball,
           player.x,
           userInputArray[i],
-          player.state
+          player.state,
+          alterations.p1EdgeHitFix
         );
         player.isCollisionWithBallHappened = true;
       }
@@ -679,7 +689,8 @@ function processCollisionBetweenBallAndPlayer(
   ball,
   playerX,
   userInput,
-  playerState
+  playerState,
+  p1EdgeHitFix
 ) {
   // playerX is maybe pika's x position
   // if collision occur,
@@ -707,10 +718,19 @@ function processCollisionBetweenBallAndPlayer(
 
   // player is jumping and power hitting
   if (playerState === 2) {
-    if (ball.x < GROUND_HALF_WIDTH) {
-      ball.xVelocity = (Math.abs(userInput.xDirection) + 1) * 10;
-    } else {
-      ball.xVelocity = -(Math.abs(userInput.xDirection) + 1) * 10;
+    // GAME-ALTERING:: p1EdgeHitFix
+    if (!p1EdgeHitFix) { // original flow
+      if (ball.x < GROUND_HALF_WIDTH) {
+        ball.xVelocity = (Math.abs(userInput.xDirection) + 1) * 10;
+      } else {
+        ball.xVelocity = -(Math.abs(userInput.xDirection) + 1) * 10;
+      }
+    } else { // alternative flow
+      if (playerX < GROUND_HALF_WIDTH) {
+        ball.xVelocity = (Math.abs(userInput.xDirection) + 1) * 10;
+      } else {
+        ball.xVelocity = -(Math.abs(userInput.xDirection) + 1) * 10;
+      }
     }
     ball.punchEffectX = ball.x;
     ball.punchEffectY = ball.y;

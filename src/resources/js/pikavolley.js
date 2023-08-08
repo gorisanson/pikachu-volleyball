@@ -524,4 +524,8 @@ export class PikachuVolleyball {
     this.view.game.scoreBoards[0].visible = !bool;
     this.view.game.scoreBoards[1].visible = !bool;
   }
+
+  set isP1EdgeHitFix(bool) {
+    this.physics.alterations.p1EdgeHitFix = bool;
+  }
 }
