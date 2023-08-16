@@ -39,8 +39,8 @@ export var capability = {
   early_ball: false,
   jump: false,
 };
-export var human_delay = 0; // 6 is good
-export var defense = 2; // mid, mid_plus, predict, mirror, close
+export var delay = 0; // 3 is good
+export var defense = 4; // mid, mid_mirror, mirror, predict, close
 /**
  * Enum for "game paused by what?".
  * The greater the number, the higher the precedence.
@@ -763,12 +763,23 @@ function setUpBtns(pikaVolley, ticker) {
   for (var key in capability) {
     (function (key) {
       document.getElementById(key).addEventListener('change', () => {
-        console.log(key);
+        // console.log(key);
         // @ts-ignore
         capability[key] = document.getElementById(key).checked;
       });
     })(key);
   }
+
+  document.getElementById('defense').addEventListener('change', () => {
+    // @ts-ignore
+    defense = parseInt(document.getElementById('defense').value);
+  });
+
+  document.getElementById('delay').addEventListener('change', () => {
+    // console.log(key);
+    // @ts-ignore
+    delay = document.getElementById('delay').value;
+  });
 
   const player1_1_step = document.getElementById('player1-1-step-serve');
   player1_1_step.addEventListener('change', () => {
