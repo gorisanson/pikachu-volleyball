@@ -29,7 +29,6 @@
 'use strict';
 import { rand, true_rand } from './rand.js';
 import {
-  serveMode,
   SkillTypeForPlayer2Available,
   SkillTypeForPlayer1Available,
   capability,
@@ -2908,11 +2907,6 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
   }
 }
 
-const serveModeT = {
-  randomOrder: 0,
-  fixedOrder: 1,
-  completeRandom: 2,
-};
 const actionType = {
   wait: 0,
   forward: 1,
@@ -3092,42 +3086,24 @@ class ServeMachine {
     this.randServeIndex = 0;
   }
   chooseNextSkill() {
-    if (serveMode === serveModeT.randomOrder)
-      while (1) {
-        // get next
-        this.usingFullSkill = this.skillList[this.randServeIndex];
-        this.randServeIndex++;
-        // if (this.randServeIndex === this.skillCount)
-        this.shuffle();
-        // check if it's available
-        if (
-          this.isPlayer2 === false &&
-          SkillTypeForPlayer1Available[this.usingFullSkill] === true
-        )
-          return;
-        else if (
-          this.isPlayer2 === true &&
-          SkillTypeForPlayer2Available[this.usingFullSkill] === true
-        )
-          return;
-      }
-    else if (serveMode === serveModeT.fixedOrder)
-      while (1) {
-        // get next
-        this.usingFullSkill++;
-        if (this.usingFullSkill === this.skillCount) this.usingFullSkill = 0;
-        // check if it's available
-        if (
-          this.isPlayer2 === false &&
-          SkillTypeForPlayer1Available[this.usingFullSkill] === true
-        )
-          return;
-        else if (
-          this.isPlayer2 === true &&
-          SkillTypeForPlayer2Available[this.usingFullSkill] === true
-        )
-          return;
-      }
+    while (1) {
+      // get next
+      this.usingFullSkill = this.skillList[this.randServeIndex];
+      this.randServeIndex++;
+      // if (this.randServeIndex === this.skillCount)
+      this.shuffle();
+      // check if it's available
+      if (
+        this.isPlayer2 === false &&
+        SkillTypeForPlayer1Available[this.usingFullSkill] === true
+      )
+        return;
+      else if (
+        this.isPlayer2 === true &&
+        SkillTypeForPlayer2Available[this.usingFullSkill] === true
+      )
+        return;
+    }
   }
   initializeForNewRound() {
     this.chooseNextSkill();

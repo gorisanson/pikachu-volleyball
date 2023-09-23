@@ -7,7 +7,6 @@ import { replaySaver } from './replay/replay_saver.js';
 
 /** @typedef {import('./pikavolley.js').PikachuVolleyball} PikachuVolleyball */
 /** @typedef {import('pixi.js-legacy').Ticker} Ticker */
-export var serveMode = 0;
 export var SkillTypeForPlayer1Available = [
   true,
   true,
@@ -31,7 +30,7 @@ export var SkillTypeForPlayer2Available = [
   true,
 ];
 export var capability = {
-  serve: true,
+  serve: false,
   fancy: true,
   block: true,
   diving: true,
@@ -41,6 +40,20 @@ export var capability = {
 };
 export var delay = 0; // 3 is good
 export var defense = 4; // mid, mid_mirror, mirror, predict, close
+
+const level = [
+  [false, false, false, false, false, false, true, 13, 0], // 新手
+  [false, false, false, false, false, false, false, 13, 0], // 練下前殺
+  [false, false, false, true, false, false, false, 7, 1], // 練平殺
+  [false, false, true, true, true, false, false, 7, 3], // 練上殺
+  [false, false, true, true, true, false, false, 3, 2], // 練穿越下前殺
+  [false, false, true, true, true, false, false, 3, 1], // 練下殺
+  [false, false, true, true, true, false, true, 0, 4], // 超級同步跳
+  [false, false, true, true, false, true, false, 0, 4], // 提早球
+  [false, false, true, true, true, false, false, 0, 3], // 打穩
+  [false, true, true, true, true, false, false, 0, 2], // 鏡像
+  [false, true, true, true, true, false, false, 0, 4], // 無敵
+];
 /**
  * Enum for "game paused by what?".
  * The greater the number, the higher the precedence.
@@ -122,16 +135,11 @@ export function setUpUI(pikaVolley, ticker) {
 function setUpBtns(pikaVolley, ticker) {
   const gameDropdownBtn = document.getElementById('game-dropdown-btn');
   const optionsDropdownBtn = document.getElementById('options-dropdown-btn');
-  const serveModeDropdownBtn = document.getElementById(
-    'serve-mode-dropdown-btn'
-  );
   const aboutBtn = document.getElementById('about-btn');
   // @ts-ignore
   gameDropdownBtn.disabled = false;
   // @ts-ignore
   optionsDropdownBtn.disabled = false;
-  // @ts-ignore
-  serveModeDropdownBtn.disabled = false;
   // @ts-ignore
   aboutBtn.disabled = false;
 
@@ -271,8 +279,6 @@ function setUpBtns(pikaVolley, ticker) {
       // @ts-ignore
       optionsDropdownBtn.disabled = true;
       // @ts-ignore
-      serveModeDropdownBtn.disabled = true;
-      // @ts-ignore
       aboutBtn.disabled = true;
       pauseResumeManager.pause(pikaVolley, PauseResumePrecedence.messageBox);
       return;
@@ -284,8 +290,6 @@ function setUpBtns(pikaVolley, ticker) {
       gameDropdownBtn.disabled = true;
       // @ts-ignore
       optionsDropdownBtn.disabled = true;
-      // @ts-ignore
-      serveModeDropdownBtn.disabled = true;
       // @ts-ignore
       aboutBtn.disabled = true;
       pauseResumeManager.pause(pikaVolley, PauseResumePrecedence.messageBox);
@@ -316,8 +320,6 @@ function setUpBtns(pikaVolley, ticker) {
       // @ts-ignore
       optionsDropdownBtn.disabled = true;
       // @ts-ignore
-      serveModeDropdownBtn.disabled = true;
-      // @ts-ignore
       aboutBtn.disabled = true;
       pauseResumeManager.pause(pikaVolley, PauseResumePrecedence.messageBox);
       return;
@@ -329,8 +331,6 @@ function setUpBtns(pikaVolley, ticker) {
       gameDropdownBtn.disabled = true;
       // @ts-ignore
       optionsDropdownBtn.disabled = true;
-      // @ts-ignore
-      serveModeDropdownBtn.disabled = true;
       // @ts-ignore
       aboutBtn.disabled = true;
       pauseResumeManager.pause(pikaVolley, PauseResumePrecedence.messageBox);
@@ -361,8 +361,6 @@ function setUpBtns(pikaVolley, ticker) {
       // @ts-ignore
       optionsDropdownBtn.disabled = true;
       // @ts-ignore
-      serveModeDropdownBtn.disabled = true;
-      // @ts-ignore
       aboutBtn.disabled = true;
       pauseResumeManager.pause(pikaVolley, PauseResumePrecedence.messageBox);
       return;
@@ -374,8 +372,6 @@ function setUpBtns(pikaVolley, ticker) {
       gameDropdownBtn.disabled = true;
       // @ts-ignore
       optionsDropdownBtn.disabled = true;
-      // @ts-ignore
-      serveModeDropdownBtn.disabled = true;
       // @ts-ignore
       aboutBtn.disabled = true;
       pauseResumeManager.pause(pikaVolley, PauseResumePrecedence.messageBox);
@@ -402,8 +398,7 @@ function setUpBtns(pikaVolley, ticker) {
       gameDropdownBtn.disabled = false;
       // @ts-ignore
       optionsDropdownBtn.disabled = false;
-      // @ts-ignore
-      serveModeDropdownBtn.disabled = false;
+
       // @ts-ignore
       aboutBtn.disabled = false;
       pauseResumeManager.resume(pikaVolley, PauseResumePrecedence.messageBox);
@@ -416,8 +411,7 @@ function setUpBtns(pikaVolley, ticker) {
       gameDropdownBtn.disabled = false;
       // @ts-ignore
       optionsDropdownBtn.disabled = false;
-      // @ts-ignore
-      serveModeDropdownBtn.disabled = false;
+
       // @ts-ignore
       aboutBtn.disabled = false;
       pauseResumeManager.resume(pikaVolley, PauseResumePrecedence.messageBox);
@@ -435,19 +429,6 @@ function setUpBtns(pikaVolley, ticker) {
     practiceModeOnBtn.classList.remove('selected');
     practiceModeOffBtn.classList.add('selected');
     pikaVolley.isPracticeMode = false;
-  });
-
-  const serveModeRandomBtn = document.getElementById('random-order-btn');
-  const serveModeFixedBtn = document.getElementById('fixed-order-btn');
-  serveModeRandomBtn.addEventListener('click', () => {
-    serveModeFixedBtn.classList.remove('selected');
-    serveModeRandomBtn.classList.add('selected');
-    serveMode = 0;
-  });
-  serveModeFixedBtn.addEventListener('click', () => {
-    serveModeRandomBtn.classList.remove('selected');
-    serveModeFixedBtn.classList.add('selected');
-    serveMode = 1;
   });
 
   function CountAvailable(avail) {
@@ -760,27 +741,6 @@ function setUpBtns(pikaVolley, ticker) {
     }
   });
 
-  for (var key in capability) {
-    (function (key) {
-      document.getElementById(key).addEventListener('change', () => {
-        // console.log(key);
-        // @ts-ignore
-        capability[key] = document.getElementById(key).checked;
-      });
-    })(key);
-  }
-
-  document.getElementById('defense').addEventListener('change', () => {
-    // @ts-ignore
-    defense = parseInt(document.getElementById('defense').value);
-  });
-
-  document.getElementById('delay').addEventListener('change', () => {
-    // console.log(key);
-    // @ts-ignore
-    delay = document.getElementById('delay').value;
-  });
-
   const player1_1_step = document.getElementById('player1-1-step-serve');
   player1_1_step.addEventListener('change', () => {
     // @ts-ignore
@@ -883,8 +843,6 @@ function setUpBtns(pikaVolley, ticker) {
       gameDropdownBtn.disabled = true;
       // @ts-ignore
       optionsDropdownBtn.disabled = true;
-      // @ts-ignore
-      serveModeDropdownBtn.disabled = true;
       pauseResumeManager.pause(pikaVolley, PauseResumePrecedence.messageBox);
     } else {
       aboutBox.classList.add('hidden');
@@ -892,8 +850,7 @@ function setUpBtns(pikaVolley, ticker) {
       gameDropdownBtn.disabled = false;
       // @ts-ignore
       optionsDropdownBtn.disabled = false;
-      // @ts-ignore
-      serveModeDropdownBtn.disabled = false;
+
       pauseResumeManager.resume(pikaVolley, PauseResumePrecedence.messageBox);
     }
   });
@@ -904,8 +861,7 @@ function setUpBtns(pikaVolley, ticker) {
       gameDropdownBtn.disabled = false;
       // @ts-ignore
       optionsDropdownBtn.disabled = false;
-      // @ts-ignore
-      serveModeDropdownBtn.disabled = false;
+
       pauseResumeManager.resume(pikaVolley, PauseResumePrecedence.messageBox);
     }
   });
@@ -935,11 +891,6 @@ function setUpToShowDropdownsAndSubmenus(pikaVolley) {
     .addEventListener('click', () => {
       toggleDropdown('options-dropdown', pikaVolley);
     });
-  document
-    .getElementById('serve-mode-dropdown-btn')
-    .addEventListener('click', () => {
-      toggleDropdown('serve-mode-dropdown', pikaVolley);
-    });
   // set up to show submenus on mouseover event
   document
     .getElementById('bgm-submenu-btn')
@@ -966,13 +917,6 @@ function setUpToShowDropdownsAndSubmenus(pikaVolley) {
     .addEventListener('mouseover', () => {
       showSubmenu('practice-mode-submenu-btn', 'practice-mode-submenu');
     });
-  /*
-  document
-    .getElementById('serve-mode-submenu-btn')
-    .addEventListener('mouseover', () => {
-      showSubmenu('serve-mode-submenu-btn', 'serve-mode-submenu');
-    });
-  */
   // set up to show submenus on click event
   // (it is for touch device equipped with physical keyboard)
   document.getElementById('bgm-submenu-btn').addEventListener('click', () => {
@@ -994,13 +938,6 @@ function setUpToShowDropdownsAndSubmenus(pikaVolley) {
     .addEventListener('click', () => {
       showSubmenu('practice-mode-submenu-btn', 'practice-mode-submenu');
     });
-  /*
-  document
-    .getElementById('serve-mode-submenu-btn')
-    .addEventListener('click', () => {
-      showSubmenu('serve-mode-submenu-btn', 'serve-mode-submenu');
-    });
-  */
 }
 
 /**
@@ -1056,3 +993,54 @@ function hideSubmenus() {
     submenuBtns[i].classList.remove('open');
   }
 }
+
+// before start
+
+for (var key in capability) {
+  (function (key) {
+    document.getElementById(key).addEventListener('change', () => {
+      // console.log(key);
+      // @ts-ignore
+      capability[key] = document.getElementById(key).checked;
+    });
+  })(key);
+}
+
+const h_defense = document.getElementById('defense');
+h_defense.addEventListener('change', () => {
+  // @ts-ignore
+  defense = parseInt(h_defense.value);
+});
+
+const h_delay = document.getElementById('delay');
+h_delay.addEventListener('change', () => {
+  // console.log(key);
+  // @ts-ignore
+  delay = h_delay.value;
+});
+const o_capability = [
+  'serve',
+  'fancy',
+  'block',
+  'diving',
+  'anti_block',
+  'early_ball',
+  'jump',
+];
+const h_ai_level = document.getElementById('ai-level');
+h_ai_level.addEventListener('change', () => {
+  // @ts-ignore
+  const now_level = level[parseInt(h_ai_level.value)];
+  for (let i = 0; i < o_capability.length; i++) {
+    const now_cap = document.getElementById(o_capability[i]);
+    // @ts-ignore
+    now_cap.checked = now_level[i];
+    now_cap.dispatchEvent(new Event('change'));
+  }
+  // @ts-ignore
+  h_delay.value = now_level[7];
+  h_delay.dispatchEvent(new Event('change'));
+  // @ts-ignore
+  h_defense.value = now_level[8];
+  h_defense.dispatchEvent(new Event('change'));
+});

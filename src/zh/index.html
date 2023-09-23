@@ -131,16 +131,26 @@
 						存檔
 					</button>
 				</div>
-				<div class="relative-container"><button type="button" id="serve-mode-dropdown-btn"
-						class="btn dropdown-btn">發球模式</button>
-					<div id="serve-mode-dropdown" class="dropdown"><button type="button" id="random-order-btn"
-							class="btn selected"><span class="check">&check; </span>隨機次序</button> <button type="button"
-							id="fixed-order-btn" class="btn"><span class="check">&check; </span>固定次序</button></div>
-				</div>
 				<div class="color-scheme-toggle-switch-container">
 					<input type="checkbox" id="dark-color-scheme-checkbox-1"
 						class="toggle-switch dark-color-scheme-checkbox" />
 					<label for="dark-color-scheme-checkbox-1"></label>
+				</div>
+				<div class="relative-container">
+					<label>AI 強度</label>
+					<select id="ai-level">
+						<option value="0">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10" selected>10</option>
+					</select>
 				</div>
 			</div>
 			<div class="btn-container right">
@@ -167,6 +177,115 @@
 		</div>
 		<div id="game-canvas-container">
 			<div class="fade-in-box about" id="about-box">
+				<div id="setting">
+					<h1>能力</h1>
+					<div id="capability">
+						<div><input id="serve" type="checkbox"><label>發球</label></div>
+						<div><input id="fancy" type="checkbox" checked="checked"><label>花式</label></div>
+						<div><input id="block" type="checkbox" checked="checked"><label>攔網</label></div>
+						<div><input id="diving" type="checkbox" checked="checked"><label>飛撲</label></div>
+						<div><input id="anti_block" type="checkbox" checked="checked"><label>抗攔網</label></div>
+						<div><input id="early_ball" type="checkbox"><label>提早球</label></div>
+						<div><input id="jump" type="checkbox"><label>同步跳</label></div>
+						<div>
+							<label>防守</label>
+							<select id="defense">
+								<option value="0">置中</option>
+								<option value="1">置中鏡像</option>
+								<option value="2">鏡像</option>
+								<option value="3">預測</option>
+								<option value="4" selected>預測趨前</option>
+							</select>
+						</div>
+						<div>
+							<label>延遲</label>
+							<input id="delay" type="number" inputmode="numeric" min="0" max="30" value="0">
+						</div>
+					</div>
+					<h1 style="margin-bottom: 0;">發球</h1>
+					<div style="width: 100%;">
+						<div class="player" style="float: left;">
+							<h3>玩家一</h3>
+							<div>
+								<div class="serve">
+									<div><b>一步托發球</b><input id="player1-1-step-serve" type="checkbox" checked="checked">
+									</div>
+									<div><input id="player-1-skill-0-checkbox" type="checkbox" checked="checked">
+										<label>穿網</label>
+									</div>
+									<div><input id="player-1-skill-1-checkbox" type="checkbox" checked="checked">
+										<label>平殺</label>
+									</div>
+									<div><input id="player-1-skill-2-checkbox" type="checkbox" checked="checked">
+										<label>頭閃</label>
+									</div>
+									<div><input id="player-1-skill-3-checkbox" type="checkbox" checked="checked">
+										<label>頭閃平殺</label>
+									</div>
+									<div><input id="player-1-skill-4-checkbox" type="checkbox" checked="checked">
+										<label>彈網下殺</label>
+									</div>
+									<div><input id="player-1-skill-5-checkbox" type="checkbox" checked="checked">
+										<label>彈網上殺</label>
+									</div>
+									<div><input id="player-1-skill-6-checkbox" type="checkbox" checked="checked">
+										<label>彈網平殺</label>
+									</div>
+									<div><input id="player-1-skill-7-checkbox" type="checkbox" checked="checked">
+										<label>彈網不打</label>
+									</div>
+									<hr style="width: 100%;">
+									<div><b>尾托發球</b><input id="player1-tail-serve" type="checkbox" checked="checked">
+									</div>
+									<div><input id="player-1-skill-8-checkbox" type="checkbox" checked="checked">
+										<label>尾閃</label>
+									</div>
+									<div><input id="player-1-skill-9-checkbox" type="checkbox" checked="checked">
+										<label>尾閃平殺</label>
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+						<div class="player" style="float: right;">
+							<h3>玩家二</h3>
+							<div>
+								<div class="surve">
+									<div><b>一步托發球</b><input id="player2-1-step-serve" type="checkbox" checked="checked">
+									</div>
+									<div><input id="player-2-skill-0-checkbox" type="checkbox" checked="checked">
+										<label>穿網</label>
+									</div>
+									<div><input id="player-2-skill-1-checkbox" type="checkbox" checked="checked">
+										<label>平殺</label>
+									</div>
+									<div><input id="player-2-skill-2-checkbox" type="checkbox" checked="checked">
+										<label>頭閃</label>
+									</div>
+									<div><input id="player-2-skill-3-checkbox" type="checkbox" checked="checked">
+										<label>頭閃平殺</label>
+									</div>
+									<div><input id="player-2-skill-4-checkbox" type="checkbox" checked="checked">
+										<label>彈網閃</label>
+									</div>
+									<div><input id="player-2-skill-5-checkbox" type="checkbox" checked="checked">
+										<label>彈網閃平殺</label>
+									</div>
+									<hr style="width: 100%;">
+									<div><b>尾托發球</b><input id="player2-tail-serve" type="checkbox" checked="checked">
+									</div>
+									<div><input id="player-2-skill-6-checkbox" type="checkbox" checked="checked">
+										<label>尾閃</label>
+									</div>
+									<div><input id="player-2-skill-7-checkbox" type="checkbox" checked="checked">
+										<label>尾閃平殺</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div id="about-box-head">
 					<h1>皮卡丘打排球</h1>
 					<p class="languages">
@@ -326,106 +445,6 @@
 					<button type="button" class="update" id="later">
 						待會再說 (於瀏覽器重開後自動更新)
 					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="setting">
-		<h1>能力</h1>
-		<div id="capability">
-			<div><input id="serve" type="checkbox" checked="checked"><label>發球</label></div>
-			<div><input id="fancy" type="checkbox" checked="checked"><label>花式</label></div>
-			<div><input id="block" type="checkbox" checked="checked"><label>攔網</label></div>
-			<div><input id="diving" type="checkbox" checked="checked"><label>飛撲</label></div>
-			<div><input id="anti_block" type="checkbox" checked="checked"><label>抗攔網</label></div>
-			<div><input id="early_ball" type="checkbox"><label>提早球</label></div>
-			<div><input id="jump" type="checkbox"><label>同步跳</label></div>
-			<div>
-				<label>防守</label>
-				<select id="defense">
-					<option value="0">置中</option>
-					<option value="1">置中鏡像</option>
-					<option value="2">鏡像</option>
-					<option value="3">預測</option>
-					<option value="4" selected>預測趨前</option>
-				</select>
-			</div>
-			<div>
-				<label>延遲</label>
-				<input id="delay" type="number" inputmode="numeric" min="0" max="30" value="0">
-			</div>
-		</div>
-		<h1 style="margin-bottom: 0;">發球</h1>
-		<div style="width: 100%;">
-			<div class="player" style="float: left;">
-				<h3>玩家一</h3>
-				<div>
-					<div class="serve">
-						<div><b>一步托發球</b><input id="player1-1-step-serve" type="checkbox" checked="checked">
-						</div>
-						<div><input id="player-1-skill-0-checkbox" type="checkbox" checked="checked"> <label>穿網</label>
-						</div>
-						<div><input id="player-1-skill-1-checkbox" type="checkbox" checked="checked"> <label>平殺</label>
-						</div>
-						<div><input id="player-1-skill-2-checkbox" type="checkbox" checked="checked"> <label>頭閃</label>
-						</div>
-						<div><input id="player-1-skill-3-checkbox" type="checkbox" checked="checked">
-							<label>頭閃平殺</label>
-						</div>
-						<div><input id="player-1-skill-4-checkbox" type="checkbox" checked="checked">
-							<label>彈網下殺</label>
-						</div>
-						<div><input id="player-1-skill-5-checkbox" type="checkbox" checked="checked">
-							<label>彈網上殺</label>
-						</div>
-						<div><input id="player-1-skill-6-checkbox" type="checkbox" checked="checked">
-							<label>彈網平殺</label>
-						</div>
-						<div><input id="player-1-skill-7-checkbox" type="checkbox" checked="checked">
-							<label>彈網不打</label>
-						</div>
-						<hr style="width: 100%;">
-						<div><b>尾托發球</b><input id="player1-tail-serve" type="checkbox" checked="checked">
-						</div>
-						<div><input id="player-1-skill-8-checkbox" type="checkbox" checked="checked"> <label>尾閃</label>
-						</div>
-						<div><input id="player-1-skill-9-checkbox" type="checkbox" checked="checked">
-							<label>尾閃平殺</label>
-						</div>
-					</div>
-				</div>
-
-
-			</div>
-			<div class="player" style="float: right;">
-				<h3>玩家二</h3>
-				<div>
-					<div class="surve">
-						<div><b>一步托發球</b><input id="player2-1-step-serve" type="checkbox" checked="checked">
-						</div>
-						<div><input id="player-2-skill-0-checkbox" type="checkbox" checked="checked"> <label>穿網</label>
-						</div>
-						<div><input id="player-2-skill-1-checkbox" type="checkbox" checked="checked"> <label>平殺</label>
-						</div>
-						<div><input id="player-2-skill-2-checkbox" type="checkbox" checked="checked"> <label>頭閃</label>
-						</div>
-						<div><input id="player-2-skill-3-checkbox" type="checkbox" checked="checked">
-							<label>頭閃平殺</label>
-						</div>
-						<div><input id="player-2-skill-4-checkbox" type="checkbox" checked="checked"> <label>彈網閃</label>
-						</div>
-						<div><input id="player-2-skill-5-checkbox" type="checkbox" checked="checked">
-							<label>彈網閃平殺</label>
-						</div>
-						<hr style="width: 100%;">
-						<div><b>尾托發球</b><input id="player2-tail-serve" type="checkbox" checked="checked">
-						</div>
-						<div><input id="player-2-skill-6-checkbox" type="checkbox" checked="checked"> <label>尾閃</label>
-						</div>
-						<div><input id="player-2-skill-7-checkbox" type="checkbox" checked="checked">
-							<label>尾閃平殺</label>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
