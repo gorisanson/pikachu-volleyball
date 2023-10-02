@@ -54,10 +54,10 @@ CanvasRenderer.registerPlugin('prepare', CanvasPrepare);
 CanvasRenderer.registerPlugin('sprite', CanvasSpriteRenderer);
 Loader.registerPlugin(SpritesheetLoader);
 
-// Set settings.RESOLUTION to 3 instead of 1 to make the game screen do not look
+// Set settings.RESOLUTION to 2 instead of 1 to make the game screen do not look
 // much blurry in case of the image rendering mode of 'image-rendering: auto',
 // which is like bilinear interpolation, which is used in "soft" game graphic option.
-settings.RESOLUTION = 3;
+settings.RESOLUTION = 2;
 settings.SCALE_MODE = SCALE_MODES.NEAREST;
 settings.ROUND_PIXELS = true;
 
