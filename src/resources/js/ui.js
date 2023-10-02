@@ -469,6 +469,7 @@ function setUpBtns(pikaVolley, applyAndSaveOptions) {
 
     // and restore the reset options to default
     const defaultOptions = {
+      graphic: 'sharp',
       bgm: 'on',
       sfx: 'stereo',
       speed: 'medium',
