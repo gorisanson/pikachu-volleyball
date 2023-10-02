@@ -226,6 +226,9 @@ span.check {
   margin-right: auto;
   width: var(--canvas-width);
   height: var(--canvas-height);
+  image-rendering: auto;
+}
+#game-canvas.graphic-sharp {
   image-rendering: pixelated;
 }
 .fade-in-box {
