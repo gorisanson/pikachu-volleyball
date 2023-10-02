@@ -54,11 +54,10 @@ CanvasRenderer.registerPlugin('prepare', CanvasPrepare);
 CanvasRenderer.registerPlugin('sprite', CanvasSpriteRenderer);
 Loader.registerPlugin(SpritesheetLoader);
 
-// If 'image-rendering: pixelated', whose image rendering is like
-// nearest-neighbor interpolation, is not supported, set settings.RESOLUTION
-// to 3 to make the game screen do not look much blurry because of the image
-// rendering of 'image-rendering: auto' which is like bilinear interpolation.
-settings.RESOLUTION = CSS.supports('image-rendering', 'pixelated') ? 1 : 3;
+// Set settings.RESOLUTION to 3 instead of 1 to make the game screen do not look
+// much blurry in case of the image rendering mode of 'image-rendering: auto',
+// which is like bilinear interpolation, which is used in "soft" game graphic option.
+settings.RESOLUTION = 3;
 settings.SCALE_MODE = SCALE_MODES.NEAREST;
 settings.ROUND_PIXELS = true;
 

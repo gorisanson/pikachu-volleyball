@@ -7,7 +7,7 @@ import { localStorageWrapper } from './utils/local_storage_wrapper.js';
 
 /** @typedef {import('./pikavolley.js').PikachuVolleyball} PikachuVolleyball */
 /** @typedef {import('@pixi/ticker').Ticker} Ticker */
-/** @typedef {{bgm?: string, sfx?: string, speed?: string, winningScore?: string}} Options */
+/** @typedef {{graphic?: string, bgm?: string, sfx?: string, speed?: string, winningScore?: string}} Options */
 
 /**
  * Enum for "game paused by what?".
@@ -66,6 +66,14 @@ export function setUpUI(pikaVolley, ticker) {
    */
   const applyOptions = (options) => {
     setSelectedOptionsBtn(options);
+    switch (options.graphic) {
+      case 'sharp':
+        document.getElementById('game-canvas').classList.remove('graphic-soft');
+        break;
+      case 'soft':
+        document.getElementById('game-canvas').classList.add('graphic-soft');
+        break;
+    }
     switch (options.bgm) {
       case 'on':
         pikaVolley.audio.turnBGMVolume(true);
@@ -120,6 +128,9 @@ export function setUpUI(pikaVolley, ticker) {
    */
   const saveOptions = (options) => {
     setSelectedOptionsBtn(options);
+    if (options.graphic) {
+      localStorageWrapper.set('pv-offline-graphic', options.graphic);
+    }
     if (options.bgm) {
       localStorageWrapper.set('pv-offline-bgm', options.bgm);
     }
@@ -139,6 +150,7 @@ export function setUpUI(pikaVolley, ticker) {
    * @returns {Options}
    */
   const loadOptions = () => ({
+    graphic: localStorageWrapper.get('pv-offline-graphic'),
     bgm: localStorageWrapper.get('pv-offline-bgm'),
     sfx: localStorageWrapper.get('pv-offline-sfx'),
     speed: localStorageWrapper.get('pv-offline-speed'),
@@ -221,6 +233,15 @@ function setUpBtns(pikaVolley, applyAndSaveOptions) {
       pauseResumeManager.resume(pikaVolley, PauseResumePrecedence.pauseBtn);
     }
     pikaVolley.restart();
+  });
+
+  const graphicSharpBtn = document.getElementById('graphic-sharp-btn');
+  const graphicSoftBtn = document.getElementById('graphic-soft-btn');
+  graphicSharpBtn.addEventListener('click', () => {
+    applyAndSaveOptions({ graphic: 'sharp' });
+  });
+  graphicSoftBtn.addEventListener('click', () => {
+    applyAndSaveOptions({ graphic: 'soft' });
   });
 
   const bgmOnBtn = document.getElementById('bgm-on-btn');
@@ -462,6 +483,20 @@ function setUpBtns(pikaVolley, applyAndSaveOptions) {
  * @param {Options} options
  */
 function setSelectedOptionsBtn(options) {
+  if (options.graphic) {
+    const graphicSharpBtn = document.getElementById('graphic-sharp-btn');
+    const graphicSoftBtn = document.getElementById('graphic-soft-btn');
+    switch (options.graphic) {
+      case 'sharp':
+        graphicSoftBtn.classList.remove('selected');
+        graphicSharpBtn.classList.add('selected');
+        break;
+      case 'soft':
+        graphicSharpBtn.classList.remove('selected');
+        graphicSoftBtn.classList.add('selected');
+        break;
+    }
+  }
   if (options.bgm) {
     const bgmOnBtn = document.getElementById('bgm-on-btn');
     const bgmOffBtn = document.getElementById('bgm-off-btn');
@@ -570,6 +605,11 @@ function setUpToShowDropdownsAndSubmenus(pikaVolley) {
     });
 
   // set up to show submenus on mouseover event
+  document
+    .getElementById('graphic-submenu-btn')
+    .addEventListener('mouseover', () => {
+      showSubmenu('graphic-submenu-btn', 'graphic-submenu');
+    });
   document
     .getElementById('bgm-submenu-btn')
     .addEventListener('mouseover', () => {

@@ -228,6 +228,9 @@ span.check {
   height: var(--canvas-height);
   image-rendering: pixelated;
 }
+#game-canvas.graphic-soft {
+  image-rendering: auto;
+}
 .fade-in-box {
   position: absolute;
   display: flex;
