@@ -226,10 +226,10 @@ span.check {
   margin-right: auto;
   width: var(--canvas-width);
   height: var(--canvas-height);
-  image-rendering: auto;
-}
-#game-canvas.graphic-sharp {
   image-rendering: pixelated;
+}
+#game-canvas.graphic-soft {
+  image-rendering: auto;
 }
 .fade-in-box {
   position: absolute;
