@@ -230,7 +230,7 @@ class Ball {
    */
   constructor(isPlayer2Serve) {
     this.initializeForNewRound(isPlayer2Serve);
-    /** @type {number} x coord of expected lang point */
+    /** @type {number} x coord of expected landing point */
     this.expectedLandingPointX = 0; // 0x40
     /**
      * ball rotation frame number selector
