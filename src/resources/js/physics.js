@@ -681,7 +681,7 @@ function processCollisionBetweenBallAndPlayer(
   userInput,
   playerState
 ) {
-  // playerX is maybe pika's x position
+  // playerX is pika's x position
   // if collision occur,
   // greater the x position difference between pika and ball,
   // greater the x velocity of the ball.
