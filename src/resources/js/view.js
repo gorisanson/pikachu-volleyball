@@ -414,7 +414,7 @@ export class GameView {
     this.messages.ready.y = 38;
     this.scoreBoards[0].x = 14; // score board is 14 pixel distant from boundary
     this.scoreBoards[0].y = 10;
-    this.scoreBoards[1].x = 432 - 32 - 32 - 14; // 32 pixel is for number (32x32px) width; one score board has tow numbers
+    this.scoreBoards[1].x = 432 - 32 - 32 - 14; // 32 pixel is for number (32x32px) width; one score board has two numbers
     this.scoreBoards[1].y = 10;
 
     this.shadows.forPlayer1.y = 273;
