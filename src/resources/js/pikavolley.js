@@ -228,14 +228,14 @@ export class PikachuVolleyball {
     ) {
       if (this.selectedWithWho === 1) {
         this.physics.player1.isComputer = false;
-        this.physics.player2.isComputer = false;
+        this.physics.player2.isComputer = true;
       } else {
         if (this.keyboardArray[0].powerHit === 1) {
           this.physics.player1.isComputer = false;
           this.physics.player2.isComputer = true;
         } else if (this.keyboardArray[1].powerHit === 1) {
-          this.physics.player1.isComputer = true;
-          this.physics.player2.isComputer = false;
+          this.physics.player1.isComputer = false;
+          this.physics.player2.isComputer = true;
         }
       }
       this.audio.sounds.pikachu.play();
@@ -289,7 +289,7 @@ export class PikachuVolleyball {
       this.view.game.visible = true;
       this.gameEnded = false;
       this.roundEnded = false;
-      this.isPlayer2Serve = false;
+      this.isPlayer2Serve = true;
       this.physics.player1.gameEnded = false;
       this.physics.player1.isWinner = false;
       this.physics.player2.gameEnded = false;
