@@ -382,7 +382,7 @@ export class PikachuVolleyball {
           this.physics.player2.gameEnded = true;
         }
       } else {
-        this.isPlayer2Serve = false;
+        this.isPlayer2Serve = true;
         this.scores[0] += 1;
         if (this.scores[0] >= this.winningScore) {
           this.gameEnded = true;
