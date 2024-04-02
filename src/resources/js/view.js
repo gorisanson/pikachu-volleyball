@@ -88,7 +88,7 @@ export class MenuView {
       ),
       withWho: [
         makeSpriteWithAnchorXY(textures, TEXTURES.WITH_COMPUTER, 0, 0),
-        makeSpriteWithAnchorXY(textures, TEXTURES.WITH_FRIEND, 0, 0),
+        makeSpriteWithAnchorXY(textures, TEXTURES.WITH_COMPUTER, 0, 0),
       ],
       sachisoft: makeSpriteWithAnchorXY(textures, TEXTURES.SACHISOFT, 0, 0),
       fight: makeSpriteWithAnchorXY(textures, TEXTURES.FIGHT, 0, 0),
