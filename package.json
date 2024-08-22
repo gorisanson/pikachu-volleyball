@@ -6,11 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gorisanson/pikachu-volleyball.git"
+    "url": "git+https://github.com/ilesejin/pikachu-volleyball.git"
   },
   "keywords": [
     "game"
@@ -18,14 +20,15 @@
   "author": "Kyutae Lee",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/gorisanson/pikachu-volleyball/issues"
+    "url": "https://github.com/ilesejin/pikachu-volleyball/issues"
   },
-  "homepage": "https://github.com/gorisanson/pikachu-volleyball#readme",
+  "homepage": "https://github.com/ilesejin/pikachu-volleyball#readme",
   "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "eslint": "^8.17.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "gh-pages": "^6.1.1",
     "html-webpack-plugin": "^5.5.0",
     "prettier": "^2.6.2",
     "webpack": "^5.76.0",
