@@ -271,6 +271,14 @@ class Ball {
    * @param {boolean} isPlayer2Serve will player on the right side serve on this new round?
    */
   initializeForNewRound(isPlayer2Serve) {
+    /** @type {boolean} is Player2 serve? */
+    this.isPlayer2Serve = isPlayer2Serve;
+    /** @type {boolean} is the ball still in a serve state? */
+    this.isServeState = true;
+    /** @type {boolean} did the game end by down powerhitted serve? */
+    this.endByDownServe = false;
+    /** @type {boolean} is the ball powerhitted down? */
+    this.isDownPowerhit = false;
     /** @type {number} x coord */
     this.x = 56; // 0x30    // initialized to 56 or 376
     if (isPlayer2Serve === true) {
@@ -350,6 +358,12 @@ function physicsEngine(player1, player2, ball, userInputArray) {
     );
     if (isHappened === true) {
       if (player.isCollisionWithBallHappened === false) {
+        // check if the ball is still in serve state
+        // when the ball touches the other player
+        if (+ball.isPlayer2Serve!=i && ball.isServeState) {
+          ball.isServeState = false;
+        }
+
         processCollisionBetweenBallAndPlayer(
           ball,
           player.x,
@@ -435,6 +449,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   */
   if (futureBallX < BALL_RADIUS || futureBallX > GROUND_WIDTH) {
     ball.xVelocity = -ball.xVelocity;
+    ball.isDownPowerhit = false; // no more in a down powerhit state
   }
 
   let futureBallY = ball.y + ball.yVelocity;
@@ -444,6 +459,7 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   }
 
   // If ball touches net
+  // serves going through the net doesn't change the down power hit state of the ball
   if (
     Math.abs(ball.x - GROUND_HALF_WIDTH) < NET_PILLAR_HALF_WIDTH &&
     ball.y > NET_PILLAR_TOP_TOP_Y_COORD
@@ -476,6 +492,12 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
     ball.y = BALL_TOUCHING_GROUND_Y_COORD;
     ball.punchEffectRadius = BALL_RADIUS;
     ball.punchEffectY = BALL_TOUCHING_GROUND_Y_COORD + BALL_RADIUS;
+    
+    // check if the game ended by down serve
+    if (ball.isDownPowerhit && ball.isServeState) {
+      ball.endByDownServe = true;
+    }
+    
     return true;
   }
   ball.y = futureBallY;
@@ -705,6 +727,9 @@ function processCollisionBetweenBallAndPlayer(
     ball.yVelocity = -15;
   }
 
+  // ball is no more down powerhitted
+  ball.isDownPowerhit = false;
+
   // player is jumping and power hitting
   if (playerState === 2) {
     if (ball.x < GROUND_HALF_WIDTH) {
@@ -717,6 +742,12 @@ function processCollisionBetweenBallAndPlayer(
 
     ball.yVelocity = Math.abs(ball.yVelocity) * userInput.yDirection * 2;
     ball.punchEffectRadius = BALL_RADIUS;
+
+    // check if the ball is down powerhitted
+    if (userInput.yDirection==1) {
+      ball.isDownPowerhit = true;
+    }
+
     // maybe-stereo-sound function FUN_00408470 (0x90) omitted:
     // refer to a detailed comment above about this function
     // maybe-soundcode function (ballpointer + 0x24 + 0x10) omitted:

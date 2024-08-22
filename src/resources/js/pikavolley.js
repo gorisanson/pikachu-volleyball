@@ -67,6 +67,8 @@ export class PikachuVolleyball {
 
     /** @type {number[]} [0] for player 1 score, [1] for player 2 score */
     this.scores = [0, 0];
+    /** @type {number[]} count for down serves [0] for player 1, [1] for player 2*/
+    this.downServeCounts = [0, 0];
     /** @type {number} winning score: if either one of the players reaches this score, game ends */
     this.winningScore = 15;
 
@@ -299,6 +301,10 @@ export class PikachuVolleyball {
       this.scores[1] = 0;
       this.view.game.drawScoresToScoreBoards(this.scores);
 
+      this.downServeCounts[0] = 0;
+      this.downServeCounts[1] = 0;
+      this.view.game.drawDownServeCountsToDownServeBoards(this.downServeCounts);
+
       this.physics.player1.initializeForNewRound();
       this.physics.player2.initializeForNewRound();
       this.physics.ball.initializeForNewRound(this.isPlayer2Serve);
@@ -347,6 +353,11 @@ export class PikachuVolleyball {
       this.keyboardArray
     );
 
+    console.log(this.physics.ball.endByDownServe);
+    console.log(this.physics.ball.isServeState);
+    console.log(this.physics.ball.isDownPowerhit);
+    console.log(this.downServeCounts);
+
     this.playSoundEffect();
     this.view.game.drawPlayersAndBall(this.physics);
     this.view.game.drawCloudsAndWave();
@@ -374,6 +385,12 @@ export class PikachuVolleyball {
       if (this.physics.ball.punchEffectX < GROUND_HALF_WIDTH) {
         this.isPlayer2Serve = true;
         this.scores[1] += 1;
+
+        // check if the game ended by down powerhitted serve
+        if (this.physics.ball.endByDownServe && this.physics.ball.isPlayer2Serve==true) {
+          this.downServeCounts[1] += 1;
+        }
+
         if (this.scores[1] >= this.winningScore) {
           this.gameEnded = true;
           this.physics.player1.isWinner = false;
@@ -384,6 +401,12 @@ export class PikachuVolleyball {
       } else {
         this.isPlayer2Serve = false;
         this.scores[0] += 1;
+
+        // check if the game ended by down powerhitted serve
+        if (this.physics.ball.endByDownServe && this.physics.ball.isPlayer2Serve==false) {
+          this.downServeCounts[0] += 1;
+        }
+
         if (this.scores[0] >= this.winningScore) {
           this.gameEnded = true;
           this.physics.player1.isWinner = true;
@@ -393,6 +416,7 @@ export class PikachuVolleyball {
         }
       }
       this.view.game.drawScoresToScoreBoards(this.scores);
+      this.view.game.drawDownServeCountsToDownServeBoards(this.downServeCounts);
       if (this.roundEnded === false && this.gameEnded === false) {
         this.slowMotionFramesLeft = this.SLOW_MOTION_FRAMES_NUM;
       }
@@ -523,5 +547,7 @@ export class PikachuVolleyball {
     this._isPracticeMode = bool;
     this.view.game.scoreBoards[0].visible = !bool;
     this.view.game.scoreBoards[1].visible = !bool;
+    this.view.game.downServeBoards[0].visible = !bool;
+    this.view.game.downServeBoards[1].visible = !bool;
   }
 }
