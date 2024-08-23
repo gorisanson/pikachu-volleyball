@@ -364,6 +364,22 @@ export class PikachuVolleyball {
     if (PlayerMove) {
       replaySaver.recordInputs(this.keyboardArray[0], this.keyboardArray[1]);
     }
+    if (this.physics.player1.isComputer) {
+      this.keyboardArray[1].xDirection =
+        this.keyboardArray[1].xDirection || this.keyboardArray[0].xDirection;
+      this.keyboardArray[1].yDirection =
+        this.keyboardArray[1].yDirection || this.keyboardArray[0].yDirection;
+      this.keyboardArray[1].powerHit =
+        this.keyboardArray[1].powerHit || this.keyboardArray[0].powerHit;
+    }
+    if (this.physics.player2.isComputer) {
+      this.keyboardArray[0].xDirection =
+        this.keyboardArray[1].xDirection || this.keyboardArray[0].xDirection;
+      this.keyboardArray[0].yDirection =
+        this.keyboardArray[1].yDirection || this.keyboardArray[0].yDirection;
+      this.keyboardArray[0].powerHit =
+        this.keyboardArray[1].powerHit || this.keyboardArray[0].powerHit;
+    }
     const isBallTouchingGround = this.physics.runEngineForNextFrame(
       this.keyboardArray
     );
