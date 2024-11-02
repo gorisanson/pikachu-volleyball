@@ -69,8 +69,18 @@ export class PikachuVolleyball {
     this.scores = [0, 0];
     /** @type {number[]} count for down serves [0] for player 1, [1] for player 2*/
     this.downServeCounts = [0, 0];
+    /** @type {number} limit of down serves */
+    this.downServeLimit = 3;
+    /** @type {number} score when the down serve gets banned */
+    this.serveLimitScore = 10;
     /** @type {number} winning score: if either one of the players reaches this score, game ends */
     this.winningScore = 15;
+
+    // Used for preventing identical serves in a row
+    /** @type {number[][]} record of the position of the current Ball */
+    this.currentServeRecord = [];
+    /** @type {number[][]} record of the position of the previous Ball */
+    this.previousServeRecord = [];
 
     /** @type {boolean} Is the game ended? */
     this.gameEnded = false;
@@ -127,7 +137,7 @@ export class PikachuVolleyball {
       this.slowMotionNumOfSkippedFrames++;
       if (
         this.slowMotionNumOfSkippedFrames %
-          Math.round(this.normalFPS / this.slowMotionFPS) !==
+        Math.round(this.normalFPS / this.slowMotionFPS) !==
         0
       ) {
         return;
@@ -301,9 +311,12 @@ export class PikachuVolleyball {
       this.scores[1] = 0;
       this.view.game.drawScoresToScoreBoards(this.scores);
 
-      this.downServeCounts[0] = 0;
-      this.downServeCounts[1] = 0;
+      this.downServeCounts[0] = this.downServeLimit;
+      this.downServeCounts[1] = this.downServeLimit;
       this.view.game.drawDownServeCountsToDownServeBoards(this.downServeCounts);
+
+      this.currentServeRecord = [];
+      this.previousServeRecord = [];
 
       this.physics.player1.initializeForNewRound();
       this.physics.player2.initializeForNewRound();
@@ -353,10 +366,8 @@ export class PikachuVolleyball {
       this.keyboardArray
     );
 
-    console.log(this.physics.ball.endByDownServe);
-    console.log(this.physics.ball.isServeState);
-    console.log(this.physics.ball.isDownPowerhit);
-    console.log(this.downServeCounts);
+    if (this.roundEnded === false && this.physics.ball.isServeState) // Record serve path only at a ServeState and round isn't ended
+      this.currentServeRecord.push([this.physics.ball.x, this.physics.ball.y]);
 
     this.playSoundEffect();
     this.view.game.drawPlayersAndBall(this.physics);
@@ -382,44 +393,78 @@ export class PikachuVolleyball {
       this.roundEnded === false &&
       this.gameEnded === false
     ) {
-      if (this.physics.ball.punchEffectX < GROUND_HALF_WIDTH) {
-        this.isPlayer2Serve = true;
-        this.scores[1] += 1;
-
-        // check if the game ended by down powerhitted serve
-        if (this.physics.ball.endByDownServe && this.physics.ball.isPlayer2Serve==true) {
-          this.downServeCounts[1] += 1;
+      // if the game ended by down powerhitted serve 
+      if (this.physics.ball.endByDownServe && this.physics.ball.isPlayer2Serve && this.physics.ball.punchEffectX < GROUND_HALF_WIDTH) {
+        if (this.downServeCounts[1] > 0) {
+          this.downServeCounts[1] -= 1;
+          this.isPlayer2Serve = true;
+          this.scores[1] += 1;
         }
-
-        if (this.scores[1] >= this.winningScore) {
-          this.gameEnded = true;
-          this.physics.player1.isWinner = false;
-          this.physics.player2.isWinner = true;
-          this.physics.player1.gameEnded = true;
-          this.physics.player2.gameEnded = true;
-        }
-      } else {
-        this.isPlayer2Serve = false;
-        this.scores[0] += 1;
-
-        // check if the game ended by down powerhitted serve
-        if (this.physics.ball.endByDownServe && this.physics.ball.isPlayer2Serve==false) {
-          this.downServeCounts[0] += 1;
-        }
-
-        if (this.scores[0] >= this.winningScore) {
-          this.gameEnded = true;
-          this.physics.player1.isWinner = true;
-          this.physics.player2.isWinner = false;
-          this.physics.player1.gameEnded = true;
-          this.physics.player2.gameEnded = true;
+        else {
+          // down serve limit ended
+          this.isPlayer2Serve = false;
+          this.scores[0] += 1;
         }
       }
+      else if (this.physics.ball.endByDownServe && !this.physics.ball.isPlayer2Serve && !(this.physics.ball.punchEffectX < GROUND_HALF_WIDTH)) {
+        if (this.downServeCounts[0] > 0) {
+          this.downServeCounts[0] -= 1;
+          this.isPlayer2Serve = false;
+          this.scores[0] += 1;
+        }
+        else {
+          // down serve limit ended
+          this.isPlayer2Serve = true;
+          this.scores[1] += 1;
+        }
+      } else {
+        if (this.isIdenticalServe && this.physics.ball.isServeState) { // Did an identical serve and is still in a serve state
+          if (!this.physics.ball.isPlayer2Serve) {
+            this.isPlayer2Serve = true;
+            this.scores[0] = Math.max(this.scores[0] - 1, 0);
+          } else {
+            this.isPlayer2Serve = false;
+            this.scores[1] = Math.max(this.scores[1] - 1, 0);
+          }
+        }
+        else { // game ended normally
+          if (this.physics.ball.punchEffectX < GROUND_HALF_WIDTH) {
+            this.isPlayer2Serve = true;
+            this.scores[1] += 1;
+          } else {
+            this.isPlayer2Serve = false;
+            this.scores[0] += 1;
+          }
+        }
+      }
+
+      if (this.scores[0] >= this.serveLimitScore) {
+        this.downServeCounts[0] = 0;
+      } else if (this.scores[1] >= this.serveLimitScore) {
+        this.downServeCounts[1] = 0;
+      }
+
+      if (this.scores[1] >= this.winningScore) {
+        this.gameEnded = true;
+        this.physics.player1.isWinner = false;
+        this.physics.player2.isWinner = true;
+        this.physics.player1.gameEnded = true;
+        this.physics.player2.gameEnded = true;
+      } else if (this.scores[0] >= this.winningScore) {
+        this.gameEnded = true;
+        this.physics.player1.isWinner = true;
+        this.physics.player2.isWinner = false;
+        this.physics.player1.gameEnded = true;
+        this.physics.player2.gameEnded = true;
+      }
+
       this.view.game.drawScoresToScoreBoards(this.scores);
       this.view.game.drawDownServeCountsToDownServeBoards(this.downServeCounts);
       if (this.roundEnded === false && this.gameEnded === false) {
         this.slowMotionFramesLeft = this.SLOW_MOTION_FRAMES_NUM;
       }
+      this.previousServeRecord = this.currentServeRecord;
+      this.currentServeRecord = [];
       this.roundEnded = true;
     }
 
@@ -550,4 +595,10 @@ export class PikachuVolleyball {
     this.view.game.downServeBoards[0].visible = !bool;
     this.view.game.downServeBoards[1].visible = !bool;
   }
+
+  /** @return {boolean} */
+  get isIdenticalServe() {
+    return JSON.stringify(this.currentServeRecord) === JSON.stringify(this.previousServeRecord);
+  }
+
 }
