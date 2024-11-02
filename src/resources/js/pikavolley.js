@@ -393,8 +393,16 @@ export class PikachuVolleyball {
       this.roundEnded === false &&
       this.gameEnded === false
     ) {
-      // if the game ended by down powerhitted serve 
-      if (this.physics.ball.endByDownServe && this.physics.ball.isPlayer2Serve && this.physics.ball.punchEffectX < GROUND_HALF_WIDTH) {
+      if (this.isIdenticalServe && this.physics.ball.isServeState) { // Did an identical serve and is still in a serve state
+        if (!this.physics.ball.isPlayer2Serve) {
+          this.isPlayer2Serve = true;
+          this.scores[0] = Math.max(this.scores[0] - 1, 0);
+        } else {
+          this.isPlayer2Serve = false;
+          this.scores[1] = Math.max(this.scores[1] - 1, 0);
+        }
+      }
+      else if (this.physics.ball.endByDownServe && this.physics.ball.isPlayer2Serve && this.physics.ball.punchEffectX < GROUND_HALF_WIDTH) { // if the game ended by down powerhitted serve 
         if (this.downServeCounts[1] > 0) {
           this.downServeCounts[1] -= 1;
           this.isPlayer2Serve = true;
@@ -417,17 +425,7 @@ export class PikachuVolleyball {
           this.isPlayer2Serve = true;
           this.scores[1] += 1;
         }
-      } else {
-        if (this.isIdenticalServe && this.physics.ball.isServeState) { // Did an identical serve and is still in a serve state
-          if (!this.physics.ball.isPlayer2Serve) {
-            this.isPlayer2Serve = true;
-            this.scores[0] = Math.max(this.scores[0] - 1, 0);
-          } else {
-            this.isPlayer2Serve = false;
-            this.scores[1] = Math.max(this.scores[1] - 1, 0);
-          }
-        }
-        else { // game ended normally
+      } else { // game ended normally
           if (this.physics.ball.punchEffectX < GROUND_HALF_WIDTH) {
             this.isPlayer2Serve = true;
             this.scores[1] += 1;
@@ -435,7 +433,6 @@ export class PikachuVolleyball {
             this.isPlayer2Serve = false;
             this.scores[0] += 1;
           }
-        }
       }
 
       if (this.scores[0] >= this.serveLimitScore) {
