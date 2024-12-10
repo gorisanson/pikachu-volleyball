@@ -5,9 +5,9 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-	<title>Pikachu Volleyball</title>
-	<meta name="description" content="Play the game Pikachu Volleyball" />
-	<meta name="author" content="Lee, Kyutae" />
+	<title>Pikachu Volleyball - Super AI Edition</title>
+	<meta name="description" content="Play the game Pikachu Volleyball - Super AI Edition" />
+	<meta name="author" content="DuckLL" />
 
 	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -158,7 +158,7 @@
 			</div>
 			<div class="btn-container right">
 				<button type="button" id="about-btn" class="btn glow">
-					<span class="text-about hidden">About</span><span class="text-play">Play</span>
+					<span class="text-about hidden">Setting<br>/About</span><span class="text-play">Play</span>
 				</button>
 			</div>
 		</div>
@@ -184,20 +184,20 @@
 					<h1>Capability</h1>
 					<div id="capability">
 						<div><input id="serve" type="checkbox"><label>Serve</label></div>
-						<div><input id="fancy" type="checkbox" checked="checked"><label>Fancy</label></div>
-						<div><input id="block" type="checkbox" checked="checked"><label>Block</label></div>
+						<div><input id="fancy" type="checkbox" checked="checked"><label>Trick</label></div>
+						<div><input id="block" type="checkbox" checked="checked"><label>Blocking</label></div>
 						<div><input id="diving" type="checkbox" checked="checked"><label>Diving</label></div>
-						<div><input id="anti_block" type="checkbox" checked="checked"><label>Anti Block</label></div>
-						<div><input id="early_ball" type="checkbox"><label>Early Ball</label></div>
-						<div><input id="jump" type="checkbox"><label>Same time Jump</label></div>
+						<div><input id="anti_block" type="checkbox" checked="checked"><label>Anti-Blocking</label></div>
+						<div><input id="early_ball" type="checkbox"><label>Early Hits</label></div>
+						<div><input id="jump" type="checkbox"><label>Sync-Jumping</label></div>
 						<div>
 							<label>Defense</label>
 							<select id="defense">
-								<option value="0">mid</option>
-								<option value="1">mid_mirror</option>
-								<option value="2">mirror</option>
-								<option value="3">predict</option>
-								<option value="4" selected>close</option>
+								<option value="0">Centering</option>
+								<option value="1">Mirrored Centering</option>
+								<option value="2">Mirroring</option>
+								<option value="3">Prediction</option>
+								<option value="4" selected>Advanced Forward</option>
 							</select>
 						</div>
 						<div>
@@ -318,17 +318,13 @@
 						</div>
 					</div>
 				</div>
+				<hr style="width: 100%;">
 				<div id="about-box-head">
 					<h1>Pikachu Volleyball - Super AI Edition</h1>
 					<p class="languages">
 						<a href="../zh/" target="_self">Chinese(中文)</a> | &check;
 						English |
 						<a href="../ko/" target="_self">Korean(한국어)</a>
-					</p>
-					<p class="p2p-online-version">
-						You can also play
-						<a href="https://gorisanson.github.io/pikachu-volleyball-p2p-online/en/">the peer-to-peer online
-							version</a>.
 					</p>
 					<p class="original-by">
 						The original Pikachu Volleyball (対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編) was
@@ -337,116 +333,103 @@
 						<span class="no-wrap">SACHI SOFT / SAWAYAKAN Programmers</span><br />
 						1997 (C) <span class="no-wrap">Satoshi Takenouchi</span>
 					</p>
+					<hr style="width: 100%;">
 					<p class="reverse-engineered-by">
-						The original game was reverse engineered<br />
-						and implemented into this web version by<br />
-						<span class="no-wrap"><a href="https://gorisanson.github.io/">Lee, Kyutae</a></span>
+						Based on the <a href="https://gorisanson.github.io/pikachu-volleyball/en/" target="_blank">web
+							version</a>
+						developed by <a href="https://gorisanson.github.io/" target="_blank">Lee,
+							Kyutae</a>
 					</p>
-					<p class="source-code-on">
-						You can view the source code on
-						<a href="https://github.com/gorisanson/pikachu-volleyball" target="_blank"
-							rel="noopener">GitHub</a>.
-					</p>
-					<p class="release-date">Release Date: 2020-03-26</p>
-					<p class="update-history-on">
-						<a href="./update-history/" target="_self">Update history</a>
-					</p>
+					<hr style="width: 100%;">
 					<p class="reverse-engineered-by">
 						This version is modified by <span class="no-wrap"><a href="https://blog.duckll.tw/"
-								target="_blank">DuckLL</a></span>.<br />
-						There are many skills in new AI. You can view details in update history(above).<br />
-						There are some options blow for AI capability.<br />
-						You can click the "Save replay" button and replay with <a
+								target="_blank">DuckLL</a></span>.
+						<br>Strengthened AI with adjustable options
+						<br>Save replay, watch replay with <a
 							href="https://gorisanson.github.io/pikachu-volleyball-p2p-online/en/replay/"
-							target="_blank">origirnal
-							replayer</a>.<br />
-						The 2 players mode is change to AI vs. AI. You can watch a top game in this mode.<br />
+							target="_blank">Replayer</a>
+						<br>1P full key available (same as the online battle version)
+						<br>2P mode change to CPU vs. CPU, allowing you to enjoy intense AI battles
 					</p>
 					<p class="source-code-on">
-						You can view the source code on
 						<a href="https://github.com/duckll/pikachu-volleyball" target="_blank" rel="noopener">GitHub</a>
-						.
+						<br>
+						<a href="./update-history/" target="_self">Update history</a>
+						<br>
+						<a href="/version.html" target="_self">History versions</a>
 					</p>
-					<p class="update-history-on">
-						Version: 6.0.20230816(Latest)
-						| <a href="/version/5020230119/">5.0.20230119</a>
-						| <a href="/version/4220221217/">4.2.20221217</a>
-						| <a href="/version/4120221113/">4.1.20221113</a>
-						| <a href="/version/4020220925/">4.0.20220925</a>
-						| <a href="/version/3020220903/">3.0.20220903</a>
-						| <a href="/version/2020220522/">2.0.20220522</a>
-						| <a href="/version/1120220502/">1.1.20220502</a>
-						| <a href="/version/1020220423/">1.0.20220423</a>
+					<hr style="width: 100%;">
+					<h2>Design Concept</h2>
+					<p>
+						I won't claim that my AI is the strongest, but it is undoubtedly the most dazzling! With
+						lightning-fast
+						decision-making, an aggressive offensive style, and versatile randomness, it makes every match
+						more exciting.
+						Although it's an AI, it doesn't use machine learning; all strategies are designed based on my
+						understanding of the
+						game. There is still room for improvement, so I will continue to develop it. If you have any
+						suggestions, feel free
+						to share them on GitHub!
 					</p>
+
+					<h2>Ability Overview</h2>
+					<div style="text-align: left;">
+						<p><b>Serving: </b>Effective against human players but not against AIs. To avoid being directly
+							countered by AI
+							opponents, this option is disabled by default. The serves from both sides are slightly
+							different and can be
+							fine-tuned through the serving options below.</p>
+						<p><b>Trick: </b>Refers to combo hitting techniques, such as the lightning smash,
+							which uses the net to
+							rebound the ball before smashing it again. Other examples include upward and downward
+							smash, small ball combos,
+							and double bounces.</p>
+						<p><b>Blocking: </b>A practice option to determine whether to intercept opponent attacks in the
+							net-front area.</p>
+						<p><b>Diving: </b>Enabling this expands the defensive range.</p>
+						<p><b>Anti-Blocking: </b>When enabled, the AI adjusts its attack trajectory to avoid being
+							blocked by opponents near
+							the net.</p>
+						<p><b>Early Hits: </b>Attacking during the jump’s ascending phase. It’s recommended to disable
+							the anti-blocking
+							option simultaneously. Useful for practicing reaction time for surprise attacks, but in AI
+							matches, early hits
+							may reduce defensive capabilities and lead to points lost.</p>
+						<p><b>Synchronized Jumping: </b>A practice option designed to train the AI's response when
+							opponents block early,
+							enabling it to vary its attack trajectory.</p>
+						<p><b>Delay: </b>Simulates human reaction delays, affecting the timing of defensive movements
+							and attack
+							organization. A delay of 4 closely mimics an expert’s reaction time. However, humans usually
+							don’t “freeze.” If
+							the defensive mode is predictive, increasing the delay to 7 can provide an intriguing
+							predictive defense
+							experience.</p>
+					</div>
+					<h3>Defense Modes</h3>
+					<p>
+						Defense mode defines the AI's positioning before an opponent’s attack. Once the opponent
+						strikes, the AI will move
+						toward the ball's predicted landing point. Difficulty levels are based on scenarios where trick
+						shots are enabled.
+						Without trick shots, predictive mode is more effective than mirror mode.
+					</p>
+					<div style="text-align: left;">
+						<p><b>Centering: </b>Difficulty 1, positions itself at the center of the defensive range.</p>
+						<p><b>Mirrored Centering: </b>Difficulty 2, mirrors the opponent’s movements but stays within
+							the center area.</p>
+						<p><b>Mirroring: </b>Difficulty 4, fully mirrors the opponent’s movements.</p>
+						<p><b>Prediction: </b>Difficulty 3, predicts the shortest path to the opponent's attack landing
+							point.</p>
+						<p><b>Advanced Forward: </b>Difficulty 5, moves closer to the net for better blocking
+							opportunities while ensuring
+							interception is possible.</p>
+					</div>
 				</div>
-				<div class="margin-top limit-width">
-					<div class="align-center-horizontally">
-						<img class="screenshot" src="../resources/assets/images/screenshot.png" width="1728"
-							height="1216" alt="Pikachu Volleyball game screenshot" />
-					</div>
-					<p>
-						Pikachu Volleyball is an old Windows game which was developed in
-						Japan in 1997. The game was popular in Korea when I was young. I
-						had played it with my friends.
-					</p>
-					<p>
-						This web version is made by reverse engineering the original game
-						and implementing it to JavaScript. It is executed directly on the
-						web browser so, unlike the original game, you can play it
-						regardless of the operating system of your computer.
-					</p>
-					<p class="margin-top"><span class="thick">Controls:</span></p>
-					<div class="align-center-horizontally">
-						<img class="controls" src="../resources/assets/images/controls.png" width="1994" height="997"
-							alt="game controls" />
-						<p>
-							If you have a Bluetooth keyboard, you can play also on your
-							touch/mobile devices.
-						</p>
-					</div>
-					<p class="margin-top">
-						<span class="thick">Tip 1:</span><br />
-						Like the original game, when you select
-						<span class="no_wrap">"1人でぴかちゅ~"</span> to play against the
-						computer, you would play as player 1 if you select by pressing the
-						"Z" key, or you would play as player 2 if you select by pressing
-						the Enter key.
-					</p>
-					<p class="margin-top">
-						<span class="thick">Tip 2:</span><br />
-						Player 1 has the "V" key as an additional down key. The "V" key
-						works differently compared to the "F" key, so you can try using
-						it. (<span class="no-wrap"><a href="https://twitter.com/repeat_c/status/1256494157884841984"
-								target="_blank" rel="noopener">Thanks to @repeat_c</a></span>, this characteristic of
-						the original game could be
-						reflected in
-						this web version.)
-					</p>
-					<p class="margin-top">
-						<span class="thick">Tip 3:</span><br />
-						If you want to hide/show the game menu bar, press the Esc key.
-					</p>
-					<p class="margin-top">
-						<span class="thick">Tip 4:</span><br />
-						I've added a practice mode which is not in the original game, you
-						can turn on this mode at
-						<span class="no_wrap">"Options &rarr; Practice mode &rarr; on"</span>.
-					</p>
-					<p class="margin-top">
-						<span class="thick">Tip 5:</span><br />
-						If you want to play this game without the need for an internet
-						connection, you can install this page as an app on your device. On
-						a computer,
-						<a href="https://support.google.com/chrome/answer/9658361" target="_blank" rel="noopener">use
-							the Chrome
-							browser to install</a>. On a mobile device, "Add to Home Screen" this page.
-					</p>
-					<div class="margin-top">
-						<button type="button" id="close-about-btn" class="btn-in-box glow">
-							<span class="text-close hidden">close</span><span class="text-play">Play</span>
-						</button>
-					</div>
-					<div class="for-margin"></div>
+				<div class="margin-top">
+					<button type="button" id="close-about-btn" class="btn-in-box glow">
+						<span class="text-close hidden">close</span><span class="text-play">Play</span>
+					</button>
 				</div>
 			</div>
 			<div class="fade-in-box notice hidden" id="notice-box-1">

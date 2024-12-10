@@ -5,9 +5,9 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-	<title>피카츄 배구</title>
-	<meta name="description" content="피카츄 배구 게임" />
-	<meta name="author" content="이규태" />
+	<title>피카츄 배구 - 슈퍼 AI 버전</title>
+	<meta name="description" content="피카츄 배구 게임  - 슈퍼 AI 버전" />
+	<meta name="author" content="DuckLL" />
 
 	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -157,7 +157,7 @@
 			</div>
 			<div class="btn-container right">
 				<button type="button" id="about-btn" class="btn glow">
-					<span class="text-about hidden">게임 소개</span><span class="text-play">게임 시작</span>
+					<span class="text-about hidden">설정/정보</span><span class="text-play">게임 시작</span>
 				</button>
 			</div>
 		</div>
@@ -178,151 +178,120 @@
 		<div id="game-canvas-container">
 			<div class="fade-in-box about" id="about-box">
 				<div id="setting">
-					<h1>Capability</h1>
+					<h1>기능</h1>
 					<div id="capability">
-						<div><input id="serve" type="checkbox"><label>Serve</label></div>
-						<div><input id="fancy" type="checkbox" checked="checked"><label>Fancy</label></div>
-						<div><input id="block" type="checkbox" checked="checked"><label>Block</label></div>
-						<div><input id="diving" type="checkbox" checked="checked"><label>Diving</label></div>
-						<div><input id="anti_block" type="checkbox" checked="checked"><label>Anti Block</label></div>
-						<div><input id="early_ball" type="checkbox"><label>Early Ball</label></div>
-						<div><input id="jump" type="checkbox"><label>Same time Jump</label></div>
+						<div><input id="serve" type="checkbox"><label>서브</label></div>
+						<div><input id="fancy" type="checkbox" checked="checked"><label>트릭샷</label></div>
+						<div><input id="block" type="checkbox" checked="checked"><label>블로킹</label></div>
+						<div><input id="diving" type="checkbox" checked="checked"><label>다이빙</label></div>
+						<div><input id="anti_block" type="checkbox" checked="checked"><label>안티 블로킹</label></div>
+						<div><input id="early_ball" type="checkbox"><label>조기 타격</label></div>
+						<div><input id="jump" type="checkbox"><label>동기화 점프</label></div>
 						<div>
-							<label>Defense</label>
+							<label>방어 모드</label>
 							<select id="defense">
-								<option value="0">mid</option>
-								<option value="1">mid_mirror</option>
-								<option value="2">mirror</option>
-								<option value="3">predict</option>
-								<option value="4" selected>close</option>
+								<option value="0">중앙 위치</option>
+								<option value="1">중앙 미러링</option>
+								<option value="2">미러링</option>
+								<option value="3">예측</option>
+								<option value="4" selected>전진 방어</option>
 							</select>
 						</div>
 						<div>
-							<label>Delay</label>
+							<label>딜레이</label>
 							<input id="delay" type="number" inputmode="numeric" min="0" max="30" value="0">
 						</div>
 					</div>
-					<h1 style="margin-bottom: 0;">serve</h1>
+					<h1 style="margin-bottom: 0;">서브</h1>
 					<div style="width: 100%;">
 						<div class="player" style="float: left;">
-							<h3>player1</h3>
+							<h3>플레이어1</h3>
 							<div>
 								<div class="serve">
-									<div><b>1 step serve</b><input id="player1-1-step-serve" type="checkbox"
-											checked="checked">
-									</div>
+									<div><b>1단계 서브</b><input id="player1-1-step-serve" type="checkbox"
+											checked="checked"></div>
 									<div><input id="player-1-skill-0-checkbox" type="checkbox" checked="checked">
-										<label>Break
-											net</label>
+										<label>브레이크 네트</label>
 									</div>
 									<div><input id="player-1-skill-1-checkbox" type="checkbox" checked="checked">
-										<label>Break
-											net(fake,
-											flat)</label>
+										<label>브레이크 네트(페이크, 플랫)</label>
 									</div>
 									<div><input id="player-1-skill-2-checkbox" type="checkbox" checked="checked">
-										<label>Head
-											thunder</label>
+										<label>헤드 썬더</label>
 									</div>
 									<div><input id="player-1-skill-3-checkbox" type="checkbox" checked="checked">
-										<label>Head
-											thunder(fake,
-											flat)</label>
+										<label>헤드 썬더(페이크, 플랫)</label>
 									</div>
 									<div><input id="player-1-skill-4-checkbox" type="checkbox" checked="checked">
-										<label>Net V
-											smash</label>
+										<label>네트 V 스매시</label>
 									</div>
 									<div><input id="player-1-skill-5-checkbox" type="checkbox" checked="checked">
-										<label>Net R
-											smash</label>
+										<label>네트 R 스매시</label>
 									</div>
 									<div><input id="player-1-skill-6-checkbox" type="checkbox" checked="checked">
-										<label>Net G
-											smash</label>
+										<label>네트 G 스매시</label>
 									</div>
 									<div><input id="player-1-skill-7-checkbox" type="checkbox" checked="checked">
-										<label>Net
-											dodge</label>
+										<label>네트 회피</label>
 									</div>
 									<hr style="width: 100%;">
-									<div><b>tail serve</b><input id="player1-tail-serve" type="checkbox"
-											checked="checked">
+									<div><b>꼬리 서브</b><input id="player1-tail-serve" type="checkbox" checked="checked">
 									</div>
 									<div><input id="player-1-skill-8-checkbox" type="checkbox" checked="checked">
-										<label>Tail
-											thunder</label>
+										<label>꼬리 썬더</label>
 									</div>
 									<div><input id="player-1-skill-9-checkbox" type="checkbox" checked="checked">
-										<label>Tail
-											thunder(fake,
-											flat)</label>
+										<label>꼬리 썬더(페이크, 플랫)</label>
 									</div>
 								</div>
 							</div>
-
-
 						</div>
 						<div class="player" style="float: right;">
-							<h3>player2</h3>
+							<h3>플레이어2</h3>
 							<div>
-								<div class="surve">
-									<div><b>1 step serve</b><input id="player2-1-step-serve" type="checkbox"
-											checked="checked">
-									</div>
+								<div class="serve">
+									<div><b>1단계 서브</b><input id="player2-1-step-serve" type="checkbox"
+											checked="checked"></div>
 									<div><input id="player-2-skill-0-checkbox" type="checkbox" checked="checked">
-										<label>Break
-											net</label>
+										<label>브레이크 네트</label>
 									</div>
 									<div><input id="player-2-skill-1-checkbox" type="checkbox" checked="checked">
-										<label>Break
-											net(fake,
-											flat)</label>
+										<label>브레이크 네트(페이크, 플랫)</label>
 									</div>
 									<div><input id="player-2-skill-2-checkbox" type="checkbox" checked="checked">
-										<label>Head
-											thunder</label>
+										<label>헤드 썬더</label>
 									</div>
 									<div><input id="player-2-skill-3-checkbox" type="checkbox" checked="checked">
-										<label>Head
-											thunder(fake,
-											flat)</label>
+										<label>헤드 썬더(페이크, 플랫)</label>
 									</div>
 									<div><input id="player-2-skill-4-checkbox" type="checkbox" checked="checked">
-										<label>Net
-											thunder</label>
+										<label>네트 썬더</label>
 									</div>
 									<div><input id="player-2-skill-5-checkbox" type="checkbox" checked="checked">
-										<label>Net
-											thunder(fake,
-											flat)</label>
+										<label>네트 썬더(페이크, 플랫)</label>
 									</div>
 									<hr style="width: 100%;">
-									<div><b>tail serve</b><input id="player2-tail-serve" type="checkbox"
-											checked="checked"></div>
+									<div><b>꼬리 서브</b><input id="player2-tail-serve" type="checkbox" checked="checked">
+									</div>
 									<div><input id="player-2-skill-6-checkbox" type="checkbox" checked="checked">
-										<label>Tail
-											thunder</label>
+										<label>꼬리 썬더</label>
 									</div>
 									<div><input id="player-2-skill-7-checkbox" type="checkbox" checked="checked">
-										<label>Tail
-											thunder(fake,
-											flat)</label>
+										<label>꼬리 썬더(페이크, 플랫)</label>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+
 				</div>
+				<hr style="width: 100%;">
 				<div id="about-box-head">
 					<h1>피카츄 배구 - 슈퍼 AI 버전</h1>
 					<p class="languages">
 						<a href="../zh/" target="_self">Chinese(中文)</a>
 						| <a href="../en/" target="_self">English</a>
 						| &check; Korean(한국어)
-					</p>
-					<p class="p2p-online-version">
-						<a href="https://gorisanson.github.io/pikachu-volleyball-p2p-online/ko/">P2P 온라인 버전</a>도 있습니다.
 					</p>
 					<p class="original-by">
 						원조 피카츄 배구 (対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編) 게임은 다음 분들이
@@ -331,120 +300,75 @@
 						<span class="no-wrap">SACHI SOFT / SAWAYAKAN Programmers</span><br />
 						1997 (C) <span class="no-wrap">Satoshi Takenouchi</span>
 					</p>
+					<hr style="width: 100%;">
 					<p class="reverse-engineered-by">
-						원조 피카츄 배구 게임을 리버스 엔지니어링하여 웹 버전으로
-						만들었습니다.<br />
-						웹 버전으로 만든 사람:
-						<span class="no-wrap"><a href="https://gorisanson.github.io/">이규태</a></span>
+						<a href="https://gorisanson.github.io/pikachu-volleyball/ko/" target="_blank">웹 버전</a>을 바탕으로
+						<a href="https://gorisanson.github.io/" target="_blank">이규태</a>가 개발한 것입니다.
+					</p>
+					<hr style="width: 100%;">
+					<p class="reverse-engineered-by">
+						<a href="https://blog.duckll.tw/" target="_blank">DuckLL</a> 두 번째 수정 적용
+						<br>조정 가능한 옵션으로 AI 강화
+						<br>리플레이 저장, <a href="https://gorisanson.github.io/pikachu-volleyball-p2p-online/ko/replay/"
+							target="_blank">재생
+							플레이어</a>로 리플레이 시청
+						<br>1P는 모든 키 사용 가능 (온라인 대전 버전과 동일)
+						<br>2P는 AI 모드로 설정되어, AI 간의 치열한 경기를 감상할 수 있음
 					</p>
 					<p class="source-code-on">
-						소스 코드를
-						<a href="https://github.com/gorisanson/pikachu-volleyball" target="_blank"
-							rel="noopener">GitHub</a>에서 볼 수
-						있습니다.
-					</p>
-					<p class="release-date">공개한 날: 2020-03-26</p>
-					<p class="update-history-on">
-						<a href="./update-history/" target="_self">업데이트 기록</a>
-					</p>
-					<p class="reverse-engineered-by">
-						This version is modified by <span class="no-wrap"><a href="https://blog.duckll.tw/"
-								target="_blank">DuckLL</a></span>.<br />
-						There are many skills in new AI. You can view details in update history(above).<br />
-						There are some options blow for AI capability.<br />
-						You can click the "Save replay" button and replay with <a
-							href="https://gorisanson.github.io/pikachu-volleyball-p2p-online/en/replay/"
-							target="_blank">origirnal
-							replayer</a>.<br />
-						The 2 players mode is change to AI vs. AI. You can watch a top game in this mode.<br />
-					</p>
-					<p class="source-code-on">
-						You can view the source code on
 						<a href="https://github.com/duckll/pikachu-volleyball" target="_blank" rel="noopener">GitHub</a>
-						.
+						<br>
+						<a href="./update-history/" target="_self">업데이트 내역</a>
+						<br>
+						<a href="/version.html" target="_self">이전 버전</a>
+
 					</p>
-					<p class="update-history-on">
-						Version: 6.0.20230816(Latest)
-						| <a href="/version/5020230119/">5.0.20230119</a>
-						| <a href="/version/4220221217/">4.2.20221217</a>
-						| <a href="/version/4120221113/">4.1.20221113</a>
-						| <a href="/version/4020220925/">4.0.20220925</a>
-						| <a href="/version/3020220903/">3.0.20220903</a>
-						| <a href="/version/2020220522/">2.0.20220522</a>
-						| <a href="/version/1120220502/">1.1.20220502</a>
-						| <a href="/version/1020220423/">1.0.20220423</a>
+					<hr style="width: 100%;">
+					<h2>디자인 개념</h2>
+					<p>
+						제 AI가 가장 강력하다고 주장하지는 않지만, 확실히 가장 눈부신 존재입니다! 번개처럼 빠른 판단력, 공격적인 플레이 스타일, 다재다능한 랜덤성이 매 경기를 더욱 흥미롭게
+						만듭니다. 이 AI는 기계 학습을
+						사용하지 않고, 전적으로 제가 게임을 이해한 바를 기반으로 모든 전략을 설계했습니다. 여전히 개선의 여지가 많아 계속 개발할 예정입니다. 어떤 제안이든 GitHub에서
+						자유롭게 공유해주세요!
 					</p>
+
+					<h2>능력 소개</h2>
+					<div style="text-align: left;">
+						<p><b>서브: </b>인간 플레이어에게는 효과적이지만 AI에게는 효과가 적습니다. AI 상대에게 바로 역공당하는 것을 방지하기 위해 기본적으로 비활성화되어 있습니다.
+							양쪽 서브는 약간 다르며 아래 옵션을
+							통해 세부 조정이 가능합니다.</p>
+						<p><b>트릭샷: </b>연속적인 타격 기술을 의미합니다. 예를 들어, 번개 스파이크는 네트를 이용해 공을 튕긴 후 다시 스파이크를 날리는 방식으로 생성됩니다. 위아래
+							스파이크, 소프트볼 연속 타격, 더블
+							바운스 등도 트릭샷에 포함됩니다.</p>
+						<p><b>블로킹: </b>넷 앞 영역에서 상대의 공격을 차단할지 여부를 결정하는 연습용 옵션입니다.</p>
+						<p><b>다이빙: </b>활성화 시 방어 범위가 넓어집니다.</p>
+						<p><b>안티 블로킹: </b>활성화하면 AI가 상대의 넷 앞 블로킹을 피하기 위해 공격 경로를 조정합니다.</p>
+						<p><b>조기 타격: </b>점프 상승 단계에서 공격을 수행합니다. 동시에 안티 블로킹 옵션을 비활성화하는 것이 권장됩니다. 서프라이즈 공격 반응 속도를 훈련하는 데
+							유용하지만, AI 대전에서는 방어 능력이
+							감소하여 점수를 잃을 수 있습니다.</p>
+						<p><b>동기화 점프: </b>상대가 블로킹을 조기에 시도할 때 AI가 공격 경로를 다양화하도록 훈련하는 연습용 옵션입니다.</p>
+						<p><b>딜레이: </b>인간의 판단 지연을 시뮬레이션하며, 방어 이동과 공격 조직의 타이밍에 영향을 미칩니다. 4는 숙련자의 반응 시간을 가장 잘 모방한다고 생각됩니다.
+							그러나 인간은 보통 멍하게 있지
+							않습니다. 방어 모드가 예측형인 경우, 딜레이를 7로 설정하면 예측 방어의 매력을 느낄 수 있습니다.</p>
+					</div>
+					<h3>방어 모드</h3>
+					<p>
+						방어 모드는 상대가 공격하기 전 AI의 위치를 정의합니다. 상대가 공을 칠 때, AI는 공의 예상 착지 지점으로 이동합니다. 난이도는 트릭샷 옵션이 활성화된 상황을 기준으로
+						합니다. 트릭샷 옵션이 비활성화된
+						경우, 예측 모드는 미러 모드보다 효과적입니다.
+					</p>
+					<div style="text-align: left;">
+						<p><b>중앙 위치: </b>난이도 1, 방어 범위의 중앙에 위치합니다.</p>
+						<p><b>중앙 미러링: </b>난이도 2, 상대의 움직임을 따라가지만 중앙 지역을 벗어나지 않습니다.</p>
+						<p><b>미러링: </b>난이도 4, 상대의 움직임을 완전히 따라갑니다.</p>
+						<p><b>예측: </b>난이도 3, 상대 공격의 최단 경로 착지 지점을 예측합니다.</p>
+						<p><b>전진 방어: </b>난이도 5, 공을 막을 수 있는 상황에서 최대한 넷에 가까이 다가가 블로킹을 돕습니다.</p>
+					</div>
 				</div>
-				<div class="margin-top limit-width">
-					<div class="align-center-horizontally">
-						<img class="screenshot" src="../resources/assets/images/screenshot.png" width="1728"
-							height="1216" alt="Pikachu Volleyball game screenshot" />
-					</div>
-					<p>
-						피카츄 배구는 일본에서 1997년에 만들어진 윈도우용 게임입니다. 이
-						게임을 처음 접한 건 아마 초등학교 컴퓨터실에서였던 것으로
-						기억합니다. 친구들과 같이하면 정말 재미있지요. 어떤 분이 일본어
-						스프라이트를 한국어로 번역한 '피카츄 버전 한글판'이 나오기도
-						했습니다. (이 '피카츄 버전 한글판'의 한국어 스프라이트를 이 한국어
-						웹 버전에서도 사용했습니다.)
-					</p>
-					<p>
-						이 웹 버전은 원조 피카츄 배구 게임을 리버스 엔지니어링하여 이를
-						자바스크립트 코드로 구현한 것입니다. 이 웹 버전 게임은 웹 브라우저
-						상에서 직접 돌아가기 때문에 컴퓨터 운영체제에 상관 없이 플레이할
-						수 있습니다.
-					</p>
-					<p class="margin-top"><span class="thick">조작법:</span></p>
-					<div class="align-center-horizontally">
-						<img class="controls" src="../resources/assets/images/controls_ko.png" width="1920" height="984"
-							alt="game controls" />
-						<p>
-							블루투스 키보드를 연결하면 스마트폰이나 태블릿에서도 플레이할 수
-							있습니다.
-						</p>
-					</div>
-					<p class="margin-top">
-						<span class="thick">팁 1:</span><br />
-						원조 게임에서도 그랬듯이,
-						<span class="no_wrap">"혼자서재미있게~"</span>를 선택할 때 "Z"
-						키를 눌러서 선택하면, 왼쪽 피카츄(1P)를 선택하여 컴퓨터와 플레이할
-						수 있습니다. 엔터(Enter) 키를 눌러서 선택하면, 오른쪽 피카츄(2P)를
-						선택하여 컴퓨터와 플레이할 수 있고요.
-					</p>
-					<p class="margin-top">
-						<span class="thick">팁 2:</span><br />
-						왼쪽 피카츄(1P)의 경우 아래 방향키로 "V" 키가 추가로 있습니다. "V"
-						키는 "F" 키와 작동 방식에 차이가 있으므로, 직접 사용해볼 수
-						있습니다. (<span class="no-wrap"><a href="https://twitter.com/repeat_c/status/1256494157884841984"
-								target="_blank" rel="noopener">@repeat_c님의 제보</a></span>
-						덕분에, 원조 게임의 이 특성을 이 웹 버전에 반영할 수 있었습니다.)
-					</p>
-					<p class="margin-top">
-						<span class="thick">팁 3:</span><br />
-						메뉴 바를 숨기려면 (또는 다시 보이게 하려면), Esc 키를 누르면
-						됩니다.
-					</p>
-					<p class="margin-top">
-						<span class="thick">팁 4:</span><br />
-						원조 피카츄 배구에는 없는 "연습모드"를 추가했습니다.
-						<span class="no_wrap">"설정 &rarr; 연습모드 &rarr; 켜기"</span>를
-						누르면 활성화가 됩니다.
-					</p>
-					<p class="margin-top">
-						<span class="thick">팁 5:</span><br />
-						인터넷 연결 없이도 게임을 플레이 하고 싶은 경우에는 이 페이지를
-						앱으로 설치하면 됩니다. 컴퓨터에서는
-						<a href="https://support.google.com/chrome/answer/9658361" target="_blank" rel="noopener">크롬
-							브라우저를 이용해
-							설치</a>할 수 있습니다. 스마트폰이나 태블릿에서는 이 페이지를 "홈 화면에
-						추가"하면 됩니다.
-					</p>
-					<div class="margin-top">
-						<button type="button" id="close-about-btn" class="btn-in-box glow">
-							<span class="text-close hidden">닫기</span><span class="text-play">게임 시작</span>
-						</button>
-					</div>
-					<div class="for-margin"></div>
+				<div class="margin-top">
+					<button type="button" id="close-about-btn" class="btn-in-box glow">
+						<span class="text-close hidden">닫기</span><span class="text-play">게임 시작</span>
+					</button>
 				</div>
 			</div>
 			<div class="fade-in-box notice hidden" id="notice-box-1">

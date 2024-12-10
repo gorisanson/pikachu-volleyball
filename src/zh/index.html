@@ -5,9 +5,9 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-	<title>皮卡丘打排球</title>
-	<meta name="description" content="線上玩皮卡丘打排球" />
-	<meta name="author" content="Lee, Kyutae" />
+	<title>皮卡丘打排球 - 超級 AI 版</title>
+	<meta name="description" content="線上玩皮卡丘打排球  - 超級 AI 版" />
+	<meta name="author" content="DuckLL" />
 
 	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -155,7 +155,7 @@
 			</div>
 			<div class="btn-container right">
 				<button type="button" id="about-btn" class="btn glow">
-					<span class="text-about hidden">關於</span><span class="text-play">開始</span>
+					<span class="text-about hidden">設定/關於</span><span class="text-play">開始</span>
 				</button>
 			</div>
 		</div>
@@ -286,15 +286,13 @@
 						</div>
 					</div>
 				</div>
+				<hr style="width: 100%;">
 				<div id="about-box-head">
 					<h1>皮卡丘打排球 - 超級 AI 版</h1>
 					<p class="languages">
 						&check; Chinese(中文) |
 						<a href="../en/" target="_self">English</a> |
 						<a href="../ko/" target="_self">Korean(한국어)</a>
-					</p>
-					<p class="p2p-online-version">
-						你也可以遊玩<a href="https://gorisanson.github.io/pikachu-volleyball-p2p-online/en/">線上玩家對戰版本</a>。
 					</p>
 					<p class="original-by">
 						原始版的的皮卡丘打排球 (対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編) 是由
@@ -305,106 +303,64 @@
 						<br />
 						所開發的
 					</p>
+					<hr style="width: 100%;">
 					<p class="reverse-engineered-by">
-						此遊戲是由
-						<span class="no-wrap"><a href="https://gorisanson.github.io/">Lee, Kyutae</a></span>
-						<br />
-						透過逆向工程技術解析原始遊戲並將其實作至此線上版本
+						以<a href="https://gorisanson.github.io/" target="_blank">Lee, Kyutae</a>開發的<a
+							href="https://gorisanson.github.io/pikachu-volleyball/zh/" target="_blank">網頁版本</a>作為基礎
+					</p>
+					<hr style="width: 100%;">
+					<p class="reverse-engineered-by">
+						<a href="https://blog.duckll.tw/" target="_blank">DuckLL</a>進行改造開發
+						<br>強化 AI，可調整選項練習訓練
+						<br>紀錄存檔，搭配<a href="https://gorisanson.github.io/pikachu-volleyball-p2p-online/en/replay/"
+							target="_blank">重播器</a>進行重播
+						<br>1P 全按鍵可用 (同線上對戰版本)
+						<br>2P 改成電腦互打，可以欣賞神仙打架
 					</p>
 					<p class="source-code-on">
-						你可以前往
-						<a href="https://github.com/gorisanson/pikachu-volleyball" target="_blank"
-							rel="noopener">GitHub</a>
-						檢視原始碼
-					</p>
-					<p class="release-date">釋出日期: 2020-03-26</p>
-					<p class="update-history-on">
-						<a href="./update-history/" target="_self">更新紀錄</a>
-					</p>
-					<p class="reverse-engineered-by">
-						此版本由<span class="no-wrap"><a href="https://blog.duckll.tw/"
-								target="_blank">DuckLL</a></span>改版<br />
-						強化AI到神仙等級難度，功能可以從上方更新紀錄查看<br />
-						下方有選項可以調整AI的能力，成為你最好的練球伙伴<br />
-						上方有存檔按鈕，可以透過<a href="https://gorisanson.github.io/pikachu-volleyball-p2p-online/en/replay/"
-							target="_blank">原始的重播播放器</a>進行重播<br />
-						另外2P改為電腦互打，喜歡欣賞神仙打架的人不能錯過<br />
-					</p>
-					<p class="source-code-on">
-						你可以前往
 						<a href="https://github.com/duckll/pikachu-volleyball" target="_blank" rel="noopener">GitHub</a>
-						檢視原始碼
+						<br>
+						<a href="./update-history/" target="_self">更新紀錄</a>
+						<br>
+						<a href="/version.html" target="_self">歷史版本</a>
 					</p>
-					<p class="update-history-on">
-						版本: 6.0.20230816(最新)
-						| <a href="/version/5020230119/">5.0.20230119</a>
-						| <a href="/version/4220221217/">4.2.20221217</a>
-						| <a href="/version/4120221113/">4.1.20221113</a>
-						| <a href="/version/4020220925/">4.0.20220925</a>
-						| <a href="/version/3020220903/">3.0.20220903</a>
-						| <a href="/version/2020220522/">2.0.20220522</a>
-						| <a href="/version/1120220502/">1.1.20220502</a>
-						| <a href="/version/1020220423/">1.0.20220423</a>
-					</p>
-				</div>
-				<div class="margin-top limit-width">
-					<div class="align-center-horizontally">
-						<img class="screenshot" src="../resources/assets/images/screenshot.png" width="1728"
-							height="1216" alt="皮卡丘打排球之遊戲截圖" />
-					</div>
+					<hr style="width: 100%;">
+					<h2>設計理念</h2>
 					<p>
-						皮卡丘打排球是1997年時由日本開發的一款Windows遊戲。此遊戲在我小的
-						時候於韓國非常流行。我時常與朋友一同遊玩此遊戲。
+						我不會說我的 AI
+						是最強的，但它會是最具觀賞性的！超快的判斷能力、激進的進攻模式、多變的隨機性，讓比賽更加精彩。雖然他是 AI 但卻沒有使用機器學習，全部的策略都是基於我對於遊戲的理解來制訂的，這個 AI
+						還有進步的空間，因此我會持續開發。如果有任何建議，歡迎在
+						Github 提出！
 					</p>
-					<p>
-						此線上版本是透過對原始遊戲作逆向工程，並將其利用JavaScript實做出
-						來。此遊戲能直接在瀏覽器上執行，因此有別於原先的遊戲，可以不受作業
-						系統的限制。
-					</p>
-					<p class="margin-top"><span class="thick">Controls:</span></p>
-					<div class="align-center-horizontally">
-						<img class="controls" src="../resources/assets/images/controls.png" width="1994" height="997"
-							alt="game controls" />
-						<p>如果你有藍牙鍵盤，你也可以嘗試在觸控/行動裝置上遊玩。</p>
+					<h2>能力介紹</h2>
+					<div style="text-align: left;">
+						<p><b>發球: </b>對人類玩家很有用，但對 AI 效果不大。為避免被 AI 對手直接得分，預設關閉此選項。兩側的發球略有不同，可透過下方選項進行調整。</p>
+						<p><b>花式: </b>指連續擊球的技巧，如閃電殺球，其實是透過網子反彈後再進行擊球產生的。此外，上殺下殺、小球連擊、二跳連擊等都屬於花式擊球。</p>
+						<p><b>攔網: </b>一個練習用選項，指是否在網前區域主動攔截對手的攻擊球。</p>
+						<p><b>飛撲: </b>開啟後可增加防守範圍。</p>
+						<p><b>抗攔網: </b>開啟時，AI 的攻擊球路將避免對手在網前直接攔網。</p>
+						<p><b>提早球: </b>指在起跳上升階段進行攻擊。建議同時關閉抗攔網選項，用於訓練突襲反應力。但在 AI 對決中，提早球可能因空中防守能力降低而導致失分。</p>
+						<p><b>同步跳: </b>一個練習用選項，用於訓練對手提前攔網時需要變化球路。</p>
+						<p><b>延遲: </b>模擬人類判斷的延遲，影響防守移動及組織攻擊的速度。個人認為 4 最接近高手的延遲，但人類的延遲通常不會是「發呆」。如果防守模式為預測，可將延遲設為
+							7，體驗預測防守的奧妙。</p>
 					</div>
-					<p class="margin-top">
-						<span class="thick">小提示 1:</span><br />
-						與原始遊戲相同，在選擇
-						<span class="no_wrap">"1人でぴかちゅ~"</span> 來與電腦遊戲對戰時，
-						透過按下「Z鍵」開始玩可成為 1P ，而若是按下「Enter鍵」遊玩則會成為
-						2P。
+					<h3>防禦模式</h3>
+					<p>
+						防守模式是指 AI 在對手攻擊前的預判站位。當對手攻擊時，AI 將根據球的落點進行移動。難度參考是基於花式選項開啟的情況，若未啟用花式選項，預測模式的強度將高於鏡像模式。
 					</p>
-					<p class="margin-top">
-						<span class="thick">小提示 2:</span><br />
+					<div style="text-align: left;">
+						<p><b>置中: </b>難度 1，站於防守範圍的中央。</p>
+						<p><b>置中鏡像: </b>難度 2，與對手同進退，但不會離開中間區域。</p>
+						<p><b>鏡像: </b>難度 4，完全與對手同進退。</p>
+						<p><b>預測: </b>難度 3，預測對手攻擊的最短路徑落點。</p>
+						<p><b>趨前: </b>難度 5，在確保能攔截球的情況下，盡可能靠近網前進行防守，以便攔網。</p>
+					</div>
 
-						1P可以透過「V鍵」來當作額外的下鍵。「V鍵」與原先的「F鍵」略有不
-						同，你可以嘗試看看使用它。 (<span class="no-wrap"><a
-								href="https://twitter.com/repeat_c/status/1256494157884841984" target="_blank"
-								rel="noopener">特別感謝 @repeat_c 告知</a></span>，此原遊戲之特點能在本線上版中呈現。)
-					</p>
-					<p class="margin-top">
-						<span class="thick">小提示 3:</span><br />
-						如果你想 隱藏/顯示 遊戲選單控制列，請按下「Esc鍵」。
-					</p>
-					<p class="margin-top">
-						<span class="thick">小提示 4:</span><br />
-						我增加了原始遊戲中沒有的練習模式，你可以透過
-						<span class="no_wrap">"選項 &rarr; 練習模式 &rarr; 開"</span>
-						開啟練習模式。
-					</p>
-					<p class="margin-top">
-						<span class="thick">小提示 5:</span><br />
-						如果你想在無網路的環境下遊玩此遊戲，你可以將此頁面安裝成App。在電腦
-						上，你可以參考
-						<a href="https://support.google.com/chrome/answer/9658361" target="_blank"
-							rel="noopener">使用Chrome瀏覽器來安裝</a>。 在手機上，你可以在此頁面上點選 「加到主螢幕」。
-					</p>
-					<div class="margin-top">
-						<button type="button" id="close-about-btn" class="btn-in-box glow">
-							<span class="text-close hidden">關閉</span><span class="text-play">開始</span>
-						</button>
-					</div>
-					<div class="for-margin"></div>
+				</div>
+				<div class="margin-top">
+					<button type="button" id="close-about-btn" class="btn-in-box glow">
+						<span class="text-close hidden">關閉</span><span class="text-play">開始</span>
+					</button>
 				</div>
 			</div>
 			<div class="fade-in-box notice hidden" id="notice-box-1">

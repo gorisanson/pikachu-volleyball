@@ -2743,7 +2743,7 @@ function letAIDecideUserInput(player, ball, theOtherPlayer, userInput) {
             ) {
               if (
                 Math.abs(ball.x - player.x) > PLAYER_HALF_LENGTH ||
-                Math.abs(player.x - GROUND_HALF_WIDTH) > GROUND_HALF_WIDTH / 2
+                Math.abs(ball.x - GROUND_HALF_WIDTH) > 72
               ) {
                 player.direction = 1;
               } else {
