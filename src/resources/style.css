@@ -5,12 +5,11 @@
   --canvas-width: 96vmin;
   --canvas-height: calc(96vmin * var(--inverse-aspect-ratio));
   --font-size: 18px;
-  --btn-width: min(
-    calc(5 * var(--font-size)),
-    calc((var(--canvas-width) - 30px) / 4)
-  );
+  --btn-width: min(calc(5 * var(--font-size)),
+      calc((var(--canvas-width) - 30px) / 4));
   --btn-height: calc(3 * var(--font-size));
 }
+
 :root {
   --background-color: #ffffff;
   --background-color-with-alpha: rgba(255, 255, 255, 0.8);
@@ -25,6 +24,7 @@
   --update-fade-in-box-background-color: rgba(226, 230, 36, 0.85);
   --amount-to-invert-image: 0;
 }
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background-color: #202124;
@@ -41,6 +41,7 @@
     --amount-to-invert-image: 0.95;
   }
 }
+
 /* Copy of the variables in :root above */
 :root[data-color-scheme='light'] {
   --background-color: #ffffff;
@@ -56,6 +57,7 @@
   --update-fade-in-box-background-color: rgba(226, 230, 36, 0.85);
   --amount-to-invert-image: 0;
 }
+
 /* Copy of the variables in @media (prefers-color-scheme: dark) :root above */
 :root[data-color-scheme='dark'] {
   --background-color: #202124;
@@ -71,54 +73,62 @@
   --update-fade-in-box-background-color: rgba(195, 197, 48, 0.85);
   --amount-to-invert-image: 0.95;
 }
+
 /* size of iPad screen is 768px x 1024px in portrait mode */
 @media only screen and (min-width: 768px) and (min-height: 768px) {
   :root {
     --font-size: 22px;
-    --btn-width: min(
-      calc(6 * var(--font-size)),
-      calc((var(--canvas-width) - 30px) / 4)
-    );
+    --btn-width: min(calc(6 * var(--font-size)),
+        calc((var(--canvas-width) - 30px) / 4));
   }
 }
+
 @media only screen and (min-aspect-ratio: 432/304) {
   :root {
     --canvas-height: calc(96vh - var(--btn-height) - 10px);
     --canvas-width: calc(var(--canvas-height) * var(--aspect-ratio));
   }
 }
+
 @media only screen and (max-aspect-ratio: 432/304) {
   :root {
     --canvas-width: 96vw;
     --canvas-height: calc(96vw * var(--inverse-aspect-ratio));
   }
 }
+
 html {
   box-sizing: border-box;
 }
+
 *,
 *:before,
 *:after {
   box-sizing: inherit;
 }
+
 * {
   font-family: Arial, Helvetica, sans-serif;
 }
+
 body {
   background-color: var(--background-color);
   color: var(--color);
   margin: 0;
 }
+
 a,
 a:link,
 a:visited {
   color: var(--link-color);
   text-decoration: none;
 }
+
 a:hover,
 a:active {
   color: var(--link-hover-color);
 }
+
 #flex-container,
 #update-history-container {
   position: relative;
@@ -134,6 +144,7 @@ a:active {
   padding-top: 8px;
   padding-bottom: 8px;
 }
+
 #update-history-container {
   justify-content: center;
   align-items: stretch;
@@ -144,6 +155,7 @@ a:active {
   overflow: visible;
   text-align: left;
 }
+
 #menu-bar {
   display: flex;
   flex-direction: row;
@@ -153,16 +165,20 @@ a:active {
   height: var(--btn-height);
   margin-bottom: 10px;
 }
+
 .btn-container {
   display: flex;
   align-items: center;
 }
+
 .btn-container.left {
   justify-content: flex-start;
 }
+
 .btn-container.right {
   justify-content: flex-end;
 }
+
 .btn {
   display: inline-block;
   width: var(--btn-width);
@@ -178,48 +194,61 @@ a:active {
   margin-left: 5px;
   margin-right: 5px;
 }
+
 #game-dropdown-btn {
   margin-left: 0;
 }
+
 #about-btn {
   margin-right: 0;
 }
+
 .relative-container {
   position: relative;
 }
+
 .dropdown,
 .submenu {
   position: absolute;
   display: none;
   z-index: 1;
 }
+
 .dropdown.show {
   display: block;
 }
+
 .submenu.show {
   display: inline-block;
 }
+
 .dropdown .btn {
   margin-right: 0;
   background-color: var(--btn-in-dropdown-background-color);
 }
-.submenu > .btn {
+
+.submenu>.btn {
   width: calc(1.4 * var(--btn-width));
   margin-left: 0;
 }
+
 .dropdown .btn:hover,
 .submenu-btn.open {
   background-color: var(--btn-in-dropdown-hover-background-color);
 }
+
 span.check {
   display: none;
 }
-.selected > span.check {
+
+.selected>span.check {
   display: inline;
 }
+
 #game-canvas-container {
   position: relative;
 }
+
 #game-canvas {
   display: block;
   margin-left: auto;
@@ -228,9 +257,11 @@ span.check {
   height: var(--canvas-height);
   image-rendering: pixelated;
 }
+
 #game-canvas.graphic-soft {
   image-rendering: auto;
 }
+
 .fade-in-box {
   position: absolute;
   display: flex;
@@ -253,35 +284,42 @@ span.check {
   animation-name: fade-in;
   animation-duration: 1s;
 }
+
 .fade-in-box.about {
   justify-content: flex-start;
   height: auto;
   overflow: visible;
   text-align: left;
 }
+
 .fade-in-box.loading {
   background-color: transparent;
   color: #eeeeee;
   animation-duration: 0.5s;
 }
+
 .fade-in-box.update {
   background-color: var(--update-fade-in-box-background-color);
   color: #232629;
 }
+
 @keyframes fade-in {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
+
 .fade-in-box.hidden,
 .if-embedded-in-other-website.hidden,
 #menu-bar.hidden,
 span.hidden {
   display: none;
 }
+
 #about-box-head {
   display: flex;
   flex-wrap: wrap;
@@ -294,6 +332,7 @@ span.hidden {
   visibility: visible;
   overflow: visible;
 }
+
 button.btn-in-box {
   display: block;
   height: calc(2 * var(--font-size));
@@ -308,53 +347,65 @@ button.btn-in-box {
   text-decoration: none;
   border-radius: 10px;
 }
+
 h1 {
   font-size: calc(1.5 * var(--font-size));
 }
-p.languages,
+
 p.small,
 p.p2p-online-version,
 p.original-by,
 p.reverse-engineered-by,
+p.modified-by,
 p.source-code-on,
 p.release-date,
 p.update-history-on {
   font-size: 0.8em;
   line-height: 150%;
 }
+
 p.release-date {
   margin-block-end: 0;
 }
+
 p.update-history-on {
   margin-block-start: 0;
   margin-block-end: 0;
 }
+
 span.no-wrap {
   white-space: nowrap;
 }
+
 span.bold {
   font-weight: bold;
 }
+
 span.thick {
   font-weight: 900;
 }
+
 div.align-center-horizontally {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 img.screenshot,
 img.controls {
   height: auto;
   width: 100%;
 }
+
 img.screenshot {
   max-width: 864px;
 }
+
 img.controls {
   max-width: 960px;
   filter: invert(var(--amount-to-invert-image));
 }
+
 #progress-bar-border {
   position: relative;
   border: solid;
@@ -362,6 +413,7 @@ img.controls {
   height: var(--btn-height);
   width: calc(var(--canvas-width) / 2);
 }
+
 #progress-bar {
   position: absolute;
   top: 0;
@@ -370,6 +422,7 @@ img.controls {
   height: 100%;
   background-color: #eeeeee;
 }
+
 button.update {
   display: inline-block;
   height: calc(3 * var(--font-size));
@@ -384,40 +437,50 @@ button.update {
   text-decoration: none;
   border-radius: 10px;
 }
+
 @media (hover: hover) {
   button.update {
     opacity: 0.9;
   }
+
   button.update:hover {
     opacity: 1;
   }
 }
+
 button:disabled {
   background-color: var(--button-disabled-background-color);
 }
+
 div.for-margin {
   display: block;
   height: 50vh;
 }
+
 div.margin-top,
 p.margin-top {
   margin-top: calc(2.25 * var(--font-size));
 }
+
 div.limit-width {
   max-width: 864px;
   margin-left: auto;
   margin-right: auto;
 }
+
 #update-history-container h1 {
   font-size: calc(1.5 * var(--font-size));
 }
+
 div.indent-minus {
   text-indent: calc(-5.4 * var(--font-size));
   margin-left: calc(5.4 * var(--font-size));
 }
+
 #flex-container.embedded-in-other-website {
   justify-content: flex-start;
 }
+
 .if-embedded-in-other-website {
   display: flex;
   flex-direction: column;
@@ -430,9 +493,11 @@ div.indent-minus {
   border: 3px solid;
   border-radius: 10px;
 }
+
 .if-embedded-in-other-website .limit-width {
   max-width: calc(23 * var(--font-size));
 }
+
 .if-embedded-in-other-website button {
   margin-top: var(--font-size);
   background-color: var(--background-color);
@@ -442,9 +507,11 @@ div.indent-minus {
   height: calc(1.6 * var(--font-size));
   width: calc(4 * var(--font-size));
 }
+
 .original-address {
   margin-top: var(--font-size);
 }
+
 button.glow {
   box-shadow: 0 0 5px calc(var(--font-size) / 6) #52aaff;
   animation-name: blinking-glow;
@@ -453,14 +520,17 @@ button.glow {
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
 }
+
 @keyframes blinking-glow {
   0% {
     box-shadow: 0 0 5px calc(var(--font-size) / 6) #52aaff;
   }
+
   100% {
     box-shadow: 0 0 5px calc(1.5 * var(--font-size) / 6) #52aaff;
   }
 }
+
 div.color-scheme-toggle-switch-container {
   display: flex;
   justify-content: center;
@@ -470,17 +540,11 @@ div.color-scheme-toggle-switch-container {
   --toggle-switch-height: calc(1.6 * var(--font-size));
   --toggle-ball-diameter: calc(1.2 * var(--font-size));
   --toggle-switch-width: calc(2 * var(--toggle-switch-height));
-  --toggle-ball-top: calc(
-    (var(--toggle-switch-height) - var(--toggle-ball-diameter)) / 2
-  );
-  --toggle-ball-left: calc(
-    (var(--toggle-switch-height) - var(--toggle-ball-diameter)) / 2
-  );
-  --toggle-ball-left-toggled: calc(
-    var(--toggle-switch-width) - var(--toggle-ball-diameter) -
-      var(--toggle-ball-left)
-  );
+  --toggle-ball-top: calc((var(--toggle-switch-height) - var(--toggle-ball-diameter)) / 2);
+  --toggle-ball-left: calc((var(--toggle-switch-height) - var(--toggle-ball-diameter)) / 2);
+  --toggle-ball-left-toggled: calc(var(--toggle-switch-width) - var(--toggle-ball-diameter) - var(--toggle-ball-left));
 }
+
 /*
  * Toggle switch using CSS
  * Reference: https://dev.to/karankmr/how-to-create-a-custom-toggle-switch-using-css-4pmi
@@ -488,7 +552,8 @@ div.color-scheme-toggle-switch-container {
 input.toggle-switch {
   display: none;
 }
-input.toggle-switch + label {
+
+input.toggle-switch+label {
   display: inline-block;
   position: relative;
   margin: auto;
@@ -499,7 +564,8 @@ input.toggle-switch + label {
   cursor: pointer;
   transition: background-color 1s;
 }
-input.toggle-switch + label::after {
+
+input.toggle-switch+label::after {
   content: '';
   position: absolute;
   left: var(--toggle-ball-left);
@@ -510,14 +576,16 @@ input.toggle-switch + label::after {
   background-color: var(--btn-color);
   transition: left 0.5s, background-color 1s;
 }
-input.toggle-switch:checked + label::after {
+
+input.toggle-switch:checked+label::after {
   left: var(--toggle-ball-left-toggled);
 }
+
 /*
  * The following supplement is for displaying the Sun and Moon unicode characters
  * inside toggle switch label.
  */
-input.toggle-switch + label::before {
+input.toggle-switch+label::before {
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -530,7 +598,8 @@ input.toggle-switch + label::before {
   font-size: var(--toggle-ball-diameter);
   content: '\2600';
 }
-input.toggle-switch:checked + label::before {
+
+input.toggle-switch:checked+label::before {
   left: var(--toggle-ball-left);
   content: '\263E';
 }
