@@ -437,7 +437,8 @@ export class PikachuVolleyball {
 
       if (this.scores[0] >= this.serveLimitScore) {
         this.downServeCounts[0] = 0;
-      } else if (this.scores[1] >= this.serveLimitScore) {
+      }
+      if (this.scores[1] >= this.serveLimitScore) {
         this.downServeCounts[1] = 0;
       }
 
@@ -595,6 +596,7 @@ export class PikachuVolleyball {
 
   /** @return {boolean} */
   get isIdenticalServe() {
+
     return JSON.stringify(this.currentServeRecord) === JSON.stringify(this.previousServeRecord);
   }
 

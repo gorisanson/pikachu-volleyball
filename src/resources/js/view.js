@@ -427,7 +427,7 @@ export class GameView {
 
     this.downServeBoards[0].x = 14; // down serve board is 14 pixel distant from boundary
     this.downServeBoards[0].y = 10 + 8; // half size of number sprite (16)
-    this.downServeBoards[1].x = 432 - 32 - 32 - 14; // 32 pixel is for number (32x32px) width; one score board has two numbers
+    this.downServeBoards[1].x = 432 - 32 - 32 - 14; // 28 pixel is for number (28x28px) width; one score board has two numbers
     this.downServeBoards[1].y = 10 + 8;
 
     this.shadows.forPlayer1.y = 273;
@@ -937,7 +937,7 @@ function makeScoreBoardSprite(textures) {
  * @return {Container} child with index 0 for player 1 downServe board, child with index 1 for player2 downServe board
  */
 function makeDownServeBoardSprite(textures) {
-  const getNumberTexture = (n) => textures[TEXTURES.NUMBER(n)];
+  const getNumberTexture = (n) => textures[TEXTURES.NEW_NUMBER(n)];
   const numberTextureArray = [];
   for (let i = 0; i < 10; i++) {
     numberTextureArray.push(getNumberTexture(i));
@@ -950,14 +950,14 @@ function makeDownServeBoardSprite(textures) {
   addChildToParentAndSetLocalPosition(
     downServeBoard,
     numberAnimatedSprites[0],
-    32,
-    32
+    28,
+    28
   ); // for units
   addChildToParentAndSetLocalPosition(
     downServeBoard,
     numberAnimatedSprites[1],
     0,
-    32
+    28
   ); // for tens
 
   downServeBoard.setChildIndex(numberAnimatedSprites[0], 0); // for units

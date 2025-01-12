@@ -232,6 +232,9 @@ class Ball {
     this.initializeForNewRound(isPlayer2Serve);
     /** @type {number} x coord of expected landing point */
     this.expectedLandingPointX = 0; // 0x40
+    /** @type {boolean} will the ball collide with the net? */
+    this.expectedNetCollision = false;
+
     /**
      * ball rotation frame number selector
      * During the period where it continues to be 5, hyper ball glitch occur.
@@ -375,6 +378,13 @@ function physicsEngine(player1, player2, ball, userInputArray) {
     } else {
       player.isCollisionWithBallHappened = false;
     }
+
+    // did the serve end with a down hit?
+    if (ball.isDownPowerhit && ball.isServeState && !ball.expectedNetCollision &&
+      ((ball.expectedLandingPointX>=216 && !ball.isPlayer2Serve)
+      || (ball.expectedLandingPointX<216 && ball.isPlayer2Serve))) {
+         ball.endByDownServe = true;
+    }
   }
 
   // FUN_00403040
@@ -467,12 +477,17 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
     if (ball.y <= NET_PILLAR_TOP_BOTTOM_Y_COORD) {
       if (ball.yVelocity > 0) {
         ball.yVelocity = -ball.yVelocity;
+        ball.isDownPowerhit = false;
       }
     } else {
+      let prevVel = ball.xVelocity;
       if (ball.x < GROUND_HALF_WIDTH) {
         ball.xVelocity = -Math.abs(ball.xVelocity);
       } else {
         ball.xVelocity = Math.abs(ball.xVelocity);
+      }
+      if (ball.xVelocity * prevVel < 0) {
+        ball.isDownPowerhit = false;
       }
     }
   }
@@ -493,11 +508,11 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
     ball.punchEffectRadius = BALL_RADIUS;
     ball.punchEffectY = BALL_TOUCHING_GROUND_Y_COORD + BALL_RADIUS;
     
-    // check if the game ended by down serve
-    if (ball.isDownPowerhit && ball.isServeState) {
-      ball.endByDownServe = true;
-    }
-    
+    // (deprecated) check if the game ended by down serve
+    // if (ball.isDownPowerhit && ball.isServeState) {
+    //   ball.endByDownServe = true;
+    // }
+
     return true;
   }
   ball.y = futureBallY;
@@ -774,6 +789,7 @@ function calculateExpectedLandingPointXFor(ball) {
     yVelocity: ball.yVelocity,
   };
   let loopCounter = 0;
+  let netCollisoinFlag = false;
   while (true) {
     loopCounter++;
 
@@ -794,12 +810,17 @@ function calculateExpectedLandingPointXFor(ball) {
       if (copyBall.y < NET_PILLAR_TOP_BOTTOM_Y_COORD) {
         if (copyBall.yVelocity > 0) {
           copyBall.yVelocity = -copyBall.yVelocity;
+          netCollisoinFlag = true;
         }
       } else {
+        let prevVel = copyBall.xVelocity;
         if (copyBall.x < GROUND_HALF_WIDTH) {
           copyBall.xVelocity = -Math.abs(copyBall.xVelocity);
         } else {
           copyBall.xVelocity = Math.abs(copyBall.xVelocity);
+        }
+        if (copyBall.xVelocity * prevVel < 0) {
+          netCollisoinFlag = true;
         }
       }
     }
@@ -816,6 +837,7 @@ function calculateExpectedLandingPointXFor(ball) {
     copyBall.yVelocity += 1;
   }
   ball.expectedLandingPointX = copyBall.x;
+  ball.expectedNetCollision = netCollisoinFlag;
 }
 
 /**
