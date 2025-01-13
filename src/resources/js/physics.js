@@ -280,6 +280,8 @@ class Ball {
     this.isServeState = true;
     /** @type {boolean} did the game end by down powerhitted serve? */
     this.endByDownServe = false;
+    /** @type {boolean} was the down serve board updated? */
+    this.updatedDownServe = false;
     /** @type {boolean} is the ball powerhitted down? */
     this.isDownPowerhit = false;
     /** @type {number} x coord */
@@ -383,7 +385,7 @@ function physicsEngine(player1, player2, ball, userInputArray) {
     if (ball.isDownPowerhit && ball.isServeState && !ball.expectedNetCollision &&
       ((ball.expectedLandingPointX>=216 && !ball.isPlayer2Serve)
       || (ball.expectedLandingPointX<216 && ball.isPlayer2Serve))) {
-         ball.endByDownServe = true;
+      ball.endByDownServe = true;
     }
   }
 
