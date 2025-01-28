@@ -45,12 +45,12 @@ export class PikaKeyboard extends PikaUserInput {
    * Get xDirection, yDirection, powerHit input from the keyboard.
    * This method is for freezing the keyboard input during the process of one game frame.
    */
-  getInput() {
+  getInput(amIPlayer2 = false) {
     if (this.leftKey.isDown) {
       this.xDirection = -1;
     } else if (
       this.rightKey.isDown ||
-      (this.downRightKey && this.downRightKey.isDown)
+      (!amIPlayer2 && this.downRightKey && this.downRightKey.isDown)
     ) {
       this.xDirection = 1;
     } else {

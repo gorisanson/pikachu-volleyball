@@ -47,7 +47,8 @@ export class PikachuVolleyball {
         'ArrowRight',
         'ArrowUp',
         'ArrowDown',
-        'Enter'
+        'Enter',
+        'ArrowDown'
       ),
     ];
 
@@ -124,8 +125,8 @@ export class PikachuVolleyball {
     }
 
     // catch keyboard input and freeze it
-    this.keyboardArray[0].getInput();
-    this.keyboardArray[1].getInput();
+    this.keyboardArray[0].getInput(!this.physics.player2.isComputer);
+    this.keyboardArray[1].getInput(!this.physics.player2.isComputer);
 
     const player1Input = new PikaUserInput();
     player1Input.xDirection = this.keyboardArray[0].xDirection;
@@ -366,19 +367,19 @@ export class PikachuVolleyball {
     }
     if (this.physics.player1.isComputer) {
       this.keyboardArray[1].xDirection =
-        this.keyboardArray[1].xDirection || this.keyboardArray[0].xDirection;
+        this.keyboardArray[0].xDirection || this.keyboardArray[1].xDirection;
       this.keyboardArray[1].yDirection =
-        this.keyboardArray[1].yDirection || this.keyboardArray[0].yDirection;
+        this.keyboardArray[0].yDirection || this.keyboardArray[1].yDirection;
       this.keyboardArray[1].powerHit =
-        this.keyboardArray[1].powerHit || this.keyboardArray[0].powerHit;
+        this.keyboardArray[0].powerHit || this.keyboardArray[1].powerHit;
     }
     if (this.physics.player2.isComputer) {
       this.keyboardArray[0].xDirection =
-        this.keyboardArray[1].xDirection || this.keyboardArray[0].xDirection;
+        this.keyboardArray[0].xDirection || this.keyboardArray[1].xDirection;
       this.keyboardArray[0].yDirection =
-        this.keyboardArray[1].yDirection || this.keyboardArray[0].yDirection;
+        this.keyboardArray[0].yDirection || this.keyboardArray[1].yDirection;
       this.keyboardArray[0].powerHit =
-        this.keyboardArray[1].powerHit || this.keyboardArray[0].powerHit;
+        this.keyboardArray[0].powerHit || this.keyboardArray[1].powerHit;
     }
     const isBallTouchingGround = this.physics.runEngineForNextFrame(
       this.keyboardArray
