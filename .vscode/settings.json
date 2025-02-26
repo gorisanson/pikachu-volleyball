@@ -14,5 +14,6 @@
     "SAWAYAKAN",
     "spritesheet",
     "Takenouchi"
-  ]
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
