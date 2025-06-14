@@ -394,8 +394,6 @@ export class PikachuVolleyball {
       if (this.physics.ball.isPlayer2Serve) {
         if (this.downServeCounts[1] > 0) {
           this.downServeCounts[1] -= 1;
-          this.isPlayer2Serve = true;
-          this.scores[1] += 1;
         }
         else {
           // down serve limit ended
@@ -405,8 +403,6 @@ export class PikachuVolleyball {
       else {
         if (this.downServeCounts[0] > 0) {
           this.downServeCounts[0] -= 1;
-          this.isPlayer2Serve = false;
-          this.scores[0] += 1;
         }
         else {
           // down serve limit ended

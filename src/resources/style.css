@@ -354,6 +354,7 @@ h1 {
 
 p.small,
 p.p2p-online-version,
+p.super-ai-edition,
 p.original-by,
 p.reverse-engineered-by,
 p.modified-by,
@@ -363,7 +364,12 @@ p.update-history-on {
   font-size: 0.8em;
   line-height: 150%;
 }
-
+p.p2p-online-version {
+  margin-bottom: 0.1em;
+}
+p.super-ai-edition {
+  margin-top: 0.1em;
+}
 p.release-date {
   margin-block-end: 0;
 }
