@@ -365,6 +365,12 @@ export class GameView {
       makeScoreBoardSprite(textures),
     ];
 
+    // downServeBoards [0] for player1, [1] for player2
+    this.downServeBoards = [
+      makeDownServeBoardSprite(textures),
+      makeDownServeBoardSprite(textures),
+    ];
+
     this.shadows = {
       forPlayer1: makeSpriteWithAnchorXY(textures, TEXTURES.SHADOW, 0.5, 0.5),
       forPlayer2: makeSpriteWithAnchorXY(textures, TEXTURES.SHADOW, 0.5, 0.5),
@@ -398,6 +404,8 @@ export class GameView {
     this.container.addChild(this.punch);
     this.container.addChild(this.scoreBoards[0]);
     this.container.addChild(this.scoreBoards[1]);
+    this.container.addChild(this.downServeBoards[0]);
+    this.container.addChild(this.downServeBoards[1]);
     this.container.addChild(this.messages.gameStart);
     this.container.addChild(this.messages.ready);
     this.container.addChild(this.messages.gameEnd);
@@ -416,6 +424,11 @@ export class GameView {
     this.scoreBoards[0].y = 10;
     this.scoreBoards[1].x = 432 - 32 - 32 - 14; // 32 pixel is for number (32x32px) width; one score board has two numbers
     this.scoreBoards[1].y = 10;
+
+    this.downServeBoards[0].x = 14; // down serve board is 14 pixel distant from boundary
+    this.downServeBoards[0].y = 10 + 8; // half size of number sprite (16)
+    this.downServeBoards[1].x = 432 - 32 - 32 - 14; // 28 pixel is for number (28x28px) width; one score board has two numbers
+    this.downServeBoards[1].y = 10 + 8;
 
     this.shadows.forPlayer1.y = 273;
     this.shadows.forPlayer2.y = 273;
@@ -539,6 +552,28 @@ export class GameView {
       // @ts-ignore
       tensAnimatedSprite.gotoAndStop(Math.floor(score / 10) % 10);
       if (score >= 10) {
+        tensAnimatedSprite.visible = true;
+      } else {
+        tensAnimatedSprite.visible = false;
+      }
+    }
+  }
+
+  /**
+   * Draw down powerhitted serve counts to each down serve board
+   * @param {number[]} downServeCounts [0] for player1, [1] for player2
+   */
+  drawDownServeCountsToDownServeBoards(downServeCounts) {
+    for (let i = 0; i < 2; i++) {
+      const downServeBoard = this.downServeBoards[i];
+      const downServeCount = downServeCounts[i];
+      const unitsAnimatedSprite = downServeBoard.getChildAt(0);
+      const tensAnimatedSprite = downServeBoard.getChildAt(1);
+      // @ts-ignore
+      unitsAnimatedSprite.gotoAndStop(downServeCount % 10);
+      // @ts-ignore
+      tensAnimatedSprite.gotoAndStop(Math.floor(downServeCount / 10) % 10);
+      if (downServeCount >= 10) {
         tensAnimatedSprite.visible = true;
       } else {
         tensAnimatedSprite.visible = false;
@@ -894,6 +929,41 @@ function makeScoreBoardSprite(textures) {
   scoreBoard.setChildIndex(numberAnimatedSprites[1], 1); // for tens
 
   return scoreBoard;
+}
+
+/**
+ * Make downServe boards
+ * @param {Object.<string,Texture>} textures
+ * @return {Container} child with index 0 for player 1 downServe board, child with index 1 for player2 downServe board
+ */
+function makeDownServeBoardSprite(textures) {
+  const getNumberTexture = (n) => textures[TEXTURES.NEW_NUMBER(n)];
+  const numberTextureArray = [];
+  for (let i = 0; i < 10; i++) {
+    numberTextureArray.push(getNumberTexture(i));
+  }
+  const numberAnimatedSprites = [null, null];
+  numberAnimatedSprites[0] = new AnimatedSprite(numberTextureArray, false);
+  numberAnimatedSprites[1] = new AnimatedSprite(numberTextureArray, false);
+
+  const downServeBoard = new Container();
+  addChildToParentAndSetLocalPosition(
+    downServeBoard,
+    numberAnimatedSprites[0],
+    28,
+    28
+  ); // for units
+  addChildToParentAndSetLocalPosition(
+    downServeBoard,
+    numberAnimatedSprites[1],
+    0,
+    28
+  ); // for tens
+
+  downServeBoard.setChildIndex(numberAnimatedSprites[0], 0); // for units
+  downServeBoard.setChildIndex(numberAnimatedSprites[1], 1); // for tens
+
+  return downServeBoard;
 }
 
 /**

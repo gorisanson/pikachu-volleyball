@@ -1,61 +1,60 @@
-# Pikachu Volleyball
+# 대회용 피카츄 배구
 
-_&check;_ _English_ | [_Korean(한국어)_](README.ko.md)
+대회용 피카츄 배구는 [기존 웹 버전 피카츄 배구](https://gorisanson.github.io/pikachu-volleyball/ko/)를 피카츄 배구 온라인에서 진행되는 대회 규칙에 맞추어 변형한 것입니다. 
 
-Pikachu Volleyball (対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編) is an old Windows game which was developed by "(C) SACHI SOFT / SAWAYAKAN Programmers" and "(C) Satoshi Takenouchi" in 1997. The source code on this repository is gained by reverse engineering the core part of the machine code &mdash; including the physics engine and the AI &mdash; of the original game and implementing it into JavaScript.
+https://ilesejin.github.io/pikachu-volleyball/ko/
+에서 플레이할 수 있습니다. 
 
-You can play this game on the website: https://gorisanson.github.io/pikachu-volleyball/en/
+<img src="src/resources/assets/images/screenshot.png" alt="피카츄 배구 게임 스크린샷" width="648">
 
-<img src="src/resources/assets/images/screenshot.png" alt="Pikachu Volleyball game screenshot" width="648">
+## 로컬 환경에서 실행하는 방법
 
-## How to run locally
-
-1. Clone this repository and get into the directory.
+1. 본 저장소를 클론하고 해당 디렉토리로 들어갑니다.
 
 ```sh
-git clone https://github.com/gorisanson/pikachu-volleyball.git
+git clone https://github.com/ilesejin/pikachu-volleyball.git
 cd pikachu-volleyball
 ```
 
-2. Install dependencies. (If errors occur, you can try with `node v16` and `npm v8`.)
+2. 의존하는 패키지를 설치합니다. (오류가 발생한다면, `node v16`와 `npm v8`을 사용해보세요.)
 
 ```sh
 npm install
 ```
 
-3. Bundle the code.
+3. 코드를 번들링 합니다.
 
 ```sh
 npm run build
 ```
 
-4. Run a local web server.
+4. 로컬 웹 서버를 실행합니다.
 
 ```sh
 npx http-server dist
 ```
 
-5. Connect to the local web server on a web browser. (In most cases, the URL for connecting to the server would be `http://localhost:8080`. For the exact URL, it is supposed to be found on the printed messages on your terminal.)
+5. 웹 브라우저에서 로컬 웹 서버로 접속합니다. (대부분의 경우, 서버에 접속하기 위한 URL은 `http://localhost:8080` 입니다. 정확한 URL은 터미널에 출력된 메시지에서 확인할 수 있습니다.)
 
-## Game structure
+## 게임 구조
 
-- Physics Engine: The physics engine, which calculates the position of the ball and the players (Pikachus), is contained in the file [`src/resources/js/physics.js`](src/resources/js/physics.js). (This file also containes the AI which determines the keyboard input of the computer when you are playing against your computer.) This source code file is gained by reverse engineering the function at the address 00403dd0 of the machine code of the original game.
+- 물리 엔진: 공과 플레이어(피카츄)의 위치를 계산하는 물리 엔진은 [`src/resources/js/physics.js`](src/resources/js/physics.js) 파일에 담겨 있습니다. (플레이어가 컴퓨터와 대전 시 컴퓨터의 키보드 입력을 결정하는 AI도 동일한 파일에 담겨 있습니다.) 이 소스 코드 파일은 원조 게임의 머신 코드 00403dd0 주소에 위치한 함수를 리버스 엔지니어링하여 작성한 것입니다.
 
-- Rendering: [PixiJS](https://github.com/pixijs/pixi.js) library is used for rendering the game.
+- 렌더링: [PixiJS](https://github.com/pixijs/pixi.js) 라이브러리를 사용하였습니다.
 
-Refer comments on [`src/resources/js/main.js`](src/resources/js/main.js) for other details.
+더 자세한 사항은 [`src/resources/js/main.js`](src/resources/js/main.js) 파일에 있는 주석에서 볼 수 있습니다.
 
-## Methods used for reverse engineering
+## 사용한 리버스 엔지니어링 방법
 
-The main tools used for reverse engineering are following.
+다음 프로그램들을 사용했습니다.
 
 - [Ghidra](https://ghidra-sre.org/)
 - [Cheat Engine](https://www.cheatengine.org/)
 - [OllyDbg](http://www.ollydbg.de/)
 - [Resource Hacker](http://www.angusj.com/resourcehacker/)
 
-[Ghidra](https://ghidra-sre.org/) is used for decompiling the machine code to C code. At first look, the decompiled C code looked incomprehensible. One of the reason was that the variable names (`iVar1`, `iVar2`, ...) and function names (`FUN_00402dc0`, `FUN_00403070`, ...) in the decompiled C code are meaningless. But, with the aid of [Cheat Engine](https://www.cheatengine.org/), I could find the location of some significant variables &mdash; x, y coordinate of the ball and the players. And reading from the location of the variables, the decompiled C code was comprehensible! [OllyDbg](http://www.ollydbg.de/) was used for altering a specific part of the machine code. For example, to make slower version of the game so that it would be easier to count the number of frames of "Ready?" message on the start of new round in the game. [Resource Hacker](http://www.angusj.com/resourcehacker/) was used for extract the assets (sprites and sounds) of the game.
+[Ghidra](https://ghidra-sre.org/)는 머신 코드를 C 코드로 디컴파일할 때 사용했습니다. 디컴파일된 C 코드를 처음 봤을 때는 막막했습니다. 한 가지 이유는 변수들의 이름과 함수들의 이름이 `iVar1`, `iVar2`, `FUN_00402dc0`, `FUN_00403070`, ... 이런 식이라 이게 어떤 변수이고 어떤 역할을 하는 함수인지 알 수 없었기 때문입니다. 공의 좌표 변수가 머신 코드 어느 지점에서 엑세스 되는지 한번 알아나보자는 생각으로 [Cheat Engine](https://www.cheatengine.org/)을 사용하여 해당 위치를 알아내었고, 거기서부터 디컴파일된 C 코드를 읽어내려가니 코드가 해석이 되기 시작했습니다. [OllyDbg](http://www.ollydbg.de/)는 머신 코드의 일부분을 바꾸는데 사용했습니다. 예를 들어, 새 라운드가 시작할 때 "Ready?" 메시지가 깜빡 거리는데 이 때 재생되는 프레임 수가 몇 개인지 세기위해 게임 속도를 느리게 만들 때 사용했습니다. [Resource Hacker](http://www.angusj.com/resourcehacker/)는 게임 리소스(스프라이트, 소리)를 추출할 때 사용했습니다.
 
-## An intended deviation from the original game
+## 원조 게임과 일부러 다르게 한 사항
 
-If there is no keyboard input, AI vs AI match is started after a while. In the original game, the match lasts only for about 40 seconds. But in this JavaScript version, there's no time limit to the AI vs AI match so you can watch it as long as you want.
+키보드 입력이 없는 경우, 얼마의 시간이 지나면 AI 대 AI 경기가 시작됩니다. 원조 게임에서는 이 경기가 약 40초간만 진행됩니다. 이 자바스크립트 버전에서는 이 AI 대 AI 경기의 제한 시간이 없으므로, 마음 놓고 원하는 만큼 관전할 수 있습니다.

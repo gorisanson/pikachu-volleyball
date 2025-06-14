@@ -1,10 +1,9 @@
-# 피카츄 배구
+# 대회용 피카츄 배구
 
-[_English_](README.md) | _&check;_ _Korean(한국어)_
+대회용 피카츄 배구는 [기존 웹 버전 피카츄 배구](https://gorisanson.github.io/pikachu-volleyball/ko/)를 피카츄 배구 온라인에서 진행되는 대회 규칙에 맞추어 변형한 것입니다. 
 
-피카츄 배구(対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編)는 "(C) SACHI SOFT / SAWAYAKAN Programmers"와 "(C) Satoshi Takenouchi"가 1997년에 만든 윈도우용 게임입니다. 여기에 있는 소스 코드는 이 원조 피카츄 배구 게임의 머신 코드 주요 부분(물리 엔진과 AI 등)을 리버스 엔지니어링하여 자바스크립트로 구현한 것입니다.
-
-https://gorisanson.github.io/pikachu-volleyball/ko/ 에서 이 피카츄 배구를 플레이할 수 있습니다.
+https://ilesejin.github.io/pikachu-volleyball/ko/
+에서 플레이할 수 있습니다. 
 
 <img src="src/resources/assets/images/screenshot.png" alt="피카츄 배구 게임 스크린샷" width="648">
 
@@ -13,7 +12,7 @@ https://gorisanson.github.io/pikachu-volleyball/ko/ 에서 이 피카츄 배구�
 1. 본 저장소를 클론하고 해당 디렉토리로 들어갑니다.
 
 ```sh
-git clone https://github.com/gorisanson/pikachu-volleyball.git
+git clone https://github.com/ilesejin/pikachu-volleyball.git
 cd pikachu-volleyball
 ```
 

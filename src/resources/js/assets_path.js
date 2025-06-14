@@ -13,6 +13,7 @@ const TEXTURES = ASSETS_PATH.TEXTURES;
 TEXTURES.PIKACHU = (i, j) => `pikachu/pikachu_${i}_${j}.png`;
 TEXTURES.BALL = (s) => `ball/ball_${s}.png`;
 TEXTURES.NUMBER = (n) => `number/number_${n}.png`;
+TEXTURES.NEW_NUMBER = (n) => `new_number/number_${n}.png`;
 
 TEXTURES.SKY_BLUE = 'objects/sky_blue.png';
 TEXTURES.MOUNTAIN = 'objects/mountain.png';
