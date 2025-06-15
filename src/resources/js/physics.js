@@ -47,8 +47,11 @@ const BALL_TOUCHING_GROUND_Y_COORD = 252;
 const NET_PILLAR_HALF_WIDTH = 25;
 /** @constant @type {number} net pillar top's top side y coordinate */
 const NET_PILLAR_TOP_TOP_Y_COORD = 176;
+/** @constant @type {number} num of adapted rule */
+const Modenum = 2; // Pgo rule: 1 / noserve rule: 2 
 /** @constant @type {number} net pillar top's bottom side y coordinate (this value is on this physics engine only) */
 const NET_PILLAR_TOP_BOTTOM_Y_COORD = 192;
+
 
 /**
  * It's for to limit the looping number of the infinite loops.
@@ -172,6 +175,9 @@ class Player {
   initializeForNewRound() {
     /** @type {number} x coord */
     this.x = 36; // 0xA8 // initialized to 36 (player1) or 396 (player2)
+    if (Modenum == 2) {
+      collisionDefineNum = 0;
+    }
     if (this.isPlayer2) {
       this.x = GROUND_WIDTH - 36;
     }
@@ -367,6 +373,9 @@ function physicsEngine(player1, player2, ball, userInputArray) {
         // when the ball touches the other player
         if (+ball.isPlayer2Serve!=i && ball.isServeState) {
           ball.isServeState = false;
+          if (Modenum == 2) {
+            collisionDefineNum = 0
+          }
         }
 
         processCollisionBetweenBallAndPlayer(
@@ -376,16 +385,21 @@ function physicsEngine(player1, player2, ball, userInputArray) {
           player.state
         );
         player.isCollisionWithBallHappened = true;
+        if (Modenum == 2 && ball.isServeState == true) {
+          collisionDefineNum = 1;
+        }
       }
     } else {
       player.isCollisionWithBallHappened = false;
     }
 
+    if (Modenum == 1) {
     // did the serve end with a down hit?
-    if (ball.isDownPowerhit && ball.isServeState && !ball.expectedNetCollision &&
-      ((ball.expectedLandingPointX>=216 && !ball.isPlayer2Serve)
-      || (ball.expectedLandingPointX<216 && ball.isPlayer2Serve))) {
-      ball.endByDownServe = true;
+      if (ball.isDownPowerhit && ball.isServeState && !ball.expectedNetCollision &&
+        ((ball.expectedLandingPointX>=216 && !ball.isPlayer2Serve)
+        || (ball.expectedLandingPointX<216 && ball.isPlayer2Serve))) {
+        ball.endByDownServe = true;
+      }
     }
   }
 
@@ -445,7 +459,6 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   }
   ball.fineRotation = futureFineRotation;
   ball.rotation = (ball.fineRotation / 10) | 0; // integer division
-
   const futureBallX = ball.x + ball.xVelocity;
   /*
     If the center of ball would get out of left world bound or right world bound, bounce back.
@@ -532,6 +545,8 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
  * @param {Player} theOtherPlayer
  * @param {Ball} ball
  */
+let collisionDefineNum = 0; // A variable that tells whether there was a collision or not
+
 function processPlayerMovementAndSetPlayerPosition(
   player,
   userInput,
@@ -616,11 +631,12 @@ function processPlayerMovementAndSetPlayerPosition(
       player.state = 0;
     }
   }
-
+  
   if (userInput.powerHit === 1) {
-    if (player.state === 1) {
+    if (player.state === 1 && (Modenum != 2 || collisionDefineNum != 1 || (player.isPlayer2 != true && ball.isPlayer2Serve == true) || (player.isPlayer2 == true && ball.isPlayer2Serve != true))) {
       // if player is jumping..
       // then player do power hit!
+      // Fixed an issue where 2p would not be powerhit immediately when 1p powerhit the ball
       player.delayBeforeNextFrame = 5;
       player.frameNumber = 0;
       player.state = 2;
@@ -775,7 +791,7 @@ function processCollisionBetweenBallAndPlayer(
     ball.isPowerHit = false;
   }
 
-  calculateExpectedLandingPointXFor(ball);
+  calculateExpectedLandingPointXFor(ball); 
 }
 
 /**
