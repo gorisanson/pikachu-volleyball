@@ -11,6 +11,7 @@ import { Sprite } from '@pixi/sprite';
 import { Container } from '@pixi/display';
 import { Cloud, Wave, cloudAndWaveEngine } from './cloud_and_wave.js';
 import { ASSETS_PATH } from './assets_path.js';
+import Modenum from './physics';
 
 /** @typedef {import('@pixi/loaders').LoaderResource} LoaderResource */
 /** @typedef {import('@pixi/core').Texture} Texture */
@@ -939,14 +940,16 @@ function makeScoreBoardSprite(textures) {
 function makeDownServeBoardSprite(textures) {
   const getNumberTexture = (n) => textures[TEXTURES.NEW_NUMBER(n)];
   const numberTextureArray = [];
+  const numberAnimatedSprites = [null, null];
+  const downServeBoard = new Container();
   for (let i = 0; i < 10; i++) {
     numberTextureArray.push(getNumberTexture(i));
   }
-  const numberAnimatedSprites = [null, null];
+  
   numberAnimatedSprites[0] = new AnimatedSprite(numberTextureArray, false);
   numberAnimatedSprites[1] = new AnimatedSprite(numberTextureArray, false);
 
-  const downServeBoard = new Container();
+  
   addChildToParentAndSetLocalPosition(
     downServeBoard,
     numberAnimatedSprites[0],
@@ -962,6 +965,10 @@ function makeDownServeBoardSprite(textures) {
 
   downServeBoard.setChildIndex(numberAnimatedSprites[0], 0); // for units
   downServeBoard.setChildIndex(numberAnimatedSprites[1], 1); // for tens
+
+  if (Modenum == 2) {
+    downServeBoard.visible = false;
+  }
 
   return downServeBoard;
 }
