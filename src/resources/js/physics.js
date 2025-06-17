@@ -47,12 +47,12 @@ const BALL_TOUCHING_GROUND_Y_COORD = 252;
 const NET_PILLAR_HALF_WIDTH = 25;
 /** @constant @type {number} net pillar top's top side y coordinate */
 const NET_PILLAR_TOP_TOP_Y_COORD = 176;
-/** @constant @type {number} num of adapted rule */
-const Modenum = 1; // Pgo rule: 1 / noserve rule: 2
+/** @constant @type {number} ball's y should be less than 212 for thunder */
+const MaximumYForThunder = 212;
+/** @constant @type {number} ball's y velocity should be larger than 42 for thunder */
+const MinimumSpeedForThunder = 42;
 /** @constant @type {number} net pillar top's bottom side y coordinate (this value is on this physics engine only) */
 const NET_PILLAR_TOP_BOTTOM_Y_COORD = 192;
-
-export default Modenum;
 
 /**
  * It's for to limit the looping number of the infinite loops.
@@ -81,6 +81,9 @@ export class PikaPhysics {
     this.player1 = new Player(false, isPlayer1Computer);
     this.player2 = new Player(true, isPlayer2Computer);
     this.ball = new Ball(false);
+
+    // Number of the rule
+    this.modeNum = 1;
   }
 
   /**
@@ -94,7 +97,8 @@ export class PikaPhysics {
       this.player1,
       this.player2,
       this.ball,
-      userInputArray
+      userInputArray,
+      this.modeNum
     );
     return isBallTouchingGround;
   }
@@ -176,9 +180,6 @@ class Player {
   initializeForNewRound() {
     /** @type {number} x coord */
     this.x = 36; // 0xA8 // initialized to 36 (player1) or 396 (player2)
-    if (Modenum == 2) {
-      collisionDefineNum = 0;
-    }
     if (this.isPlayer2) {
       this.x = GROUND_WIDTH - 36;
     }
@@ -287,6 +288,8 @@ class Ball {
     this.isServeState = true;
     /** @type {boolean} did the game end by down powerhitted serve? */
     this.endByDownServe = false;
+    /** @type {boolean} did the game end by Thunder serve? */
+    this.endByThunder = false;
     /** @type {boolean} was the down serve board updated? */
     this.updatedDownServe = false;
     /** @type {boolean} is the ball powerhitted down? */
@@ -320,7 +323,7 @@ class Ball {
  * @param {PikaUserInput[]} userInputArray userInputArray[0]: user input for player 1, userInputArray[1]: user input for player 2
  * @return {boolean} Is ball touching ground?
  */
-function physicsEngine(player1, player2, ball, userInputArray) {
+function physicsEngine(player1, player2, ball, userInputArray, modeNum = 1) {
   const isBallTouchingGround =
     processCollisionBetweenBallAndWorldAndSetBallPosition(ball);
 
@@ -346,7 +349,8 @@ function physicsEngine(player1, player2, ball, userInputArray) {
       player,
       userInputArray[i],
       theOtherPlayer,
-      ball
+      ball,
+      modeNum
     );
 
     // FUN_00402830 omitted
@@ -374,9 +378,6 @@ function physicsEngine(player1, player2, ball, userInputArray) {
         // when the ball touches the other player
         if (+ball.isPlayer2Serve!=i && ball.isServeState) {
           ball.isServeState = false;
-          if (Modenum == 2) {
-            collisionDefineNum = 0
-          }
         }
 
         processCollisionBetweenBallAndPlayer(
@@ -386,19 +387,16 @@ function physicsEngine(player1, player2, ball, userInputArray) {
           player.state
         );
         player.isCollisionWithBallHappened = true;
-        if (Modenum == 2 && ball.isServeState == true) {
-          collisionDefineNum = 1;
-        }
       }
     } else {
       player.isCollisionWithBallHappened = false;
     }
 
-    if (Modenum == 1) {
+    if (modeNum == 1) {
     // did the serve end with a down hit?
       if (ball.isDownPowerhit && ball.isServeState && !ball.expectedNetCollision &&
-        ((ball.expectedLandingPointX>=216 && !ball.isPlayer2Serve)
-        || (ball.expectedLandingPointX<216 && ball.isPlayer2Serve))) {
+        ((ball.expectedLandingPointX>=GROUND_HALF_WIDTH && !ball.isPlayer2Serve)
+        || (ball.expectedLandingPointX<GROUND_HALF_WIDTH && ball.isPlayer2Serve))) {
         ball.endByDownServe = true;
       }
     }
@@ -436,6 +434,7 @@ function isCollisionBetweenBallAndPlayerHappened(ball, playerX, playerY) {
  * @param {Ball} ball
  * @return {boolean} Is ball touching ground?
  */
+
 function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
   // This is not part of this function in the original assembly code.
   // In the original assembly code, it is processed in other function (FUN_00402ee0)
@@ -518,6 +517,10 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
     // the omitted two functions maybe do a part of sound playback role.
     ball.sound.ballTouchesGround = true;
 
+    if (ball.y < MaximumYForThunder && ball.yVelocity > MinimumSpeedForThunder && ball.isServeState == true) {
+      ball.endByThunder = true; // If ended by thunder, the opposite player wins
+    }
+
     ball.yVelocity = -ball.yVelocity;
     ball.punchEffectX = ball.x;
     ball.y = BALL_TOUCHING_GROUND_Y_COORD;
@@ -546,13 +549,13 @@ function processCollisionBetweenBallAndWorldAndSetBallPosition(ball) {
  * @param {Player} theOtherPlayer
  * @param {Ball} ball
  */
-let collisionDefineNum = 0; // A variable that tells whether there was a collision or not
 
 function processPlayerMovementAndSetPlayerPosition(
   player,
   userInput,
   theOtherPlayer,
-  ball
+  ball,
+  modeNum = 1
 ) {
   if (player.isComputer === true) {
     letComputerDecideUserInput(player, ball, theOtherPlayer, userInput);
@@ -634,7 +637,8 @@ function processPlayerMovementAndSetPlayerPosition(
   }
   
   if (userInput.powerHit === 1) {
-    if (player.state === 1 && (Modenum != 2 || collisionDefineNum != 1 || (player.isPlayer2 != true && ball.isPlayer2Serve == true) || (player.isPlayer2 == true && ball.isPlayer2Serve != true))) {
+    // In noserve mode and serve state, the only the opposite player can powerhit
+    if (player.state === 1 && !(modeNum === 2 && ball.isServeState && (player.isPlayer2 === ball.isPlayer2Serve))) {
       // if player is jumping..
       // then player do power hit!
       // Fixed an issue where 2p would not be powerhit immediately when 1p powerhit the ball

@@ -6,7 +6,6 @@ import { GROUND_HALF_WIDTH, PikaPhysics } from './physics.js';
 import { MenuView, GameView, FadeInOut, IntroView } from './view.js';
 import { PikaKeyboard } from './keyboard.js';
 import { PikaAudio } from './audio.js';
-import Modenum from './physics.js';
 
 /** @typedef {import('@pixi/display').Container} Container */
 /** @typedef {import('@pixi/loaders').LoaderResource} LoaderResource */
@@ -52,12 +51,9 @@ export class PikachuVolleyball {
     ];
 
     /** @type {number} game fps */
-    this.normalFPS = 25;
+    this.normalFPS = 30;
     /** @type {number} fps for slow motion */
     this.slowMotionFPS = 5;
-
-    /** @type {number} No. of rule(Pgo, noserve) */
-    this.ruleNum = 1;
 
     /** @constant @type {number} number of frames for slow motion */
     this.SLOW_MOTION_FRAMES_NUM = 6;
@@ -422,7 +418,7 @@ export class PikachuVolleyball {
       this.roundEnded === false &&
       this.gameEnded === false
     ) {
-      if (this.isIdenticalServe && this.physics.ball.isServeState && Modenum == 1) { // Did an identical serve and is still in a serve state, Modenum logic doesn't working(uzaramen)
+      if (this.isIdenticalServe && this.physics.ball.isServeState && this.physics.modeNum == 1) { // Did an identical serve and is still in a serve state, Modenum logic doesn't working(uzaramen)
         if (!this.physics.ball.isPlayer2Serve) {
           this.isPlayer2Serve = true;
           this.scores[0] = Math.max(this.scores[0] - 1, 0);
@@ -431,7 +427,7 @@ export class PikachuVolleyball {
           this.scores[1] = Math.max(this.scores[1] - 1, 0);
         }
       }
-      else if (didFoul) { // if the game ended by foul (down serve limit ended)
+      else if (didFoul || this.physics.ball.endByThunder == true) { // if the game ended by foul (down serve limit ended or Thunder serve)
         if (this.physics.ball.isPlayer2Serve) {
           this.isPlayer2Serve = false;
           this.scores[0] += 1;
@@ -441,13 +437,13 @@ export class PikachuVolleyball {
           this.scores[1] += 1;
         }
       } else { // game ended normally
-          if (this.physics.ball.punchEffectX < GROUND_HALF_WIDTH) {
-            this.isPlayer2Serve = true;
-            this.scores[1] += 1;
-          } else {
-            this.isPlayer2Serve = false;
-            this.scores[0] += 1;
-          }
+        if (this.physics.ball.punchEffectX < GROUND_HALF_WIDTH) {
+          this.isPlayer2Serve = true;
+          this.scores[1] += 1;
+        } else {
+          this.isPlayer2Serve = false;
+          this.scores[0] += 1;
+        }
       }
 
       if (this.scores[0] >= this.serveLimitScore) {
@@ -579,6 +575,14 @@ export class PikachuVolleyball {
       audio.sounds.ballTouchesGround.play(leftOrCenterOrRight);
       sound.ballTouchesGround = false;
     }
+  }
+
+  /**
+   * @param {boolean} bool visibility of downServeBoards
+   */
+  changeDownBoardVisibility(bool) {
+    this.view.game.downServeBoards[0].visible = bool;
+    this.view.game.downServeBoards[1].visible = bool;
   }
 
   /**

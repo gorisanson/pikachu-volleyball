@@ -93,10 +93,10 @@
                 <button type="button" id="slow-speed-btn" class="btn">
                   <span class="check">&check; </span>느리게
                 </button>
-                <button type="button" id="medium-speed-btn" class="btn selected">
+                <button type="button" id="medium-speed-btn" class="btn">
                   <span class="check">&check; </span>보통
                 </button>
-                <button type="button" id="fast-speed-btn" class="btn">
+                <button type="button" id="fast-speed-btn" class="btn selected">
                   <span class="check">&check; </span>빠르게
                 </button>
               </div>
@@ -127,6 +127,19 @@
                 </button>
                 <button type="button" id="practice-mode-off-btn" class="btn selected">
                   <span class="check">&check; </span>끄기
+                </button>
+              </div>
+            </div>
+            <div class="relative-container">
+              <button type="button" id="rule-submenu-btn" class="btn submenu-btn">
+                룰 설정 &#9654;&#xfe0e;
+              </button>
+              <div id="rule-submenu" class="submenu">
+                <button type="button" id="Pgo-rule-btn" class="btn selected">
+                  <span class="check">&check; </span>Pgo 룰
+                </button>
+                <button type="button" id="noserve-rule-btn" class="btn">
+                  <span class="check">&check; </span>노서브 룰
                 </button>
               </div>
             </div>
@@ -301,6 +314,15 @@
           눌러주세요.
         </p>
         <button type="button" id="notice-ok-btn-2" class="btn-in-box">
+          알겠어요
+        </button>
+      </div>
+      <div class="fade-in-box notice hidden" id="notice-box-3">
+        <p>
+          이미 게임을 시작하였습니다.<br />
+          룰 변경은 대기 중에만 가능합니다. 
+        </p>
+        <button type="button" id="notice-ok-btn-3" class="btn-in-box">
           알겠어요
         </button>
       </div>

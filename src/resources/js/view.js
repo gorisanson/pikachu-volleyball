@@ -11,7 +11,6 @@ import { Sprite } from '@pixi/sprite';
 import { Container } from '@pixi/display';
 import { Cloud, Wave, cloudAndWaveEngine } from './cloud_and_wave.js';
 import { ASSETS_PATH } from './assets_path.js';
-import Modenum from './physics';
 
 /** @typedef {import('@pixi/loaders').LoaderResource} LoaderResource */
 /** @typedef {import('@pixi/core').Texture} Texture */
@@ -965,10 +964,6 @@ function makeDownServeBoardSprite(textures) {
 
   downServeBoard.setChildIndex(numberAnimatedSprites[0], 0); // for units
   downServeBoard.setChildIndex(numberAnimatedSprites[1], 1); // for tens
-
-  if (Modenum == 2) {
-    downServeBoard.visible = false;
-  }
 
   return downServeBoard;
 }
