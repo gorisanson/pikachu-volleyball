@@ -431,7 +431,7 @@ export class PikachuVolleyball {
           this.scores[1] = Math.max(this.scores[1] - 1, 0);
         }
       }
-      else if (didFoul) { // if the game ended by foul (down serve limit ended)
+      else if (didFoul || this.physics.ball.endByThunder == true) { // if the game ended by foul (down serve limit ended or Thunder serve)
         if (this.physics.ball.isPlayer2Serve) {
           this.isPlayer2Serve = false;
           this.scores[0] += 1;
