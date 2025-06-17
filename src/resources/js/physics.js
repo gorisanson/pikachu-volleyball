@@ -48,10 +48,11 @@ const NET_PILLAR_HALF_WIDTH = 25;
 /** @constant @type {number} net pillar top's top side y coordinate */
 const NET_PILLAR_TOP_TOP_Y_COORD = 176;
 /** @constant @type {number} num of adapted rule */
-const Modenum = 2; // Pgo rule: 1 / noserve rule: 2 
+const Modenum = 1; // Pgo rule: 1 / noserve rule: 2
 /** @constant @type {number} net pillar top's bottom side y coordinate (this value is on this physics engine only) */
 const NET_PILLAR_TOP_BOTTOM_Y_COORD = 192;
 
+export default Modenum;
 
 /**
  * It's for to limit the looping number of the infinite loops.
