@@ -2,7 +2,7 @@
 
 _&check;_ _English_ | [_Korean(한국어)_](README.ko.md)
 
-Pikachu Volleyball (対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編) is an old Windows game which was developed by "(C) SACHI SOFT / SAWAYAKAN Programmers" and "(C) Satoshi Takenouchi" in 1997. The source code on this repository is gained by reverse engineering the core part of the machine code &mdash; including the physics engine and the AI &mdash; of the original game and implementing it into JavaScript.
+Pikachu Volleyball (対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編) is an old Windows game that was developed by "(C) SACHI SOFT / SAWAYAKAN Programmers" and "(C) Satoshi Takenouchi" in 1997. The source code on this repository was obtained by reverse engineering the core parts of the machine code &mdash; including the physics engine and the AI &mdash; of the original game and reimplementing them in JavaScript.
 
 You can play this game on the website: https://gorisanson.github.io/pikachu-volleyball/en/
 
