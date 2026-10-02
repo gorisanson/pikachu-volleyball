@@ -315,6 +315,7 @@ p.languages,
 p.small,
 p.p2p-online-version,
 p.super-ai-edition,
+p.seungsu-ai,
 p.original-by,
 p.reverse-engineered-by,
 p.source-code-on,
@@ -323,10 +324,12 @@ p.update-history-on {
   font-size: 0.8em;
   line-height: 150%;
 }
-p.p2p-online-version {
+p.p2p-online-version,
+p.super-ai-edition {
   margin-bottom: 0.1em;
 }
-p.super-ai-edition {
+p.super-ai-edition,
+p.seungsu-ai {
   margin-top: 0.1em;
 }
 p.release-date {
